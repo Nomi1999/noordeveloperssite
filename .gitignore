@@ -19,3 +19,4 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+brand/og/.og-render.html

@@ -2,6 +2,7 @@
 import { site } from "../config/site.ts";
 import { navLinks } from "../config/nav.ts";
 import { formatHours, telUrl, whatsappUrl } from "../lib/contact.ts";
+import Logo from "./Logo.astro";
 import CallButton from "./CallButton.astro";
 import WhatsAppButton from "./WhatsAppButton.astro";
 
@@ -19,8 +20,11 @@ const whatsappDisplay = site.phone.replace(/\D/g, "") === site.whatsapp ? site.p
 <footer class="site-footer">
   <div class="container site-footer__grid">
     <div class="site-footer__brand">
-      <p class="site-footer__name">{site.name}</p>
-      <p class="label text-accent">{site.tagline}</p>
+      <a class="site-footer__logo" href="/" aria-label="Noor Developers home">
+        <Logo variant="stacked" accent class="site-footer__logo-stacked" />
+        <Logo variant="horizontal" accent class="site-footer__logo-horizontal" />
+      </a>
+      <p class="label text-accent site-footer__tagline">{site.tagline}</p>
       <div class="site-footer__actions">
         <CallButton variant="outline" />
         <WhatsAppButton message={whatsappMessage} variant="primary" />
@@ -92,12 +96,33 @@ const whatsappDisplay = site.phone.replace(/\D/g, "") === site.whatsapp ? site.p
     gap: var(--space-7);
   }
 
-  .site-footer__name {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    font-weight: var(--weight-display);
-    line-height: var(--leading-tight);
-    text-transform: uppercase;
+  .site-footer__logo {
+    display: block;
+    width: min(100%, 22rem);
+  }
+
+  .site-footer__logo :global(.site-footer__logo-stacked) {
+    display: none;
+    width: 100%;
+  }
+
+  .site-footer__logo :global(.site-footer__logo-horizontal) {
+    width: 100%;
+  }
+
+  @media (min-width: 40rem) {
+    /* the stacked lockup already carries the tagline */
+    .site-footer__tagline {
+      display: none;
+    }
+
+    .site-footer__logo :global(.site-footer__logo-stacked) {
+      display: block;
+    }
+
+    .site-footer__logo :global(.site-footer__logo-horizontal) {
+      display: none;
+    }
   }
 
   .site-footer__brand .label {

@@ -1,6 +1,6 @@
 ---
-import "@fontsource/barlow-condensed/latin-600.css";
-import "@fontsource/barlow-condensed/latin-800.css";
+import "@fontsource/big-shoulders-display/latin-600";
+import "@fontsource/big-shoulders-display/latin-800";
 import "@fontsource/barlow/latin-400.css";
 import "@fontsource/barlow/latin-500.css";
 import "@fontsource/ibm-plex-mono/latin-400.css";
@@ -8,7 +8,7 @@ import "@fontsource/ibm-plex-mono/latin-500.css";
 import "../styles/tokens.css";
 import "../styles/global.css";
 
-import displayFont from "@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2?url";
+import displayFont from "@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2?url";
 import bodyFont from "@fontsource/barlow/files/barlow-latin-400-normal.woff2?url";
 
 import Seo from "../components/Seo.astro";
@@ -40,6 +40,9 @@ const { title, description, ogImage, whatsappMessage, noindex } = Astro.props;
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="color-scheme" content="dark" />
     <Seo title={title} description={description} ogImage={ogImage} noindex={noindex} />
     <LocalBusinessJsonLd />

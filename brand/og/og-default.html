@@ -1,19 +1,19 @@
 <!doctype html>
-<!-- Template for public/og-default.png. Render with `npm run render:og`. -->
+<!-- Template for public/og-default.png. Render with `npm run render:og` (injects src/assets/brand/logo-stacked-accent.svg at the logo placeholder). -->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../src/styles/tokens.css" />
     <style>
       @font-face {
-        font-family: "Barlow Condensed";
+        font-family: "Big Shoulders Display";
         font-weight: 600;
-        src: url(../../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2) format("woff2");
+        src: url(../../node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-600-normal.woff2) format("woff2");
       }
       @font-face {
-        font-family: "Barlow Condensed";
+        font-family: "Big Shoulders Display";
         font-weight: 800;
-        src: url(../../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2) format("woff2");
+        src: url(../../node_modules/@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2) format("woff2");
       }
       @font-face {
         font-family: "IBM Plex Mono";
@@ -54,26 +54,15 @@
         height: 100%;
       }
 
-      .label {
-        font-family: var(--font-mono);
-        font-weight: 500;
-        font-size: 22px;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--noor);
+      .logo {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        color: var(--paper);
       }
 
-      .wordmark {
-        margin-top: 36px;
-        font-size: 168px;
-        line-height: 0.88;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.01em;
-      }
-
-      .wordmark .noor { color: var(--noor); }
-      .wordmark .rest { display: block; font-weight: 600; }
+      .logo svg { width: 760px; height: auto; }
 
       .dim {
         display: flex;
@@ -121,8 +110,7 @@
   <body>
     <div class="grid"></div>
     <div class="content">
-      <p class="label">Building the Future</p>
-      <h1 class="wordmark"><span class="noor">Noor</span><span class="rest">Developers</span></h1>
+      <h1 class="logo" aria-label="Noor Developers"><!--LOGO--></h1>
       <div class="dim">
         <span>Faisalabad</span>
         <span class="line"></span>

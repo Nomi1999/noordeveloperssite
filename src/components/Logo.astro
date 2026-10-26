@@ -1,0 +1,42 @@
+---
+import stacked from "../assets/brand/logo-stacked.svg?raw";
+import stackedAccent from "../assets/brand/logo-stacked-accent.svg?raw";
+import horizontal from "../assets/brand/logo-horizontal.svg?raw";
+import horizontalAccent from "../assets/brand/logo-horizontal-accent.svg?raw";
+import mark from "../assets/brand/logo-mark.svg?raw";
+import markAccent from "../assets/brand/logo-mark-accent.svg?raw";
+import monogram from "../assets/brand/logo-monogram.svg?raw";
+import monogramAccent from "../assets/brand/logo-monogram-accent.svg?raw";
+
+interface Props {
+  variant?: "stacked" | "horizontal" | "mark" | "monogram";
+  /** Monogram in the brand accent, everything else in the current text color */
+  accent?: boolean;
+  class?: string;
+}
+
+const { variant = "horizontal", accent = false, class: className } = Astro.props;
+const svgs = {
+  stacked: [stacked, stackedAccent],
+  horizontal: [horizontal, horizontalAccent],
+  mark: [mark, markAccent],
+  monogram: [monogram, monogramAccent],
+};
+const svg = svgs[variant][accent ? 1 : 0];
+---
+
+<!-- Decorative: the surrounding link or heading carries the accessible name -->
+<span class:list={["logo", `logo--${variant}`, className]} aria-hidden="true" set:html={svg} />
+
+<style>
+  .logo {
+    display: inline-block;
+    line-height: 0;
+  }
+
+  .logo :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import { navLinks } from "../config/nav.ts";
+import Logo from "./Logo.astro";
 import CallButton from "./CallButton.astro";
 import WhatsAppButton from "./WhatsAppButton.astro";
 
@@ -19,11 +20,8 @@ function currentState(href: string): "page" | "true" | undefined {
 
 <header class="site-header" data-site-header>
   <div class="container site-header__inner">
-    <!-- Temporary text wordmark until the brand-logo change ships the redrawn logo -->
-    <a class="wordmark" href="/" aria-current={path === "/" ? "page" : undefined}>
-      <span class="wordmark__noor">Noor</span>
-      <span class="wordmark__rest">Developers</span>
-      <span class="sr-only">home</span>
+    <a class="brand" href="/" aria-label="Noor Developers home" aria-current={path === "/" ? "page" : undefined}>
+      <Logo variant="horizontal" accent />
     </a>
 
     <button
@@ -112,27 +110,16 @@ function currentState(href: string): "page" | "true" | undefined {
     padding-block: var(--space-3);
   }
 
-  .wordmark {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.3em;
+  .brand {
+    display: block;
+    width: 11.5rem;
     margin-right: auto;
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    font-weight: var(--weight-display);
-    letter-spacing: 0.02em;
-    line-height: 1;
-    text-transform: uppercase;
-    text-decoration: none;
-    white-space: nowrap;
   }
 
-  .wordmark__noor {
-    color: var(--noor);
-  }
-
-  .wordmark__rest {
-    font-weight: var(--weight-display-light);
+  @media (min-width: 48rem) {
+    .brand {
+      width: 14.5rem;
+    }
   }
 
   .site-nav__list {

@@ -1,0 +1,56 @@
+schema: spec-driven
+
+context: |
+  Project: marketing website for Noor Developers, a property developer and builder
+  based in Faisalabad, Pakistan. Tagline: "Building the Future". Domain: noordevelopers.pk.
+
+  Business:
+  - Two offerings: (1) houses Noor Developers build on plots they buy and then sell;
+    (2) design + architecture + construction on the client's own plot.
+  - They build houses of all sizes (mainly 1 Kanal and 2 Kanal) and also commercial buildings.
+  - Every build is delivered fully finished: the client only brings furniture and moves in.
+  - Customers today are local homeowners; the site must not exclude overseas Pakistanis
+    or future building types (structure content so new types are just new content).
+
+  Site purpose: a showcase that the company exists and builds these things. The only
+  conversion goal is a phone call or a WhatsApp message.
+
+  Content rules (hard constraints):
+  - English only.
+  - No prices, no availability/sold status, no trust signals (stats, testimonials,
+    certifications, years in business), no blog, no social links, no analytics.
+  - Never mention real projects (including the Wapda City house), map/plan approvals,
+    or anything regulatory.
+  - No stock photos. All imagery is our own 3D renders. CC0 textures, HDRIs and plant
+    models (Poly Haven, ambientCG) are allowed as render materials.
+  - House designs are presented as concept designs ("designs"), not listings.
+  - Contact details (address, phone, WhatsApp, email, hours) are placeholders until the
+    client supplies them; keep them in one config file.
+
+  Brand and style: bold and industrial. Near-black + warm concrete greys + one warm
+  amber/gold "light" accent ("Noor" means light). Heavy condensed display type echoing
+  the logo wordmark, a monospace face for architect-drawing style labels and dimension
+  annotations. No hazard-stripe cliches. The logo source is an auto-traced raster
+  (v1 and v3 combined.svg); it is to be redrawn as clean vector with the same structure.
+
+  Tech stack:
+  - Astro static site, deployed to GitHub Pages via GitHub Actions, custom domain via
+    CNAME (no base path).
+  - Forms are not needed; CTAs are tel: and wa.me links (with page-specific prefilled
+    WhatsApp messages) plus a sticky Call/WhatsApp bar on mobile.
+  - 3D: house/building designs are defined once as data (plot, walls, openings, levels)
+    and that data generates both floor plan SVGs and Blender scenes. Blender 5.0 is
+    driven by Python (bpy) scripts in headless mode; Cycles renders on CPU only (no GPU
+    device available), EEVEE is used for fast iteration. Overnight renders are acceptable.
+  - Home hero is a scroll-scrubbed pre-rendered frame sequence (construction phases:
+    design blueprint, foundation, structure, walls, finishing, dusk "lights on"), with
+    separate landscape and portrait sequences, progressive loading and a bounded decoded
+    frame window for iOS memory limits. Overlay text is HTML, never baked into frames.
+    Ultra-polished visuals take priority over payload size.
+
+  Planned changes, in order: site-foundation, brand-logo, house-designs (data model +
+  floor plans for 1 Kanal, 2 Kanal; commercial G+3 plaza concept), render-pipeline,
+  scroll-build-hero, content-pages.
+
+  Units: plots in Kanal/Marla with a 225 sq ft marla; 1 Kanal drawn as 50'x90',
+  2 Kanal as 75'x120'. Dimensions are shown in feet-inches.

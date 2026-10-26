@@ -1,0 +1,299 @@
+---
+import { navLinks } from "../config/nav.ts";
+import CallButton from "./CallButton.astro";
+import WhatsAppButton from "./WhatsAppButton.astro";
+
+interface Props {
+  whatsappMessage?: string;
+}
+
+const { whatsappMessage } = Astro.props;
+const path = Astro.url.pathname;
+
+function currentState(href: string): "page" | "true" | undefined {
+  if (path === href) return "page";
+  if (path.startsWith(href)) return "true";
+  return undefined;
+}
+---
+
+<header class="site-header" data-site-header>
+  <div class="container site-header__inner">
+    <!-- Temporary text wordmark until the brand-logo change ships the redrawn logo -->
+    <a class="wordmark" href="/" aria-current={path === "/" ? "page" : undefined}>
+      <span class="wordmark__noor">Noor</span>
+      <span class="wordmark__rest">Developers</span>
+      <span class="sr-only">home</span>
+    </a>
+
+    <button
+      type="button"
+      class="nav-toggle"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      data-nav-toggle
+    >
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+      <span class="nav-toggle__label">Menu</span>
+    </button>
+
+    <nav id="site-nav" class="site-nav" aria-label="Main" data-nav>
+      <ul class="site-nav__list" role="list">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a class="site-nav__link" href={link.href} aria-current={currentState(link.href)}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <CallButton variant="outline" size="sm" />
+      <WhatsAppButton message={whatsappMessage} variant="primary" size="sm" />
+    </div>
+  </div>
+</header>
+
+<script>
+  // Mobile menu: progressive enhancement. Without JS the nav list stays visible.
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  const toggle = header?.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+  const nav = header?.querySelector<HTMLElement>("[data-nav]");
+
+  if (header && toggle && nav) {
+    const setOpen = (open: boolean, returnFocus = false) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      nav.classList.toggle("is-open", open);
+      if (open) {
+        nav.querySelector<HTMLAnchorElement>("a")?.focus();
+      } else if (returnFocus) {
+        toggle.focus();
+      }
+    };
+
+    toggle.addEventListener("click", () => {
+      setOpen(toggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        setOpen(false, true);
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (toggle.getAttribute("aria-expanded") === "true" && !header.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 50;
+    background: var(--ink);
+    color: var(--paper);
+    border-bottom: var(--rule-thin) solid var(--concrete-700);
+    --focus-color: var(--noor);
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-5);
+    min-height: var(--header-height);
+    padding-block: var(--space-3);
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3em;
+    margin-right: auto;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-display);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .wordmark__noor {
+    color: var(--noor);
+  }
+
+  .wordmark__rest {
+    font-weight: var(--weight-display-light);
+  }
+
+  .site-nav__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-5);
+  }
+
+  .site-nav__link {
+    display: inline-block;
+    padding-block: var(--space-2);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-display-light);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: var(--rule-thick) solid transparent;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .site-nav__link:hover {
+    border-bottom-color: var(--concrete-500);
+  }
+
+  .site-nav__link[aria-current] {
+    color: var(--noor);
+    border-bottom-color: var(--noor);
+  }
+
+  .site-header__actions {
+    display: none;
+    gap: var(--space-2);
+  }
+
+  .nav-toggle {
+    display: none;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-3);
+    background: transparent;
+    border: var(--rule-thin) solid var(--concrete-700);
+    border-radius: var(--radius-1);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-mono-strong);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+  }
+
+  .nav-toggle__bars,
+  .nav-toggle__bars::before,
+  .nav-toggle__bars::after {
+    display: block;
+    width: 1.125rem;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .nav-toggle__bars {
+    position: relative;
+  }
+
+  .nav-toggle__bars::before,
+  .nav-toggle__bars::after {
+    content: "";
+    position: absolute;
+    left: 0;
+  }
+
+  .nav-toggle__bars::before {
+    top: -6px;
+  }
+
+  .nav-toggle__bars::after {
+    top: 6px;
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle__bars {
+    background: transparent;
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle__bars::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle__bars::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
+  /* No JS: the nav wraps onto its own row below the wordmark */
+  .site-nav {
+    flex-basis: 100%;
+  }
+
+  /* With JS, below 64rem: the nav collapses behind the toggle */
+  @media (max-width: 63.999rem) {
+    .nav-toggle {
+      order: 3;
+    }
+
+    .site-nav {
+      order: 4;
+    }
+
+    :global(.js) .nav-toggle {
+      display: inline-flex;
+    }
+
+    :global(.js) .site-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      inset-inline: 0;
+      padding: var(--space-4) var(--gutter) var(--space-6);
+      background: var(--ink-2);
+      border-bottom: var(--rule-thick) solid var(--noor);
+    }
+
+    :global(.js) .site-nav.is-open {
+      display: block;
+    }
+
+    :global(.js) .site-nav__list {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    :global(.js) .site-nav__link {
+      display: block;
+      padding-block: var(--space-3);
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-display);
+      border-bottom: var(--rule-thin) solid var(--concrete-700);
+    }
+
+    :global(.js) .site-nav__link[aria-current] {
+      border-bottom-color: var(--noor);
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .site-header__actions {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .site-header__inner {
+      flex-wrap: nowrap;
+    }
+
+    .site-nav {
+      flex-basis: auto;
+    }
+
+    .site-header__actions {
+      order: 3;
+    }
+  }
+</style>

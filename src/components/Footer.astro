@@ -1,0 +1,175 @@
+---
+import { site } from "../config/site.ts";
+import { navLinks } from "../config/nav.ts";
+import { formatHours, telUrl, whatsappUrl } from "../lib/contact.ts";
+import CallButton from "./CallButton.astro";
+import WhatsAppButton from "./WhatsAppButton.astro";
+
+interface Props {
+  whatsappMessage?: string;
+}
+
+const { whatsappMessage } = Astro.props;
+const { address } = site;
+const year = new Date().getFullYear();
+// Show the WhatsApp number in the phone format when both are the same line
+const whatsappDisplay = site.phone.replace(/\D/g, "") === site.whatsapp ? site.phoneDisplay : `+${site.whatsapp}`;
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <p class="site-footer__name">{site.name}</p>
+      <p class="label text-accent">{site.tagline}</p>
+      <div class="site-footer__actions">
+        <CallButton variant="outline" />
+        <WhatsAppButton message={whatsappMessage} variant="primary" />
+      </div>
+    </div>
+
+    <dl class="site-footer__contact">
+      <div>
+        <dt class="label">Phone</dt>
+        <dd><a href={telUrl()}>{site.phoneDisplay}</a></dd>
+      </div>
+      <div>
+        <dt class="label">WhatsApp</dt>
+        <dd>
+          <a href={whatsappUrl(whatsappMessage)} target="_blank" rel="noopener">{whatsappDisplay}</a>
+        </dd>
+      </div>
+      <div>
+        <dt class="label">Email</dt>
+        <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+      </div>
+      <div>
+        <dt class="label">Office</dt>
+        <dd>
+          <address>
+            {address.street}<br />
+            {`${address.city}, ${address.region}`}
+          </address>
+        </dd>
+      </div>
+      <div>
+        <dt class="label">Hours</dt>
+        {formatHours().map((line) => <dd>{line}</dd>)}
+      </div>
+    </dl>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      <ul role="list">
+        <li><a href="/">Home</a></li>
+        {
+          navLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container">
+    <div class="site-footer__base">
+      <p class="dim">{`© ${year} ${site.name}. ${address.city}, Pakistan.`}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: var(--paper);
+    border-top: var(--rule-thick) solid var(--noor);
+    padding-top: var(--space-8);
+    --focus-color: var(--noor);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .site-footer__name {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-display);
+    line-height: var(--leading-tight);
+    text-transform: uppercase;
+  }
+
+  .site-footer__brand .label {
+    margin-top: var(--space-3);
+  }
+
+  .site-footer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .site-footer__contact {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .site-footer__contact dt {
+    color: var(--concrete-500);
+    margin-bottom: var(--space-1);
+  }
+
+  .site-footer__contact dd {
+    margin: 0;
+  }
+
+  .site-footer__contact address {
+    font-style: normal;
+  }
+
+  .site-footer__contact a,
+  .site-footer__nav a {
+    display: inline-block;
+    padding-block: var(--space-1);
+  }
+
+  .site-footer__contact a:hover,
+  .site-footer__nav a:hover {
+    color: var(--noor);
+  }
+
+  .site-footer__nav ul {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .site-footer__nav a {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-display-light);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .site-footer__base {
+    margin-top: var(--space-8);
+    padding-block: var(--space-5);
+    border-top: var(--rule-thin) solid var(--concrete-700);
+    color: var(--concrete-500);
+  }
+
+  @media (min-width: 48rem) {
+    .site-footer__grid {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .site-footer__grid {
+      grid-template-columns: 1.6fr 1.2fr 0.8fr;
+    }
+  }
+</style>

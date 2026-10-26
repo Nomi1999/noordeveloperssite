@@ -1,0 +1,55 @@
+---
+import CallButton from "./CallButton.astro";
+import WhatsAppButton from "./WhatsAppButton.astro";
+
+interface Props {
+  whatsappMessage?: string;
+}
+
+const { whatsappMessage } = Astro.props;
+---
+
+<aside class="action-bar" aria-label="Contact Noor Developers">
+  <CallButton variant="outline" class="action-bar__btn" />
+  <WhatsAppButton message={whatsappMessage} variant="primary" class="action-bar__btn" />
+</aside>
+
+<style>
+  .action-bar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    /* Fixed height: must equal the space BaseLayout reserves below the footer */
+    height: calc(var(--action-bar-height) + env(safe-area-inset-bottom, 0px));
+    padding: var(--space-2) max(var(--space-2), env(safe-area-inset-right, 0px))
+      calc(var(--space-2) + env(safe-area-inset-bottom, 0px)) max(var(--space-2), env(safe-area-inset-left, 0px));
+    background: var(--ink-2);
+    border-top: var(--rule-thin) solid var(--concrete-700);
+    color: var(--paper);
+    --focus-color: var(--noor);
+  }
+
+  .action-bar :global(.action-bar__btn) {
+    width: 100%;
+    min-height: 0;
+    padding-block: 0;
+    padding-inline: var(--space-3);
+  }
+
+  /* Matches the --action-bar-height space reserved on body in BaseLayout */
+  @media (min-width: 48rem) {
+    .action-bar {
+      display: none;
+    }
+  }
+
+  @media print {
+    .action-bar {
+      display: none;
+    }
+  }
+</style>

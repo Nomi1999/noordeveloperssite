@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://noordevelopers.pk/sitemap-index.xml

@@ -1,0 +1,217 @@
+---
+// Hidden reference page for the design tokens: noindex and excluded from the sitemap
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CallButton from "../components/CallButton.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
+
+const swatches = [
+  { token: "--ink", use: "Dark sections, text on light" },
+  { token: "--ink-2", use: "Raised surfaces on dark" },
+  { token: "--concrete-700", use: "Rules on dark, muted text on light" },
+  { token: "--concrete-500", use: "Muted text on dark only" },
+  { token: "--concrete-300", use: "Secondary text on dark, rules on light" },
+  { token: "--concrete-100", use: "Concrete section background" },
+  { token: "--paper", use: "Light background, text on dark" },
+  { token: "--noor", use: "The single accent: text on dark, fill on light" },
+];
+
+const typeScale = ["--text-4xl", "--text-3xl", "--text-2xl", "--text-xl", "--text-lg", "--text-base", "--text-sm", "--text-xs"];
+const spacing = ["--space-1", "--space-2", "--space-3", "--space-4", "--space-5", "--space-6", "--space-7", "--space-8", "--space-9"];
+---
+
+<BaseLayout
+  title="Styleguide"
+  description="Internal reference for the Noor Developers design tokens, type roles and buttons."
+  noindex
+>
+  <section class="section section--dark">
+    <div class="container sg-stack">
+      <p class="label text-accent">00 — Styleguide</p>
+      <h1>Design tokens</h1>
+      <p class="lead">Every value on this page comes from <code>src/styles/tokens.css</code>.</p>
+    </div>
+  </section>
+
+  <section class="section section--concrete">
+    <div class="container sg-stack">
+      <h2>Palette</h2>
+      <ul class="sg-swatches" role="list">
+        {
+          swatches.map(({ token, use }) => (
+            <li class="sg-swatch">
+              <span class="sg-swatch__chip" style={`background: var(${token})`} />
+              <span class="label">{token}</span>
+              <span class="sg-swatch__use">{use}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container sg-stack">
+      <h2>Type roles</h2>
+      <div class="sg-roles">
+        <div>
+          <p class="label text-muted">Display: Barlow Condensed 800 / 600</p>
+          <p class="display sg-display">Building the future</p>
+          <p class="display sg-display sg-display--light">1 Kanal · 2 Kanal · Commercial</p>
+        </div>
+        <div>
+          <p class="label text-muted">Body: Barlow 400 / 500</p>
+          <p>
+            Every build is delivered fully finished. You bring the furniture and move in. Body text sits at a comfortable
+            measure with generous leading.
+          </p>
+          <p><strong>Medium weight</strong> for emphasis within body copy.</p>
+        </div>
+        <div>
+          <p class="label text-muted">Mono: IBM Plex Mono 400 / 500</p>
+          <p class="label">01 — Foundation</p>
+          <p class="dim">50'-0" × 90'-0" · 1 Kanal · 20 Marla</p>
+        </div>
+      </div>
+
+      <h3>Scale</h3>
+      <ul class="sg-scale" role="list">
+        {
+          typeScale.map((token) => (
+            <li>
+              <span class="label text-muted">{token}</span>
+              <span class="display" style={`font-size: var(${token})`}>
+                Noor
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3>Spacing</h3>
+      <ul class="sg-spacing" role="list">
+        {
+          spacing.map((token) => (
+            <li>
+              <span class="label text-muted">{token}</span>
+              <span class="sg-spacing__bar" style={`width: var(${token})`} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container sg-stack">
+      <h2>Buttons on dark</h2>
+      <div class="sg-buttons">
+        <WhatsAppButton variant="primary" />
+        <CallButton variant="outline" />
+        <WhatsAppButton variant="primary" size="sm" />
+        <CallButton variant="outline" size="sm" />
+        <a class="btn btn--outline" href="/">Text link button</a>
+      </div>
+      <p class="text-accent">Accent text, allowed on dark only.</p>
+    </div>
+  </section>
+
+  <section class="section section--concrete">
+    <div class="container sg-stack">
+      <h2>Buttons on concrete</h2>
+      <div class="sg-buttons">
+        <WhatsAppButton variant="primary" />
+        <CallButton variant="outline" />
+        <a class="btn btn--outline" href="/">Text link button</a>
+      </div>
+      <p class="text-muted">Muted text on light uses --concrete-700.</p>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container sg-stack">
+      <h2>Buttons on paper</h2>
+      <div class="sg-buttons">
+        <WhatsAppButton variant="primary" />
+        <CallButton variant="outline" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sg-stack > * + * {
+    margin-top: var(--space-6);
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  .sg-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .sg-swatch {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .sg-swatch__chip {
+    display: block;
+    height: 6rem;
+    border: var(--rule-thin) solid var(--ink);
+    border-radius: var(--radius-1);
+  }
+
+  .sg-swatch__use {
+    font-size: var(--text-sm);
+  }
+
+  .sg-roles {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .sg-roles > div > * + * {
+    margin-top: var(--space-3);
+  }
+
+  .sg-display {
+    font-size: var(--text-3xl);
+  }
+
+  .sg-display--light {
+    font-weight: var(--weight-display-light);
+    font-size: var(--text-2xl);
+    color: var(--concrete-300);
+  }
+
+  .sg-scale,
+  .sg-spacing {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .sg-scale li,
+  .sg-spacing li {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .sg-spacing__bar {
+    display: block;
+    height: var(--space-4);
+    background: var(--noor);
+  }
+
+  .sg-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+</style>

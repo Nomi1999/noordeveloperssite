@@ -1,0 +1,26 @@
+---
+import { site } from "../config/site.ts";
+import { whatsappUrl } from "../lib/contact.ts";
+import WhatsAppIcon from "./icons/WhatsAppIcon.astro";
+
+interface Props {
+  /** Prefilled chat message; defaults to the site-wide greeting */
+  message?: string;
+  variant?: "primary" | "outline";
+  size?: "md" | "sm";
+  class?: string;
+}
+
+const { message, variant = "primary", size = "md", class: className } = Astro.props;
+---
+
+<a
+  href={whatsappUrl(message)}
+  class:list={["btn", `btn--${variant}`, size === "sm" && "btn--sm", className]}
+  target="_blank"
+  rel="noopener"
+  data-action="whatsapp"
+>
+  <WhatsAppIcon />
+  <span><span class="sr-only">{`Message ${site.name} on `}</span>WhatsApp</span>
+</a>

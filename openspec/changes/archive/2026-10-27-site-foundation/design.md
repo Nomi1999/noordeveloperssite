@@ -92,3 +92,29 @@ New site, so there is nothing to migrate. Deploy sequence: push to GitHub → se
 
 - Real contact details and the office map location. These only fill in `site.ts` and don't change the design.
 - Final accent hex value. It will be tuned against the first renders in the `render-pipeline` change.
+
+## Apply Notes: Astro 7 docs check (2026-10-26)
+
+Checked against the current docs (upgrade guides for v6 and v7, configuration reference, integrations reference, sitemap guide, GitHub Pages deploy guide). The design's assumptions hold. Differences and details to respect:
+
+- **Node**: Astro 6+ needs Node ≥ 22.12. The local Node 24 and the workflow's Node 24 are fine.
+- **`build.format` / `trailingSlash`**: `directory` is already the default, and `trailingSlash` defaults to `ignore`. Both are set explicitly anyway. The docs recommend this exact `directory` + `always` pairing so dev and build behave the same. `Astro.url` ends in `/` at build time under `directory`.
+- **`compressHTML` now defaults to `'jsx'`** (new in v7): whitespace between inline elements is stripped by JSX rules, so `<span>a</span> <em>b</em>` can render as "ab". Components keep that default. Gaps between icons and labels use flex `gap`, and explicit `{" "}` is used where inline text needs a space.
+- **Rust compiler** (v7 default): unclosed non-void tags and invalid nesting (for example a `<div>` inside a `<p>`) are build errors and are no longer auto-fixed. Markup must be valid.
+- **`src/fetch.ts` is reserved** (v7 advanced routing). Don't use that filename.
+- **Scripts and styles render in source order** (v6). `<script>` tags without `is:inline` are processed and bundled as modules. The mobile-menu script uses a processed `<script>` in `Header.astro`, which Astro dedupes and may inline when it is small. That still meets "tiny, no library".
+- **Integration API**: `astro:config:setup` and `astro:build:done` both receive `logger` (`logger.warn` prints `[name] message`). The placeholder check is an inline integration in `astro.config.mjs` that warns in `astro:build:done`, so it shows in `npm run build` output.
+- **Sitemap**: `@astrojs/sitemap` writes `sitemap-index.xml` plus `sitemap-0.xml`. The docs don't say the 404 page is excluded automatically, so `filter` excludes `/404/` and `/styleguide/` explicitly.
+- **GitHub Pages**: the documented action versions are `actions/checkout@v7`, `withastro/action@v6` (default Node 24, which is set explicitly anyway) and `actions/deploy-pages@v5`. These match the latest releases (v7.0.1, v6.1.4, v5.0.1). The lockfile must be committed.
+- Not relevant to this change: the Sätteri Markdown default, removal of `@astrojs/db`, `Astro.glob()` removal, Zod 4.
+
+## Apply Notes: implementation deviations and results (2026-10-26)
+
+- **Sticky-bar space is reserved on `body`, not `main`.** The footer comes after `main`, so padding on `main` would leave the footer under the bar, which breaks the "footer fully visible" scenario. `body` gets `padding-bottom: calc(var(--action-bar-height) + env(safe-area-inset-bottom))` below `48rem`. The bar has a fixed height equal to that value.
+- **Nav collapses below `64rem`, not `48rem`.** Wordmark, four nav links and both CTAs don't fit in one row at 768px. Breakpoints are now: below `48rem`, a menu toggle plus the sticky bar; from `48rem` to `64rem`, a menu toggle with Call/WhatsApp in the header; from `64rem` up, the full nav with the CTAs. Without JS, the nav wraps onto its own row at any width below `64rem`.
+- **Mobile-menu flash avoided** with a one-line inline `<head>` script that adds `.js` to `<html>`. The collapse CSS is scoped to `.js`, so the nav stays visible when JS is off.
+- **Section ancestors** (for example Designs while on `/designs/1-kanal/`) get `aria-current="true"` and the same visual mark. Exact matches get `aria-current="page"`.
+- **JSON-LD `logo`/`image`** temporarily point to `/og-default.png` until `brand-logo` delivers a logo file.
+- **Temporary `public/favicon.svg`** (an amber "N" on ink) prevents a `/favicon.ico` 404. It will be replaced in `brand-logo`.
+- **Lighthouse 13.5.0, mobile, local `npm run preview`:** `/` scored Performance 100, Accessibility 100, Best Practices 100, SEO 100. `/designs/1-kanal/` scored Performance 100, Accessibility 100, Best Practices 100, SEO 100.
+- **schema.org validator** (validator.schema.org, built `dist/index.html`): one `GeneralContractor` object, 0 errors, 0 warnings. All contact values match `site.ts`.

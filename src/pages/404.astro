@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CallButton from "../components/CallButton.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The page you were looking for does not exist. Go back to the Noor Developers home page, or call or WhatsApp us."
+  noindex
+>
+  <section class="section section--dark not-found">
+    <div class="container">
+      <p class="label text-accent">Error 404 — Not found</p>
+      <h1 class="not-found__title">Nothing built here</h1>
+      <p class="lead not-found__lead">
+        This page does not exist, or it has moved. Head back to the home page, or talk to us directly.
+      </p>
+      <div class="not-found__actions">
+        <a class="btn btn--outline" href="/">Back to home</a>
+        <WhatsAppButton variant="primary" />
+        <CallButton variant="outline" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 60vh;
+  }
+
+  .not-found__title {
+    margin-top: var(--space-4);
+    max-width: 12ch;
+  }
+
+  .not-found__lead {
+    margin-top: var(--space-5);
+    color: var(--concrete-300);
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-7);
+  }
+</style>

@@ -1,0 +1,102 @@
+/*
+ * Noor Developers design tokens: the single source of brand values.
+ * Components use these custom properties and never literal colors or sizes.
+ *
+ * Allowed text / background pairings (WCAG 2.1 contrast ratio, AA needs 4.5:1
+ * for normal text and 3:1 for large text):
+ *
+ *   --paper         on --ink            16.76:1  body text, headings on dark
+ *   --paper         on --ink-2          15.25:1  text on raised dark surfaces
+ *   --concrete-300  on --ink            10.98:1  secondary text on dark
+ *   --concrete-500  on --ink             5.23:1  muted text on dark (dark only)
+ *   --concrete-500  on --ink-2           4.76:1  muted text on raised dark surfaces
+ *   --noor          on --ink             9.38:1  accent text on dark (dark only)
+ *   --noor          on --ink-2           8.54:1  accent text on raised dark surfaces
+ *   --ink           on --noor            9.38:1  button labels on the accent fill
+ *   --ink           on --paper          16.76:1  body text on light
+ *   --ink           on --concrete-100   14.63:1  body text on concrete sections
+ *   --concrete-700  on --paper          10.33:1  muted text on light
+ *   --concrete-700  on --concrete-100    9.02:1  muted text on concrete sections
+ *
+ * Not allowed as text (fail AA):
+ *   --noor on --paper (1.79), --noor on --concrete-100 (1.56),
+ *   --concrete-500 on --paper (3.21), --concrete-700 on --ink (1.62).
+ *   On light backgrounds --noor is a fill (button, rule, marker) with --ink on it.
+ *   --concrete-700 on dark and --concrete-300 on light are decorative rules only.
+ */
+
+:root {
+  /* Palette: near-black, warm concrete greys, off-white, one "light" accent */
+  --ink: #121212;
+  --ink-2: #1c1c1b;
+  --concrete-700: #3a3936;
+  --concrete-500: #8a8780;
+  --concrete-300: #c9c6bf;
+  --concrete-100: #e6e3dd;
+  --paper: #f4f2ee;
+  --noor: #f2a93b;
+
+  /* Type roles */
+  --font-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --weight-display: 800;
+  --weight-display-light: 600;
+  --weight-body: 400;
+  --weight-body-strong: 500;
+  --weight-mono: 400;
+  --weight-mono-strong: 500;
+
+  /* Fluid type scale (320px → 1440px viewport) */
+  --text-xs: clamp(0.75rem, 0.73rem + 0.09vw, 0.8125rem);
+  --text-sm: clamp(0.875rem, 0.85rem + 0.11vw, 0.9375rem);
+  --text-base: clamp(1rem, 0.96rem + 0.18vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.06rem + 0.32vw, 1.375rem);
+  --text-xl: clamp(1.375rem, 1.23rem + 0.71vw, 1.875rem);
+  --text-2xl: clamp(1.75rem, 1.48rem + 1.34vw, 2.75rem);
+  --text-3xl: clamp(2.25rem, 1.75rem + 2.5vw, 4rem);
+  --text-4xl: clamp(2.75rem, 1.89rem + 4.29vw, 6rem);
+
+  --leading-tight: 0.95;
+  --leading-snug: 1.15;
+  --leading-body: 1.6;
+  --tracking-display: 0.01em;
+  --tracking-mono: 0.08em;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-section: clamp(4rem, 2.86rem + 5.71vw, 8rem);
+
+  /* Layout */
+  --container-max: 80rem;
+  --gutter: clamp(1rem, 0.43rem + 2.86vw, 3rem);
+  --measure: 65ch;
+  --header-height: 4.5rem;
+  /* Mobile Call/WhatsApp bar, shown below the 48rem breakpoint */
+  --action-bar-height: 4rem;
+
+  /* Radii: industrial, near-square */
+  --radius-0: 0;
+  --radius-1: 2px;
+  --radius-2: 4px;
+
+  /* Lines */
+  --rule-thin: 1px;
+  --rule-thick: 3px;
+  --focus-ring: 3px;
+
+  /* Motion */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 400ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

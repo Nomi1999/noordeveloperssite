@@ -1,0 +1,22 @@
+---
+import { site } from "../config/site.ts";
+import { telUrl } from "../lib/contact.ts";
+import PhoneIcon from "./icons/PhoneIcon.astro";
+
+interface Props {
+  variant?: "primary" | "outline";
+  size?: "md" | "sm";
+  class?: string;
+}
+
+const { variant = "outline", size = "md", class: className } = Astro.props;
+---
+
+<a
+  href={telUrl()}
+  class:list={["btn", `btn--${variant}`, size === "sm" && "btn--sm", className]}
+  data-action="call"
+>
+  <PhoneIcon />
+  <span>Call<span class="sr-only">{` ${site.name}`}</span></span>
+</a>

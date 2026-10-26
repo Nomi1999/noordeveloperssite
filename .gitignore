@@ -20,3 +20,6 @@ Thumbs.db
 !.vscode/extensions.json
 .idea/
 brand/og/.og-render.html
+
+# plan review sheet (npm run designs:review)
+review/

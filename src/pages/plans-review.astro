@@ -1,0 +1,326 @@
+---
+/*
+ * Plan review sheet for the maintainer: every level of every design in the
+ * light theme, with each design's facts. Laid out as A3 pages and printed to
+ * PDF by `npm run designs:review`. noindex and excluded from the sitemap.
+ */
+import "@fontsource/big-shoulders-display/latin-800";
+import "@fontsource/ibm-plex-mono/latin-400.css";
+import "@fontsource/ibm-plex-mono/latin-500.css";
+import "../styles/tokens.css";
+import "../styles/floor-plan.css";
+import { designs } from "../designs/index.ts";
+import { planLevels, renderPlan } from "../designs/plan.ts";
+import { checkDesign, formatIssue } from "../designs/validate.ts";
+import { feetInches, sqft } from "../designs/units.ts";
+
+const yesNo = (v: boolean) => (v ? "Yes" : "No");
+const count = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
+
+const sheets = designs.map(({ design, facts }) => {
+  const floors = design.levels.filter((l) => l.kind === "floor").length;
+  const rows: [string, string][] = [
+    ["Plot", `${feetInches(design.plot.width)} × ${feetInches(design.plot.depth)} (${facts.plot.size}, ${sqft(facts.plot.area)})`],
+    ["Storeys", String(facts.storeys)],
+    ...facts.levels.map((l): [string, string] => [`Covered area, ${l.name.toLowerCase()}`, sqft(l.coveredArea)]),
+    ["Covered area, total", sqft(facts.coveredArea)],
+  ];
+  if (facts.bedrooms > 0) {
+    rows.push(["Bedrooms", `${facts.bedrooms} (${facts.bedroomsWithAttachedBath} with attached bath)`]);
+  }
+  rows.push(["Bathrooms and washrooms", String(facts.bathrooms)]);
+  if (facts.shops > 0) rows.push(["Shops", String(facts.shops)]);
+  if (facts.officeArea > 0) rows.push(["Office floor area", sqft(facts.officeArea)]);
+  if (facts.doubleHeightRooms.length) rows.push(["Double-height", facts.doubleHeightRooms.join(", ")]);
+  for (const p of facts.porches) rows.push(["Car porch", `${count(p.cars, "car")}, ${p.covered ? "covered" : "open"}`]);
+  if (facts.lawnArea > 0) rows.push(["Lawn", sqft(facts.lawnArea)]);
+  rows.push(
+    ["Roof", [facts.roof.stairRoom && "stair room", facts.roof.parapet && "parapet", count(facts.roof.tanks, "water tank"), facts.roof.machineRoom && "lift machine room"].filter(Boolean).join(", ")],
+    ["Washrooms", `on ${facts.levelsWithWashrooms} of ${floors} floors`],
+  );
+  if (facts.levelsWithLift > 0) rows.push(["Lift", `on ${facts.levelsWithLift} of ${floors} floors`]);
+
+  const { errors, warnings } = checkDesign(design);
+  const issues = [...errors, ...warnings];
+  const plans = planLevels(design).map((level) => renderPlan(design, level, facts, { theme: "light", id: `rv-${design.slug}-${level.id}` }));
+  return { design, rows, errors, warnings, issues, plans };
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta name="color-scheme" content="light" />
+    <title>Plan review | Noor Developers</title>
+  </head>
+  <body>
+    <main>
+      <section class="sheet sheet--cover">
+        <p class="eyebrow">Noor Developers · plan review</p>
+        <h1>Concept designs</h1>
+        <p class="note">
+          Concept design. Indicative only. Every level of every design, drawn from the design data: for each design a page
+          of facts and room schedules, then one page per level. Please mark changes on the plans or list them against each
+          design; approval is recorded in <code>src/designs/README.md</code> before rendering begins.
+        </p>
+        <ol class="contents">
+          {
+            sheets.map(({ design, plans }) => (
+              <li>
+                <span>{design.name}</span>
+                <span class="dimtext">{plans.map((p) => p.title.split(", ")[1].replace(/ plan$/, "")).join(" · ")}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      {
+        sheets.map(({ design, rows, errors, warnings, issues, plans }) => (
+          <>
+            <section class="sheet sheet--facts">
+              <p class="eyebrow">{design.kind}</p>
+              <h2>{design.name}</h2>
+              <table class="facts">
+                <caption class="sr-only">Facts: {design.name}</caption>
+                <tbody>
+                  {rows.map(([k, v]) => (
+                    <tr>
+                      <th scope="row">{k}</th>
+                      <td>{v}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p class="checks">
+                Checks: {count(errors.length, "error")}, {count(warnings.length, "warning")}
+              </p>
+              {issues.length > 0 && (
+                <ul class="issues">
+                  {issues.map((i) => (
+                    <li>{formatIssue(i)}</li>
+                  ))}
+                </ul>
+              )}
+              <div class="schedules">
+                {plans.map((plan) => (
+                  <table class="schedule">
+                    <caption>{plan.title.split(", ")[1]}</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Room</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Area</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {plan.schedule.map((r) => (
+                        <tr>
+                          <th scope="row">{r.name}</th>
+                          <td>{r.size}</td>
+                          <td>{r.area}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ))}
+              </div>
+            </section>
+            {plans.map((plan) => (
+              <section class="sheet sheet--plan" set:html={plan.svg} />
+            ))}
+          </>
+        ))
+      }
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  @page {
+    size: A3 portrait;
+    margin: 12mm;
+  }
+
+  html {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-weight: var(--weight-mono);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>
+
+<style>
+  /* One A3 page each: 297 × 420 mm less 12 mm margins */
+  .sheet {
+    box-sizing: border-box;
+    width: 273mm;
+    height: 396mm;
+    margin: 0 auto;
+    overflow: hidden;
+    break-after: page;
+  }
+
+  @media screen {
+    .sheet {
+      margin-block: 12mm;
+      padding: 0;
+      outline: 1px solid var(--concrete-300);
+      outline-offset: 6mm;
+    }
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-display);
+    text-transform: uppercase;
+    line-height: 0.95;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 34mm;
+    margin-top: 4mm;
+  }
+
+  h2 {
+    font-size: 20mm;
+    margin-top: 3mm;
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-size: 3.4mm;
+    font-weight: var(--weight-mono-strong);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--concrete-700);
+  }
+
+  .note {
+    max-width: 180mm;
+    margin-top: 10mm;
+    font-size: 4mm;
+    line-height: 1.5;
+  }
+
+  .contents {
+    margin: 14mm 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 4.2mm;
+    border-top: 0.3mm solid var(--ink);
+  }
+
+  .contents li {
+    display: flex;
+    justify-content: space-between;
+    gap: 8mm;
+    padding: 3mm 0;
+    border-bottom: 0.2mm solid var(--concrete-300);
+  }
+
+  .dimtext,
+  .checks {
+    color: var(--concrete-700);
+  }
+
+  .facts {
+    width: 100%;
+    margin-top: 8mm;
+    border-collapse: collapse;
+    font-size: 3.6mm;
+  }
+
+  .facts th,
+  .facts td {
+    padding: 1.8mm 4mm 1.8mm 0;
+    border-bottom: 0.2mm solid var(--concrete-300);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .facts th {
+    width: 80mm;
+    font-weight: var(--weight-mono-strong);
+  }
+
+  .checks {
+    margin-top: 6mm;
+    font-size: 3.6mm;
+  }
+
+  .issues {
+    font-size: 3.2mm;
+  }
+
+  .schedules {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6mm 10mm;
+    align-items: start;
+    margin-top: 8mm;
+  }
+
+  .schedule {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 2.9mm;
+  }
+
+  .schedule caption {
+    text-align: left;
+    padding-bottom: 1.5mm;
+    font-size: 3.2mm;
+    font-weight: var(--weight-mono-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .schedule th,
+  .schedule td {
+    padding: 1.1mm 2mm 1.1mm 0;
+    border-bottom: 0.2mm solid var(--concrete-300);
+    text-align: left;
+    vertical-align: top;
+    font-weight: var(--weight-mono);
+    white-space: nowrap;
+  }
+
+  .schedule thead th {
+    color: var(--concrete-700);
+    border-bottom-color: var(--ink);
+  }
+
+  .schedule td:last-child,
+  .schedule th:last-child {
+    text-align: right;
+    padding-right: 0;
+  }
+
+  /* The drawing fills the page; its own title block names it */
+  .sheet--plan :global(svg.fp) {
+    width: 100%;
+    height: 100%;
+  }
+</style>

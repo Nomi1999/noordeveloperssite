@@ -15,9 +15,11 @@ Run these from the repository root.
 |---|---|
 | `npm install` | Install dependencies (versions are pinned exactly) |
 | `npm run dev` | Start the dev server at `http://localhost:4321/` |
-| `npm run build` | Build the production site into `dist/` and warn about any placeholder contact details |
+| `npm run build` | Build the production site into `dist/`, warn about any placeholder contact details, and fail if a building design breaks a geometric rule |
 | `npm run preview` | Serve `dist/` locally at `http://localhost:4321/`, exactly as it will be deployed (unknown paths show the 404 page) |
-| `npm test` | Check that prefilled WhatsApp messages survive URL encoding |
+| `npm test` | Run the unit tests (design model, geometry, validation, floor plans, render export) and check that prefilled WhatsApp messages survive URL encoding |
+| `npm run designs:export` | Write the render export, `render/data/<slug>.json` and `render/data/schema.json`; run after changing a design and commit the result |
+| `npm run designs:review` | Build the site and print the plan review sheet to `review/plans-review.pdf` with headless Chrome (set `CHROME_PATH` if Chrome is not found) |
 | `npm run render:og` | Re-render `public/og-default.png` from `brand/og/og-default.html` with headless Chrome (set `CHROME_PATH` if Chrome is not found) |
 
 ## Where things live
@@ -31,6 +33,8 @@ Run these from the repository root.
 | Shared layout, header, footer, Call/WhatsApp buttons, mobile action bar | `src/layouts/` and `src/components/` |
 | Pages (one file per route) | `src/pages/` |
 | Token reference page (not in the sitemap, `noindex`) | `/styleguide/` |
+| Building designs, floor plans and the render export | `src/designs/` (see its `README.md`) |
+| Every floor plan in both themes, and the A3 review sheet (not in the sitemap, `noindex`) | `/plans-preview/`, `/plans-review/` |
 | Logo source material (not shipped) | `brand/source/` |
 
 ### Contact details are placeholders

@@ -1,0 +1,191 @@
+---
+/**
+ * A floor plan for one level of a design: the SVG drawing (built at build time,
+ * no client script), a link to the full-size file, and a room schedule table
+ * as the text alternative.
+ */
+import "../styles/floor-plan.css";
+import { getDesign } from "../designs/index.ts";
+import { MIN_PX_PER_FOOT, planLevels, renderPlan, type PlanTheme } from "../designs/plan.ts";
+import { planFileName } from "../designs/plan-file.ts";
+
+interface Props {
+  /** Design slug, e.g. "1-kanal" */
+  design: string;
+  /** Level id, e.g. "ground" */
+  level: string;
+  theme: PlanTheme;
+}
+
+const { design: slug, level: levelId, theme } = Astro.props;
+const { design, facts } = getDesign(slug);
+const level = planLevels(design).find((l) => l.id === levelId);
+if (!level) throw new Error(`Design "${slug}" has no plan for level "${levelId}"`);
+
+const id = `fp-${slug}-${level.id}-${theme}`;
+const plan = renderPlan(design, level, facts, { theme, id });
+const minWidth = Math.round(plan.width * MIN_PX_PER_FOOT);
+const fullSize = `/plans/${planFileName(design, level, theme)}`;
+---
+
+<figure class={`fp-figure fp-figure--${theme}`}>
+  <div class="fp-frame">
+    <div class="fp-scroll" tabindex="0" role="region" aria-label={`${plan.title}, scrolls sideways`}>
+      <div class="fp-canvas" style={`min-width: ${minWidth}px`}>
+        <Fragment set:html={plan.svg} />
+      </div>
+    </div>
+  </div>
+  <figcaption class="fp-caption">
+    <span class="fp-hint label" aria-hidden="true">Scroll sideways to see the whole plan</span>
+    <a class="fp-full label" href={fullSize}>View full size<span class="sr-only">: {plan.title}</span></a>
+  </figcaption>
+  <table class="fp-schedule">
+    <caption class="dim">Room schedule: {plan.title}</caption>
+    <thead>
+      <tr>
+        <th scope="col">Room</th>
+        <th scope="col">Size (width × depth)</th>
+        <th scope="col">Area</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        plan.schedule.map((row) => (
+          <tr>
+            <th scope="row">{row.name}</th>
+            <td>{row.size}</td>
+            <td>{row.area}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</figure>
+
+<style>
+  .fp-figure {
+    --fp-edge: var(--ink);
+    margin: 0;
+  }
+
+  .fp-figure--light {
+    --fp-edge: var(--paper);
+  }
+
+  .fp-frame {
+    position: relative;
+    timeline-scope: --fp-scroll;
+  }
+
+  .fp-scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-timeline: --fp-scroll inline;
+  }
+
+  .fp-canvas {
+    max-width: 75rem;
+    margin-inline: auto;
+  }
+
+  /*
+   * Scroll hint: a fade on the right edge while there is more plan to the
+   * right. Driven by the scroll position where supported; when the plan
+   * fits, the timeline is inactive and the fade stays hidden.
+   */
+  .fp-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: var(--space-7);
+    background: linear-gradient(to right, transparent, var(--fp-edge));
+    pointer-events: none;
+    opacity: 0;
+    animation: fp-fade linear both;
+    animation-timeline: --fp-scroll;
+  }
+
+  @keyframes fp-fade {
+    from {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .fp-caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    margin-top: var(--space-3);
+  }
+
+  .fp-hint {
+    color: var(--concrete-500);
+  }
+
+  .fp-figure--light .fp-hint {
+    color: var(--concrete-700);
+  }
+
+  /* Wide screens show the whole plan, so the hint is only for narrow ones */
+  @media (min-width: 64rem) {
+    .fp-hint {
+      visibility: hidden;
+    }
+  }
+
+  .fp-full {
+    margin-left: auto;
+    color: inherit;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .fp-schedule {
+    width: 100%;
+    max-width: 40rem;
+    margin-top: var(--space-4);
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+
+  .fp-schedule caption {
+    text-align: left;
+    padding-bottom: var(--space-2);
+  }
+
+  .fp-schedule th,
+  .fp-schedule td {
+    padding: var(--space-1) var(--space-3) var(--space-1) 0;
+    border-bottom: var(--rule-thin) solid var(--concrete-700);
+    text-align: left;
+    font-weight: var(--weight-mono);
+  }
+
+  .fp-figure--light .fp-schedule th,
+  .fp-figure--light .fp-schedule td {
+    border-bottom-color: var(--concrete-300);
+  }
+
+  .fp-schedule thead th {
+    font-weight: var(--weight-mono-strong);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-mono);
+    font-size: var(--text-xs);
+  }
+
+  .fp-schedule td:last-child,
+  .fp-schedule th:last-child {
+    text-align: right;
+    padding-right: 0;
+  }
+</style>

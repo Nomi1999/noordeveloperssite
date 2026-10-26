@@ -2,10 +2,11 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import placeholderCheck from "./integrations/placeholder-check.mjs";
+import designCheck from "./integrations/design-check.mjs";
 
 const SITE = "https://noordevelopers.pk";
 // Pages kept out of the sitemap (they are also noindex)
-const UNLISTED = ["/404/", "/styleguide/"].map((path) => new URL(path, SITE).href);
+const UNLISTED = ["/404/", "/styleguide/", "/plans-preview/", "/plans-review/"].map((path) => new URL(path, SITE).href);
 
 export default defineConfig({
   site: SITE,
@@ -15,6 +16,7 @@ export default defineConfig({
     format: "directory",
   },
   integrations: [
+    designCheck(),
     sitemap({
       filter: (page) => !UNLISTED.includes(page),
     }),

@@ -12,8 +12,10 @@
     "preview": "astro preview",
     "astro": "astro",
     "render:og": "node scripts/render-og.mjs",
+    "designs:export": "node scripts/export-designs.ts",
+    "designs:review": "astro build && node scripts/print-review.mjs",
     "brand:build": "node brand/scripts/make-mark.mjs && node brand/scripts/make-type.mjs && node brand/scripts/build-logo.mjs && node brand/scripts/check-mark.mjs",
-    "test": "node scripts/check-whatsapp-url.ts"
+    "test": "vitest run --passWithNoTests && node scripts/check-whatsapp-url.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
@@ -26,6 +28,8 @@
     "clipper-lib": "6.4.2",
     "opentype.js": "2.0.0",
     "sharp": "0.35.5",
-    "svgo": "4.1.0"
+    "svgo": "4.1.0",
+    "vitest": "5.0.5",
+    "zod": "4.6.7"
   }
 }

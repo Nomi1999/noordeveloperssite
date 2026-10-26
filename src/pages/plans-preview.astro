@@ -1,0 +1,50 @@
+---
+// Hidden check page: every plan of every design in both themes. noindex and excluded from the sitemap.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FloorPlan from "../components/FloorPlan.astro";
+import { designs } from "../designs/index.ts";
+import { planLevels } from "../designs/plan.ts";
+import { sqft } from "../designs/units.ts";
+---
+
+<BaseLayout title="Plans preview" description="Internal preview of every floor plan in both drawing styles." noindex>
+  <section class="section section--dark">
+    <div class="container">
+      <p class="label text-accent">00 — Plans preview</p>
+      <h1>Floor plans</h1>
+    </div>
+  </section>
+  {
+    designs.map(({ design, facts }) =>
+      (["dark", "light"] as const).map((theme) => (
+        <section class={`section ${theme === "dark" ? "section--dark" : "section--paper"}`}>
+          <div class="container preview">
+            <h2 class="preview__title">
+              {design.name} — {theme}
+            </h2>
+            <p class="dim">
+              {facts.plot.size} · {facts.storeys} storeys · covered area {sqft(facts.coveredArea)}
+            </p>
+            {planLevels(design).map((level) => (
+              <FloorPlan design={design.slug} level={level.id} theme={theme} />
+            ))}
+          </div>
+        </section>
+      )),
+    )
+  }
+</BaseLayout>
+
+<style>
+  .preview > * + * {
+    margin-top: var(--space-7);
+  }
+
+  .preview > .dim {
+    margin-top: var(--space-3);
+  }
+
+  .preview__title {
+    font-size: var(--text-2xl);
+  }
+</style>

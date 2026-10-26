@@ -1,0 +1,7030 @@
+{
+  "schemaVersion": 1,
+  "slug": "commercial",
+  "name": "Commercial Plaza",
+  "kind": "commercial",
+  "plot": {
+    "width": 50,
+    "depth": 90,
+    "north": 0
+  },
+  "grid": {
+    "x": [
+      {
+        "ref": "A",
+        "at": 0.375
+      },
+      {
+        "ref": "B",
+        "at": 13.75
+      },
+      {
+        "ref": "C",
+        "at": 27.125
+      },
+      {
+        "ref": "D",
+        "at": 40.5
+      },
+      {
+        "ref": "E",
+        "at": 49.625
+      }
+    ],
+    "y": [
+      {
+        "ref": "1",
+        "at": 15
+      },
+      {
+        "ref": "2",
+        "at": 38.5
+      },
+      {
+        "ref": "3",
+        "at": 62
+      },
+      {
+        "ref": "4",
+        "at": 84
+      }
+    ]
+  },
+  "levels": [
+    {
+      "id": "ground",
+      "name": "Ground floor",
+      "kind": "floor",
+      "elevation": 1,
+      "height": 13,
+      "slab": {
+        "top": 1,
+        "bottom": 0.5,
+        "material": "exposed-concrete",
+        "polygons": [
+          {
+            "outer": [
+              [
+                50,
+                84.375
+              ],
+              [
+                0,
+                84.375
+              ],
+              [
+                0,
+                14.625
+              ],
+              [
+                50,
+                14.625
+              ]
+            ],
+            "holes": []
+          }
+        ],
+        "voids": [],
+        "cantilevers": []
+      },
+      "walls": [
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            0,
+            15
+          ],
+          "to": [
+            1.125,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "shop-1-glass",
+          "from": [
+            1.125,
+            15
+          ],
+          "to": [
+            9.625,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 12,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            9.625,
+            15
+          ],
+          "to": [
+            9.775,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "shop-1-door",
+          "from": [
+            9.775,
+            15
+          ],
+          "to": [
+            13.275,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 12,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            13.275,
+            15
+          ],
+          "to": [
+            14.5,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "shop-2-glass",
+          "from": [
+            14.5,
+            15
+          ],
+          "to": [
+            23,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 12,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            23,
+            15
+          ],
+          "to": [
+            23.15,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "shop-2-door",
+          "from": [
+            23.15,
+            15
+          ],
+          "to": [
+            26.65,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 12,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            26.65,
+            15
+          ],
+          "to": [
+            27.875,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "shop-3-glass",
+          "from": [
+            27.875,
+            15
+          ],
+          "to": [
+            36.375,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 12,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            36.375,
+            15
+          ],
+          "to": [
+            36.525,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "shop-3-door",
+          "from": [
+            36.525,
+            15
+          ],
+          "to": [
+            40.025,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 12,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.025,
+            15
+          ],
+          "to": [
+            42.875,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "lobby-entrance",
+          "from": [
+            42.875,
+            15
+          ],
+          "to": [
+            47.875,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 12,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            47.875,
+            15
+          ],
+          "to": [
+            50,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-2",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            49.625,
+            14.625
+          ],
+          "to": [
+            49.625,
+            84.375
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            50,
+            84
+          ],
+          "to": [
+            32.125,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "wash-2-vent",
+          "from": [
+            32.125,
+            84
+          ],
+          "to": [
+            30.125,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 8,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "wash-2-vent",
+          "from": [
+            32.125,
+            84
+          ],
+          "to": [
+            30.125,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 10,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            30.125,
+            84
+          ],
+          "to": [
+            19.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "shop-2-service",
+          "from": [
+            19.625,
+            84
+          ],
+          "to": [
+            16.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 9,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            16.625,
+            84
+          ],
+          "to": [
+            7.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "shop-1-service",
+          "from": [
+            7.625,
+            84
+          ],
+          "to": [
+            4.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 9,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            4.625,
+            84
+          ],
+          "to": [
+            0,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-4",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            0.375,
+            84.375
+          ],
+          "to": [
+            0.375,
+            14.625
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "shop-1-2",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            13.75,
+            14.625
+          ],
+          "to": [
+            13.75,
+            84.375
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "shop-2-3",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            27.125,
+            14.625
+          ],
+          "to": [
+            27.125,
+            84.375
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            14.625
+          ],
+          "to": [
+            40.5,
+            63.5
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "lift-door",
+          "from": [
+            40.5,
+            63.5
+          ],
+          "to": [
+            40.5,
+            67
+          ],
+          "thickness": 0.375,
+          "bottom": 9,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            67
+          ],
+          "to": [
+            40.5,
+            71
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "corridor-opening",
+          "from": [
+            40.5,
+            71
+          ],
+          "to": [
+            40.5,
+            75
+          ],
+          "thickness": 0.375,
+          "bottom": 9,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            75
+          ],
+          "to": [
+            40.5,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "core-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            26.75,
+            62
+          ],
+          "to": [
+            34.375,
+            62
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            33.625,
+            62
+          ],
+          "to": [
+            40.6875,
+            62
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-left",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            61.625
+          ],
+          "to": [
+            34,
+            69.375
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-rear",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            33.625,
+            69
+          ],
+          "to": [
+            40.6875,
+            69
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            68.625
+          ],
+          "to": [
+            34,
+            69.5
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "wash-1-door",
+          "from": [
+            34,
+            69.5
+          ],
+          "to": [
+            34,
+            72.5
+          ],
+          "thickness": 0.375,
+          "bottom": 9,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            72.5
+          ],
+          "to": [
+            34,
+            76
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "wash-2-door",
+          "from": [
+            34,
+            76
+          ],
+          "to": [
+            34,
+            79
+          ],
+          "thickness": 0.375,
+          "bottom": 9,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            79
+          ],
+          "to": [
+            34,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-split",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            26.75,
+            73
+          ],
+          "to": [
+            34.1875,
+            73
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 13.5,
+          "material": "plaster-white"
+        }
+      ],
+      "openings": [
+        {
+          "id": "shop-1-glass",
+          "wall": "out-1",
+          "type": "window",
+          "from": [
+            1.125,
+            15
+          ],
+          "to": [
+            9.625,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 12,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": "glass-clear"
+        },
+        {
+          "id": "shop-1-door",
+          "wall": "out-1",
+          "type": "door",
+          "from": [
+            9.775,
+            15
+          ],
+          "to": [
+            13.275,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 12,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "shop-2-glass",
+          "wall": "out-1",
+          "type": "window",
+          "from": [
+            14.5,
+            15
+          ],
+          "to": [
+            23,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 12,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": "glass-clear"
+        },
+        {
+          "id": "shop-2-door",
+          "wall": "out-1",
+          "type": "door",
+          "from": [
+            23.15,
+            15
+          ],
+          "to": [
+            26.65,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 12,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "shop-3-glass",
+          "wall": "out-1",
+          "type": "window",
+          "from": [
+            27.875,
+            15
+          ],
+          "to": [
+            36.375,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 12,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": "glass-clear"
+        },
+        {
+          "id": "shop-3-door",
+          "wall": "out-1",
+          "type": "door",
+          "from": [
+            36.525,
+            15
+          ],
+          "to": [
+            40.025,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 12,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "lobby-entrance",
+          "wall": "out-1",
+          "type": "double-door",
+          "from": [
+            42.875,
+            15
+          ],
+          "to": [
+            47.875,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 12,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "shop-1-service",
+          "wall": "out-3",
+          "type": "door",
+          "from": [
+            7.625,
+            84
+          ],
+          "to": [
+            4.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 9,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "shop-2-service",
+          "wall": "out-3",
+          "type": "door",
+          "from": [
+            19.625,
+            84
+          ],
+          "to": [
+            16.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 1,
+          "top": 9,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "wash-2-vent",
+          "wall": "out-3",
+          "type": "window",
+          "from": [
+            32.125,
+            84
+          ],
+          "to": [
+            30.125,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 8,
+          "top": 10,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "lift-door",
+          "wall": "lobby-side",
+          "type": "sliding-door",
+          "from": [
+            40.5,
+            63.5
+          ],
+          "to": [
+            40.5,
+            67
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 9,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "corridor-opening",
+          "wall": "lobby-side",
+          "type": "opening",
+          "from": [
+            40.5,
+            71
+          ],
+          "to": [
+            40.5,
+            75
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 9,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "wash-1-door",
+          "wall": "wash-side",
+          "type": "door",
+          "from": [
+            34,
+            69.5
+          ],
+          "to": [
+            34,
+            72.5
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 9,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        },
+        {
+          "id": "wash-2-door",
+          "wall": "wash-side",
+          "type": "door",
+          "from": [
+            34,
+            76
+          ],
+          "to": [
+            34,
+            79
+          ],
+          "thickness": 0.375,
+          "bottom": 1,
+          "top": 9,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        }
+      ],
+      "rooms": [
+        {
+          "id": "shop-1",
+          "name": "Shop 1",
+          "type": "shop",
+          "outline": [
+            [
+              0.375,
+              15
+            ],
+            [
+              13.75,
+              15
+            ],
+            [
+              13.75,
+              84
+            ],
+            [
+              0.375,
+              84
+            ]
+          ],
+          "area": 861.6563,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "shop-2",
+          "name": "Shop 2",
+          "type": "shop",
+          "outline": [
+            [
+              13.75,
+              15
+            ],
+            [
+              27.125,
+              15
+            ],
+            [
+              27.125,
+              84
+            ],
+            [
+              13.75,
+              84
+            ]
+          ],
+          "area": 861.6563,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "shop-3",
+          "name": "Shop 3",
+          "type": "shop",
+          "outline": [
+            [
+              27.125,
+              15
+            ],
+            [
+              40.5,
+              15
+            ],
+            [
+              40.5,
+              62
+            ],
+            [
+              27.125,
+              62
+            ]
+          ],
+          "area": 593.7528,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "lobby",
+          "name": "Entrance lobby",
+          "type": "stair-hall",
+          "outline": [
+            [
+              40.5,
+              15
+            ],
+            [
+              49.625,
+              15
+            ],
+            [
+              49.625,
+              84
+            ],
+            [
+              40.5,
+              84
+            ]
+          ],
+          "area": 584.3565,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "lift",
+          "name": "Lift",
+          "type": "lift",
+          "outline": [
+            [
+              34,
+              62
+            ],
+            [
+              40.5,
+              62
+            ],
+            [
+              40.5,
+              69
+            ],
+            [
+              34,
+              69
+            ]
+          ],
+          "area": 37.1125,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "corridor",
+          "name": "Corridor",
+          "type": "corridor",
+          "outline": [
+            [
+              34,
+              69
+            ],
+            [
+              40.5,
+              69
+            ],
+            [
+              40.5,
+              84
+            ],
+            [
+              34,
+              84
+            ]
+          ],
+          "area": 87.2813,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "wash-1",
+          "name": "Washroom 1",
+          "type": "washroom",
+          "outline": [
+            [
+              27.125,
+              62
+            ],
+            [
+              34,
+              62
+            ],
+            [
+              34,
+              73
+            ],
+            [
+              27.125,
+              73
+            ]
+          ],
+          "area": 65.7245,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "wash-2",
+          "name": "Washroom 2",
+          "type": "washroom",
+          "outline": [
+            [
+              27.125,
+              73
+            ],
+            [
+              34,
+              73
+            ],
+            [
+              34,
+              84
+            ],
+            [
+              27.125,
+              84
+            ]
+          ],
+          "area": 65.8888,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        }
+      ],
+      "fixtures": [
+        {
+          "id": "w1-wc-1",
+          "type": "wc",
+          "x": 27.5,
+          "y": 62.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 1,
+          "back": "left"
+        },
+        {
+          "id": "w1-wc-2",
+          "type": "wc",
+          "x": 27.5,
+          "y": 65.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 1,
+          "back": "left"
+        },
+        {
+          "id": "w1-basin-1",
+          "type": "basin",
+          "x": 31,
+          "y": 70.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 1,
+          "back": "rear"
+        },
+        {
+          "id": "w1-basin-2",
+          "type": "basin",
+          "x": 28.6,
+          "y": 70.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 1,
+          "back": "rear"
+        },
+        {
+          "id": "w2-wc-1",
+          "type": "wc",
+          "x": 27.5,
+          "y": 73.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 1,
+          "back": "left"
+        },
+        {
+          "id": "w2-wc-2",
+          "type": "wc",
+          "x": 27.5,
+          "y": 76.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 1,
+          "back": "left"
+        },
+        {
+          "id": "w2-basin-1",
+          "type": "basin",
+          "x": 31,
+          "y": 81.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 1,
+          "back": "rear"
+        },
+        {
+          "id": "w2-basin-2",
+          "type": "basin",
+          "x": 28.6,
+          "y": 81.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 1,
+          "back": "rear"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "stair",
+          "type": "dog-leg",
+          "x": 41,
+          "y": 66.5,
+          "w": 8.25,
+          "d": 17,
+          "bottom": 1,
+          "to": "first",
+          "up": "rear",
+          "risers": 23,
+          "riser": 0.5652,
+          "tread": 1.1818,
+          "steps": [
+            {
+              "x": 45.25,
+              "y": 66.5,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 1.5652
+            },
+            {
+              "x": 45.25,
+              "y": 67.6818,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 2.1304
+            },
+            {
+              "x": 45.25,
+              "y": 68.8636,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 2.6957
+            },
+            {
+              "x": 45.25,
+              "y": 70.0455,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 3.2609
+            },
+            {
+              "x": 45.25,
+              "y": 71.2273,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 3.8261
+            },
+            {
+              "x": 45.25,
+              "y": 72.4091,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 4.3913
+            },
+            {
+              "x": 45.25,
+              "y": 73.5909,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 4.9565
+            },
+            {
+              "x": 45.25,
+              "y": 74.7727,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 5.5217
+            },
+            {
+              "x": 45.25,
+              "y": 75.9545,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 6.087
+            },
+            {
+              "x": 45.25,
+              "y": 77.1364,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 6.6522
+            },
+            {
+              "x": 45.25,
+              "y": 78.3182,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 7.2174
+            },
+            {
+              "x": 41,
+              "y": 79.5,
+              "w": 8.25,
+              "d": 4,
+              "bottom": 1,
+              "top": 7.7826
+            },
+            {
+              "x": 41,
+              "y": 78.3182,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 8.3478
+            },
+            {
+              "x": 41,
+              "y": 77.1364,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 8.913
+            },
+            {
+              "x": 41,
+              "y": 75.9545,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 9.4783
+            },
+            {
+              "x": 41,
+              "y": 74.7727,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 10.0435
+            },
+            {
+              "x": 41,
+              "y": 73.5909,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 10.6087
+            },
+            {
+              "x": 41,
+              "y": 72.4091,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 11.1739
+            },
+            {
+              "x": 41,
+              "y": 71.2273,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 11.7391
+            },
+            {
+              "x": 41,
+              "y": 70.0455,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 12.3043
+            },
+            {
+              "x": 41,
+              "y": 68.8636,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 12.8696
+            },
+            {
+              "x": 41,
+              "y": 67.6818,
+              "w": 4,
+              "d": 1.1818,
+              "bottom": 1,
+              "top": 13.4348
+            }
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "ref": "A1",
+          "x": 0.375,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "A2",
+          "x": 0.375,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "A3",
+          "x": 0.375,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "A4",
+          "x": 0.375,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "B1",
+          "x": 13.75,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "B2",
+          "x": 13.75,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "B3",
+          "x": 13.75,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "B4",
+          "x": 13.75,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "C1",
+          "x": 27.125,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "C2",
+          "x": 27.125,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "C3",
+          "x": 27.125,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "C4",
+          "x": 27.125,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "D1",
+          "x": 40.5,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "D2",
+          "x": 40.5,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "D3",
+          "x": 40.5,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "D4",
+          "x": 40.5,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "E1",
+          "x": 49.625,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "E2",
+          "x": 49.625,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "E3",
+          "x": 49.625,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        },
+        {
+          "ref": "E4",
+          "x": 49.625,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 1,
+          "top": 13.5
+        }
+      ],
+      "parapets": [],
+      "tanks": []
+    },
+    {
+      "id": "first",
+      "name": "First floor",
+      "kind": "floor",
+      "elevation": 14,
+      "height": 11.5,
+      "slab": {
+        "top": 14,
+        "bottom": 13.5,
+        "material": "exposed-concrete",
+        "polygons": [
+          {
+            "outer": [
+              [
+                50,
+                84.375
+              ],
+              [
+                0,
+                84.375
+              ],
+              [
+                0,
+                14.625
+              ],
+              [
+                50,
+                14.625
+              ]
+            ],
+            "holes": [
+              [
+                [
+                  41,
+                  66.5
+                ],
+                [
+                  41,
+                  83.5
+                ],
+                [
+                  49.25,
+                  83.5
+                ],
+                [
+                  49.25,
+                  66.5
+                ]
+              ],
+              [
+                [
+                  34.375,
+                  62.375
+                ],
+                [
+                  34.375,
+                  68.625
+                ],
+                [
+                  40.125,
+                  68.625
+                ],
+                [
+                  40.125,
+                  62.375
+                ]
+              ]
+            ]
+          }
+        ],
+        "voids": [
+          {
+            "id": "stairwell",
+            "kind": "stair",
+            "outline": [
+              [
+                41,
+                66.5
+              ],
+              [
+                49.25,
+                66.5
+              ],
+              [
+                49.25,
+                83.5
+              ],
+              [
+                41,
+                83.5
+              ]
+            ]
+          },
+          {
+            "id": "lift-shaft",
+            "kind": "shaft",
+            "outline": [
+              [
+                34.375,
+                62.375
+              ],
+              [
+                40.125,
+                62.375
+              ],
+              [
+                40.125,
+                68.625
+              ],
+              [
+                34.375,
+                68.625
+              ]
+            ]
+          }
+        ],
+        "cantilevers": []
+      },
+      "walls": [
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            0,
+            15
+          ],
+          "to": [
+            0.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "curtain-wall",
+          "from": [
+            0.975,
+            15
+          ],
+          "to": [
+            48.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 14.25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "curtain-wall",
+          "from": [
+            0.975,
+            15
+          ],
+          "to": [
+            48.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 24.75,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            48.975,
+            15
+          ],
+          "to": [
+            50,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-2",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            49.625,
+            14.625
+          ],
+          "to": [
+            49.625,
+            84.375
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            50,
+            84
+          ],
+          "to": [
+            25.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "rear-1",
+          "from": [
+            25.625,
+            84
+          ],
+          "to": [
+            15.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 17,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "rear-1",
+          "from": [
+            25.625,
+            84
+          ],
+          "to": [
+            15.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 22,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            15.625,
+            84
+          ],
+          "to": [
+            12.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "rear-2",
+          "from": [
+            12.625,
+            84
+          ],
+          "to": [
+            2.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 17,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "rear-2",
+          "from": [
+            12.625,
+            84
+          ],
+          "to": [
+            2.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 22,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            2.625,
+            84
+          ],
+          "to": [
+            0,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-4",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            0.375,
+            84.375
+          ],
+          "to": [
+            0.375,
+            14.625
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.3125,
+            56
+          ],
+          "to": [
+            42.5,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-front",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "office-door",
+          "from": [
+            42.5,
+            56
+          ],
+          "to": [
+            47.5,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 22,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            47.5,
+            56
+          ],
+          "to": [
+            50,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            55.8125
+          ],
+          "to": [
+            40.5,
+            63.5
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "lift-door",
+          "from": [
+            40.5,
+            63.5
+          ],
+          "to": [
+            40.5,
+            67
+          ],
+          "thickness": 0.375,
+          "bottom": 22,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            67
+          ],
+          "to": [
+            40.5,
+            71
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "corridor-opening",
+          "from": [
+            40.5,
+            71
+          ],
+          "to": [
+            40.5,
+            75
+          ],
+          "thickness": 0.375,
+          "bottom": 22,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            75
+          ],
+          "to": [
+            40.5,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "office-rear",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            27.125,
+            61.8125
+          ],
+          "to": [
+            27.125,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "core-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            26.9375,
+            62
+          ],
+          "to": [
+            34.375,
+            62
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            33.625,
+            62
+          ],
+          "to": [
+            40.6875,
+            62
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-left",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            61.625
+          ],
+          "to": [
+            34,
+            69.375
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-rear",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            33.625,
+            69
+          ],
+          "to": [
+            40.6875,
+            69
+          ],
+          "thickness": 0.75,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            68.625
+          ],
+          "to": [
+            34,
+            69.5
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "wash-1-door",
+          "from": [
+            34,
+            69.5
+          ],
+          "to": [
+            34,
+            72.5
+          ],
+          "thickness": 0.375,
+          "bottom": 22,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            72.5
+          ],
+          "to": [
+            34,
+            76
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "wash-2-door",
+          "from": [
+            34,
+            76
+          ],
+          "to": [
+            34,
+            79
+          ],
+          "thickness": 0.375,
+          "bottom": 22,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            79
+          ],
+          "to": [
+            34,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-split",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            26.9375,
+            73
+          ],
+          "to": [
+            34.1875,
+            73
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 25,
+          "material": "plaster-white"
+        }
+      ],
+      "openings": [
+        {
+          "id": "curtain-wall",
+          "wall": "out-1",
+          "type": "window",
+          "from": [
+            0.975,
+            15
+          ],
+          "to": [
+            48.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 14.25,
+          "top": 24.75,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": "glass-tinted"
+        },
+        {
+          "id": "rear-1",
+          "wall": "out-3",
+          "type": "window",
+          "from": [
+            25.625,
+            84
+          ],
+          "to": [
+            15.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 17,
+          "top": 22,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "rear-2",
+          "wall": "out-3",
+          "type": "window",
+          "from": [
+            12.625,
+            84
+          ],
+          "to": [
+            2.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 17,
+          "top": 22,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "office-door",
+          "wall": "lobby-front",
+          "type": "double-door",
+          "from": [
+            42.5,
+            56
+          ],
+          "to": [
+            47.5,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 22,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        },
+        {
+          "id": "lift-door",
+          "wall": "lobby-side",
+          "type": "sliding-door",
+          "from": [
+            40.5,
+            63.5
+          ],
+          "to": [
+            40.5,
+            67
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 22,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "corridor-opening",
+          "wall": "lobby-side",
+          "type": "opening",
+          "from": [
+            40.5,
+            71
+          ],
+          "to": [
+            40.5,
+            75
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 22,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "wash-1-door",
+          "wall": "wash-side",
+          "type": "door",
+          "from": [
+            34,
+            69.5
+          ],
+          "to": [
+            34,
+            72.5
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 22,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        },
+        {
+          "id": "wash-2-door",
+          "wall": "wash-side",
+          "type": "door",
+          "from": [
+            34,
+            76
+          ],
+          "to": [
+            34,
+            79
+          ],
+          "thickness": 0.375,
+          "bottom": 14,
+          "top": 22,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        }
+      ],
+      "rooms": [
+        {
+          "id": "office",
+          "name": "Office",
+          "type": "office",
+          "outline": [
+            [
+              0.375,
+              15
+            ],
+            [
+              49.625,
+              15
+            ],
+            [
+              49.625,
+              56
+            ],
+            [
+              40.5,
+              56
+            ],
+            [
+              40.5,
+              62
+            ],
+            [
+              27.125,
+              62
+            ],
+            [
+              27.125,
+              84
+            ],
+            [
+              0.375,
+              84
+            ]
+          ],
+          "area": 2768.5763,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "lobby",
+          "name": "Lobby",
+          "type": "stair-hall",
+          "outline": [
+            [
+              40.5,
+              56
+            ],
+            [
+              49.625,
+              56
+            ],
+            [
+              49.625,
+              84
+            ],
+            [
+              40.5,
+              84
+            ]
+          ],
+          "area": 234.9156,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "lift",
+          "name": "Lift",
+          "type": "lift",
+          "outline": [
+            [
+              34,
+              62
+            ],
+            [
+              40.5,
+              62
+            ],
+            [
+              40.5,
+              69
+            ],
+            [
+              34,
+              69
+            ]
+          ],
+          "area": 37.1125,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "corridor",
+          "name": "Corridor",
+          "type": "corridor",
+          "outline": [
+            [
+              34,
+              69
+            ],
+            [
+              40.5,
+              69
+            ],
+            [
+              40.5,
+              84
+            ],
+            [
+              34,
+              84
+            ]
+          ],
+          "area": 87.2813,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "wash-1",
+          "name": "Washroom 1",
+          "type": "washroom",
+          "outline": [
+            [
+              27.125,
+              62
+            ],
+            [
+              34,
+              62
+            ],
+            [
+              34,
+              73
+            ],
+            [
+              27.125,
+              73
+            ]
+          ],
+          "area": 67.7113,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "wash-2",
+          "name": "Washroom 2",
+          "type": "washroom",
+          "outline": [
+            [
+              27.125,
+              73
+            ],
+            [
+              34,
+              73
+            ],
+            [
+              34,
+              84
+            ],
+            [
+              27.125,
+              84
+            ]
+          ],
+          "area": 67.8405,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        }
+      ],
+      "fixtures": [
+        {
+          "id": "w1-wc-1",
+          "type": "wc",
+          "x": 27.5,
+          "y": 62.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 14,
+          "back": "left"
+        },
+        {
+          "id": "w1-wc-2",
+          "type": "wc",
+          "x": 27.5,
+          "y": 65.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 14,
+          "back": "left"
+        },
+        {
+          "id": "w1-basin-1",
+          "type": "basin",
+          "x": 31,
+          "y": 70.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 14,
+          "back": "rear"
+        },
+        {
+          "id": "w1-basin-2",
+          "type": "basin",
+          "x": 28.6,
+          "y": 70.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 14,
+          "back": "rear"
+        },
+        {
+          "id": "w2-wc-1",
+          "type": "wc",
+          "x": 27.5,
+          "y": 73.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 14,
+          "back": "left"
+        },
+        {
+          "id": "w2-wc-2",
+          "type": "wc",
+          "x": 27.5,
+          "y": 76.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 14,
+          "back": "left"
+        },
+        {
+          "id": "w2-basin-1",
+          "type": "basin",
+          "x": 31,
+          "y": 81.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 14,
+          "back": "rear"
+        },
+        {
+          "id": "w2-basin-2",
+          "type": "basin",
+          "x": 28.6,
+          "y": 81.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 14,
+          "back": "rear"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "stair",
+          "type": "dog-leg",
+          "x": 41,
+          "y": 66.5,
+          "w": 8.25,
+          "d": 17,
+          "bottom": 14,
+          "to": "second",
+          "up": "rear",
+          "risers": 20,
+          "riser": 0.575,
+          "tread": 1.4444,
+          "steps": [
+            {
+              "x": 45.25,
+              "y": 66.5,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 14.575
+            },
+            {
+              "x": 45.25,
+              "y": 67.9444,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 15.15
+            },
+            {
+              "x": 45.25,
+              "y": 69.3889,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 15.725
+            },
+            {
+              "x": 45.25,
+              "y": 70.8333,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 16.3
+            },
+            {
+              "x": 45.25,
+              "y": 72.2778,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 16.875
+            },
+            {
+              "x": 45.25,
+              "y": 73.7222,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 17.45
+            },
+            {
+              "x": 45.25,
+              "y": 75.1667,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 18.025
+            },
+            {
+              "x": 45.25,
+              "y": 76.6111,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 18.6
+            },
+            {
+              "x": 45.25,
+              "y": 78.0556,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 19.175
+            },
+            {
+              "x": 41,
+              "y": 79.5,
+              "w": 8.25,
+              "d": 4,
+              "bottom": 14,
+              "top": 19.75
+            },
+            {
+              "x": 41,
+              "y": 78.0556,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 20.325
+            },
+            {
+              "x": 41,
+              "y": 76.6111,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 20.9
+            },
+            {
+              "x": 41,
+              "y": 75.1667,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 21.475
+            },
+            {
+              "x": 41,
+              "y": 73.7222,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 22.05
+            },
+            {
+              "x": 41,
+              "y": 72.2778,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 22.625
+            },
+            {
+              "x": 41,
+              "y": 70.8333,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 23.2
+            },
+            {
+              "x": 41,
+              "y": 69.3889,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 23.775
+            },
+            {
+              "x": 41,
+              "y": 67.9444,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 24.35
+            },
+            {
+              "x": 41,
+              "y": 66.5,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 14,
+              "top": 24.925
+            }
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "ref": "A1",
+          "x": 0.375,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "A2",
+          "x": 0.375,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "A3",
+          "x": 0.375,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "A4",
+          "x": 0.375,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "B1",
+          "x": 13.75,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "B2",
+          "x": 13.75,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "B3",
+          "x": 13.75,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "B4",
+          "x": 13.75,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "C1",
+          "x": 27.125,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "C2",
+          "x": 27.125,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "C3",
+          "x": 27.125,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "C4",
+          "x": 27.125,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "D1",
+          "x": 40.5,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "D2",
+          "x": 40.5,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "D3",
+          "x": 40.5,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "D4",
+          "x": 40.5,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "E1",
+          "x": 49.625,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "E2",
+          "x": 49.625,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "E3",
+          "x": 49.625,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        },
+        {
+          "ref": "E4",
+          "x": 49.625,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 14,
+          "top": 25
+        }
+      ],
+      "parapets": [],
+      "tanks": []
+    },
+    {
+      "id": "second",
+      "name": "Second floor",
+      "kind": "floor",
+      "elevation": 25.5,
+      "height": 11.5,
+      "slab": {
+        "top": 25.5,
+        "bottom": 25,
+        "material": "exposed-concrete",
+        "polygons": [
+          {
+            "outer": [
+              [
+                50,
+                84.375
+              ],
+              [
+                0,
+                84.375
+              ],
+              [
+                0,
+                14.625
+              ],
+              [
+                50,
+                14.625
+              ]
+            ],
+            "holes": [
+              [
+                [
+                  41,
+                  66.5
+                ],
+                [
+                  41,
+                  83.5
+                ],
+                [
+                  49.25,
+                  83.5
+                ],
+                [
+                  49.25,
+                  66.5
+                ]
+              ],
+              [
+                [
+                  34.375,
+                  62.375
+                ],
+                [
+                  34.375,
+                  68.625
+                ],
+                [
+                  40.125,
+                  68.625
+                ],
+                [
+                  40.125,
+                  62.375
+                ]
+              ]
+            ]
+          }
+        ],
+        "voids": [
+          {
+            "id": "stairwell",
+            "kind": "stair",
+            "outline": [
+              [
+                41,
+                66.5
+              ],
+              [
+                49.25,
+                66.5
+              ],
+              [
+                49.25,
+                83.5
+              ],
+              [
+                41,
+                83.5
+              ]
+            ]
+          },
+          {
+            "id": "lift-shaft",
+            "kind": "shaft",
+            "outline": [
+              [
+                34.375,
+                62.375
+              ],
+              [
+                40.125,
+                62.375
+              ],
+              [
+                40.125,
+                68.625
+              ],
+              [
+                34.375,
+                68.625
+              ]
+            ]
+          }
+        ],
+        "cantilevers": []
+      },
+      "walls": [
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            0,
+            15
+          ],
+          "to": [
+            0.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "curtain-wall",
+          "from": [
+            0.975,
+            15
+          ],
+          "to": [
+            48.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 25.75,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "curtain-wall",
+          "from": [
+            0.975,
+            15
+          ],
+          "to": [
+            48.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 36.25,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            48.975,
+            15
+          ],
+          "to": [
+            50,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-2",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            49.625,
+            14.625
+          ],
+          "to": [
+            49.625,
+            84.375
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            50,
+            84
+          ],
+          "to": [
+            25.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "rear-1",
+          "from": [
+            25.625,
+            84
+          ],
+          "to": [
+            15.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 28.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "rear-1",
+          "from": [
+            25.625,
+            84
+          ],
+          "to": [
+            15.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 33.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            15.625,
+            84
+          ],
+          "to": [
+            12.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "rear-2",
+          "from": [
+            12.625,
+            84
+          ],
+          "to": [
+            2.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 28.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "rear-2",
+          "from": [
+            12.625,
+            84
+          ],
+          "to": [
+            2.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 33.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            2.625,
+            84
+          ],
+          "to": [
+            0,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-4",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            0.375,
+            84.375
+          ],
+          "to": [
+            0.375,
+            14.625
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.3125,
+            56
+          ],
+          "to": [
+            42.5,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-front",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "office-door",
+          "from": [
+            42.5,
+            56
+          ],
+          "to": [
+            47.5,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 33.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            47.5,
+            56
+          ],
+          "to": [
+            50,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            55.8125
+          ],
+          "to": [
+            40.5,
+            63.5
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "lift-door",
+          "from": [
+            40.5,
+            63.5
+          ],
+          "to": [
+            40.5,
+            67
+          ],
+          "thickness": 0.375,
+          "bottom": 33.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            67
+          ],
+          "to": [
+            40.5,
+            71
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "corridor-opening",
+          "from": [
+            40.5,
+            71
+          ],
+          "to": [
+            40.5,
+            75
+          ],
+          "thickness": 0.375,
+          "bottom": 33.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            75
+          ],
+          "to": [
+            40.5,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "office-rear",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            27.125,
+            61.8125
+          ],
+          "to": [
+            27.125,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "core-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            26.9375,
+            62
+          ],
+          "to": [
+            34.375,
+            62
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            33.625,
+            62
+          ],
+          "to": [
+            40.6875,
+            62
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-left",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            61.625
+          ],
+          "to": [
+            34,
+            69.375
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-rear",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            33.625,
+            69
+          ],
+          "to": [
+            40.6875,
+            69
+          ],
+          "thickness": 0.75,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            68.625
+          ],
+          "to": [
+            34,
+            69.5
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "wash-1-door",
+          "from": [
+            34,
+            69.5
+          ],
+          "to": [
+            34,
+            72.5
+          ],
+          "thickness": 0.375,
+          "bottom": 33.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            72.5
+          ],
+          "to": [
+            34,
+            76
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "wash-2-door",
+          "from": [
+            34,
+            76
+          ],
+          "to": [
+            34,
+            79
+          ],
+          "thickness": 0.375,
+          "bottom": 33.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            79
+          ],
+          "to": [
+            34,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-split",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            26.9375,
+            73
+          ],
+          "to": [
+            34.1875,
+            73
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 36.5,
+          "material": "plaster-white"
+        }
+      ],
+      "openings": [
+        {
+          "id": "curtain-wall",
+          "wall": "out-1",
+          "type": "window",
+          "from": [
+            0.975,
+            15
+          ],
+          "to": [
+            48.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 25.75,
+          "top": 36.25,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": "glass-tinted"
+        },
+        {
+          "id": "rear-1",
+          "wall": "out-3",
+          "type": "window",
+          "from": [
+            25.625,
+            84
+          ],
+          "to": [
+            15.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 28.5,
+          "top": 33.5,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "rear-2",
+          "wall": "out-3",
+          "type": "window",
+          "from": [
+            12.625,
+            84
+          ],
+          "to": [
+            2.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 28.5,
+          "top": 33.5,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "office-door",
+          "wall": "lobby-front",
+          "type": "double-door",
+          "from": [
+            42.5,
+            56
+          ],
+          "to": [
+            47.5,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 33.5,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        },
+        {
+          "id": "lift-door",
+          "wall": "lobby-side",
+          "type": "sliding-door",
+          "from": [
+            40.5,
+            63.5
+          ],
+          "to": [
+            40.5,
+            67
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 33.5,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "corridor-opening",
+          "wall": "lobby-side",
+          "type": "opening",
+          "from": [
+            40.5,
+            71
+          ],
+          "to": [
+            40.5,
+            75
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 33.5,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "wash-1-door",
+          "wall": "wash-side",
+          "type": "door",
+          "from": [
+            34,
+            69.5
+          ],
+          "to": [
+            34,
+            72.5
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 33.5,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        },
+        {
+          "id": "wash-2-door",
+          "wall": "wash-side",
+          "type": "door",
+          "from": [
+            34,
+            76
+          ],
+          "to": [
+            34,
+            79
+          ],
+          "thickness": 0.375,
+          "bottom": 25.5,
+          "top": 33.5,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        }
+      ],
+      "rooms": [
+        {
+          "id": "office",
+          "name": "Office",
+          "type": "office",
+          "outline": [
+            [
+              0.375,
+              15
+            ],
+            [
+              49.625,
+              15
+            ],
+            [
+              49.625,
+              56
+            ],
+            [
+              40.5,
+              56
+            ],
+            [
+              40.5,
+              62
+            ],
+            [
+              27.125,
+              62
+            ],
+            [
+              27.125,
+              84
+            ],
+            [
+              0.375,
+              84
+            ]
+          ],
+          "area": 2768.5763,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "lobby",
+          "name": "Lobby",
+          "type": "stair-hall",
+          "outline": [
+            [
+              40.5,
+              56
+            ],
+            [
+              49.625,
+              56
+            ],
+            [
+              49.625,
+              84
+            ],
+            [
+              40.5,
+              84
+            ]
+          ],
+          "area": 234.9156,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "lift",
+          "name": "Lift",
+          "type": "lift",
+          "outline": [
+            [
+              34,
+              62
+            ],
+            [
+              40.5,
+              62
+            ],
+            [
+              40.5,
+              69
+            ],
+            [
+              34,
+              69
+            ]
+          ],
+          "area": 37.1125,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "corridor",
+          "name": "Corridor",
+          "type": "corridor",
+          "outline": [
+            [
+              34,
+              69
+            ],
+            [
+              40.5,
+              69
+            ],
+            [
+              40.5,
+              84
+            ],
+            [
+              34,
+              84
+            ]
+          ],
+          "area": 87.2813,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "wash-1",
+          "name": "Washroom 1",
+          "type": "washroom",
+          "outline": [
+            [
+              27.125,
+              62
+            ],
+            [
+              34,
+              62
+            ],
+            [
+              34,
+              73
+            ],
+            [
+              27.125,
+              73
+            ]
+          ],
+          "area": 67.7113,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "wash-2",
+          "name": "Washroom 2",
+          "type": "washroom",
+          "outline": [
+            [
+              27.125,
+              73
+            ],
+            [
+              34,
+              73
+            ],
+            [
+              34,
+              84
+            ],
+            [
+              27.125,
+              84
+            ]
+          ],
+          "area": 67.8405,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        }
+      ],
+      "fixtures": [
+        {
+          "id": "w1-wc-1",
+          "type": "wc",
+          "x": 27.5,
+          "y": 62.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 25.5,
+          "back": "left"
+        },
+        {
+          "id": "w1-wc-2",
+          "type": "wc",
+          "x": 27.5,
+          "y": 65.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 25.5,
+          "back": "left"
+        },
+        {
+          "id": "w1-basin-1",
+          "type": "basin",
+          "x": 31,
+          "y": 70.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 25.5,
+          "back": "rear"
+        },
+        {
+          "id": "w1-basin-2",
+          "type": "basin",
+          "x": 28.6,
+          "y": 70.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 25.5,
+          "back": "rear"
+        },
+        {
+          "id": "w2-wc-1",
+          "type": "wc",
+          "x": 27.5,
+          "y": 73.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 25.5,
+          "back": "left"
+        },
+        {
+          "id": "w2-wc-2",
+          "type": "wc",
+          "x": 27.5,
+          "y": 76.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 25.5,
+          "back": "left"
+        },
+        {
+          "id": "w2-basin-1",
+          "type": "basin",
+          "x": 31,
+          "y": 81.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 25.5,
+          "back": "rear"
+        },
+        {
+          "id": "w2-basin-2",
+          "type": "basin",
+          "x": 28.6,
+          "y": 81.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 25.5,
+          "back": "rear"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "stair",
+          "type": "dog-leg",
+          "x": 41,
+          "y": 66.5,
+          "w": 8.25,
+          "d": 17,
+          "bottom": 25.5,
+          "to": "third",
+          "up": "rear",
+          "risers": 20,
+          "riser": 0.575,
+          "tread": 1.4444,
+          "steps": [
+            {
+              "x": 45.25,
+              "y": 66.5,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 26.075
+            },
+            {
+              "x": 45.25,
+              "y": 67.9444,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 26.65
+            },
+            {
+              "x": 45.25,
+              "y": 69.3889,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 27.225
+            },
+            {
+              "x": 45.25,
+              "y": 70.8333,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 27.8
+            },
+            {
+              "x": 45.25,
+              "y": 72.2778,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 28.375
+            },
+            {
+              "x": 45.25,
+              "y": 73.7222,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 28.95
+            },
+            {
+              "x": 45.25,
+              "y": 75.1667,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 29.525
+            },
+            {
+              "x": 45.25,
+              "y": 76.6111,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 30.1
+            },
+            {
+              "x": 45.25,
+              "y": 78.0556,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 30.675
+            },
+            {
+              "x": 41,
+              "y": 79.5,
+              "w": 8.25,
+              "d": 4,
+              "bottom": 25.5,
+              "top": 31.25
+            },
+            {
+              "x": 41,
+              "y": 78.0556,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 31.825
+            },
+            {
+              "x": 41,
+              "y": 76.6111,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 32.4
+            },
+            {
+              "x": 41,
+              "y": 75.1667,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 32.975
+            },
+            {
+              "x": 41,
+              "y": 73.7222,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 33.55
+            },
+            {
+              "x": 41,
+              "y": 72.2778,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 34.125
+            },
+            {
+              "x": 41,
+              "y": 70.8333,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 34.7
+            },
+            {
+              "x": 41,
+              "y": 69.3889,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 35.275
+            },
+            {
+              "x": 41,
+              "y": 67.9444,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 35.85
+            },
+            {
+              "x": 41,
+              "y": 66.5,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 25.5,
+              "top": 36.425
+            }
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "ref": "A1",
+          "x": 0.375,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "A2",
+          "x": 0.375,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "A3",
+          "x": 0.375,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "A4",
+          "x": 0.375,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "B1",
+          "x": 13.75,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "B2",
+          "x": 13.75,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "B3",
+          "x": 13.75,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "B4",
+          "x": 13.75,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "C1",
+          "x": 27.125,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "C2",
+          "x": 27.125,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "C3",
+          "x": 27.125,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "C4",
+          "x": 27.125,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "D1",
+          "x": 40.5,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "D2",
+          "x": 40.5,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "D3",
+          "x": 40.5,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "D4",
+          "x": 40.5,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "E1",
+          "x": 49.625,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "E2",
+          "x": 49.625,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "E3",
+          "x": 49.625,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        },
+        {
+          "ref": "E4",
+          "x": 49.625,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 25.5,
+          "top": 36.5
+        }
+      ],
+      "parapets": [],
+      "tanks": []
+    },
+    {
+      "id": "third",
+      "name": "Third floor",
+      "kind": "floor",
+      "elevation": 37,
+      "height": 11.5,
+      "slab": {
+        "top": 37,
+        "bottom": 36.5,
+        "material": "exposed-concrete",
+        "polygons": [
+          {
+            "outer": [
+              [
+                50,
+                84.375
+              ],
+              [
+                0,
+                84.375
+              ],
+              [
+                0,
+                14.625
+              ],
+              [
+                50,
+                14.625
+              ]
+            ],
+            "holes": [
+              [
+                [
+                  41,
+                  66.5
+                ],
+                [
+                  41,
+                  83.5
+                ],
+                [
+                  49.25,
+                  83.5
+                ],
+                [
+                  49.25,
+                  66.5
+                ]
+              ],
+              [
+                [
+                  34.375,
+                  62.375
+                ],
+                [
+                  34.375,
+                  68.625
+                ],
+                [
+                  40.125,
+                  68.625
+                ],
+                [
+                  40.125,
+                  62.375
+                ]
+              ]
+            ]
+          }
+        ],
+        "voids": [
+          {
+            "id": "stairwell",
+            "kind": "stair",
+            "outline": [
+              [
+                41,
+                66.5
+              ],
+              [
+                49.25,
+                66.5
+              ],
+              [
+                49.25,
+                83.5
+              ],
+              [
+                41,
+                83.5
+              ]
+            ]
+          },
+          {
+            "id": "lift-shaft",
+            "kind": "shaft",
+            "outline": [
+              [
+                34.375,
+                62.375
+              ],
+              [
+                40.125,
+                62.375
+              ],
+              [
+                40.125,
+                68.625
+              ],
+              [
+                34.375,
+                68.625
+              ]
+            ]
+          }
+        ],
+        "cantilevers": []
+      },
+      "walls": [
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            0,
+            15
+          ],
+          "to": [
+            0.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "curtain-wall",
+          "from": [
+            0.975,
+            15
+          ],
+          "to": [
+            48.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 37.25,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "curtain-wall",
+          "from": [
+            0.975,
+            15
+          ],
+          "to": [
+            48.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 47.75,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            48.975,
+            15
+          ],
+          "to": [
+            50,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-2",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            49.625,
+            14.625
+          ],
+          "to": [
+            49.625,
+            84.375
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            50,
+            84
+          ],
+          "to": [
+            25.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "rear-1",
+          "from": [
+            25.625,
+            84
+          ],
+          "to": [
+            15.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 40,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "rear-1",
+          "from": [
+            25.625,
+            84
+          ],
+          "to": [
+            15.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 45,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            15.625,
+            84
+          ],
+          "to": [
+            12.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "sill",
+          "opening": "rear-2",
+          "from": [
+            12.625,
+            84
+          ],
+          "to": [
+            2.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 40,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "rear-2",
+          "from": [
+            12.625,
+            84
+          ],
+          "to": [
+            2.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 45,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            2.625,
+            84
+          ],
+          "to": [
+            0,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "out-4",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            0.375,
+            84.375
+          ],
+          "to": [
+            0.375,
+            14.625
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.3125,
+            56
+          ],
+          "to": [
+            42.5,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-front",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "office-door",
+          "from": [
+            42.5,
+            56
+          ],
+          "to": [
+            47.5,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 45,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            47.5,
+            56
+          ],
+          "to": [
+            50,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            55.8125
+          ],
+          "to": [
+            40.5,
+            63.5
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "lift-door",
+          "from": [
+            40.5,
+            63.5
+          ],
+          "to": [
+            40.5,
+            67
+          ],
+          "thickness": 0.375,
+          "bottom": 45,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            67
+          ],
+          "to": [
+            40.5,
+            71
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "corridor-opening",
+          "from": [
+            40.5,
+            71
+          ],
+          "to": [
+            40.5,
+            75
+          ],
+          "thickness": 0.375,
+          "bottom": 45,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lobby-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            75
+          ],
+          "to": [
+            40.5,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "office-rear",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            27.125,
+            61.8125
+          ],
+          "to": [
+            27.125,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "core-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            26.9375,
+            62
+          ],
+          "to": [
+            34.375,
+            62
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-front",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            33.625,
+            62
+          ],
+          "to": [
+            40.6875,
+            62
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-left",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            61.625
+          ],
+          "to": [
+            34,
+            69.375
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "lift-rear",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            33.625,
+            69
+          ],
+          "to": [
+            40.6875,
+            69
+          ],
+          "thickness": 0.75,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            68.625
+          ],
+          "to": [
+            34,
+            69.5
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "wash-1-door",
+          "from": [
+            34,
+            69.5
+          ],
+          "to": [
+            34,
+            72.5
+          ],
+          "thickness": 0.375,
+          "bottom": 45,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            72.5
+          ],
+          "to": [
+            34,
+            76
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "lintel",
+          "opening": "wash-2-door",
+          "from": [
+            34,
+            76
+          ],
+          "to": [
+            34,
+            79
+          ],
+          "thickness": 0.375,
+          "bottom": 45,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-side",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            79
+          ],
+          "to": [
+            34,
+            84.375
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        },
+        {
+          "wall": "wash-split",
+          "kind": "interior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            26.9375,
+            73
+          ],
+          "to": [
+            34.1875,
+            73
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 48,
+          "material": "plaster-white"
+        }
+      ],
+      "openings": [
+        {
+          "id": "curtain-wall",
+          "wall": "out-1",
+          "type": "window",
+          "from": [
+            0.975,
+            15
+          ],
+          "to": [
+            48.975,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 37.25,
+          "top": 47.75,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": "glass-tinted"
+        },
+        {
+          "id": "rear-1",
+          "wall": "out-3",
+          "type": "window",
+          "from": [
+            25.625,
+            84
+          ],
+          "to": [
+            15.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 40,
+          "top": 45,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "rear-2",
+          "wall": "out-3",
+          "type": "window",
+          "from": [
+            12.625,
+            84
+          ],
+          "to": [
+            2.625,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 40,
+          "top": 45,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "office-door",
+          "wall": "lobby-front",
+          "type": "double-door",
+          "from": [
+            42.5,
+            56
+          ],
+          "to": [
+            47.5,
+            56
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 45,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        },
+        {
+          "id": "lift-door",
+          "wall": "lobby-side",
+          "type": "sliding-door",
+          "from": [
+            40.5,
+            63.5
+          ],
+          "to": [
+            40.5,
+            67
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 45,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "corridor-opening",
+          "wall": "lobby-side",
+          "type": "opening",
+          "from": [
+            40.5,
+            71
+          ],
+          "to": [
+            40.5,
+            75
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 45,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "wash-1-door",
+          "wall": "wash-side",
+          "type": "door",
+          "from": [
+            34,
+            69.5
+          ],
+          "to": [
+            34,
+            72.5
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 45,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        },
+        {
+          "id": "wash-2-door",
+          "wall": "wash-side",
+          "type": "door",
+          "from": [
+            34,
+            76
+          ],
+          "to": [
+            34,
+            79
+          ],
+          "thickness": 0.375,
+          "bottom": 37,
+          "top": 45,
+          "hinge": "start",
+          "opensTo": "right",
+          "material": null
+        }
+      ],
+      "rooms": [
+        {
+          "id": "office",
+          "name": "Office",
+          "type": "office",
+          "outline": [
+            [
+              0.375,
+              15
+            ],
+            [
+              49.625,
+              15
+            ],
+            [
+              49.625,
+              56
+            ],
+            [
+              40.5,
+              56
+            ],
+            [
+              40.5,
+              62
+            ],
+            [
+              27.125,
+              62
+            ],
+            [
+              27.125,
+              84
+            ],
+            [
+              0.375,
+              84
+            ]
+          ],
+          "area": 2768.5763,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "lobby",
+          "name": "Lobby",
+          "type": "stair-hall",
+          "outline": [
+            [
+              40.5,
+              56
+            ],
+            [
+              49.625,
+              56
+            ],
+            [
+              49.625,
+              84
+            ],
+            [
+              40.5,
+              84
+            ]
+          ],
+          "area": 234.9156,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "lift",
+          "name": "Lift",
+          "type": "lift",
+          "outline": [
+            [
+              34,
+              62
+            ],
+            [
+              40.5,
+              62
+            ],
+            [
+              40.5,
+              69
+            ],
+            [
+              34,
+              69
+            ]
+          ],
+          "area": 37.1125,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "corridor",
+          "name": "Corridor",
+          "type": "corridor",
+          "outline": [
+            [
+              34,
+              69
+            ],
+            [
+              40.5,
+              69
+            ],
+            [
+              40.5,
+              84
+            ],
+            [
+              34,
+              84
+            ]
+          ],
+          "area": 87.2813,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "wash-1",
+          "name": "Washroom 1",
+          "type": "washroom",
+          "outline": [
+            [
+              27.125,
+              62
+            ],
+            [
+              34,
+              62
+            ],
+            [
+              34,
+              73
+            ],
+            [
+              27.125,
+              73
+            ]
+          ],
+          "area": 67.7113,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "wash-2",
+          "name": "Washroom 2",
+          "type": "washroom",
+          "outline": [
+            [
+              27.125,
+              73
+            ],
+            [
+              34,
+              73
+            ],
+            [
+              34,
+              84
+            ],
+            [
+              27.125,
+              84
+            ]
+          ],
+          "area": 67.8405,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        }
+      ],
+      "fixtures": [
+        {
+          "id": "w1-wc-1",
+          "type": "wc",
+          "x": 27.5,
+          "y": 62.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 37,
+          "back": "left"
+        },
+        {
+          "id": "w1-wc-2",
+          "type": "wc",
+          "x": 27.5,
+          "y": 65.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 37,
+          "back": "left"
+        },
+        {
+          "id": "w1-basin-1",
+          "type": "basin",
+          "x": 31,
+          "y": 70.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 37,
+          "back": "rear"
+        },
+        {
+          "id": "w1-basin-2",
+          "type": "basin",
+          "x": 28.6,
+          "y": 70.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 37,
+          "back": "rear"
+        },
+        {
+          "id": "w2-wc-1",
+          "type": "wc",
+          "x": 27.5,
+          "y": 73.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 37,
+          "back": "left"
+        },
+        {
+          "id": "w2-wc-2",
+          "type": "wc",
+          "x": 27.5,
+          "y": 76.6,
+          "w": 2.25,
+          "d": 1.5,
+          "bottom": 37,
+          "back": "left"
+        },
+        {
+          "id": "w2-basin-1",
+          "type": "basin",
+          "x": 31,
+          "y": 81.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 37,
+          "back": "rear"
+        },
+        {
+          "id": "w2-basin-2",
+          "type": "basin",
+          "x": 28.6,
+          "y": 81.8,
+          "w": 1.75,
+          "d": 1.5,
+          "bottom": 37,
+          "back": "rear"
+        }
+      ],
+      "stairs": [
+        {
+          "id": "stair",
+          "type": "dog-leg",
+          "x": 41,
+          "y": 66.5,
+          "w": 8.25,
+          "d": 17,
+          "bottom": 37,
+          "to": "roof",
+          "up": "rear",
+          "risers": 20,
+          "riser": 0.575,
+          "tread": 1.4444,
+          "steps": [
+            {
+              "x": 45.25,
+              "y": 66.5,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 37.575
+            },
+            {
+              "x": 45.25,
+              "y": 67.9444,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 38.15
+            },
+            {
+              "x": 45.25,
+              "y": 69.3889,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 38.725
+            },
+            {
+              "x": 45.25,
+              "y": 70.8333,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 39.3
+            },
+            {
+              "x": 45.25,
+              "y": 72.2778,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 39.875
+            },
+            {
+              "x": 45.25,
+              "y": 73.7222,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 40.45
+            },
+            {
+              "x": 45.25,
+              "y": 75.1667,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 41.025
+            },
+            {
+              "x": 45.25,
+              "y": 76.6111,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 41.6
+            },
+            {
+              "x": 45.25,
+              "y": 78.0556,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 42.175
+            },
+            {
+              "x": 41,
+              "y": 79.5,
+              "w": 8.25,
+              "d": 4,
+              "bottom": 37,
+              "top": 42.75
+            },
+            {
+              "x": 41,
+              "y": 78.0556,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 43.325
+            },
+            {
+              "x": 41,
+              "y": 76.6111,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 43.9
+            },
+            {
+              "x": 41,
+              "y": 75.1667,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 44.475
+            },
+            {
+              "x": 41,
+              "y": 73.7222,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 45.05
+            },
+            {
+              "x": 41,
+              "y": 72.2778,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 45.625
+            },
+            {
+              "x": 41,
+              "y": 70.8333,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 46.2
+            },
+            {
+              "x": 41,
+              "y": 69.3889,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 46.775
+            },
+            {
+              "x": 41,
+              "y": 67.9444,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 47.35
+            },
+            {
+              "x": 41,
+              "y": 66.5,
+              "w": 4,
+              "d": 1.4444,
+              "bottom": 37,
+              "top": 47.925
+            }
+          ]
+        }
+      ],
+      "columns": [
+        {
+          "ref": "A1",
+          "x": 0.375,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "A2",
+          "x": 0.375,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "A3",
+          "x": 0.375,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "A4",
+          "x": 0.375,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "B1",
+          "x": 13.75,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "B2",
+          "x": 13.75,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "B3",
+          "x": 13.75,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "B4",
+          "x": 13.75,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "C1",
+          "x": 27.125,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "C2",
+          "x": 27.125,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "C3",
+          "x": 27.125,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "C4",
+          "x": 27.125,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "D1",
+          "x": 40.5,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "D2",
+          "x": 40.5,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "D3",
+          "x": 40.5,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "D4",
+          "x": 40.5,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "E1",
+          "x": 49.625,
+          "y": 15,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "E2",
+          "x": 49.625,
+          "y": 38.5,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "E3",
+          "x": 49.625,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        },
+        {
+          "ref": "E4",
+          "x": 49.625,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 37,
+          "top": 48
+        }
+      ],
+      "parapets": [],
+      "tanks": []
+    },
+    {
+      "id": "roof",
+      "name": "Roof",
+      "kind": "roof",
+      "elevation": 48.5,
+      "height": 10,
+      "slab": {
+        "top": 48.5,
+        "bottom": 48,
+        "material": "exposed-concrete",
+        "polygons": [
+          {
+            "outer": [
+              [
+                50,
+                84.375
+              ],
+              [
+                0,
+                84.375
+              ],
+              [
+                0,
+                14.625
+              ],
+              [
+                50,
+                14.625
+              ]
+            ],
+            "holes": [
+              [
+                [
+                  41,
+                  66.5
+                ],
+                [
+                  41,
+                  83.5
+                ],
+                [
+                  49.25,
+                  83.5
+                ],
+                [
+                  49.25,
+                  66.5
+                ]
+              ]
+            ]
+          }
+        ],
+        "voids": [
+          {
+            "id": "stairwell",
+            "kind": "stair",
+            "outline": [
+              [
+                41,
+                66.5
+              ],
+              [
+                49.25,
+                66.5
+              ],
+              [
+                49.25,
+                83.5
+              ],
+              [
+                41,
+                83.5
+              ]
+            ]
+          }
+        ],
+        "cantilevers": []
+      },
+      "walls": [
+        {
+          "wall": "mumty-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.125,
+            62
+          ],
+          "to": [
+            41.5,
+            62
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "mumty-1",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "roof-door",
+          "from": [
+            41.5,
+            62
+          ],
+          "to": [
+            44.5,
+            62
+          ],
+          "thickness": 0.75,
+          "bottom": 56.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "mumty-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            44.5,
+            62
+          ],
+          "to": [
+            50,
+            62
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "mumty-2",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            49.625,
+            61.625
+          ],
+          "to": [
+            49.625,
+            84.375
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "mumty-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            50,
+            84
+          ],
+          "to": [
+            40.125,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "mumty-4",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.5,
+            84.375
+          ],
+          "to": [
+            40.5,
+            61.625
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "machine-1",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            40.875,
+            62
+          ],
+          "to": [
+            33.625,
+            62
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "machine-2",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            61.625
+          ],
+          "to": [
+            34,
+            65
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "machine-2",
+          "kind": "exterior",
+          "part": "lintel",
+          "opening": "machine-door",
+          "from": [
+            34,
+            65
+          ],
+          "to": [
+            34,
+            68
+          ],
+          "thickness": 0.75,
+          "bottom": 56.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "machine-2",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            34,
+            68
+          ],
+          "to": [
+            34,
+            69.375
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "wall": "machine-3",
+          "kind": "exterior",
+          "part": "solid",
+          "opening": null,
+          "from": [
+            33.625,
+            69
+          ],
+          "to": [
+            40.875,
+            69
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 58,
+          "material": "plaster-warm-grey"
+        }
+      ],
+      "openings": [
+        {
+          "id": "roof-door",
+          "wall": "mumty-1",
+          "type": "door",
+          "from": [
+            41.5,
+            62
+          ],
+          "to": [
+            44.5,
+            62
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 56.5,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        },
+        {
+          "id": "machine-door",
+          "wall": "machine-2",
+          "type": "door",
+          "from": [
+            34,
+            65
+          ],
+          "to": [
+            34,
+            68
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 56.5,
+          "hinge": "start",
+          "opensTo": "left",
+          "material": null
+        }
+      ],
+      "rooms": [
+        {
+          "id": "stair-room",
+          "name": "Stair room",
+          "type": "stair-room",
+          "outline": [
+            [
+              40.5,
+              62
+            ],
+            [
+              49.625,
+              62
+            ],
+            [
+              49.625,
+              84
+            ],
+            [
+              40.5,
+              84
+            ]
+          ],
+          "area": 177.9688,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
+          "id": "machine-room",
+          "name": "Lift machine room",
+          "type": "machine-room",
+          "outline": [
+            [
+              34,
+              62
+            ],
+            [
+              40.5,
+              62
+            ],
+            [
+              40.5,
+              69
+            ],
+            [
+              34,
+              69
+            ]
+          ],
+          "area": 35.9375,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        }
+      ],
+      "fixtures": [],
+      "stairs": [],
+      "columns": [
+        {
+          "ref": "D3",
+          "x": 40.5,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 48.5,
+          "top": 58
+        },
+        {
+          "ref": "D4",
+          "x": 40.5,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 48.5,
+          "top": 58
+        },
+        {
+          "ref": "E3",
+          "x": 49.625,
+          "y": 62,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 48.5,
+          "top": 58
+        },
+        {
+          "ref": "E4",
+          "x": 49.625,
+          "y": 84,
+          "w": 1,
+          "d": 1.5,
+          "bottom": 48.5,
+          "top": 58
+        }
+      ],
+      "parapets": [
+        {
+          "parapet": "parapet",
+          "from": [
+            0,
+            15
+          ],
+          "to": [
+            50,
+            15
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 52,
+          "material": "plaster-white"
+        },
+        {
+          "parapet": "parapet",
+          "from": [
+            49.625,
+            14.625
+          ],
+          "to": [
+            49.625,
+            84.375
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 52,
+          "material": "plaster-white"
+        },
+        {
+          "parapet": "parapet",
+          "from": [
+            50,
+            84
+          ],
+          "to": [
+            0,
+            84
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 52,
+          "material": "plaster-white"
+        },
+        {
+          "parapet": "parapet",
+          "from": [
+            0.375,
+            84.375
+          ],
+          "to": [
+            0.375,
+            14.625
+          ],
+          "thickness": 0.75,
+          "bottom": 48.5,
+          "top": 52,
+          "material": "plaster-white"
+        }
+      ],
+      "tanks": [
+        {
+          "id": "tank-1",
+          "x": 4,
+          "y": 72,
+          "w": 6,
+          "d": 6,
+          "bottom": 48.5,
+          "top": 53.5,
+          "material": "plaster-warm-grey"
+        },
+        {
+          "id": "tank-2",
+          "x": 12,
+          "y": 72,
+          "w": 6,
+          "d": 6,
+          "bottom": 48.5,
+          "top": 53.5,
+          "material": "plaster-warm-grey"
+        }
+      ]
+    },
+    {
+      "id": "top",
+      "name": "Stair room roof",
+      "kind": "roof",
+      "elevation": 58.5,
+      "height": 1,
+      "slab": {
+        "top": 58.5,
+        "bottom": 58,
+        "material": "exposed-concrete",
+        "polygons": [
+          {
+            "outer": [
+              [
+                50,
+                84.375
+              ],
+              [
+                40.125,
+                84.375
+              ],
+              [
+                40.125,
+                69.375
+              ],
+              [
+                33.625,
+                69.375
+              ],
+              [
+                33.625,
+                61.625
+              ],
+              [
+                50,
+                61.625
+              ]
+            ],
+            "holes": []
+          }
+        ],
+        "voids": [],
+        "cantilevers": []
+      },
+      "walls": [],
+      "openings": [],
+      "rooms": [],
+      "fixtures": [],
+      "stairs": [],
+      "columns": [],
+      "parapets": [],
+      "tanks": []
+    }
+  ],
+  "site": {
+    "boundary": {
+      "material": "plaster-warm-grey",
+      "walls": [
+        {
+          "side": "rear",
+          "from": [
+            0,
+            89.625
+          ],
+          "to": [
+            50,
+            89.625
+          ],
+          "thickness": 0.75,
+          "bottom": 0,
+          "top": 7
+        }
+      ],
+      "gates": []
+    },
+    "porches": [],
+    "driveways": [],
+    "lawns": [],
+    "paving": [
+      {
+        "id": "forecourt",
+        "outline": [
+          [
+            0,
+            0
+          ],
+          [
+            50,
+            0
+          ],
+          [
+            50,
+            14.625
+          ],
+          [
+            0,
+            14.625
+          ]
+        ],
+        "material": "paving-stone"
+      },
+      {
+        "id": "service-lane",
+        "outline": [
+          [
+            0,
+            84.375
+          ],
+          [
+            50,
+            84.375
+          ],
+          [
+            50,
+            89.25
+          ],
+          [
+            0,
+            89.25
+          ]
+        ],
+        "material": "paving-stone"
+      }
+    ],
+    "planting": [
+      {
+        "id": "tree-1",
+        "kind": "tree",
+        "at": [
+          6,
+          3
+        ],
+        "size": 4
+      },
+      {
+        "id": "tree-2",
+        "kind": "tree",
+        "at": [
+          25,
+          3
+        ],
+        "size": 4
+      },
+      {
+        "id": "tree-3",
+        "kind": "tree",
+        "at": [
+          44,
+          3
+        ],
+        "size": 4
+      }
+    ]
+  },
+  "facade": [
+    {
+      "type": "box",
+      "id": "canopy",
+      "role": "canopy",
+      "x": 0,
+      "y": 12.5,
+      "w": 50,
+      "d": 2.125,
+      "bottom": 12.25,
+      "top": 13,
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "frame-left",
+      "role": "frame",
+      "x": 0,
+      "y": 12.5,
+      "w": 2,
+      "d": 2.125,
+      "bottom": 13.5,
+      "top": 52,
+      "material": "exposed-concrete"
+    },
+    {
+      "type": "box",
+      "id": "frame-right",
+      "role": "frame",
+      "x": 48,
+      "y": 12.5,
+      "w": 2,
+      "d": 2.125,
+      "bottom": 13.5,
+      "top": 52,
+      "material": "exposed-concrete"
+    },
+    {
+      "type": "box",
+      "id": "frame-top",
+      "role": "frame",
+      "x": 2,
+      "y": 12.5,
+      "w": 46,
+      "d": 2.125,
+      "bottom": 47.5,
+      "top": 52,
+      "material": "exposed-concrete"
+    },
+    {
+      "type": "box",
+      "id": "frame-bottom",
+      "role": "frame",
+      "x": 2,
+      "y": 12.5,
+      "w": 46,
+      "d": 2.125,
+      "bottom": 13.5,
+      "top": 15,
+      "material": "exposed-concrete"
+    },
+    {
+      "type": "box",
+      "id": "mullion-1",
+      "role": "mullion",
+      "x": 7.625,
+      "y": 14.25,
+      "w": 0.25,
+      "d": 0.375,
+      "bottom": 15,
+      "top": 47.5,
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "mullion-2",
+      "role": "mullion",
+      "x": 13.375,
+      "y": 14.25,
+      "w": 0.25,
+      "d": 0.375,
+      "bottom": 15,
+      "top": 47.5,
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "mullion-3",
+      "role": "mullion",
+      "x": 19.125,
+      "y": 14.25,
+      "w": 0.25,
+      "d": 0.375,
+      "bottom": 15,
+      "top": 47.5,
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "mullion-4",
+      "role": "mullion",
+      "x": 24.875,
+      "y": 14.25,
+      "w": 0.25,
+      "d": 0.375,
+      "bottom": 15,
+      "top": 47.5,
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "mullion-5",
+      "role": "mullion",
+      "x": 30.625,
+      "y": 14.25,
+      "w": 0.25,
+      "d": 0.375,
+      "bottom": 15,
+      "top": 47.5,
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "mullion-6",
+      "role": "mullion",
+      "x": 36.375,
+      "y": 14.25,
+      "w": 0.25,
+      "d": 0.375,
+      "bottom": 15,
+      "top": 47.5,
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "mullion-7",
+      "role": "mullion",
+      "x": 42.125,
+      "y": 14.25,
+      "w": 0.25,
+      "d": 0.375,
+      "bottom": 15,
+      "top": 47.5,
+      "material": "metal-dark"
+    }
+  ],
+  "facts": {
+    "plot": {
+      "width": 50,
+      "depth": 90,
+      "area": 4500,
+      "size": "1 Kanal"
+    },
+    "storeys": 4,
+    "levels": [
+      {
+        "id": "ground",
+        "name": "Ground floor",
+        "coveredArea": 3487.5
+      },
+      {
+        "id": "first",
+        "name": "First floor",
+        "coveredArea": 3487.5
+      },
+      {
+        "id": "second",
+        "name": "Second floor",
+        "coveredArea": 3487.5
+      },
+      {
+        "id": "third",
+        "name": "Third floor",
+        "coveredArea": 3487.5
+      },
+      {
+        "id": "roof",
+        "name": "Roof",
+        "coveredArea": 275.0313
+      }
+    ],
+    "coveredArea": 14225.0313,
+    "bedrooms": 0,
+    "bedroomsWithAttachedBath": 0,
+    "bathrooms": 8,
+    "shops": 3,
+    "officeArea": 8305.7289,
+    "roomCounts": {
+      "shop": 3,
+      "stair-hall": 4,
+      "lift": 4,
+      "corridor": 4,
+      "washroom": 8,
+      "office": 3,
+      "stair-room": 1,
+      "machine-room": 1
+    },
+    "doubleHeightRooms": [],
+    "porches": [],
+    "lawnArea": 0,
+    "roof": {
+      "parapet": true,
+      "stairRoom": true,
+      "tanks": 2,
+      "machineRoom": true
+    },
+    "levelsWithWashrooms": 4,
+    "levelsWithLift": 4
+  }
+}

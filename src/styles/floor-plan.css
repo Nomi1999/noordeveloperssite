@@ -1,0 +1,254 @@
+/*
+ * Floor plan drawing styles (SVG from src/designs/plan.ts). Colors are tokens
+ * only. Text roles and their contrast (see tokens.css):
+ *
+ *   dark   --fp-text  --paper        on --ink     16.76:1
+ *          --fp-dim   --concrete-300 on --ink     10.98:1
+ *   light  --fp-text  --ink          on --paper   16.76:1
+ *          --fp-dim   --concrete-700 on --paper   10.33:1
+ *
+ * --fp-faint and --fp-grid are linework only, never text. The accent (--noor)
+ * is reserved for the north arrow and walking-line arrows.
+ */
+
+.fp {
+  --fp-bg: var(--ink);
+  --fp-wall: var(--paper);
+  --fp-line: var(--concrete-300);
+  --fp-faint: var(--concrete-500);
+  --fp-grid: var(--concrete-700);
+  --fp-fill: var(--ink-2);
+  --fp-text: var(--paper);
+  --fp-dim: var(--concrete-300);
+  --fp-accent: var(--noor);
+
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--fp-bg);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-mono);
+}
+
+.fp--light {
+  --fp-bg: var(--paper);
+  --fp-wall: var(--ink);
+  --fp-line: var(--concrete-700);
+  --fp-faint: var(--concrete-500);
+  --fp-grid: var(--concrete-300);
+  --fp-fill: var(--concrete-100);
+  --fp-text: var(--ink);
+  --fp-dim: var(--concrete-700);
+}
+
+.fp path,
+.fp rect,
+.fp circle,
+.fp ellipse {
+  vector-effect: non-scaling-stroke;
+  fill: none;
+  stroke: none;
+}
+
+.fp .fp-bg {
+  fill: var(--fp-bg);
+}
+
+/* Structure */
+.fp .fp-wall {
+  fill: var(--fp-wall);
+}
+
+.fp .fp-cut {
+  fill: var(--fp-line);
+}
+
+.fp .fp-boundary {
+  fill: var(--fp-faint);
+}
+
+.fp .fp-parapet {
+  fill: var(--fp-fill);
+  stroke: var(--fp-line);
+  stroke-width: 1px;
+}
+
+.fp .fp-slab {
+  stroke: var(--fp-line);
+  stroke-width: 1px;
+}
+
+.fp .fp-above {
+  stroke: var(--fp-faint);
+  stroke-width: 1px;
+  stroke-dasharray: 6 4;
+}
+
+.fp .fp-void {
+  stroke: var(--fp-faint);
+  stroke-width: 0.75px;
+  stroke-dasharray: 3 3;
+}
+
+/* Openings */
+.fp .fp-open {
+  stroke: var(--fp-line);
+  stroke-width: 1px;
+}
+
+.fp .fp-glass {
+  stroke: var(--fp-wall);
+  stroke-width: 1.25px;
+}
+
+.fp .fp-leaf {
+  stroke: var(--fp-wall);
+  stroke-width: 1.5px;
+}
+
+.fp .fp-swing {
+  stroke: var(--fp-line);
+  stroke-width: 0.75px;
+}
+
+.fp .fp-head {
+  stroke: var(--fp-faint);
+  stroke-width: 0.75px;
+  stroke-dasharray: 4 3;
+}
+
+.fp .fp-gate {
+  stroke: var(--fp-line);
+  stroke-width: 1.5px;
+  stroke-dasharray: 2 2;
+}
+
+.fp .fp-rail {
+  stroke: var(--fp-line);
+  stroke-width: 1.5px;
+}
+
+/* Fixtures and stairs */
+.fp .fp-fix {
+  stroke: var(--fp-line);
+  stroke-width: 1px;
+}
+
+.fp .fp-fix-thin {
+  stroke: var(--fp-line);
+  stroke-width: 0.6px;
+}
+
+.fp .fp-fix-dash {
+  stroke: var(--fp-line);
+  stroke-width: 0.6px;
+  stroke-dasharray: 3 2;
+}
+
+.fp .fp-walk {
+  stroke: var(--fp-accent);
+  stroke-width: 1px;
+}
+
+.fp .fp-arrow,
+.fp .fp-north {
+  fill: var(--fp-accent);
+}
+
+/* Site */
+.fp .fp-plot {
+  stroke: var(--fp-faint);
+  stroke-width: 1px;
+  stroke-dasharray: 10 3 2 3;
+}
+
+.fp .fp-pave {
+  stroke: var(--fp-grid);
+  stroke-width: 0.75px;
+}
+
+.fp .fp-porch {
+  fill: var(--fp-fill);
+  stroke: var(--fp-faint);
+  stroke-width: 0.75px;
+}
+
+.fp .fp-lawn {
+  stroke: var(--fp-grid);
+  stroke-width: 0.75px;
+}
+
+.fp .fp-lawn-dot {
+  fill: var(--fp-faint);
+}
+
+.fp .fp-plant {
+  stroke: var(--fp-faint);
+  stroke-width: 0.75px;
+}
+
+/* Annotation */
+.fp text {
+  font-family: var(--font-mono);
+  fill: var(--fp-text);
+  paint-order: stroke;
+  stroke: var(--fp-bg);
+  stroke-width: 0.35px;
+  stroke-linejoin: round;
+}
+
+.fp .fp-label {
+  font-weight: var(--weight-mono-strong);
+  letter-spacing: 0.06em;
+}
+
+.fp .fp-label-sub,
+.fp .fp-dim,
+.fp .fp-note {
+  fill: var(--fp-dim);
+}
+
+.fp .fp-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: 0.02em;
+}
+
+.fp .fp-dimline,
+.fp .fp-tick {
+  stroke: var(--fp-line);
+  stroke-width: 0.75px;
+}
+
+.fp .fp-ext {
+  stroke: var(--fp-faint);
+  stroke-width: 0.5px;
+}
+
+.fp .fp-grid {
+  stroke: var(--fp-grid);
+  stroke-width: 0.75px;
+  stroke-dasharray: 8 3 2 3;
+}
+
+.fp .fp-bubble {
+  stroke: var(--fp-line);
+  stroke-width: 1px;
+}
+
+.fp .fp-rule {
+  stroke: var(--fp-grid);
+  stroke-width: 1px;
+}
+
+.fp .fp-scale-a {
+  fill: var(--fp-wall);
+  stroke: var(--fp-wall);
+  stroke-width: 1px;
+}
+
+.fp .fp-scale-b {
+  fill: var(--fp-bg);
+  stroke: var(--fp-wall);
+  stroke-width: 1px;
+}

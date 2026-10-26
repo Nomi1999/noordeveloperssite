@@ -1,0 +1,2 @@
+# The render export is compared byte for byte, so keep LF line endings on every checkout
+render/data/*.json text eol=lf

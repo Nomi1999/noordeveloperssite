@@ -1,0 +1,1779 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "slug": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "plot": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "number"
+        },
+        "depth": {
+          "type": "number"
+        },
+        "north": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "width",
+        "depth",
+        "north"
+      ],
+      "additionalProperties": false
+    },
+    "grid": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ref": {
+                "type": "string"
+              },
+              "at": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "ref",
+              "at"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "y": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ref": {
+                "type": "string"
+              },
+              "at": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "ref",
+              "at"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "additionalProperties": false
+    },
+    "levels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "floor",
+              "roof"
+            ]
+          },
+          "elevation": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "slab": {
+            "type": "object",
+            "properties": {
+              "top": {
+                "type": "number"
+              },
+              "bottom": {
+                "type": "number"
+              },
+              "material": {
+                "type": "string",
+                "enum": [
+                  "plaster-white",
+                  "plaster-warm-grey",
+                  "stone-cladding",
+                  "wood-panel",
+                  "exposed-concrete",
+                  "metal-dark",
+                  "glass-clear",
+                  "glass-tinted",
+                  "porcelain-paving",
+                  "brick-structure",
+                  "paving-stone",
+                  "grass",
+                  "planter-soil"
+                ]
+              },
+              "polygons": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "outer": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "prefixItems": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "items": false,
+                        "minItems": 2,
+                        "maxItems": 2
+                      }
+                    },
+                    "holes": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "prefixItems": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ],
+                          "items": false,
+                          "minItems": 2,
+                          "maxItems": 2
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "outer",
+                    "holes"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "voids": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "stair",
+                        "shaft",
+                        "double-height",
+                        "open"
+                      ]
+                    },
+                    "outline": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "prefixItems": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "items": false,
+                        "minItems": 2,
+                        "maxItems": 2
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "kind",
+                    "outline"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "cantilevers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "outline": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "prefixItems": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "items": false,
+                        "minItems": 2,
+                        "maxItems": 2
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "outline"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "top",
+              "bottom",
+              "material",
+              "polygons",
+              "voids",
+              "cantilevers"
+            ],
+            "additionalProperties": false
+          },
+          "walls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "wall": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "exterior",
+                    "interior"
+                  ]
+                },
+                "part": {
+                  "type": "string",
+                  "enum": [
+                    "solid",
+                    "sill",
+                    "lintel"
+                  ]
+                },
+                "opening": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "from": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "to": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "thickness": {
+                  "type": "number"
+                },
+                "bottom": {
+                  "type": "number"
+                },
+                "top": {
+                  "type": "number"
+                },
+                "material": {
+                  "type": "string",
+                  "enum": [
+                    "plaster-white",
+                    "plaster-warm-grey",
+                    "stone-cladding",
+                    "wood-panel",
+                    "exposed-concrete",
+                    "metal-dark",
+                    "glass-clear",
+                    "glass-tinted",
+                    "porcelain-paving",
+                    "brick-structure",
+                    "paving-stone",
+                    "grass",
+                    "planter-soil"
+                  ]
+                }
+              },
+              "required": [
+                "wall",
+                "kind",
+                "part",
+                "opening",
+                "from",
+                "to",
+                "thickness",
+                "bottom",
+                "top",
+                "material"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "openings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "wall": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "door",
+                    "double-door",
+                    "sliding-door",
+                    "window",
+                    "opening"
+                  ]
+                },
+                "from": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "to": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "thickness": {
+                  "type": "number"
+                },
+                "bottom": {
+                  "type": "number"
+                },
+                "top": {
+                  "type": "number"
+                },
+                "hinge": {
+                  "type": "string",
+                  "enum": [
+                    "start",
+                    "end"
+                  ]
+                },
+                "opensTo": {
+                  "type": "string",
+                  "enum": [
+                    "left",
+                    "right"
+                  ]
+                },
+                "material": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "plaster-white",
+                        "plaster-warm-grey",
+                        "stone-cladding",
+                        "wood-panel",
+                        "exposed-concrete",
+                        "metal-dark",
+                        "glass-clear",
+                        "glass-tinted",
+                        "porcelain-paving",
+                        "brick-structure",
+                        "paving-stone",
+                        "grass",
+                        "planter-soil"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "wall",
+                "type",
+                "from",
+                "to",
+                "thickness",
+                "bottom",
+                "top",
+                "hinge",
+                "opensTo",
+                "material"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "rooms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "master-bedroom",
+                    "bedroom",
+                    "bathroom",
+                    "powder-room",
+                    "dressing",
+                    "drawing",
+                    "dining",
+                    "lounge",
+                    "tv-lounge",
+                    "family-lounge",
+                    "kitchen",
+                    "back-kitchen",
+                    "foyer",
+                    "corridor",
+                    "stair-hall",
+                    "store",
+                    "laundry",
+                    "servant-room",
+                    "guard-room",
+                    "terrace",
+                    "stair-room",
+                    "shop",
+                    "office",
+                    "lobby",
+                    "washroom",
+                    "lift",
+                    "shaft",
+                    "machine-room",
+                    "other"
+                  ]
+                },
+                "outline": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 2,
+                    "maxItems": 2
+                  }
+                },
+                "area": {
+                  "type": "number"
+                },
+                "attachedTo": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "floor": {
+                  "type": "string",
+                  "enum": [
+                    "plaster-white",
+                    "plaster-warm-grey",
+                    "stone-cladding",
+                    "wood-panel",
+                    "exposed-concrete",
+                    "metal-dark",
+                    "glass-clear",
+                    "glass-tinted",
+                    "porcelain-paving",
+                    "brick-structure",
+                    "paving-stone",
+                    "grass",
+                    "planter-soil"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "type",
+                "outline",
+                "area",
+                "attachedTo",
+                "floor"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "fixtures": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "counter",
+                    "sink",
+                    "hob",
+                    "wc",
+                    "basin",
+                    "vanity",
+                    "shower",
+                    "bathtub",
+                    "urinal",
+                    "wardrobe"
+                  ]
+                },
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "w": {
+                  "type": "number"
+                },
+                "d": {
+                  "type": "number"
+                },
+                "bottom": {
+                  "type": "number"
+                },
+                "back": {
+                  "type": "string",
+                  "enum": [
+                    "front",
+                    "rear",
+                    "left",
+                    "right"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "type",
+                "x",
+                "y",
+                "w",
+                "d",
+                "bottom",
+                "back"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "stairs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "dog-leg",
+                    "straight"
+                  ]
+                },
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "w": {
+                  "type": "number"
+                },
+                "d": {
+                  "type": "number"
+                },
+                "bottom": {
+                  "type": "number"
+                },
+                "to": {
+                  "type": "string"
+                },
+                "up": {
+                  "type": "string",
+                  "enum": [
+                    "front",
+                    "rear",
+                    "left",
+                    "right"
+                  ]
+                },
+                "risers": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "riser": {
+                  "type": "number"
+                },
+                "tread": {
+                  "type": "number"
+                },
+                "steps": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      },
+                      "w": {
+                        "type": "number"
+                      },
+                      "d": {
+                        "type": "number"
+                      },
+                      "bottom": {
+                        "type": "number"
+                      },
+                      "top": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "w",
+                      "d",
+                      "bottom",
+                      "top"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "type",
+                "x",
+                "y",
+                "w",
+                "d",
+                "bottom",
+                "to",
+                "up",
+                "risers",
+                "riser",
+                "tread",
+                "steps"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "w": {
+                  "type": "number"
+                },
+                "d": {
+                  "type": "number"
+                },
+                "bottom": {
+                  "type": "number"
+                },
+                "top": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "ref",
+                "x",
+                "y",
+                "w",
+                "d",
+                "bottom",
+                "top"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "parapets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "parapet": {
+                  "type": "string"
+                },
+                "from": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "to": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "thickness": {
+                  "type": "number"
+                },
+                "bottom": {
+                  "type": "number"
+                },
+                "top": {
+                  "type": "number"
+                },
+                "material": {
+                  "type": "string",
+                  "enum": [
+                    "plaster-white",
+                    "plaster-warm-grey",
+                    "stone-cladding",
+                    "wood-panel",
+                    "exposed-concrete",
+                    "metal-dark",
+                    "glass-clear",
+                    "glass-tinted",
+                    "porcelain-paving",
+                    "brick-structure",
+                    "paving-stone",
+                    "grass",
+                    "planter-soil"
+                  ]
+                }
+              },
+              "required": [
+                "parapet",
+                "from",
+                "to",
+                "thickness",
+                "bottom",
+                "top",
+                "material"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "tanks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "w": {
+                  "type": "number"
+                },
+                "d": {
+                  "type": "number"
+                },
+                "bottom": {
+                  "type": "number"
+                },
+                "top": {
+                  "type": "number"
+                },
+                "material": {
+                  "type": "string",
+                  "enum": [
+                    "plaster-white",
+                    "plaster-warm-grey",
+                    "stone-cladding",
+                    "wood-panel",
+                    "exposed-concrete",
+                    "metal-dark",
+                    "glass-clear",
+                    "glass-tinted",
+                    "porcelain-paving",
+                    "brick-structure",
+                    "paving-stone",
+                    "grass",
+                    "planter-soil"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "x",
+                "y",
+                "w",
+                "d",
+                "bottom",
+                "top",
+                "material"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "elevation",
+          "height",
+          "slab",
+          "walls",
+          "openings",
+          "rooms",
+          "fixtures",
+          "stairs",
+          "columns",
+          "parapets",
+          "tanks"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "site": {
+      "type": "object",
+      "properties": {
+        "boundary": {
+          "type": "object",
+          "properties": {
+            "material": {
+              "type": "string",
+              "enum": [
+                "plaster-white",
+                "plaster-warm-grey",
+                "stone-cladding",
+                "wood-panel",
+                "exposed-concrete",
+                "metal-dark",
+                "glass-clear",
+                "glass-tinted",
+                "porcelain-paving",
+                "brick-structure",
+                "paving-stone",
+                "grass",
+                "planter-soil"
+              ]
+            },
+            "walls": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "side": {
+                    "type": "string",
+                    "enum": [
+                      "front",
+                      "rear",
+                      "left",
+                      "right"
+                    ]
+                  },
+                  "from": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "to": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "thickness": {
+                    "type": "number"
+                  },
+                  "bottom": {
+                    "type": "number"
+                  },
+                  "top": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "side",
+                  "from",
+                  "to",
+                  "thickness",
+                  "bottom",
+                  "top"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "gates": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "side": {
+                    "type": "string",
+                    "enum": [
+                      "front",
+                      "rear",
+                      "left",
+                      "right"
+                    ]
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "vehicle",
+                      "pedestrian"
+                    ]
+                  },
+                  "from": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "to": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "thickness": {
+                    "type": "number"
+                  },
+                  "bottom": {
+                    "type": "number"
+                  },
+                  "top": {
+                    "type": "number"
+                  },
+                  "material": {
+                    "type": "string",
+                    "enum": [
+                      "plaster-white",
+                      "plaster-warm-grey",
+                      "stone-cladding",
+                      "wood-panel",
+                      "exposed-concrete",
+                      "metal-dark",
+                      "glass-clear",
+                      "glass-tinted",
+                      "porcelain-paving",
+                      "brick-structure",
+                      "paving-stone",
+                      "grass",
+                      "planter-soil"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "side",
+                  "kind",
+                  "from",
+                  "to",
+                  "thickness",
+                  "bottom",
+                  "top",
+                  "material"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "material",
+            "walls",
+            "gates"
+          ],
+          "additionalProperties": false
+        },
+        "porches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "outline": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              },
+              "material": {
+                "type": "string",
+                "enum": [
+                  "plaster-white",
+                  "plaster-warm-grey",
+                  "stone-cladding",
+                  "wood-panel",
+                  "exposed-concrete",
+                  "metal-dark",
+                  "glass-clear",
+                  "glass-tinted",
+                  "porcelain-paving",
+                  "brick-structure",
+                  "paving-stone",
+                  "grass",
+                  "planter-soil"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "outline",
+              "material"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "driveways": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "outline": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              },
+              "material": {
+                "type": "string",
+                "enum": [
+                  "plaster-white",
+                  "plaster-warm-grey",
+                  "stone-cladding",
+                  "wood-panel",
+                  "exposed-concrete",
+                  "metal-dark",
+                  "glass-clear",
+                  "glass-tinted",
+                  "porcelain-paving",
+                  "brick-structure",
+                  "paving-stone",
+                  "grass",
+                  "planter-soil"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "outline",
+              "material"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "lawns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "outline": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              }
+            },
+            "required": [
+              "id",
+              "outline"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "paving": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "outline": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              },
+              "material": {
+                "type": "string",
+                "enum": [
+                  "plaster-white",
+                  "plaster-warm-grey",
+                  "stone-cladding",
+                  "wood-panel",
+                  "exposed-concrete",
+                  "metal-dark",
+                  "glass-clear",
+                  "glass-tinted",
+                  "porcelain-paving",
+                  "brick-structure",
+                  "paving-stone",
+                  "grass",
+                  "planter-soil"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "outline",
+              "material"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "planting": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "tree",
+                  "palm",
+                  "shrub",
+                  "hedge"
+                ]
+              },
+              "at": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "items": false,
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "size": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "at",
+              "size"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "boundary",
+        "porches",
+        "driveways",
+        "lawns",
+        "paving",
+        "planting"
+      ],
+      "additionalProperties": false
+    },
+    "facade": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "box"
+              },
+              "id": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "w": {
+                "type": "number"
+              },
+              "d": {
+                "type": "number"
+              },
+              "bottom": {
+                "type": "number"
+              },
+              "top": {
+                "type": "number"
+              },
+              "material": {
+                "type": "string",
+                "enum": [
+                  "plaster-white",
+                  "plaster-warm-grey",
+                  "stone-cladding",
+                  "wood-panel",
+                  "exposed-concrete",
+                  "metal-dark",
+                  "glass-clear",
+                  "glass-tinted",
+                  "porcelain-paving",
+                  "brick-structure",
+                  "paving-stone",
+                  "grass",
+                  "planter-soil"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "id",
+              "role",
+              "x",
+              "y",
+              "w",
+              "d",
+              "bottom",
+              "top",
+              "material"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "railing"
+              },
+              "id": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "pieces": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "from": {
+                      "type": "array",
+                      "prefixItems": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "items": false,
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "to": {
+                      "type": "array",
+                      "prefixItems": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "items": false,
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "thickness": {
+                      "type": "number"
+                    },
+                    "bottom": {
+                      "type": "number"
+                    },
+                    "top": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "from",
+                    "to",
+                    "thickness",
+                    "bottom",
+                    "top"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "material": {
+                "type": "string",
+                "enum": [
+                  "plaster-white",
+                  "plaster-warm-grey",
+                  "stone-cladding",
+                  "wood-panel",
+                  "exposed-concrete",
+                  "metal-dark",
+                  "glass-clear",
+                  "glass-tinted",
+                  "porcelain-paving",
+                  "brick-structure",
+                  "paving-stone",
+                  "grass",
+                  "planter-soil"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "id",
+              "role",
+              "pieces",
+              "material"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "facts": {
+      "type": "object",
+      "properties": {
+        "plot": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "number"
+            },
+            "depth": {
+              "type": "number"
+            },
+            "area": {
+              "type": "number"
+            },
+            "size": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "width",
+            "depth",
+            "area",
+            "size"
+          ],
+          "additionalProperties": false
+        },
+        "storeys": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "levels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "coveredArea": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "coveredArea"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "coveredArea": {
+          "type": "number"
+        },
+        "bedrooms": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "bedroomsWithAttachedBath": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "bathrooms": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "shops": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "officeArea": {
+          "type": "number"
+        },
+        "roomCounts": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "enum": [
+              "master-bedroom",
+              "bedroom",
+              "bathroom",
+              "powder-room",
+              "dressing",
+              "drawing",
+              "dining",
+              "lounge",
+              "tv-lounge",
+              "family-lounge",
+              "kitchen",
+              "back-kitchen",
+              "foyer",
+              "corridor",
+              "stair-hall",
+              "store",
+              "laundry",
+              "servant-room",
+              "guard-room",
+              "terrace",
+              "stair-room",
+              "shop",
+              "office",
+              "lobby",
+              "washroom",
+              "lift",
+              "shaft",
+              "machine-room",
+              "other"
+            ]
+          },
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "doubleHeightRooms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "porches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "cars": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "covered": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "cars",
+              "covered"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "lawnArea": {
+          "type": "number"
+        },
+        "roof": {
+          "type": "object",
+          "properties": {
+            "parapet": {
+              "type": "boolean"
+            },
+            "stairRoom": {
+              "type": "boolean"
+            },
+            "tanks": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "machineRoom": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "parapet",
+            "stairRoom",
+            "tanks",
+            "machineRoom"
+          ],
+          "additionalProperties": false
+        },
+        "levelsWithWashrooms": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "levelsWithLift": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "plot",
+        "storeys",
+        "levels",
+        "coveredArea",
+        "bedrooms",
+        "bedroomsWithAttachedBath",
+        "bathrooms",
+        "shops",
+        "officeArea",
+        "roomCounts",
+        "doubleHeightRooms",
+        "porches",
+        "lawnArea",
+        "roof",
+        "levelsWithWashrooms",
+        "levelsWithLift"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "slug",
+    "name",
+    "kind",
+    "plot",
+    "grid",
+    "levels",
+    "site",
+    "facade",
+    "facts"
+  ],
+  "additionalProperties": false,
+  "title": "Noor Developers design export",
+  "$comment": "schemaVersion 1"
+}

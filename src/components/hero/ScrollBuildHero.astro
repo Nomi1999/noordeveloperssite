@@ -338,10 +338,11 @@ const { phases } = heroCopy;
     height: calc(6 * 100svh + 100svh);
   }
 
+  /* Pinned just below the sticky header, filling the rest of the screen */
   :global(html.hero-scrub) .hero__stage {
     position: sticky;
-    top: 0;
-    height: 100svh;
+    top: var(--header-offset);
+    height: calc(100svh - var(--header-offset));
     min-height: 0;
   }
 

@@ -104,7 +104,9 @@ export function start(root: HTMLElement) {
   function measure() {
     const rect = root.getBoundingClientRect();
     const span = rect.height - stage.clientHeight;
-    progress = span > 0 ? clamp(-rect.top / span) : 0;
+    // The stage pins at its sticky top (below the site header): progress runs 0 → 1 while it's pinned
+    const pin = parseFloat(getComputedStyle(stage).top) || 0;
+    progress = span > 0 ? clamp((pin - rect.top) / span) : 0;
     target = progress * (frameCount - 1);
   }
 

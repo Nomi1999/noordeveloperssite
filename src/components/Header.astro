@@ -56,6 +56,21 @@ function currentState(href: string): "page" | "true" | undefined {
   </div>
 </header>
 
+<script is:inline>
+  // Publish the sticky header's real height as --header-offset (the token is only its minimum),
+  // before the page below is laid out, and keep it current as the header resizes.
+  (function () {
+    var header = document.querySelector("[data-site-header]");
+    if (!header) return;
+    var root = document.documentElement;
+    var set = function () {
+      root.style.setProperty("--header-offset", header.offsetHeight + "px");
+    };
+    set();
+    if (window.ResizeObserver) new ResizeObserver(set).observe(header);
+  })();
+</script>
+
 <script>
   // Mobile menu: progressive enhancement. Without JS the nav list stays visible.
   const header = document.querySelector<HTMLElement>("[data-site-header]");
@@ -99,6 +114,18 @@ function currentState(href: string): "page" | "true" | undefined {
     color: var(--paper);
     border-bottom: var(--rule-thin) solid var(--concrete-700);
     --focus-color: var(--noor);
+  }
+
+  /* With JS the header stays at the top of the viewport; without it, it scrolls away as before */
+  :global(.js) .site-header {
+    position: sticky;
+    top: 0;
+  }
+
+  @media print {
+    :global(.js) .site-header {
+      position: static;
+    }
   }
 
   .site-header__inner {
@@ -238,6 +265,10 @@ function currentState(href: string): "page" | "true" | undefined {
       top: 100%;
       inset-inline: 0;
       padding: var(--space-4) var(--gutter) var(--space-6);
+      /* The header doesn't scroll, so a menu taller than the screen scrolls inside itself */
+      max-height: calc(100svh - var(--header-offset));
+      overflow-y: auto;
+      overscroll-behavior: contain;
       background: var(--ink-2);
       border-bottom: var(--rule-thick) solid var(--noor);
     }

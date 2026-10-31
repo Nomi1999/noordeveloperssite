@@ -81,6 +81,9 @@
   --gutter: clamp(1rem, 0.43rem + 2.86vw, 3rem);
   --measure: 65ch;
   --header-height: 4.5rem;
+  /* Space the sticky header takes at the top of the viewport: 0 without JS (the header
+     scrolls away), else its measured height (set inline by Header.astro) */
+  --header-offset: 0px;
   /* Mobile Call/WhatsApp bar, shown below the 48rem breakpoint */
   --action-bar-height: 4rem;
 
@@ -106,4 +109,9 @@
   --duration-base: 200ms;
   --duration-slow: 400ms;
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* With JS the header is sticky; this is the fallback until its height is measured */
+:root.js {
+  --header-offset: var(--header-height);
 }

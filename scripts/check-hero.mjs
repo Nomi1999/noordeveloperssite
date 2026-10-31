@@ -148,8 +148,10 @@ async function device(page, name) {
 // Page-side helpers
 const HERO = `(() => {
   const root = document.querySelector('[data-hero]'), stage = root.querySelector('[data-hero-stage]');
-  const top = root.getBoundingClientRect().top + scrollY, span = root.offsetHeight - stage.clientHeight;
-  return { top, span, height: root.offsetHeight, stage: stage.clientHeight, inner: innerHeight };
+  // top: the scroll position where progress is 0 (the stage pins below the sticky header, at its sticky top)
+  const docTop = root.getBoundingClientRect().top + scrollY, pin = parseFloat(getComputedStyle(stage).top) || 0;
+  const top = docTop - pin, span = root.offsetHeight - stage.clientHeight;
+  return { top, docTop, span, height: root.offsetHeight, stage: stage.clientHeight, inner: innerHeight };
 })()`;
 const scrollToFrame = (frame, count) =>
   `(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span * ${frame} / ${count - 1})); return scrollY; })()`;
@@ -241,7 +243,7 @@ async function offscreen() {
   await page.goto("/?hero-debug");
   await page.eval("scrollTo(0, 1)");
   await loadAll(page);
-  await page.eval(`(() => { const h = ${HERO}; scrollTo(0, h.top + h.height + 50); })()`);
+  await page.eval(`(() => { const h = ${HERO}; scrollTo(0, h.docTop + h.height + 50); })()`);
   await sleep(800);
   const ticks = () => page.eval(`+/rAF ticks (\\d+)/.exec(document.querySelector('pre').textContent)[1]`);
   const a = await ticks();
@@ -401,10 +403,10 @@ async function skip() {
   await key("keyDown", { key: "Enter", code: "Enter", windowsVirtualKeyCode: 13, text: "\r" });
   await key("keyUp", { key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
   await sleep(300);
-  const after = await page.eval(`({ id: document.activeElement.id, top: Math.round(document.getElementById('after-hero').getBoundingClientRect().top) })`);
+  const after = await page.eval(`({ id: document.activeElement.id, top: Math.round(document.getElementById('after-hero').getBoundingClientRect().top), pad: Math.round(parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0) })`);
   record("skip is first focusable", first === "Skip the animation", first);
   record("skip reached by Tab", /hero__skip/.test(focused), focused);
-  record("skip moves focus to #after-hero", after.id === "after-hero" && Math.abs(after.top) < 40, after);
+  record("skip moves focus to #after-hero", after.id === "after-hero" && Math.abs(after.top - after.pad) < 24, after); // lands just below the sticky header
   await page.close();
 }
 

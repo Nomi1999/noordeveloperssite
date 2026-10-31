@@ -13,7 +13,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scroll-padding-top: var(--space-4);
+  /* Anchor jumps and focused elements land clear of the sticky header */
+  scroll-padding-top: calc(var(--header-offset) + var(--space-4));
 }
 
 body {

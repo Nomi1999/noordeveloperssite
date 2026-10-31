@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "frameCount": 192,
+  "frameDigits": 4,
+  "phases": [
+    {
+      "id": "design",
+      "name": "Design",
+      "start": 0,
+      "end": 31
+    },
+    {
+      "id": "foundation",
+      "name": "Foundation",
+      "start": 32,
+      "end": 63
+    },
+    {
+      "id": "structure",
+      "name": "Structure",
+      "start": 64,
+      "end": 95
+    },
+    {
+      "id": "walls",
+      "name": "Walls",
+      "start": 96,
+      "end": 127
+    },
+    {
+      "id": "finishing",
+      "name": "Finishing",
+      "start": 128,
+      "end": 159
+    },
+    {
+      "id": "complete",
+      "name": "Complete",
+      "start": 160,
+      "end": 191
+    }
+  ],
+  "orientations": {
+    "landscape": {
+      "poster": 0,
+      "staticPoster": 191,
+      "tiers": [
+        {
+          "id": "540",
+          "width": 960,
+          "height": 540,
+          "formats": {
+            "avif": {
+              "url": "/hero/landscape/540/{frame}.avif",
+              "bytes": 3203369
+            },
+            "webp": {
+              "url": "/hero/landscape/540/{frame}.webp",
+              "bytes": 4050976
+            }
+          }
+        },
+        {
+          "id": "360",
+          "width": 640,
+          "height": 360,
+          "formats": {
+            "avif": {
+              "url": "/hero/landscape/360/{frame}.avif",
+              "bytes": 1768817
+            },
+            "webp": {
+              "url": "/hero/landscape/360/{frame}.webp",
+              "bytes": 2299672
+            }
+          }
+        }
+      ]
+    },
+    "portrait": {
+      "poster": 0,
+      "staticPoster": 191,
+      "tiers": [
+        {
+          "id": "540",
+          "width": 540,
+          "height": 960,
+          "formats": {
+            "avif": {
+              "url": "/hero/portrait/540/{frame}.avif",
+              "bytes": 3022266
+            },
+            "webp": {
+              "url": "/hero/portrait/540/{frame}.webp",
+              "bytes": 3766586
+            }
+          }
+        },
+        {
+          "id": "360",
+          "width": 360,
+          "height": 640,
+          "formats": {
+            "avif": {
+              "url": "/hero/portrait/360/{frame}.avif",
+              "bytes": 1621686
+            },
+            "webp": {
+              "url": "/hero/portrait/360/{frame}.webp",
+              "bytes": 2050952
+            }
+          }
+        }
+      ]
+    }
+  }
+}

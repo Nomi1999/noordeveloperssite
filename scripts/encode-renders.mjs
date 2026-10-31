@@ -5,7 +5,9 @@
 //   node scripts/encode-renders.mjs share --design 1-kanal --shot front-day [--focus 0.5,0.55] [--zoom 1]
 //       a 1200×630 crop of a delivered still → public/og/<design>.jpg
 //   node scripts/encode-renders.mjs sequence <frames folder> --orientation landscape|portrait [--out public/hero]
-//       every frame → AVIF and WebP at two tiers, plus <out>/manifest.json
+//         [--avif 55] [--webp 80] [--avif-<tier> q] [--tiers <id>,<id>]
+//       every frame → AVIF and WebP at two tiers (the frames' own size and two thirds of it, see tiersFor),
+//       plus <out>/manifest.json
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -20,16 +22,19 @@ const opt = (name, fallback) => {
 };
 
 export const MANIFEST_VERSION = 1;
-export const TIERS = {
-  landscape: [
-    { id: "1080", width: 1920, height: 1080 },
-    { id: "720", width: 1280, height: 720 },
-  ],
-  portrait: [
-    { id: "1080", width: 1080, height: 1920 },
-    { id: "720", width: 720, height: 1280 },
-  ],
-};
+/**
+ * Size tiers of a sequence, from the size of its rendered frames: the full size and two thirds of it,
+ * never upscaled. Named by the short side, so 1920×1080 frames give tiers "1080" and "720", and the
+ * 960×540 frames on the site now give "540" and "360".
+ */
+export function tiersFor(width, height) {
+  const short = Math.min(width, height);
+  return [1, 2 / 3].map((k) => {
+    const w = Math.round((width * k) / 2) * 2;
+    const h = Math.round((height * k) / 2) * 2;
+    return { id: String(Math.round(short * k)), width: w, height: h };
+  });
+}
 export const PHASES = [
   { id: "design", name: "Design" },
   { id: "foundation", name: "Foundation" },
@@ -52,7 +57,8 @@ async function writeAtomic(path, pipeline) {
 const shotFiles = () =>
   readdirSync(join(root, "render/shots"))
     .filter((f) => f.endsWith(".json"))
-    .map((f) => [f.replace(/\.json$/, ""), JSON.parse(readFileSync(join(root, "render/shots", f), "utf8"))]);
+    .map((f) => [f.replace(/\.json$/, ""), JSON.parse(readFileSync(join(root, "render/shots", f), "utf8"))])
+    .filter(([, config]) => config.shots); // sequence configs (e.g. 1-kanal-hero-landscape) have no stills
 
 async function stills() {
   const engine = opt("engine", "cycles");
@@ -103,12 +109,18 @@ async function share() {
   console.log(`${out}: 1200×630 from ${shot} (${(bytes / 1024).toFixed(0)} KB)`);
 }
 
-/** First and last frame index of each phase, from each frame's build value (0–6). */
-export function phaseRanges(builds) {
+/**
+ * First and last frame index of each phase. Each entry is a frame's sidecar: its `phase`
+ * (written by keyed sequences, which hold a finished step at the end of its phase) or,
+ * failing that, the phase its `build` value (0–6) falls in.
+ */
+export function phaseRanges(sidecars) {
+  const phaseOf = (m) =>
+    Number.isInteger(m.phase) ? m.phase : Math.min(PHASES.length - 1, Math.max(0, Math.floor(m.build ?? 0)));
   return PHASES.map((p, k) => {
-    const idx = builds
-      .map((b, i) => [b, i])
-      .filter(([b]) => (k === PHASES.length - 1 ? b >= k : b >= k && b < k + 1))
+    const idx = sidecars
+      .map((m, i) => [phaseOf(m), i])
+      .filter(([phase]) => phase === k)
       .map(([, i]) => i);
     return { ...p, start: idx.length ? idx[0] : null, end: idx.length ? idx[idx.length - 1] : null };
   });
@@ -118,16 +130,29 @@ async function sequence() {
   const folder = positional[0];
   const orientation = opt("orientation");
   const outDir = join(root, opt("out", "public/hero"));
-  if (!folder || !TIERS[orientation]) throw new Error("sequence needs <folder> and --orientation landscape|portrait");
+  if (!folder || !["landscape", "portrait"].includes(orientation)) throw new Error("sequence needs <folder> and --orientation landscape|portrait");
   const avifQuality = Number(opt("avif", "55"));
   const webpQuality = Number(opt("webp", "80"));
   const frames = readdirSync(folder)
     .filter((f) => /^\d{4}\.png$/.test(f))
     .sort();
   if (!frames.length) throw new Error(`No frames (NNNN.png) in ${folder}`);
-  const builds = frames.map((f) => JSON.parse(readFileSync(join(folder, f.replace(".png", ".json")), "utf8")).build);
+  const sidecars = frames.map((f) => JSON.parse(readFileSync(join(folder, f.replace(".png", ".json")), "utf8")));
+  const only = opt("tiers")?.split(",");
+  const size = await sharp(join(folder, frames[0])).metadata();
+  if ((size.width > size.height) !== (orientation === "landscape")) throw new Error(`${folder} frames are ${size.width}×${size.height}, not ${orientation}`);
+  const tiers = tiersFor(size.width, size.height);
   const totals = {};
-  for (const tier of TIERS[orientation]) {
+  for (const tier of tiers) {
+    if (only && !only.includes(tier.id)) {
+      // keep the totals of a tier encoded earlier (re-encoding one tier at a higher quality)
+      const prev = existsSync(join(outDir, "manifest.json"))
+        ? JSON.parse(readFileSync(join(outDir, "manifest.json"), "utf8")).orientations?.[orientation]?.tiers?.find((t) => t.id === tier.id)
+        : null;
+      totals[tier.id] = { avif: prev?.formats.avif.bytes ?? 0, webp: prev?.formats.webp.bytes ?? 0 };
+      continue;
+    }
+    const tierAvif = Number(opt(`avif-${tier.id}`, String(avifQuality)));
     totals[tier.id] = { avif: 0, webp: 0 };
     const dir = join(outDir, orientation, tier.id);
     for (const [i, f] of frames.entries()) {
@@ -135,7 +160,7 @@ async function sequence() {
       const base = sharp(join(folder, f)).resize(tier.width, tier.height, { fit: "cover" });
       totals[tier.id].avif += await writeAtomic(
         join(dir, `${name}.avif`),
-        base.clone().avif({ quality: avifQuality, effort: 4, chromaSubsampling: "4:4:4" }),
+        base.clone().avif({ quality: tierAvif, effort: 4, chromaSubsampling: "4:4:4" }),
       );
       totals[tier.id].webp += await writeAtomic(join(dir, `${name}.webp`), base.clone().webp({ quality: webpQuality, effort: 5 }));
     }
@@ -148,10 +173,12 @@ async function sequence() {
   if (manifest.frameCount !== frames.length) {
     throw new Error(`${orientation} has ${frames.length} frames but the manifest says ${manifest.frameCount}; re-encode both orientations`);
   }
-  manifest.phases = phaseRanges(builds);
+  manifest.phases = phaseRanges(sidecars);
   manifest.orientations[orientation] = {
-    poster: Number(opt("poster", String(frames.length - 1))),
-    tiers: TIERS[orientation].map((t) => ({
+    // poster: the first view before any frame loads; staticPoster: the reduced-motion image
+    poster: Number(opt("poster", "0")),
+    staticPoster: Number(opt("static-poster", String(frames.length - 1))),
+    tiers: tiers.map((t) => ({
       id: t.id,
       width: t.width,
       height: t.height,
@@ -161,7 +188,7 @@ async function sequence() {
     })),
   };
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
-  for (const t of TIERS[orientation]) {
+  for (const t of tiers) {
     const mb = (n) => (n / 1048576).toFixed(2);
     console.log(`${orientation} ${t.width}×${t.height}: avif ${mb(totals[t.id].avif)} MB, webp ${mb(totals[t.id].webp)} MB`);
   }

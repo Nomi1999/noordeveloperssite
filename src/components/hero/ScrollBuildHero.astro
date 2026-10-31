@@ -1,0 +1,553 @@
+---
+/**
+ * Home page hero: the 1 Kanal house builds itself as the visitor scrolls.
+ *
+ * Progressive enhancement. The markup and default CSS are the static hero (one
+ * screen: poster, headline, the six phases as a list, Call and WhatsApp), which
+ * is what no-JS, reduced-motion and Save-Data visitors get. The inline script
+ * below adds html.hero-scrub before the hero is parsed when scrubbing is wanted;
+ * only then does the section grow tall with a sticky stage, and hero-player.ts
+ * draws the frame sequence (public/hero/, see render/README.md) onto the canvas.
+ */
+import { readFileSync } from "node:fs";
+import CallButton from "../CallButton.astro";
+import WhatsAppButton from "../WhatsAppButton.astro";
+import { heroCopy } from "./hero-copy.ts";
+
+type Orientation = "landscape" | "portrait";
+interface Tier {
+  id: string;
+  width: number;
+  height: number;
+}
+
+// The encoded sequence's manifest (scripts/encode-renders.mjs sequence). Read at build
+// time for the poster sources; the player fetches it again for frame URLs and phases.
+let manifest: { frameCount: number; orientations: Record<string, { poster?: number; staticPoster?: number; tiers: Tier[] }> } | null = null;
+try {
+  manifest = JSON.parse(readFileSync(new URL("../../../public/hero/manifest.json", import.meta.url), "utf8"));
+} catch {
+  manifest = null;
+}
+const frameCount = manifest?.frameCount ?? 192;
+// Only used when public/hero/manifest.json is missing; matches the frames on the site
+const DEFAULT_TIERS: Record<Orientation, Tier[]> = {
+  landscape: [
+    { id: "540", width: 960, height: 540 },
+    { id: "360", width: 640, height: 360 },
+  ],
+  portrait: [
+    { id: "540", width: 540, height: 960 },
+    { id: "360", width: 360, height: 640 },
+  ],
+};
+const info = (o: Orientation) => {
+  const m = manifest?.orientations[o];
+  return {
+    tiers: [...(m?.tiers ?? DEFAULT_TIERS[o])].sort((a, b) => a.width - b.width),
+    poster: m?.poster ?? 0,
+    staticPoster: m?.staticPoster ?? frameCount - 1,
+  };
+};
+const pad = (n: number) => String(n).padStart(4, "0");
+const srcset = (o: Orientation, frame: number, ext: string) =>
+  info(o)
+    .tiers.map((t) => `/hero/${o}/${t.id}/${pad(frame)}.${ext} ${t.width}w`)
+    .join(", ");
+
+const REDUCED = "(prefers-reduced-motion: reduce)";
+const PORTRAIT = "(orientation: portrait)";
+// Most specific first: the first matching <source> wins
+const sources = [
+  { media: `${REDUCED} and ${PORTRAIT}`, o: "portrait", frame: info("portrait").staticPoster },
+  { media: REDUCED, o: "landscape", frame: info("landscape").staticPoster },
+  { media: PORTRAIT, o: "portrait", frame: info("portrait").poster },
+  { media: undefined, o: "landscape", frame: info("landscape").poster },
+] as const;
+const fallback = info("landscape");
+const fallbackTier = fallback.tiers[fallback.tiers.length - 1];
+const { phases } = heroCopy;
+---
+
+<script is:inline>
+  // Scrub only with JS, no reduced-motion preference and no Save-Data. Runs before the hero is parsed.
+  (function () {
+    var c = navigator.connection;
+    var mq = function (q) {
+      return window.matchMedia && matchMedia(q).matches;
+    };
+    if (!mq("(prefers-reduced-motion: reduce)") && !mq("(prefers-reduced-data: reduce)") && !(c && c.saveData)) {
+      document.documentElement.classList.add("hero-scrub");
+    }
+  })();
+</script>
+
+<section class="hero" data-hero aria-labelledby="hero-title">
+  <a class="hero__skip" href="#after-hero">{heroCopy.skip}</a>
+  <div class="hero__stage" data-hero-stage data-phase="0">
+    <picture class="hero__poster">
+      {
+        sources.flatMap(({ media, o, frame }) => [
+          <source media={media} type="image/avif" srcset={srcset(o, frame, "avif")} sizes="100vw" />,
+          <source media={media} type="image/webp" srcset={srcset(o, frame, "webp")} sizes="100vw" />,
+        ])
+      }
+      <img
+        src={`/hero/landscape/${fallbackTier.id}/${pad(fallback.poster)}.webp`}
+        width={fallbackTier.width}
+        height={fallbackTier.height}
+        alt={heroCopy.imageAlt}
+        fetchpriority="high"
+        decoding="async"
+        data-hero-poster
+      />
+    </picture>
+    <canvas class="hero__canvas" aria-hidden="true" data-hero-canvas></canvas>
+    <div class="hero__scrim" aria-hidden="true"></div>
+
+    <div class="hero__copy">
+      <h1 class="hero__title" id="hero-title">{heroCopy.headline}</h1>
+      <h2 class="sr-only">{heroCopy.phasesLabel}</h2>
+      <ol class="hero__phases" role="list">
+        {
+          phases.map((p, i) => (
+            <li class="hero__phase" data-index={i}>
+              <p class="hero__phase-label">
+                <span class="hero__phase-num">{p.number}</span>
+                <span aria-hidden="true"> — </span>
+                <span class="hero__phase-name">{p.name}</span>
+              </p>
+              <p class="hero__phase-line">{p.line}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="hero__cta">
+        <WhatsAppButton message={heroCopy.whatsappMessage} variant="primary" />
+        <CallButton variant="outline" />
+      </div>
+    </div>
+
+    <p class="hero__cue" aria-hidden="true"><span>{heroCopy.scrollCue}</span></p>
+
+    <div class="hero__ruler" aria-hidden="true">
+      <div class="hero__ruler-track">
+        <div class="hero__ruler-fill" data-hero-fill></div>
+        {phases.map((p, i) => <span class="hero__tick" style={`--at: ${i / phases.length}`}>{p.number}</span>)}
+      </div>
+    </div>
+  </div>
+</section>
+<div id="after-hero" class="hero-after" tabindex="-1"></div>
+
+<script>
+  import { start } from "./hero-player.ts";
+
+  const root = document.querySelector<HTMLElement>("[data-hero]");
+  if (root && document.documentElement.classList.contains("hero-scrub")) {
+    // Out of the page's critical path: start when the page is idle after load, or at the first scroll
+    let started = false;
+    const go = () => {
+      if (started) return;
+      started = true;
+      removeEventListener("scroll", go);
+      start(root);
+    };
+    const idle = () =>
+      "requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 1500 }) : setTimeout(go, 200);
+    addEventListener("scroll", go, { passive: true });
+    if (document.readyState === "complete") idle();
+    else addEventListener("load", idle, { once: true });
+  }
+</script>
+
+<style>
+  /* ---------- static mode (the default) ---------- */
+  .hero {
+    position: relative;
+    background: var(--ink);
+  }
+
+  .hero__skip {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    z-index: 20;
+    padding: var(--space-3) var(--space-4);
+    background: var(--noor);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-mono-strong);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    text-decoration: none;
+    transform: translateY(calc(-100% - var(--space-4)));
+  }
+
+  .hero__skip:focus {
+    transform: none;
+  }
+
+  .hero__stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* one screen below the header (the token is the header's minimum; the logo row can add a few px) */
+    min-height: calc(100svh - var(--header-height) - var(--space-2));
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__poster,
+  .hero__poster img,
+  .hero__canvas,
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__poster {
+    z-index: -3;
+  }
+
+  .hero__poster img {
+    object-fit: cover;
+  }
+
+  .hero__canvas {
+    z-index: -2;
+    object-fit: cover; /* keeps the last frame filling the stage between a resize and the next draw */
+    opacity: 0;
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+
+  /* Legibility: darkens the text corner only (lower-left on wide screens, top on tall ones) */
+  .hero__scrim {
+    z-index: -1;
+    background:
+      linear-gradient(to top, rgb(18 18 18 / 0.85), rgb(18 18 18 / 0) 55%),
+      linear-gradient(to right, rgb(18 18 18 / 0.55), rgb(18 18 18 / 0) 60%);
+  }
+
+  .hero__copy {
+    position: relative;
+    width: min(100%, var(--container-max));
+    margin-inline: auto;
+    padding: var(--space-8) var(--gutter) var(--space-7);
+  }
+
+  .hero__title {
+    max-width: 13ch;
+    font-size: var(--text-4xl);
+    text-wrap: balance;
+  }
+
+  .hero__phases {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4) var(--space-5);
+    max-width: 60rem;
+    margin-top: var(--space-6);
+    padding: 0;
+    list-style: none;
+  }
+
+  .hero__phase {
+    padding-top: var(--space-3);
+    border-top: var(--rule-thin) solid var(--concrete-700);
+  }
+
+  .hero__phase-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-mono-strong);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--noor);
+  }
+
+  .hero__phase-line {
+    margin-top: var(--space-1);
+    max-width: 34ch;
+    font-size: var(--text-sm);
+    line-height: var(--leading-snug);
+    color: var(--concrete-300);
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .hero__cue {
+    display: none;
+  }
+
+  .hero__ruler {
+    display: none;
+  }
+
+  /* Small screens: the list shows phase names only (each line stays in the document) */
+  @media (max-width: 47.999rem) {
+    /* One screen = what's between the header and the fixed Call/WhatsApp bar */
+    .hero__stage {
+      min-height: calc(100svh - var(--header-height) - var(--space-2) - var(--action-bar-height) - env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Without JS the header's nav wraps onto a second row instead of collapsing into a toggle */
+    :global(html:not(.js)) .hero__stage {
+      min-height: calc(100svh - var(--header-height) - var(--space-2) - 3rem - var(--action-bar-height) - env(safe-area-inset-bottom, 0px));
+    }
+
+    .hero__copy {
+      padding-top: var(--space-7);
+      padding-bottom: var(--space-5);
+    }
+
+    .hero__phases {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-2) var(--space-4);
+    }
+
+    .hero__phase {
+      padding-top: var(--space-2);
+    }
+
+    .hero__phase-line {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .hero__cta {
+      display: none; /* the fixed Call/WhatsApp bar is on screen below 48rem */
+    }
+  }
+
+  /* ---------- scrub mode: html.hero-scrub ---------- */
+  :global(html.hero-scrub) .hero {
+    height: calc(6 * 100svh + 100svh);
+  }
+
+  :global(html.hero-scrub) .hero__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    min-height: 0;
+  }
+
+  :global(html.hero-scrub) .hero__stage[data-ready] .hero__canvas {
+    opacity: 1;
+  }
+
+  :global(html.hero-scrub) .hero__copy {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding-right: calc(var(--gutter) + 4rem);
+    padding-bottom: var(--space-8);
+  }
+
+  :global(html.hero-scrub) .hero__title {
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 300ms var(--ease-out);
+  }
+
+  :global(html.hero-scrub) .hero__stage:not([data-phase="0"]) .hero__title {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  /* One phase at a time, stacked in the same place */
+  :global(html.hero-scrub) .hero__phases {
+    display: grid;
+    grid-template-columns: 1fr;
+    max-width: 36rem;
+    margin-top: var(--space-5);
+  }
+
+  :global(html.hero-scrub) .hero__phase {
+    grid-area: 1 / 1;
+    padding-top: 0;
+    border-top: 0;
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 300ms var(--ease-out);
+  }
+
+  :global(html.hero-scrub) .hero__phase-label {
+    font-size: var(--text-sm);
+  }
+
+  :global(html.hero-scrub) .hero__phase-line {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+    margin-top: var(--space-2);
+    font-size: var(--text-lg);
+    color: var(--paper);
+  }
+
+  :global(html.hero-scrub) [data-phase="0"] .hero__phase[data-index="0"],
+  :global(html.hero-scrub) [data-phase="1"] .hero__phase[data-index="1"],
+  :global(html.hero-scrub) [data-phase="2"] .hero__phase[data-index="2"],
+  :global(html.hero-scrub) [data-phase="3"] .hero__phase[data-index="3"],
+  :global(html.hero-scrub) [data-phase="4"] .hero__phase[data-index="4"],
+  :global(html.hero-scrub) [data-phase="5"] .hero__phase[data-index="5"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The actions appear with the Move in phase and can't be focused before it */
+  :global(html.hero-scrub) .hero__cta {
+    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 300ms var(--ease-out),
+      visibility 0s linear 300ms;
+  }
+
+  :global(html.hero-scrub) [data-phase="5"] .hero__cta {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  :global(html.hero-scrub) .hero__cue {
+    display: block;
+    position: absolute;
+    left: 50%;
+    bottom: var(--space-5);
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--concrete-300);
+    transition: opacity 300ms var(--ease-out);
+  }
+
+  :global(html.hero-scrub) .hero__cue span::after {
+    content: "";
+    display: block;
+    width: var(--rule-thin);
+    height: var(--space-6);
+    margin: var(--space-2) auto 0;
+    background: linear-gradient(var(--noor), transparent);
+  }
+
+  :global(html.hero-scrub) .hero__stage:not([data-phase="0"]) .hero__cue {
+    opacity: 0;
+  }
+
+  /* Architect's ruler: six ticks, a fill that tracks progress */
+  :global(html.hero-scrub) .hero__ruler {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: var(--gutter);
+    height: min(50svh, 24rem);
+    transform: translateY(-50%);
+  }
+
+  .hero__ruler-track {
+    position: relative;
+    width: var(--rule-thin);
+    height: 100%;
+    background: rgb(201 198 191 / 0.35);
+  }
+
+  .hero__ruler-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--noor);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  .hero__tick {
+    position: absolute;
+    top: calc(var(--at) * 100%);
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    transform: translateY(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: var(--tracking-mono);
+    color: var(--concrete-300);
+  }
+
+  .hero__tick::after {
+    content: "";
+    width: var(--space-3);
+    height: var(--rule-thin);
+    background: currentColor;
+  }
+
+  /* Tall screens: the text sits in the calm sky at the top, actions at the bottom */
+  @media (orientation: portrait) {
+    :global(html.hero-scrub) .hero__scrim {
+      background:
+        linear-gradient(to bottom, rgb(18 18 18 / 0.8), rgb(18 18 18 / 0) 42%),
+        linear-gradient(to top, rgb(18 18 18 / 0.6), rgb(18 18 18 / 0) 25%);
+    }
+
+    :global(html.hero-scrub) .hero__copy {
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding-top: var(--space-7);
+      padding-bottom: calc(var(--action-bar-height) + var(--space-5) + env(safe-area-inset-bottom, 0px));
+    }
+
+    :global(html.hero-scrub) .hero__title {
+      font-size: var(--text-3xl);
+    }
+
+    :global(html.hero-scrub) .hero__cta {
+      margin-top: auto;
+    }
+
+    :global(html.hero-scrub) .hero__cue {
+      bottom: calc(var(--action-bar-height) + var(--space-4) + env(safe-area-inset-bottom, 0px));
+    }
+
+    :global(html.hero-scrub) .hero__ruler {
+      top: auto;
+      bottom: calc(var(--action-bar-height) + var(--space-6));
+      height: min(28svh, 12rem);
+      transform: none;
+    }
+  }
+
+  /* Below 48rem the fixed action bar already offers both actions; keep the hero's for the end frame only on wider screens */
+  @media (max-width: 47.999rem) {
+    :global(html.hero-scrub) .hero__cta {
+      display: none;
+    }
+  }
+
+  .hero-after:focus {
+    outline: none;
+  }
+</style>

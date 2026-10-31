@@ -17,10 +17,11 @@ def clear():
 
 
 class Scene:
-    def __init__(self, slug, shot_name, clay=None):
+    def __init__(self, slug, shot_name, clay=None, shot=None):
+        """shot: a shot dict to use instead of looking shot_name up (a sequence's first frame)."""
         design = loader.load(slug)  # stops on an unsupported export before anything is built
         config = shots.load(slug)
-        shot = shots.get(config, shot_name)
+        shot = shot or shots.get(config, shot_name)
         assets.check_all()
         clear()
         root = collection("noor")

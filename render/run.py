@@ -3,6 +3,7 @@
     blender -b --factory-startup --python-exit-code 1 --python render/run.py -- <command> [options]
 
 or through npm: npm run render:still -- --design 1-kanal --shot front-day
+             npm run render:sequence -- --config 1-kanal-hero-landscape --every 8
 """
 
 import argparse
@@ -12,6 +13,9 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 OUT = os.path.join(HERE, "out")
+# Exit code for a frame that keeps rendering black: EEVEE's GPU memory fills up over a long
+# run; a fresh Blender process renders the frame fine, so scripts/blender.mjs restarts it.
+BLANK_EXIT = 3
 
 
 def _range(value):
@@ -57,11 +61,57 @@ def parser():
             s.add_argument("--frames", type=_frames, required=True, help="first-last, e.g. 1-192")
         if name == "scene":
             s.add_argument("--save", required=True, help="path of the .blend to write")
+    s = sub.add_parser("sequence", help="render a keyed sequence (render/shots/<config>.json), skipping frames already written")
+    s.add_argument("--config", required=True, help="sequence config name, e.g. 1-kanal-hero-landscape")
+    s.add_argument("--engine", choices=("eevee", "cycles"), default="eevee")
+    s.add_argument("--quality", choices=("preview", "high", "final"), default="preview")
+    s.add_argument("--frames", type=_frames, help="first-last (default: the whole sequence)")
+    s.add_argument("--every", type=int, default=1, help="render every n-th frame (contact sheets)")
+    s.add_argument("--width", type=int, help="output width in pixels")
+    s.add_argument("--clay", nargs="?", const="all", choices=("all", "glass"), help="single grey material (glass: keep glazing)")
+    s.add_argument("--name", help="output folder name (default <config>-<engine>-<quality>)")
     return p
+
+
+def sequence(args):
+    from noor_render import output, shots
+    from noor_render.assets import MissingAsset
+    from noor_render.loader import ExportError
+    from noor_render.scene import Scene
+
+    try:
+        seq = shots.load_sequence(args.config)
+        sc = Scene(seq.config["design"], args.config, clay=args.clay, shot=seq.shot(0))
+    except (ExportError, MissingAsset, shots.ShotError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+    output.configure(args.engine, args.quality, shots.aspect(seq.config), args.width)
+    first, last = args.frames or (0, seq.frames - 1)
+    if last >= seq.frames:
+        print(f"ERROR: {args.config} has frames 0-{seq.frames - 1}", file=sys.stderr)
+        sys.exit(1)
+
+    def extra(frame):
+        shot = seq.shot(frame)
+        shots.place(sc.camera, shot)
+        return {"phase": seq.phase(frame), "camera": [round(v, 4) for v in shot["position"]],
+                "target": [round(v, 4) for v in shot["target"]], "lens": round(shot["lens"], 3)}
+
+    name = args.name or f"{args.config}-{args.engine}-{args.quality}"
+    meta = {"design": seq.config["design"], "shot": args.config, "engine": args.engine, "quality": args.quality,
+            "clay": args.clay}
+    try:
+        output.frames(os.path.join(OUT, seq.config["design"], name), first, last, seq.state, sc.set_state, meta,
+                      step=max(1, args.every), extra=extra)
+    except output.BlankRender as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(BLANK_EXIT)
 
 
 def main(argv):
     args = parser().parse_args(argv)
+    if args.command == "sequence":
+        return sequence(args)
 
     import bpy
     from noor_render import output, shots
@@ -102,7 +152,7 @@ def main(argv):
             output.frames(folder, first, last, at, sc.set_state, meta)
     except output.BlankRender as e:
         print(f"ERROR: {e}", file=sys.stderr)
-        sys.exit(1)
+        sys.exit(BLANK_EXIT)
 
 
 if __name__ == "__main__":

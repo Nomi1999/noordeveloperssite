@@ -13,6 +13,8 @@ Run from the repository root. `BLENDER_PATH` overrides the default `C:\Program F
 | `npm run render:fetch` | Download every asset in `assets.lock.json` into `render/assets/` and check its sha256 (`-- --lock` fills in missing checksums after adding assets) |
 | `npm run render:still -- --design 1-kanal --shot front-day` | Render one still into `render/out/<design>/stills/` |
 | `npm run render:frames -- --design 1-kanal --shot front-day --frames 1-192 --build 0:6` | Render a frame range into `render/out/<design>/<name>/`, skipping frames that already exist |
+| `npm run render:sequence -- --config 1-kanal-hero-landscape` | Render a keyed sequence (`render/shots/<config>.json`) into `render/out/<design>/<config>-<engine>-<quality>/`, skipping frames that already exist (`--frames a-b`, `--every n`, `--width`, `--engine`, `--quality`, `--name`) |
+| `python render/camera_path.py [--svg out.svg]` | Camera continuity check for the hero sequences: per-frame displacement and rotation, and the values at each phase boundary (no Blender needed) |
 | `npm run render:sheet -- render/out/1-kanal/<folder>` | Write `sheet.png` (a labelled contact sheet) for a folder of rendered frames or stills |
 | `npm run render:encode -- stills` | Encode every shot's final still (`--engine`, `--quality`; default Cycles final) into `src/assets/renders/<design>/<shot>.jpg` (JPEG q90 masters, at least 3200px wide) |
 | `npm run render:encode -- share --design 1-kanal --shot front-day --focus 0.5,0.55` | Crop a 1200×630 share image from a delivered still into `public/og/<design>.jpg` |
@@ -43,9 +45,34 @@ The scene has two continuous controls; everything else follows from them.
 
 `construction.apply(build)` and `Rig.apply(time_of_day, build)` set both. A frame-change handler applies a keyframed `scene["build"]`, and `render:frames` interpolates `--build a:b` and `--time-of-day a:b` across the range.
 
+## Sequences
+
+A sequence config (`render/shots/1-kanal-hero-landscape.json`, `…-portrait.json`) keys everything per frame, so the whole choreography is data:
+
+- **`camera`**: keys at chosen frames with `azimuth` (degrees, counterclockwise from +x; the street side is around −90), `distance` and `height` around the `orbit` point, plus `target`, `lens`, `verticals` (0 = free tilt, 1 = level camera with lens shift, blended in between), `shiftX`, `shiftY`. Each channel is a C2 cubic spline through its keys, at rest at both ends (`easeCamera`), so speed and acceleration change smoothly with no kinks at keys. Keying in cylindrical coordinates keeps the orbit circular between keys.
+- **`build`** and **`timeOfDay`**: `[frame, value]` keys through a monotone cubic, which never overshoots and is flat wherever a value holds. A step that rises between two holds therefore eases in and out by itself.
+- **`phaseFrames`**: frames per phase (32). Each frame's sidecar records its `phase`; the encoder takes the manifest's phase ranges from it, because a phase ends on a hold at its finished `build` value (63 holds at 2.0, foundation complete, no column started).
+- `sensorFit` `AUTO` maps `sensor` to the longer side, so a portrait sequence keys its lens against the frame height.
+
+The hero sequences: 192 frames, six 32-frame phases. In each, `build` holds for 3 frames, rises over frames 3–27 and holds again, so every label has a finished step to read. Phase 00 starts at `build` 0.28 so that the poster (frame 0) already shows the glowing plot outline. `timeOfDay` runs 0.95 → 0.9 (blue hour) over Design, eases to day by frame 48, holds to 127, then 0.55 (golden) at 159 and 1.0 (dusk) at 191; interior lights come on from 0.6, in the Move in phase only. The camera orbits about 68° from an elevated front-left view to a street-level three-quarter view of the facade.
+
+**Preview approval.** The EEVEE previews of both sequences (960×540 and 540×960, 192 frames each, no blank frames) were reviewed with the maintainer as MP4s and every-8th-frame contact sheets (`render/out/1-kanal/hero-review/`) and approved unchanged on 2026-10-31: first frame, pacing, light arc and final framing. 
+**Hero frames (decided 2026-10-31).** After checking the site with these frames on a laptop and a phone, the maintainer chose to ship the approved EEVEE previews as the hero's final frames and skip the Cycles `high` renders (about 9 min a frame at 1920px, so roughly 2½ days for both orientations). The encoder sizes tiers from the frames themselves (full size and two thirds, never upscaled), and the player takes the smallest tier that is sharp at the displayed size. Encoded at AVIF 55 / WebP 80, 192 frames per tier:
+
+| Tier | AVIF | WebP |
+|---|---|---|
+| landscape 960×540 | 3.05 MB | 3.86 MB |
+| landscape 640×360 | 1.69 MB | 2.19 MB |
+| portrait 540×960 | 2.88 MB | 3.59 MB |
+| portrait 360×640 | 1.55 MB | 1.96 MB |
+
+A visitor downloads one row (one orientation, tier and format). AVIF quality check: frames 16, 176 and 191 (landscape) and 191 (portrait) measure 38–40 dB PSNR against the 16-bit PNGs; at 3× zoom the dusk sky shows no banding or blocking (compression smooths the render noise) and edges stay clean, so the default quality stands. To ship sharper frames later, render `--engine cycles --quality high` (the configs are unchanged) and re-run the two `encode-renders.mjs sequence` commands; the tiers then come out at 1920/1280 automatically.
+
+On-device check (2026-10-31): the maintainer scrolled the built site on their laptop and phone: smooth, five full scrubs without a reload, rotation keeps the frame, Call and WhatsApp open the dialer and WhatsApp (placeholder numbers until `src/config/site.ts` is filled in).
+
 ## Output
 
-Every image is a 16-bit PNG written to a temporary name and renamed when complete, with a JSON sidecar. A frame range skips frames whose PNG already exists and deletes leftover temporary files, so an interrupted overnight run continues where it stopped when the same command is run again. A frame that comes back entirely black (EEVEE does this without an error when a GPU allocation fails) is rendered again up to twice and then stops the run with an error instead of being saved. Cycles uses a fixed seed (`use_animated_seed` off), adaptive sampling, OpenImageDenoise with albedo and normal guides, the light tree, persistent data and an indirect clamp of 10.
+Every image is a 16-bit PNG written to a temporary name and renamed when complete, with a JSON sidecar. A frame range skips frames whose PNG already exists and deletes leftover temporary files, so an interrupted overnight run continues where it stopped when the same command is run again. A frame that comes back entirely black (EEVEE does this without an error when a GPU allocation fails) is rendered again up to twice and then stops Blender with exit code 3 instead of being saved. EEVEE's GPU memory fills up over a long run of dusk frames, and a fresh process renders the same frame fine, so `scripts/blender.mjs` restarts Blender up to five times for `frames` and `sequence`, continuing from the first missing frame. Cycles uses a fixed seed (`use_animated_seed` off), adaptive sampling, OpenImageDenoise with albedo and normal guides, the light tree, persistent data and an indirect clamp of 10.
 
 ## Layout
 
@@ -72,7 +99,7 @@ Decided with the maintainer on 2026-10-27 from the `1-kanal / front-dusk` compar
 | Thin glass | green-cyan tint at grazing angles | clear |
 
 - **Stills: Cycles `final`** (3200px, 512 samples, adaptive threshold 0.01). `npm run render:encode -- stills` reads these by default.
-- **Sequences: Cycles `high`** (1920px landscape, 1080×1920 portrait, 256 samples), since it costs only about a third more per frame than EEVEE high and EEVEE's leak shows in every part-built frame. Subject to the flicker check below.
+- **Sequences: Cycles `high`** (1920px landscape, 1080×1920 portrait, 256 samples), since it costs only about a third more per frame than EEVEE high and EEVEE's leak shows in every part-built frame. Subject to the flicker check below. **Not used for the home hero:** see *Hero frames* under Sequences.
 - **Iteration: EEVEE `preview`** (the CLI default), with small Cycles crops (`--crop`) to confirm.
 - **Look**: AgX with the `AgX - Medium High Contrast` look. **Exposure** 0 by day and 0 at dusk (`exposureDay` / `exposureDusk` in a shot's `light` block override them); +0.6 at dusk washed the facade out.
 

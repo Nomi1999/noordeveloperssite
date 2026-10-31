@@ -12,9 +12,19 @@ const script = command === "fetch" ? "render/fetch_assets.py" : "render/run.py";
 const scriptArgs = command === "fetch" ? args : [command, ...args];
 const root = fileURLToPath(new URL("../", import.meta.url));
 
-const result = spawnSync(
-  blender,
-  ["-b", "--factory-startup", "--python-exit-code", "1", "--python", script, "--", ...scriptArgs],
-  { cwd: root, stdio: "inherit" },
-);
-process.exit(result.status ?? 1);
+// Exit code 3 from run.py: a frame kept rendering black because EEVEE's GPU memory filled up
+// over a long run. Frame ranges skip finished frames, so a fresh Blender process carries on.
+const BLANK_EXIT = 3;
+const RESTARTS = 5;
+let status;
+for (let attempt = 0; attempt <= RESTARTS; attempt++) {
+  if (attempt) console.log(`
+Restarting Blender with fresh GPU memory (${attempt}/${RESTARTS})
+`);
+  status = spawnSync(blender, ["-b", "--factory-startup", "--python-exit-code", "1", "--python", script, "--", ...scriptArgs], {
+    cwd: root,
+    stdio: "inherit",
+  }).status;
+  if (status !== BLANK_EXIT || !["frames", "sequence"].includes(command)) break;
+}
+process.exit(status ?? 1);

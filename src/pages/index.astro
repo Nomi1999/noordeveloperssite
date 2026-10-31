@@ -1,15 +1,46 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PageStub from "../components/PageStub.astro";
+import CallButton from "../components/CallButton.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
+import ScrollBuildHero from "../components/hero/ScrollBuildHero.astro";
+import { heroCopy } from "../components/hero/hero-copy.ts";
 ---
 
 <BaseLayout
   title="Building the Future in Faisalabad"
   description="Noor Developers design and build fully finished houses and commercial buildings in Faisalabad. Call or WhatsApp to talk about your build."
+  whatsappMessage={heroCopy.whatsappMessage}
 >
-  <PageStub
-    label="00 — Noor Developers"
-    heading="Building the Future"
-    lead="Houses and commercial buildings in Faisalabad, designed and built from plot to keys, fully finished and ready to move in."
-  />
+  <ScrollBuildHero />
+
+  <!-- The home page sections after the hero arrive with content-pages -->
+  <section class="section section--concrete">
+    <div class="container home-next">
+      <p class="label">Coming soon</p>
+      <h2 class="home-next__title">More about building with Noor is on its way</h2>
+      <p>Talk to us directly in the meantime. Call or send a WhatsApp message and we will get back to you.</p>
+      <div class="home-next__actions">
+        <WhatsAppButton message={heroCopy.whatsappMessage} variant="primary" />
+        <CallButton variant="outline" />
+      </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .home-next__title {
+    margin-top: var(--space-3);
+    font-size: var(--text-2xl);
+  }
+
+  .home-next p:not(.label) {
+    margin-top: var(--space-4);
+  }
+
+  .home-next__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+</style>

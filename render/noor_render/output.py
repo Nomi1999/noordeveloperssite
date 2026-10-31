@@ -143,20 +143,23 @@ def clean_partials(folder):
             os.remove(os.path.join(folder, name))
 
 
-def frames(folder, first, last, at, set_state, meta):
-    """Render frames first..last into folder/NNNN.png, skipping any already written.
+def frames(folder, first, last, at, set_state, meta, step=1, extra=None):
+    """Render frames first..last (every step-th) into folder/NNNN.png, skipping any already written.
 
     at(frame) -> (build, time_of_day); set_state(build, tod) applies them.
+    extra(frame) -> dict of more sidecar fields, applied before rendering (a sequence moves the camera here).
     """
     clean_partials(folder)
-    done = 0
-    for frame in range(first, last + 1):
+    done = total = 0
+    for frame in range(first, last + 1, step):
+        total += 1
         path = os.path.join(folder, f"{frame:04d}.png")
         if os.path.exists(path):
             continue
         build, tod = at(frame)
         bpy.context.scene.frame_set(frame)
         set_state(build, tod)
-        _save(path, dict(meta, frame=frame, build=round(build, 4), time_of_day=round(tod, 4)))
+        more = extra(frame) if extra else {}
+        _save(path, dict(meta, frame=frame, build=round(build, 4), time_of_day=round(tod, 4), **more))
         done += 1
-    print(f"{done} frames rendered, {last - first + 1 - done} already present", flush=True)
+    print(f"{done} frames rendered, {total - done} already present", flush=True)

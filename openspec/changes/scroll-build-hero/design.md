@@ -45,6 +45,8 @@ The camera follows a spline through 5–6 key positions with constant-ish angula
 
 Cycles estimate: ~1–3 min per frame on this CPU → 192 frames ≈ 3–10 h per orientation. Run one orientation per night.
 
+*Changed during implementation (2026-10-31):* a Cycles `high` frame at 1920px measured 9 min (≈ 29 h per orientation). After reviewing the site with the approved previews on a laptop and a phone, the maintainer chose to ship the EEVEE previews (960×540, 540×960) as the final frames. The encoder now derives its two tiers from the frame size (full and two thirds: 960/640 and 540/360 here; 1920/1280 for full-size renders), and the player picks the smallest tier at least as wide as the cover-fit display width in device pixels.
+
 ### Page structure (progressive enhancement)
 ```html
 <section class="hero" data-hero>

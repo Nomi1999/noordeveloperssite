@@ -19,6 +19,7 @@
     "render:fetch": "node scripts/blender.mjs fetch",
     "render:still": "node scripts/blender.mjs still",
     "render:frames": "node scripts/blender.mjs frames",
+    "render:sequence": "node scripts/blender.mjs sequence",
     "render:sheet": "node render/contact_sheet.mjs",
     "render:encode": "node scripts/encode-renders.mjs"
   },

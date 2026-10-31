@@ -1,0 +1,216 @@
+---
+/**
+ * Render gallery. Each thumbnail links to the full-size image, so without
+ * JavaScript selecting one opens the image directly. The script opens it
+ * large in a native modal <dialog> instead (focus stays inside while open),
+ * which closes with Escape, the close button or a click outside the image,
+ * and returns focus to the thumbnail that opened it.
+ */
+import { Picture, getImage } from "astro:assets";
+import { getDesign } from "../../designs/index.ts";
+import type { Render } from "../../designs/renders.ts";
+
+interface Props {
+  renders: Render[];
+}
+
+const { renders } = Astro.props;
+const items = await Promise.all(
+  renders.map(async (render) => {
+    const full = await getImage({ src: render.image, width: Math.min(2400, render.image.width), format: "webp", quality: 82 });
+    const name = getDesign(render.design).design.name;
+    return { render, full, caption: `${name} — ${render.caption} — Concept` };
+  }),
+);
+---
+
+<div class="gallery" data-gallery>
+  <ul class="gallery__grid" role="list">
+    {
+      items.map(({ render, full, caption }) => (
+        <li class="gallery__cell reveal">
+          <a
+            class="gallery__item"
+            href={full.src}
+            data-gallery-item
+            data-caption={caption}
+            data-width={full.attributes.width}
+            data-height={full.attributes.height}
+          >
+            <span class="gallery__frame">
+              <Picture
+                src={render.image}
+                alt={render.alt}
+                formats={["avif", "webp"]}
+                fallbackFormat="jpg"
+                widths={[480, 800, 1200]}
+                sizes="(min-width: 80rem) 25rem, (min-width: 40rem) 46vw, 100vw"
+                loading="lazy"
+                decoding="async"
+                class="gallery__img"
+              />
+              <span class="gallery__zoom label" aria-hidden="true">
+                View
+              </span>
+            </span>
+            <span class="gallery__caption label">
+              <span class="sr-only">Open full size: </span>
+              {render.caption}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <dialog class="gallery__dialog" aria-labelledby="gallery-dialog-caption" data-gallery-dialog>
+    <div class="gallery__dialog-bar">
+      <p class="gallery__dialog-caption label" id="gallery-dialog-caption" data-gallery-caption></p>
+      <button type="button" class="btn btn--outline btn--sm gallery__close" data-gallery-close autofocus>
+        Close<span class="sr-only"> image</span>
+      </button>
+    </div>
+    <img class="gallery__dialog-img" alt="" data-gallery-image />
+  </dialog>
+</div>
+
+<script>
+  function enhance(root: HTMLElement) {
+    const dialog = root.querySelector<HTMLDialogElement>("[data-gallery-dialog]");
+    const image = root.querySelector<HTMLImageElement>("[data-gallery-image]");
+    const caption = root.querySelector<HTMLElement>("[data-gallery-caption]");
+    const close = root.querySelector<HTMLButtonElement>("[data-gallery-close]");
+    if (!dialog || !image || !caption || !close || typeof dialog.showModal !== "function") return;
+
+    let trigger: HTMLAnchorElement | null = null;
+
+    root.querySelectorAll<HTMLAnchorElement>("[data-gallery-item]").forEach((item) => {
+      item.addEventListener("click", (event) => {
+        // Let modified clicks open the image in a new tab as usual
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        trigger = item;
+        image.src = item.href;
+        image.width = Number(item.dataset.width);
+        image.height = Number(item.dataset.height);
+        image.alt = item.querySelector("img")?.alt ?? "";
+        caption.textContent = item.dataset.caption ?? "";
+        dialog.showModal();
+      });
+    });
+
+    close.addEventListener("click", () => dialog.close());
+    // A click on the backdrop lands on the dialog element itself
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener("close", () => {
+      image.removeAttribute("src");
+      trigger?.focus();
+      trigger = null;
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-gallery]").forEach(enhance);
+</script>
+
+<style>
+  .gallery__grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 40rem) {
+    .gallery__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .gallery__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .gallery__item {
+    display: grid;
+    gap: var(--space-3);
+    text-decoration: none;
+  }
+
+  .gallery__frame {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: var(--ink);
+  }
+
+  .gallery__frame :global(.gallery__img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale var(--duration-slow) var(--ease-out);
+  }
+
+  .gallery__item:hover :global(.gallery__img) {
+    scale: 1.03;
+  }
+
+  .gallery__zoom {
+    position: absolute;
+    right: var(--space-3);
+    bottom: var(--space-3);
+    padding: var(--space-1) var(--space-2);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .gallery__caption {
+    color: var(--concrete-300);
+  }
+
+  /* The dialog fills the screen; the image is shown whole */
+  .gallery__dialog {
+    width: 100vw;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: var(--space-4) var(--gutter);
+    border: 0;
+    background: transparent;
+    color: var(--paper);
+    --focus-color: var(--noor);
+  }
+
+  .gallery__dialog[open] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .gallery__dialog::backdrop {
+    background: color-mix(in srgb, var(--ink) 94%, transparent);
+  }
+
+  .gallery__dialog-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .gallery__dialog-caption {
+    color: var(--concrete-300);
+  }
+
+  .gallery__dialog-img {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+</style>

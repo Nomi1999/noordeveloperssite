@@ -3,6 +3,13 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CallButton from "../components/CallButton.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
+import SectionHeader from "../components/sections/SectionHeader.astro";
+import Offerings from "../components/sections/Offerings.astro";
+import FullyFinished from "../components/sections/FullyFinished.astro";
+import WhatWeBuild from "../components/sections/WhatWeBuild.astro";
+import Process from "../components/sections/Process.astro";
+import FeaturedDesign from "../components/sections/FeaturedDesign.astro";
+import CtaBand from "../components/sections/CtaBand.astro";
 
 const swatches = [
   { token: "--ink", use: "Dark sections, text on light" },
@@ -62,7 +69,7 @@ const spacing = ["--space-1", "--space-2", "--space-3", "--space-4", "--space-5"
           <p class="label text-muted">Body: Barlow 400 / 500</p>
           <p>
             Every build is delivered fully finished. You bring the furniture and move in. Body text sits at a comfortable
-            measure with generous leading.
+            measure with generous line spacing.
           </p>
           <p><strong>Medium weight</strong> for emphasis within body copy.</p>
         </div>
@@ -126,6 +133,30 @@ const spacing = ["--space-1", "--space-2", "--space-3", "--space-4", "--space-5"
       <p class="text-muted">Muted text on light uses --concrete-700.</p>
     </div>
   </section>
+
+  <section class="section section--blueprint">
+    <div class="container sg-stack">
+      <p class="label text-accent">Section header on the blueprint grid (dark)</p>
+      <SectionHeader index="02" total="06" label="Fully finished" heading="Section heading on dark" intro="Lead paragraph under the dimension line." />
+    </div>
+  </section>
+
+  <section class="section section--concrete">
+    <div class="container sg-stack">
+      <p class="label">Section header on concrete</p>
+      <SectionHeader index="03" total="06" label="What we build" heading="Section heading on concrete" intro="Lead paragraph under the dimension line." />
+    </div>
+  </section>
+
+  <Offerings index="01" total="06" />
+  <Offerings variant="detail" />
+  <FullyFinished variant="compact" index="02" total="06" />
+  <FullyFinished />
+  <WhatWeBuild index="03" total="06" />
+  <WhatWeBuild variant="detail" />
+  <Process index="04" total="06" />
+  <FeaturedDesign slug="1-kanal" shot="front-dusk" index="05" total="06" />
+  <CtaBand />
 
   <section class="section section--paper">
     <div class="container sg-stack">

@@ -1,15 +1,142 @@
 ---
+/**
+ * Contact: Call and WhatsApp first, then every detail from src/config/site.ts.
+ * No embedded map, form or widget: the page makes no third-party requests.
+ */
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PageStub from "../../components/PageStub.astro";
+import PageIntro from "../../components/sections/PageIntro.astro";
+import SectionHeader from "../../components/sections/SectionHeader.astro";
+import CallButton from "../../components/CallButton.astro";
+import WhatsAppButton from "../../components/WhatsAppButton.astro";
+import { site } from "../../config/site.ts";
+import { formatHours, mapsUrl, telUrl, whatsappDisplay, whatsappUrl } from "../../lib/contact.ts";
+
+const whatsappMessage = "Hello Noor Developers, I would like to talk to you about a build.";
+const { address } = site;
 ---
 
 <BaseLayout
   title="Contact"
   description="Contact Noor Developers in Faisalabad. Call or send a WhatsApp message to talk about building a house or commercial building."
+  whatsappMessage={whatsappMessage}
 >
-  <PageStub
+  <PageIntro
     label="04 — Contact"
-    heading="Contact"
-    lead="The fastest way to reach us is a phone call or a WhatsApp message."
-  />
+    heading="Call or WhatsApp"
+    lead="The fastest way to reach us is a phone call or a WhatsApp message. Tell us about your plot, or the home or building you have in mind."
+  >
+    <div class="contact-actions">
+      <WhatsAppButton message={whatsappMessage} variant="primary" class="contact-actions__btn" />
+      <CallButton variant="outline" class="contact-actions__btn" />
+    </div>
+  </PageIntro>
+
+  <section class="section section--concrete" aria-labelledby="details-title">
+    <div class="container details">
+      <SectionHeader label="Contact details" heading="Find us" id="details-title" />
+
+      <dl class="details__list">
+        <div class="details__row">
+          <dt class="label">Phone</dt>
+          <dd class="details__value"><a href={telUrl()}>{site.phoneDisplay}</a></dd>
+        </div>
+        <div class="details__row">
+          <dt class="label">WhatsApp</dt>
+          <dd class="details__value">
+            <a href={whatsappUrl(whatsappMessage)} target="_blank" rel="noopener">{whatsappDisplay()}</a>
+          </dd>
+        </div>
+        <div class="details__row">
+          <dt class="label">Email</dt>
+          <dd class="details__value"><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+        </div>
+        <div class="details__row">
+          <dt class="label">Office</dt>
+          <dd class="details__value">
+            <address>
+              {address.street}<br />
+              {`${address.city}, ${address.region}`}<br />
+              Pakistan
+            </address>
+          </dd>
+          <dd>
+            <a class="link-arrow" href={mapsUrl()} target="_blank" rel="noopener">
+              Open in Google Maps<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </dd>
+        </div>
+        <div class="details__row">
+          <dt class="label">Hours</dt>
+          {formatHours().map((line) => <dd class="details__value">{line}</dd>)}
+        </div>
+      </dl>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .contact-actions :global(.contact-actions__btn) {
+    min-height: 4rem;
+    padding-inline: var(--space-7);
+    font-size: var(--text-xl);
+  }
+
+  @media (max-width: 29.999rem) {
+    .contact-actions :global(.contact-actions__btn) {
+      flex: 1 1 100%;
+    }
+  }
+
+  .details {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .details__list {
+    display: grid;
+    gap: 0 var(--space-6);
+  }
+
+  @media (min-width: 48rem) {
+    .details__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .details__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .details__row {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+    padding-block: var(--space-5);
+    border-top: var(--rule-thick) solid var(--ink);
+  }
+
+  .details__row dt {
+    color: var(--concrete-700);
+  }
+
+  .details__value {
+    font-size: var(--text-lg);
+  }
+
+  .details__value a {
+    overflow-wrap: anywhere;
+  }
+
+  address {
+    font-style: normal;
+  }
+</style>

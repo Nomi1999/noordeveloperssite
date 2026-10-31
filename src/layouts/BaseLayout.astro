@@ -21,12 +21,14 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  /** Describes the share image; defaults to the brand line */
+  ogImageAlt?: string;
   /** Prefilled WhatsApp message for every CTA on the page */
   whatsappMessage?: string;
   noindex?: boolean;
 }
 
-const { title, description, ogImage, whatsappMessage, noindex } = Astro.props;
+const { title, description, ogImage, ogImageAlt, whatsappMessage, noindex } = Astro.props;
 ---
 
 <!doctype html>
@@ -44,7 +46,7 @@ const { title, description, ogImage, whatsappMessage, noindex } = Astro.props;
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="color-scheme" content="dark" />
-    <Seo title={title} description={description} ogImage={ogImage} noindex={noindex} />
+    <Seo title={title} description={description} ogImage={ogImage} ogImageAlt={ogImageAlt} noindex={noindex} />
     <LocalBusinessJsonLd />
   </head>
   <body>

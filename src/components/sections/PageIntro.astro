@@ -1,0 +1,39 @@
+---
+/**
+ * The top of every inner page: a mono label, a big condensed h1, a lead
+ * paragraph and a dimension line, on the blueprint grid. Extra content (such
+ * as the contact page's actions) goes in the default slot.
+ */
+import SectionHeader from "./SectionHeader.astro";
+
+interface Props {
+  /** Mono label, e.g. "01 — What we build" */
+  label: string;
+  heading: string;
+  lead: string;
+}
+
+const { label, heading, lead } = Astro.props;
+---
+
+<section class="section section--blueprint page-intro">
+  <div class="container">
+    <SectionHeader label={label} heading={heading} as="h1" intro={lead}>
+      <slot />
+    </SectionHeader>
+  </div>
+</section>
+
+<style>
+  .page-intro {
+    border-bottom: var(--rule-thin) solid var(--concrete-700);
+  }
+
+  .page-intro :global(.sh__label) {
+    color: var(--noor);
+  }
+
+  .page-intro :global(.sh__title) {
+    max-width: 16ch;
+  }
+</style>

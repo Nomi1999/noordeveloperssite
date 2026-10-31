@@ -1,6 +1,6 @@
 /**
  * Every word the scroll-build hero shows. ScrollBuildHero.astro reads its copy
- * only from here. Drafts: final wording is approved in the content-pages review.
+ * only from here. Approved by the maintainer (see src/content/APPROVALS.md).
  */
 
 export interface HeroPhase {

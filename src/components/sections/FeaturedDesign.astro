@@ -1,0 +1,82 @@
+---
+/** One concept design shown large, with its key facts and a link to its page. */
+import { getDesign } from "../../designs/index.ts";
+import { keyFacts, kindLabel } from "../../designs/display.ts";
+import { getRender } from "../../designs/renders.ts";
+import FactsList from "../designs/FactsList.astro";
+import RenderFigure from "../RenderFigure.astro";
+import SectionHeader from "./SectionHeader.astro";
+
+interface Props {
+  slug: string;
+  /** Shot id from the render registry */
+  shot: string;
+  index?: string;
+  total?: string;
+}
+
+const { slug, shot, index, total } = Astro.props;
+const entry = getDesign(slug);
+const { design } = entry;
+const render = getRender(slug, shot);
+const what = design.kind === "house" ? "A family home" : `A ${kindLabel(design.kind).toLowerCase()} building`;
+---
+
+<section class="section section--raised featured" aria-labelledby="featured-title">
+  <div class="container">
+    <SectionHeader index={index} total={total} label="Featured design" heading={design.name} id="featured-title" />
+
+    <div class="featured__grid">
+      <RenderFigure
+        render={render}
+        sizes="(min-width: 80rem) 50rem, (min-width: 64rem) 62vw, 100vw"
+        class="featured__render reveal"
+      />
+      <div class="featured__panel reveal">
+        <p class="label text-accent">Concept design · {kindLabel(design.kind)}</p>
+        <p class="featured__text">
+          {what} on a {entry.facts.plot.size} plot, drawn by our team and delivered fully finished. Build it on
+          your own plot, or let us adapt it to yours.
+        </p>
+        <FactsList facts={keyFacts(entry)} />
+        <a class="btn btn--outline featured__link" href={`/designs/${slug}/`}>
+          Explore the design<span class="sr-only">: {design.name}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured__grid {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 64rem) {
+    .featured__grid {
+      grid-template-columns: 5fr 3fr;
+      align-items: start;
+      gap: var(--space-7);
+    }
+  }
+
+  .featured__panel {
+    display: grid;
+    gap: var(--space-5);
+    justify-items: start;
+  }
+
+  .featured__text {
+    color: var(--concrete-300);
+  }
+
+  .featured__panel :global(.facts) {
+    width: 100%;
+  }
+
+  .featured__link {
+    margin-top: var(--space-2);
+  }
+</style>

@@ -1,17 +1,30 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PageStub from "../../components/PageStub.astro";
+import PageIntro from "../../components/sections/PageIntro.astro";
+import WhatWeBuild from "../../components/sections/WhatWeBuild.astro";
+import Offerings from "../../components/sections/Offerings.astro";
+import FullyFinished from "../../components/sections/FullyFinished.astro";
+import CtaBand from "../../components/sections/CtaBand.astro";
+
+const whatsappMessage = "Hello, I am interested in building with Noor Developers. Can we talk about my project?";
 ---
 
 <BaseLayout
   title="What We Build"
-  description="Houses we build on our own plots and sell, and design-and-build projects on your plot, from 1 Kanal homes to commercial buildings."
-  whatsappMessage="Hello Noor Developers, I would like to know more about what you build."
+  description="Houses we build on our own plots and sell, and design-and-build projects on your plot, from 1 Kanal homes to commercial buildings. Every build is fully finished."
+  whatsappMessage={whatsappMessage}
 >
-  <PageStub
+  <PageIntro
     label="01 — What we build"
     heading="What we build"
-    lead="Houses we build on our own plots, and design, architecture and construction on yours. Every build is delivered fully finished."
-    whatsappMessage="Hello Noor Developers, I would like to know more about what you build."
+    lead="Houses of every size, mainly 1 Kanal and 2 Kanal, and commercial buildings. Buy one we have built, or have us build on your plot. Every build is handed over fully finished."
+  />
+  <WhatWeBuild variant="detail" index="01" total="03" />
+  <Offerings variant="detail" index="02" total="03" />
+  <FullyFinished index="03" total="03" heading="Everything included, except the furniture" />
+  <CtaBand
+    heading="Build with Noor"
+    text="Tell us whether you want to buy a Noor home or build on your own plot. Call us or send a WhatsApp message and we will talk it through."
+    whatsappMessage={whatsappMessage}
   />
 </BaseLayout>

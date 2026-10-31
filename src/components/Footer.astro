@@ -1,7 +1,7 @@
 ---
 import { site } from "../config/site.ts";
 import { navLinks } from "../config/nav.ts";
-import { formatHours, telUrl, whatsappUrl } from "../lib/contact.ts";
+import { formatHours, telUrl, whatsappDisplay as formatWhatsApp, whatsappUrl } from "../lib/contact.ts";
 import Logo from "./Logo.astro";
 import CallButton from "./CallButton.astro";
 import WhatsAppButton from "./WhatsAppButton.astro";
@@ -13,8 +13,7 @@ interface Props {
 const { whatsappMessage } = Astro.props;
 const { address } = site;
 const year = new Date().getFullYear();
-// Show the WhatsApp number in the phone format when both are the same line
-const whatsappDisplay = site.phone.replace(/\D/g, "") === site.whatsapp ? site.phoneDisplay : `+${site.whatsapp}`;
+const whatsappDisplay = formatWhatsApp();
 ---
 
 <footer class="site-footer">

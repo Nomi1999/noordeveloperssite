@@ -1,0 +1,206 @@
+---
+/**
+ * Floor plans for every level of a design, one level at a time.
+ *
+ * Progressive enhancement: the server renders every level as its own section
+ * with a heading, so without JavaScript the levels stack. The script turns
+ * them into an ARIA tabs pattern (tablist, roving tabindex, arrow keys,
+ * Home/End) and shows one level at a time.
+ */
+import FloorPlan from "../FloorPlan.astro";
+import { getDesign } from "../../designs/index.ts";
+import { planLevels, type PlanTheme } from "../../designs/plan.ts";
+
+interface Props {
+  slug: string;
+  theme: PlanTheme;
+}
+
+const { slug, theme } = Astro.props;
+const { design } = getDesign(slug);
+const levels = planLevels(design);
+const uid = `levels-${slug}`;
+---
+
+<div class:list={["levels", `levels--${theme}`]} data-levels>
+  <div class="levels__tabs" role="tablist" aria-label={`${design.name} floor plans`} data-levels-tablist hidden>
+    {
+      levels.map((level, i) => (
+        <button
+          type="button"
+          role="tab"
+          class="levels__tab"
+          id={`${uid}-tab-${level.id}`}
+          aria-controls={`${uid}-panel-${level.id}`}
+          aria-selected={i === 0 ? "true" : "false"}
+          tabindex={i === 0 ? 0 : -1}
+          data-level-tab
+        >
+          {level.name}
+        </button>
+      ))
+    }
+  </div>
+
+  {
+    levels.map((level) => (
+      <section class="levels__panel" id={`${uid}-panel-${level.id}`} aria-labelledby={`${uid}-heading-${level.id}`} data-level-panel>
+        <h3 class="levels__heading label" id={`${uid}-heading-${level.id}`}>
+          {level.name}
+        </h3>
+        <FloorPlan design={slug} level={level.id} theme={theme} />
+      </section>
+    ))
+  }
+</div>
+
+<script>
+  function enhance(root: HTMLElement) {
+    const tablist = root.querySelector<HTMLElement>("[data-levels-tablist]");
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-level-tab]")];
+    const panels = [...root.querySelectorAll<HTMLElement>("[data-level-panel]")];
+    if (!tablist || tabs.length < 2 || tabs.length !== panels.length) return;
+
+    tablist.hidden = false;
+    root.classList.add("levels--tabs");
+    panels.forEach((panel, i) => {
+      panel.setAttribute("role", "tabpanel");
+      // The tab names the panel; the panel heading stays for the document outline
+      panel.setAttribute("aria-labelledby", tabs[i].id);
+    });
+
+    const select = (index: number, focus: boolean) => {
+      tabs.forEach((tab, i) => {
+        const selected = i === index;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        panels[i].hidden = !selected;
+      });
+      if (focus) tabs[index].focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => select(i, false));
+      tab.addEventListener("keydown", (event) => {
+        const last = tabs.length - 1;
+        const next = { ArrowRight: i === last ? 0 : i + 1, ArrowLeft: i === 0 ? last : i - 1, Home: 0, End: last }[event.key];
+        if (next === undefined) return;
+        event.preventDefault();
+        select(next, true);
+      });
+    });
+
+    select(0, false);
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-levels]").forEach(enhance);
+</script>
+
+<style>
+  .levels {
+    --levels-line: var(--concrete-700);
+    --levels-selected-bg: var(--paper);
+    --levels-selected-fg: var(--ink);
+    display: grid;
+    /* minmax(0, …): the plan's wide canvas scrolls inside its frame instead of widening the page */
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+
+  .levels__panel {
+    min-width: 0;
+  }
+
+  .levels--light {
+    --levels-line: var(--concrete-300);
+    --levels-selected-bg: var(--ink);
+    --levels-selected-fg: var(--paper);
+  }
+
+  .levels--tabs {
+    gap: var(--space-6);
+  }
+
+  .levels__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding-bottom: var(--space-4);
+    border-bottom: var(--rule-thin) solid var(--levels-line);
+  }
+
+  .levels__tabs[hidden] {
+    display: none;
+  }
+
+  .levels__tab {
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-4);
+    border: var(--rule-thin) solid currentColor;
+    border-radius: var(--radius-1);
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-mono-strong);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .levels__tab[aria-selected="true"] {
+    background: var(--levels-selected-bg);
+    border-color: var(--levels-selected-bg);
+    color: var(--levels-selected-fg);
+  }
+
+  .levels__heading {
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: var(--rule-thick) solid currentColor;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+
+  /* With tabs, the tab shows the level name, so the heading is for screen readers only */
+  .levels--tabs .levels__heading {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .levels__panel[hidden] {
+    display: none;
+  }
+
+  /* Wide screens: the room schedule sits beside the plan instead of far below it */
+  @media (min-width: 64rem) {
+    .levels :global(.fp-figure) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+      grid-template-rows: auto 1fr;
+      column-gap: var(--space-7);
+      align-items: start;
+    }
+
+    .levels :global(.fp-frame),
+    .levels :global(.fp-caption) {
+      grid-column: 1;
+    }
+
+    .levels :global(.fp-schedule) {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      margin-top: 0;
+      position: sticky;
+      top: var(--space-6);
+    }
+  }
+</style>

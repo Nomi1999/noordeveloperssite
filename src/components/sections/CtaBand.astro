@@ -1,0 +1,79 @@
+---
+/** Full-width closing band with a short headline and the Call and WhatsApp actions. */
+import CallButton from "../CallButton.astro";
+import WhatsAppButton from "../WhatsAppButton.astro";
+
+interface Props {
+  heading?: string;
+  text?: string;
+  /** Prefilled WhatsApp message; use the page's own message */
+  whatsappMessage?: string;
+  /** Mono label above the heading */
+  label?: string;
+}
+
+const {
+  heading = "Let’s talk about your build",
+  text = "Call us or send a WhatsApp message. Tell us about your plot or the home you have in mind, and we will take it from there.",
+  whatsappMessage,
+  label = "Call or WhatsApp",
+} = Astro.props;
+---
+
+<section class="section section--concrete cta-band" aria-labelledby="cta-title">
+  <div class="container cta-band__inner">
+    <div class="cta-band__copy">
+      <p class="label cta-band__label">{label}</p>
+      <h2 class="cta-band__title" id="cta-title">{heading}</h2>
+      <p class="cta-band__text">{text}</p>
+    </div>
+    <div class="cta-band__actions">
+      <WhatsAppButton message={whatsappMessage} variant="primary" />
+      <CallButton variant="outline" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    border-top: var(--rule-thick) solid var(--noor);
+  }
+
+  .cta-band__inner {
+    display: grid;
+    gap: var(--space-6);
+    align-items: end;
+  }
+
+  @media (min-width: 56rem) {
+    .cta-band__inner {
+      grid-template-columns: 1fr auto;
+      gap: var(--space-8);
+    }
+  }
+
+  .cta-band__copy {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .cta-band__label {
+    color: var(--concrete-700);
+  }
+
+  .cta-band__title {
+    max-width: 16ch;
+  }
+
+  .cta-band__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 29.999rem) {
+    .cta-band__actions > :global(*) {
+      flex: 1 1 100%;
+    }
+  }
+</style>

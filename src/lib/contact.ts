@@ -35,3 +35,21 @@ export function formatHours(hours: OpeningHours[] = site.hours): string[] {
     return `${dayText}, ${formatTime(opens)} – ${formatTime(closes)}`;
   });
 }
+
+/** The WhatsApp number as shown: the phone format when both are the same line */
+export function whatsappDisplay(): string {
+  return site.phone.replace(/\D/g, "") === site.whatsapp ? site.phoneDisplay : `+${site.whatsapp}`;
+}
+
+/**
+ * "Open in Google Maps" link for the office: a Maps search URL (opens the app
+ * on phones), built from the configured coordinates, or from the address when
+ * no coordinates are set. A plain link, so the page makes no map requests.
+ */
+export function mapsUrl(geo: { lat: number; lng: number } | undefined = site.geo, address = site.address): string {
+  const query =
+    geo && Number.isFinite(geo.lat) && Number.isFinite(geo.lng)
+      ? `${geo.lat},${geo.lng}`
+      : [address.street, address.city, address.region, "Pakistan"].filter(Boolean).join(", ");
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}

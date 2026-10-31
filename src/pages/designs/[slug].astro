@@ -1,0 +1,191 @@
+---
+/**
+ * One page per design in the registry (src/designs/sources.ts), at
+ * /designs/<slug>/. Facts and floor plans come from the design data, images
+ * from the render registry (src/designs/renders.ts), and the longer
+ * description from src/content/designs/<slug>.md.
+ */
+import type { GetStaticPaths, MarkdownInstance } from "astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageIntro from "../../components/sections/PageIntro.astro";
+import SectionHeader from "../../components/sections/SectionHeader.astro";
+import FullyFinished from "../../components/sections/FullyFinished.astro";
+import CtaBand from "../../components/sections/CtaBand.astro";
+import RenderFigure from "../../components/RenderFigure.astro";
+import FactsList from "../../components/designs/FactsList.astro";
+import Gallery from "../../components/designs/Gallery.astro";
+import LevelSwitcher from "../../components/designs/LevelSwitcher.astro";
+import { designs, type DesignEntry } from "../../designs/index.ts";
+import { cardFacts, keyFacts, kindLabel } from "../../designs/display.ts";
+import { getRenders } from "../../designs/renders.ts";
+import { dims } from "../../designs/units.ts";
+
+export const getStaticPaths = (() =>
+  designs.map((entry) => ({ params: { slug: entry.design.slug }, props: { entry } }))) satisfies GetStaticPaths;
+
+interface Props {
+  entry: DesignEntry;
+}
+
+const { entry } = Astro.props;
+const { design, facts } = entry;
+const renders = getRenders(design.slug);
+const isHouse = design.kind === "house";
+
+const blurbs = import.meta.glob<MarkdownInstance<Record<string, never>>>("../../content/designs/*.md", { eager: true });
+const Blurb = blurbs[`../../content/designs/${design.slug}.md`]?.Content;
+
+const whatsappMessage = `Hello Noor Developers, I am interested in your ${design.name} design.`;
+const plot = `${facts.plot.size} plot (${dims(facts.plot.width, facts.plot.depth)})`;
+const description = `${design.name}: a concept design by Noor Developers for a ${plot}. ${cardFacts(entry).join(", ")}. Built on your plot and delivered fully finished.`;
+const sections = renders.gallery.length ? 4 : 3;
+const n = (i: number) => String(i).padStart(2, "0");
+const total = n(sections);
+---
+
+<BaseLayout
+  title={`${design.name} Design`}
+  description={description}
+  ogImage={renders.share}
+  ogImageAlt={renders.lead.alt}
+  whatsappMessage={whatsappMessage}
+>
+  <PageIntro
+    label={`02 — Designs · Concept design · ${kindLabel(design.kind)}`}
+    heading={design.name}
+    lead={`A concept design for a ${plot}, drawn and rendered by our team and delivered fully finished.`}
+  />
+
+  <section class="section section--dark design-lead" aria-label="Lead render">
+    <div class="container">
+      <RenderFigure
+        render={renders.lead}
+        sizes="(min-width: 80rem) 74rem, calc(100vw - 2 * var(--gutter))"
+        widths={[640, 960, 1280, 1600, 2400]}
+        eager
+      />
+    </div>
+  </section>
+
+  <section class="section section--concrete overview" aria-labelledby="overview-title">
+    <div class="container">
+      <SectionHeader index={n(1)} total={total} label="Overview" heading="About this design" id="overview-title" />
+      <div class="overview__grid">
+        <div class="overview__text">
+          {Blurb && <div class="overview__blurb"><Blurb /></div>}
+          <aside class="concept" aria-label="About concept designs">
+            <p class="label">Concept design</p>
+            <p>
+              This is a concept design, not a listing. We can build it on your own plot as drawn, or adapt it to your
+              plot’s size and shape and to the way {isHouse ? "your family lives" : "your business works"}.
+            </p>
+          </aside>
+          <a class="link-arrow" href="/designs/">See all designs</a>
+        </div>
+        <div class="overview__facts">
+          <h3 class="overview__facts-title label">Key facts</h3>
+          <FactsList facts={keyFacts(entry)} />
+          <p class="dim overview__note">Areas are covered areas on wall centrelines, from the design drawings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    renders.gallery.length > 0 && (
+      <section class="section section--raised" aria-labelledby="gallery-title">
+        <div class="container">
+          <SectionHeader index={n(2)} total={total} label="Renders" heading="Gallery" id="gallery-title" />
+          <div class="block-gap">
+            <Gallery renders={renders.gallery} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section section--paper" aria-labelledby="plans-title">
+    <div class="container">
+      <SectionHeader
+        index={n(sections - 1)}
+        total={total}
+        label="Floor plans"
+        heading="Floor plans"
+        id="plans-title"
+        intro="Every level, drawn to scale from the design data, with a room schedule under each plan."
+      />
+      <div class="block-gap">
+        <LevelSwitcher slug={design.slug} theme="light" />
+      </div>
+    </div>
+  </section>
+
+  <FullyFinished index={n(sections)} total={total} heading={`Fully finished, like every Noor build`} />
+
+  <CtaBand
+    label="Interested in this design?"
+    heading={`Talk to us about the ${design.name}`}
+    text={`Call or send a WhatsApp message about the ${design.name}: building it on your plot, or adapting it to yours.`}
+    whatsappMessage={whatsappMessage}
+  />
+</BaseLayout>
+
+<style>
+  .design-lead {
+    padding-top: var(--space-6);
+  }
+
+  .block-gap {
+    margin-top: var(--space-7);
+  }
+
+  .overview__grid {
+    display: grid;
+    gap: var(--space-7);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 64rem) {
+    .overview__grid {
+      grid-template-columns: 3fr 2fr;
+      gap: var(--space-8);
+    }
+  }
+
+  .overview__text {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: var(--space-6);
+  }
+
+  .overview__blurb {
+    display: grid;
+    gap: var(--space-4);
+    font-size: var(--text-lg);
+  }
+
+  .concept {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-5);
+    border-left: var(--rule-thick) solid var(--ink);
+    background: var(--paper);
+  }
+
+  .concept .label {
+    color: var(--concrete-700);
+  }
+
+  .overview__facts-title {
+    padding-bottom: var(--space-3);
+    border-bottom: var(--rule-thick) solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+
+  .overview__note {
+    margin-top: var(--space-4);
+    color: var(--concrete-700);
+  }
+</style>

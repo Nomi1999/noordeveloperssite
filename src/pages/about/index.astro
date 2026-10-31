@@ -1,15 +1,139 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PageStub from "../../components/PageStub.astro";
+import PageIntro from "../../components/sections/PageIntro.astro";
+import SectionHeader from "../../components/sections/SectionHeader.astro";
+import CtaBand from "../../components/sections/CtaBand.astro";
+import RenderFigure from "../../components/RenderFigure.astro";
+import { about } from "../../content/about.ts";
+import { getRender } from "../../designs/renders.ts";
+
+const lit = getRender("1-kanal", "front-dusk");
 ---
 
 <BaseLayout
   title="About"
-  description="About Noor Developers, a Faisalabad property developer and builder that designs and builds fully finished homes and commercial buildings."
+  description="About Noor Developers, a Faisalabad developer and builder that designs and builds houses and commercial buildings, and hands every one over fully finished."
 >
-  <PageStub
-    label="03 — About"
-    heading="About us"
-    lead="A Faisalabad developer and builder. Noor means light, and we build homes made to be lived in from day one."
-  />
+  <PageIntro label="03 — About" heading={about.intro.heading} lead={about.intro.lead} />
+
+  <section class="section section--concrete" aria-labelledby="who-title">
+    <div class="container about-split">
+      <SectionHeader index="01" total="03" label={about.who.label} heading={about.who.heading} id="who-title" />
+      <div class="about-text reveal">
+        {about.who.paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--raised" aria-labelledby="noor-title">
+    <div class="container">
+      <SectionHeader index="02" total="03" label={about.noor.label} heading={about.noor.heading} id="noor-title" />
+      <div class="noor">
+        <div class="about-text noor__text reveal">
+          {about.noor.paragraphs.map((p, i) => <p class:list={[i === 0 && "noor__first"]}>{p}</p>)}
+        </div>
+        <RenderFigure render={lit} sizes="(min-width: 64rem) 46rem, 100vw" class="noor__render reveal" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--blueprint" aria-labelledby="approach-title">
+    <div class="container">
+      <SectionHeader index="03" total="03" label={about.approach.label} heading={about.approach.heading} id="approach-title" />
+      <ol class="principles" role="list">
+        {
+          about.approach.principles.map((item) => (
+            <li class="principle reveal">
+              <p class="principle__num display text-accent" aria-hidden="true">
+                {item.number}
+              </p>
+              <h3 class="principle__title">{item.title}</h3>
+              <p class="principle__text">{item.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <CtaBand heading="Let’s talk about your build" />
 </BaseLayout>
+
+<style>
+  .about-split {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  @media (min-width: 64rem) {
+    .about-split {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
+
+  .about-text {
+    display: grid;
+    gap: var(--space-4);
+    font-size: var(--text-lg);
+  }
+
+  .noor {
+    display: grid;
+    gap: var(--space-7);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 64rem) {
+    .noor {
+      grid-template-columns: 2fr 3fr;
+      align-items: center;
+    }
+  }
+
+  .noor__text {
+    color: var(--concrete-300);
+  }
+
+  .noor__first {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-display);
+    line-height: var(--leading-snug);
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  .principles {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 48rem) {
+    .principles {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .principle {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    padding-top: var(--space-5);
+    border-top: var(--rule-thin) solid var(--concrete-700);
+  }
+
+  .principle__num {
+    font-size: var(--text-3xl);
+    line-height: 0.9;
+  }
+
+  .principle__title {
+    font-size: var(--text-xl);
+  }
+
+  .principle__text {
+    color: var(--concrete-300);
+  }
+</style>

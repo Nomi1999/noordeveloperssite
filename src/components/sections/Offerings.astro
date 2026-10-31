@@ -1,0 +1,126 @@
+---
+/**
+ * The two ways to work with Noor, side by side (stacked on phones).
+ * `summary` (home): one line each and a link to What We Build.
+ * `detail` (What We Build): each offering from start to finish.
+ */
+import { offerings } from "../../content/offerings.ts";
+import SectionHeader from "./SectionHeader.astro";
+
+interface Props {
+  variant?: "summary" | "detail";
+  index?: string;
+  total?: string;
+}
+
+const { variant = "summary", index, total } = Astro.props;
+const detail = variant === "detail";
+---
+
+<section class:list={["section offerings", detail ? "section--paper" : "section--concrete"]} aria-labelledby="offerings-title">
+  <div class="container">
+    <SectionHeader
+      index={index}
+      total={total}
+      label="Two ways to work with us"
+      heading="Two ways to work with Noor"
+      id="offerings-title"
+      intro={detail ? "Buy a home we have already built, or have us design and build on your own plot. Either way, you get it fully finished." : undefined}
+    />
+
+    <ul class="offerings__grid" role="list">
+      {
+        offerings.map((o) => (
+          <li class="offer reveal" id={detail ? `offer-${o.id}` : undefined}>
+            <p class="offer__label label">{o.label}</p>
+            <h3 class="offer__title">{o.title}</h3>
+            <p class="offer__summary">{o.summary}</p>
+            {detail ? (
+              <>
+                <ol class="offer__steps" role="list">
+                  {o.steps.map((step, i) => (
+                    <li>
+                      <span class="offer__num dim" aria-hidden="true">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ol>
+                <p class="offer__outcome">{o.outcome}</p>
+              </>
+            ) : (
+              <a class="link-arrow offer__link" href={`/what-we-build/#offer-${o.id}`}>
+                How it works<span class="sr-only">: {o.title}</span>
+              </a>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .offerings__grid {
+    display: grid;
+    gap: var(--space-7);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 48rem) {
+    .offerings__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+    }
+  }
+
+  .offer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-top: var(--space-5);
+    border-top: var(--rule-thick) solid var(--ink);
+    scroll-margin-top: var(--space-6);
+  }
+
+  .offer__label {
+    color: var(--concrete-700);
+  }
+
+  .offer__title {
+    font-size: var(--text-2xl);
+  }
+
+  .offer__summary {
+    font-size: var(--text-lg);
+  }
+
+  .offer__link {
+    align-self: flex-start;
+    margin-top: auto;
+  }
+
+  .offer__steps {
+    display: grid;
+    gap: 0;
+    margin-top: var(--space-2);
+  }
+
+  .offer__steps li {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: var(--space-3);
+    padding-block: var(--space-3);
+    border-bottom: var(--rule-thin) solid var(--concrete-300);
+  }
+
+  .offer__num {
+    padding-top: 0.2em;
+    color: var(--concrete-700);
+  }
+
+  .offer__outcome {
+    font-weight: var(--weight-body-strong);
+  }
+</style>

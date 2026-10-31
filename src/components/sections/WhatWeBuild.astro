@@ -1,0 +1,192 @@
+---
+/**
+ * The building types from src/content/building-types.ts, each with a render
+ * and a link. Every type uses the same layout, so a new type is a new entry in
+ * the data. `summary` (home): cards. `detail` (What We Build): wide rows.
+ */
+import { buildingTypes } from "../../content/building-types.ts";
+import { getRender } from "../../designs/renders.ts";
+import RenderFigure from "../RenderFigure.astro";
+import SectionHeader from "./SectionHeader.astro";
+
+interface Props {
+  variant?: "summary" | "detail";
+  index?: string;
+  total?: string;
+}
+
+const { variant = "summary", index, total } = Astro.props;
+const detail = variant === "detail";
+const types = buildingTypes.map((type) => ({ ...type, image: getRender(type.render.design, type.render.shot) }));
+---
+
+<section class="section section--concrete wwb" aria-labelledby="wwb-title">
+  <div class="container">
+    <SectionHeader
+      index={index}
+      total={total}
+      label="What we build"
+      heading="Houses and commercial buildings"
+      id="wwb-title"
+      intro={detail ? undefined : "Homes of every size, mainly 1 Kanal and 2 Kanal, and commercial buildings, all built the same way."}
+    />
+
+    <ul class:list={["wwb__list", detail ? "wwb__list--detail" : "wwb__list--cards"]} role="list">
+      {
+        types.map((type) => (
+          <li class="wwb__item reveal" id={detail ? type.id : undefined}>
+            <RenderFigure
+              render={type.image}
+              sizes={detail ? "(min-width: 80rem) 44rem, (min-width: 56rem) 55vw, 100vw" : "(min-width: 80rem) 37rem, (min-width: 48rem) 46vw, 100vw"}
+              widths={[480, 800, 1200, 1600]}
+              caption={false}
+              class="wwb__render"
+            />
+            <div class="wwb__body">
+              <ul class="wwb__tags" role="list">
+                {type.tags.map((tag) => (
+                  <li class="label">{tag}</li>
+                ))}
+              </ul>
+              <h3 class="wwb__name">
+                {detail ? type.name : <a href={type.link.href} class="wwb__card-link">{type.name}</a>}
+              </h3>
+              <p class="wwb__text">{detail ? type.detail : type.summary}</p>
+              {detail ? (
+                <a class="link-arrow" href={type.link.href}>
+                  {type.link.label}
+                </a>
+              ) : (
+                <span class="link-arrow wwb__cta" aria-hidden="true">
+                  {type.link.label}
+                </span>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .wwb__list {
+    display: grid;
+    gap: var(--space-7);
+    margin-top: var(--space-7);
+  }
+
+  /* Cards: the whole card is the link (the heading link stretches over it) */
+  @media (min-width: 48rem) {
+    .wwb__list--cards {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+    }
+  }
+
+  .wwb__list--cards .wwb__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    border-bottom: var(--rule-thick) solid var(--ink);
+  }
+
+  .wwb__list--cards .wwb__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5);
+  }
+
+  .wwb__card-link {
+    text-decoration: none;
+  }
+
+  .wwb__card-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .wwb__card-link:focus-visible {
+    outline: none;
+  }
+
+  .wwb__card-link:focus-visible::after {
+    outline: var(--focus-ring) solid var(--focus-color);
+    outline-offset: 3px;
+  }
+
+  .wwb__cta {
+    align-self: flex-start;
+    margin-top: auto;
+  }
+
+  .wwb__list--cards .wwb__item:hover .wwb__cta::after {
+    transform: translateX(0.25em);
+  }
+
+  .wwb__list--cards :global(.wwb__render .render__img) {
+    transition: scale var(--duration-slow) var(--ease-out);
+  }
+
+  .wwb__list--cards .wwb__item:hover :global(.render__img) {
+    scale: 1.03;
+  }
+
+  /* Detail rows: render and text side by side, alternating */
+  .wwb__list--detail {
+    gap: var(--space-8);
+  }
+
+  .wwb__list--detail .wwb__item {
+    display: grid;
+    gap: var(--space-5);
+    scroll-margin-top: var(--space-6);
+  }
+
+  .wwb__list--detail .wwb__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  @media (min-width: 56rem) {
+    .wwb__list--detail .wwb__item {
+      grid-template-columns: 3fr 2fr;
+      align-items: center;
+      gap: var(--space-7);
+    }
+
+    .wwb__list--detail .wwb__item:nth-child(even) {
+      grid-template-columns: 2fr 3fr;
+    }
+
+    .wwb__list--detail .wwb__item:nth-child(even) :global(.wwb__render) {
+      order: 2;
+    }
+  }
+
+  .wwb__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .wwb__tags li {
+    padding: var(--space-1) var(--space-2);
+    border: var(--rule-thin) solid var(--concrete-700);
+    color: var(--concrete-700);
+  }
+
+  .wwb__name {
+    font-size: var(--text-2xl);
+  }
+
+  .wwb__list--detail .wwb__name {
+    font-size: var(--text-3xl);
+  }
+</style>

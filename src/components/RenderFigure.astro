@@ -1,0 +1,85 @@
+---
+/**
+ * A rendered still in a hard-edged frame with a mono caption
+ * ("1 KANAL HOUSE — FRONT, DUSK — CONCEPT"). AVIF and WebP with a JPEG
+ * fallback, sized by `sizes`.
+ */
+import { Picture } from "astro:assets";
+import { getDesign } from "../designs/index.ts";
+import type { Render } from "../designs/renders.ts";
+
+interface Props {
+  render: Render;
+  /** The `sizes` attribute: how wide the image is shown at each viewport */
+  sizes: string;
+  widths?: number[];
+  /** Show the mono caption under the image */
+  caption?: boolean;
+  /** Load straight away (the lead image) instead of lazily */
+  eager?: boolean;
+  class?: string;
+}
+
+const DEFAULT_WIDTHS = [480, 800, 1200, 1600, 2400];
+const { render, sizes, widths = DEFAULT_WIDTHS, caption = true, eager = false, class: className } = Astro.props;
+const name = getDesign(render.design).design.name;
+---
+
+<figure class:list={["render", className]}>
+  <div class="render__frame">
+    <Picture
+      src={render.image}
+      alt={render.alt}
+      formats={["avif", "webp"]}
+      fallbackFormat="jpg"
+      widths={widths.filter((w) => w <= render.image.width)}
+      sizes={sizes}
+      loading={eager ? "eager" : "lazy"}
+      fetchpriority={eager ? "high" : undefined}
+      decoding="async"
+      class="render__img"
+    />
+  </div>
+  {
+    caption && (
+      <figcaption class="render__caption label">
+        <span>{name}</span>
+        <span aria-hidden="true">—</span>
+        <span>{render.caption}</span>
+        <span aria-hidden="true">—</span>
+        <span>Concept</span>
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .render {
+    margin: 0;
+  }
+
+  .render__frame {
+    overflow: hidden;
+    background: var(--ink-2);
+    aspect-ratio: 16 / 9;
+  }
+
+  .render__frame :global(.render__img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .render__caption {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    color: var(--concrete-500);
+  }
+
+  :global(.section--concrete) .render__caption,
+  :global(.section--paper) .render__caption {
+    color: var(--concrete-700);
+  }
+</style>

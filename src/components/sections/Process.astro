@@ -1,0 +1,96 @@
+---
+/** How we work: the four numbered steps from src/content/process.ts. */
+import { processIntro, processSteps } from "../../content/process.ts";
+import SectionHeader from "./SectionHeader.astro";
+
+interface Props {
+  index?: string;
+  total?: string;
+}
+
+const { index, total } = Astro.props;
+---
+
+<section class="section section--blueprint process" aria-labelledby="process-title">
+  <div class="container">
+    <SectionHeader index={index} total={total} label="How we work" heading="From first call to front door" id="process-title" intro={processIntro} />
+
+    <ol class="process__steps" role="list">
+      {
+        processSteps.map((step) => (
+          <li class="process__step reveal">
+            <div class="process__marker rule-draw" aria-hidden="true" />
+            <p class="process__num display text-accent" aria-hidden="true">
+              {step.number}
+            </p>
+            <h3 class="process__title">
+              <span class="sr-only">Step {Number(step.number)}: </span>
+              {step.title}
+            </h3>
+            <p class="process__text">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process__steps {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 40rem) {
+    .process__steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .process__steps {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+  }
+
+  .process__step {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    padding-right: var(--space-5);
+  }
+
+  /* A dimension line along the top of each step, with a tick where it starts */
+  .process__marker {
+    position: relative;
+    height: var(--rule-thin);
+    margin-bottom: var(--space-4);
+    background: var(--concrete-700);
+    transform-origin: left center;
+  }
+
+  .process__marker::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: calc(var(--tick-height) / -2);
+    width: var(--rule-thick);
+    height: var(--tick-height);
+    background: var(--noor);
+  }
+
+  .process__num {
+    font-size: var(--text-4xl);
+    line-height: 0.85;
+  }
+
+  .process__title {
+    font-size: var(--text-xl);
+  }
+
+  .process__text {
+    color: var(--concrete-300);
+  }
+</style>

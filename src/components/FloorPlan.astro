@@ -102,7 +102,10 @@ const fullSize = `/plans/${planFileName(design, level, theme)}`;
     background: linear-gradient(to right, transparent, var(--fp-edge));
     pointer-events: none;
     opacity: 0;
-    animation: fp-fade linear both;
+    /* Longhands only: a minified `animation` shorthand with a timeline is rejected by browsers */
+    animation-name: fp-fade;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: --fp-scroll;
   }
 
@@ -185,6 +188,7 @@ const fullSize = `/plans/${planFileName(design, level, theme)}`;
 
   .fp-schedule td:last-child,
   .fp-schedule th:last-child {
+    white-space: nowrap;
     text-align: right;
     padding-right: 0;
   }

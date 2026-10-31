@@ -1,0 +1,131 @@
+---
+/**
+ * Section header in the drawing-sheet style: a mono index and label
+ * ("02 / 06 · Fully finished"), a heavy condensed heading, and a thin
+ * dimension line with end ticks that draws in on first view.
+ */
+interface Props {
+  /** Two-digit section number, e.g. "02" */
+  index?: string;
+  /** Number of sections on the page, e.g. "06" */
+  total?: string;
+  label: string;
+  heading: string;
+  /** Heading level: h1 for page intros, h2 for sections */
+  as?: "h1" | "h2";
+  /** id for the heading, so the section can point at it with aria-labelledby */
+  id?: string;
+  /** Optional lead paragraph under the rule */
+  intro?: string;
+  align?: "start" | "center";
+}
+
+const { index, total, label, heading, as: Tag = "h2", id, intro, align = "start" } = Astro.props;
+---
+
+<header class:list={["sh", `sh--${align}`, `sh--${Tag}`]}>
+  <p class="sh__meta label">
+    {
+      index && (
+        <span class="sh__index text-accent">
+          {index}
+          {total && <span class="sh__total">{` / ${total}`}</span>}
+        </span>
+      )
+    }
+    <span class="sh__label">{label}</span>
+  </p>
+  <Tag class="sh__title" id={id}>{heading}</Tag>
+  <div class="sh__rule rule-draw" aria-hidden="true"></div>
+  {intro && <p class="sh__intro lead">{intro}</p>}
+  <slot />
+</header>
+
+<style>
+  .sh {
+    --sh-rule: var(--concrete-700);
+    --sh-tick: var(--concrete-500);
+    --sh-muted: var(--concrete-500);
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  :global(.section--concrete) .sh,
+  :global(.section--paper) .sh {
+    --sh-rule: var(--concrete-500);
+    --sh-tick: var(--concrete-700);
+    --sh-muted: var(--concrete-700);
+  }
+
+  .sh__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  .sh__total {
+    color: var(--sh-muted);
+  }
+
+  .sh__label {
+    color: var(--sh-muted);
+  }
+
+  .sh__title {
+    max-width: 22ch;
+  }
+
+  .sh--h2 .sh__title {
+    font-size: var(--text-3xl);
+  }
+
+  .sh__rule {
+    position: relative;
+    height: var(--rule-thin);
+    margin-block: var(--space-2);
+    background: var(--sh-rule);
+    transform-origin: left center;
+  }
+
+  .sh__rule::before,
+  .sh__rule::after {
+    content: "";
+    position: absolute;
+    top: calc(var(--tick-height) / -2);
+    width: var(--rule-thin);
+    height: var(--tick-height);
+    background: var(--sh-tick);
+  }
+
+  .sh__rule::before {
+    left: 0;
+  }
+
+  .sh__rule::after {
+    right: 0;
+  }
+
+  .sh__intro {
+    color: var(--concrete-300);
+  }
+
+  :global(.section--concrete) .sh__intro,
+  :global(.section--paper) .sh__intro {
+    color: var(--ink);
+  }
+
+  .sh--center {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .sh--center .sh__meta {
+    justify-content: center;
+  }
+
+  .sh--center .sh__rule {
+    width: 100%;
+    transform-origin: center;
+  }
+</style>

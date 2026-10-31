@@ -1,17 +1,172 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PageStub from "../../components/PageStub.astro";
+import PageIntro from "../../components/sections/PageIntro.astro";
+import CtaBand from "../../components/sections/CtaBand.astro";
+import RenderFigure from "../../components/RenderFigure.astro";
+import { designs } from "../../designs/index.ts";
+import { cardFacts, kindLabel } from "../../designs/display.ts";
+import { getRenders } from "../../designs/renders.ts";
+import { dims } from "../../designs/units.ts";
+
+const whatsappMessage = "Hello Noor Developers, I would like to talk about one of your designs.";
+const cards = designs.map((entry) => ({ entry, lead: getRenders(entry.design.slug).lead }));
 ---
 
 <BaseLayout
   title="House and Building Designs"
-  description="Concept designs by Noor Developers: 1 Kanal and 2 Kanal houses and a commercial building, each delivered fully finished."
-  whatsappMessage="Hello Noor Developers, I would like to see your house designs."
+  description="Concept designs by Noor Developers: 1 Kanal and 2 Kanal houses and a commercial plaza, with renders, floor plans and key facts. Every build is delivered fully finished."
+  whatsappMessage={whatsappMessage}
 >
-  <PageStub
+  <PageIntro
     label="02 — Designs"
     heading="Designs"
-    lead="Concept designs for 1 Kanal and 2 Kanal houses and commercial buildings, drawn and rendered by our team."
-    whatsappMessage="Hello Noor Developers, I would like to see your house designs."
+    lead="Concept designs for houses and commercial buildings, drawn and rendered by our team. We can build any of them on your plot as drawn, or adapt one to your plot and your needs."
+  />
+
+  <section class="section section--concrete" aria-label="All designs">
+    <div class="container">
+      <ul class="cards" role="list">
+        {
+          cards.map(({ entry, lead }) => {
+            const { design, facts } = entry;
+            return (
+              <li class="card reveal">
+                <RenderFigure
+                  render={lead}
+                  caption={false}
+                  sizes="(min-width: 80rem) 25rem, (min-width: 64rem) 31vw, (min-width: 40rem) 46vw, 100vw"
+                  widths={[480, 800, 1200]}
+                />
+                <div class="card__body">
+                  <p class="card__kind label">
+                    Concept design · {kindLabel(design.kind)}
+                  </p>
+                  <h2 class="card__name">
+                    <a class="card__link" href={`/designs/${design.slug}/`}>
+                      {design.name}
+                    </a>
+                  </h2>
+                  <p class="card__plot dim">
+                    {facts.plot.size} plot · {dims(facts.plot.width, facts.plot.depth)}
+                  </p>
+                  <ul class="card__facts" role="list">
+                    {cardFacts(entry).map((fact) => (
+                      <li>{fact}</li>
+                    ))}
+                  </ul>
+                  <span class="link-arrow card__cta" aria-hidden="true">
+                    View design
+                  </span>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Have a plot in mind?"
+    text="Tell us about your plot and which design you like. Call us or send a WhatsApp message."
+    whatsappMessage={whatsappMessage}
   />
 </BaseLayout>
+
+<style>
+  .cards {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 40rem) {
+    .cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    border-bottom: var(--rule-thick) solid var(--ink);
+  }
+
+  .card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-5);
+  }
+
+  .card__kind {
+    color: var(--concrete-700);
+  }
+
+  .card__name {
+    font-size: var(--text-2xl);
+  }
+
+  .card__link {
+    text-decoration: none;
+  }
+
+  /* The whole card is the link */
+  .card__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .card__link:focus-visible {
+    outline: none;
+  }
+
+  .card__link:focus-visible::after {
+    outline: var(--focus-ring) solid var(--focus-color);
+    outline-offset: 3px;
+  }
+
+  .card__plot {
+    color: var(--concrete-700);
+  }
+
+  .card__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+  }
+
+  .card__facts li {
+    padding: var(--space-1) var(--space-2);
+    border: var(--rule-thin) solid var(--concrete-500);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+
+  .card__cta {
+    margin-top: auto;
+  }
+
+  .card:hover .card__cta::after {
+    transform: translateX(0.25em);
+  }
+
+  .card :global(.render__img) {
+    transition: scale var(--duration-slow) var(--ease-out);
+  }
+
+  .card:hover :global(.render__img) {
+    scale: 1.03;
+  }
+</style>

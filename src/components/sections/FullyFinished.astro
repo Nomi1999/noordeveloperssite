@@ -1,0 +1,217 @@
+---
+/**
+ * The fully finished promise and checklist, from src/content/fully-finished.ts.
+ * `full` (What We Build, design pages): every item, grouped by area.
+ * `compact` (home): the eight highlighted items and a link to the full list.
+ */
+import { checklistHighlights, fullyFinished } from "../../content/fully-finished.ts";
+import SectionHeader from "./SectionHeader.astro";
+
+interface Props {
+  variant?: "full" | "compact";
+  index?: string;
+  total?: string;
+  /** Heading override, e.g. on design pages */
+  heading?: string;
+}
+
+const { variant = "full", index, total, heading = "Fully finished. Just bring your furniture." } = Astro.props;
+const compact = variant === "compact";
+const letters = "ABCDEFGHIJ";
+---
+
+<section
+  class="section section--blueprint ff"
+  id={compact ? undefined : "fully-finished"}
+  aria-labelledby="ff-title"
+>
+  <div class="container">
+    <SectionHeader
+      index={index}
+      total={total}
+      label={fullyFinished.heading}
+      heading={heading}
+      id="ff-title"
+      intro={fullyFinished.promise}
+    />
+
+    {
+      compact ? (
+        <ul class="ff__compact" role="list">
+          {checklistHighlights.map((item) => (
+            <li class="ff__item reveal">
+              <svg class="ff__tick" viewBox="0 0 16 16" aria-hidden="true">
+                <rect width="16" height="16" />
+                <path d="M3.5 8.5 6.5 11.5 12.5 4.5" />
+              </svg>
+              <span>{item.text}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="ff__groups">
+          {fullyFinished.groups.map((group, i) => (
+            <div class="ff__group reveal">
+              <h3 class="ff__group-title label">
+                <span class="text-accent">{letters[i]}</span>
+                <span aria-hidden="true"> — </span>
+                {group.title}
+              </h3>
+              <ul class="ff__list" role="list">
+                {group.items.map((item) => (
+                  <li class="ff__item">
+                    <svg class="ff__tick" viewBox="0 0 16 16" aria-hidden="true">
+                      <rect width="16" height="16" />
+                      <path d="M3.5 8.5 6.5 11.5 12.5 4.5" />
+                    </svg>
+                    <span>{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="ff__footer">
+      <p class="ff__excluded">
+        <svg class="ff__tick ff__tick--empty" viewBox="0 0 16 16" aria-hidden="true">
+          <rect x="0.75" y="0.75" width="14.5" height="14.5" />
+        </svg>
+        <span>
+          <span class="label">Not included</span>
+          <span class="ff__excluded-text">{fullyFinished.notIncludedNote}</span>
+        </span>
+      </p>
+      {
+        compact && (
+          <a class="link-arrow" href="/what-we-build/#fully-finished">
+            See everything included
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .ff__compact {
+    display: grid;
+    gap: var(--space-4) var(--space-6);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 40rem) {
+    .ff__compact {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .ff__compact {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .ff__compact .ff__item {
+    padding-top: var(--space-4);
+    border-top: var(--rule-thin) solid var(--concrete-700);
+  }
+
+  .ff__groups {
+    display: grid;
+    gap: var(--space-7) var(--space-6);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 48rem) {
+    .ff__groups {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .ff__groups {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .ff__group-title {
+    padding-bottom: var(--space-3);
+    border-bottom: var(--rule-thick) solid var(--concrete-700);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--leading-snug);
+    color: var(--concrete-300);
+  }
+
+  .ff__list {
+    display: grid;
+  }
+
+  .ff__list .ff__item {
+    padding-block: var(--space-3);
+    border-bottom: var(--rule-thin) solid var(--concrete-700);
+  }
+
+  .ff__item {
+    display: grid;
+    grid-template-columns: 1rem 1fr;
+    gap: var(--space-3);
+    align-items: start;
+    line-height: var(--leading-snug);
+  }
+
+  .ff__tick {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.1em;
+  }
+
+  .ff__tick rect {
+    fill: var(--noor);
+  }
+
+  .ff__tick path {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2;
+    stroke-linecap: square;
+  }
+
+  .ff__tick--empty rect {
+    fill: none;
+    stroke: var(--concrete-500);
+    stroke-width: 1.5;
+  }
+
+  .ff__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    margin-top: var(--space-7);
+  }
+
+  .ff__excluded {
+    display: grid;
+    grid-template-columns: 1rem 1fr;
+    gap: var(--space-3);
+    align-items: start;
+  }
+
+  .ff__excluded > span {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .ff__excluded .label {
+    color: var(--concrete-500);
+  }
+
+  .ff__excluded-text {
+    font-size: var(--text-lg);
+  }
+</style>

@@ -1,0 +1,71 @@
+---
+/** A design's key facts as a definition list, in the drawing-sheet style. */
+import type { Fact } from "../../designs/display.ts";
+
+interface Props {
+  facts: Fact[];
+  /** Two columns from small screens up */
+  columns?: 1 | 2;
+  class?: string;
+}
+
+const { facts, columns = 2, class: className } = Astro.props;
+---
+
+<dl class:list={["facts", `facts--${columns}`, className]}>
+  {
+    facts.map((fact) => (
+      <div class="facts__row">
+        <dt class="facts__label label">{fact.label}</dt>
+        <dd class="facts__value display">{fact.value}</dd>
+        {fact.detail && <dd class="facts__detail dim">{fact.detail}</dd>}
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .facts {
+    display: grid;
+    gap: 0 var(--space-5);
+  }
+
+  @media (min-width: 30rem) {
+    .facts--2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .facts__row {
+    display: grid;
+    align-content: start;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+    border-top: var(--rule-thin) solid var(--concrete-700);
+  }
+
+  .facts__label {
+    color: var(--concrete-500);
+  }
+
+  .facts__value {
+    font-size: var(--text-2xl);
+    line-height: var(--leading-snug);
+  }
+
+  .facts__detail {
+    color: var(--concrete-300);
+  }
+
+  :global(.section--concrete) .facts__row,
+  :global(.section--paper) .facts__row {
+    border-top-color: var(--concrete-300);
+  }
+
+  :global(.section--concrete) .facts__label,
+  :global(.section--paper) .facts__label,
+  :global(.section--concrete) .facts__detail,
+  :global(.section--paper) .facts__detail {
+    color: var(--concrete-700);
+  }
+</style>

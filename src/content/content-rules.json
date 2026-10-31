@@ -1,0 +1,163 @@
+{
+  "$comment": [
+    "Banned content for every built page, checked by scripts/audit-content.mjs after `astro build`.",
+    "phrases: case-insensitive, matched as whole words (\"sold\" does not match \"soldier\").",
+    "caseSensitive: short tokens matched exactly and as whole words, so \"Rs\" never matches \"floors\" or \"HOURS\".",
+    "patterns: JavaScript regular expressions, case-insensitive.",
+    "allow: exact phrases that are fine even though they contain a banned word; they are removed from the text before matching. Give a reason for each.",
+    "Add a real project or scheme name to real-names whenever one comes up."
+  ],
+  "categories": {
+    "price": {
+      "description": "Prices, currency amounts and payment terms",
+      "phrases": [
+        "PKR",
+        "rupee",
+        "rupees",
+        "lakh",
+        "lakhs",
+        "lac",
+        "lacs",
+        "crore",
+        "crores",
+        "per sq ft",
+        "per sq. ft",
+        "per sqft",
+        "per square foot",
+        "per square feet",
+        "per marla",
+        "per kanal",
+        "price",
+        "prices",
+        "priced",
+        "pricing",
+        "cost of construction",
+        "construction cost",
+        "installment",
+        "installments",
+        "instalment",
+        "instalments",
+        "down payment",
+        "payment plan",
+        "easy payments",
+        "discount"
+      ],
+      "caseSensitive": ["Rs", "USD"],
+      "patterns": ["[$£€₨]\\s?\\d"]
+    },
+    "sale-status": {
+      "description": "Availability or sale status",
+      "phrases": [
+        "sold",
+        "sold out",
+        "unsold",
+        "for sale",
+        "on sale",
+        "available now",
+        "now available",
+        "availability",
+        "booking",
+        "bookings",
+        "book now",
+        "now selling",
+        "limited units",
+        "units left",
+        "possession"
+      ],
+      "caseSensitive": [],
+      "patterns": []
+    },
+    "regulatory": {
+      "description": "Approvals, permits and authorities",
+      "phrases": [
+        "approval",
+        "approvals",
+        "approved",
+        "permit",
+        "permits",
+        "permission",
+        "sanction",
+        "sanctioned",
+        "bylaws",
+        "by-laws",
+        "building control",
+        "development authority",
+        "regulation",
+        "regulations",
+        "regulatory",
+        "zoning"
+      ],
+      "caseSensitive": ["NOC", "FDA", "LDA", "CDA", "RDA", "PHATA", "WASA", "TMA"],
+      "patterns": []
+    },
+    "real-names": {
+      "description": "Real projects, housing schemes and developments",
+      "phrases": ["Wapda City", "Bahria", "Citi Housing", "Eden Valley", "Defence Housing"],
+      "caseSensitive": ["WAPDA", "DHA"],
+      "patterns": []
+    },
+    "trust-signals": {
+      "description": "Experience, track record, testimonials and certifications",
+      "phrases": [
+        "years of experience",
+        "years experience",
+        "years in business",
+        "years of service",
+        "projects completed",
+        "completed projects",
+        "projects delivered",
+        "homes delivered",
+        "happy clients",
+        "happy customers",
+        "satisfied clients",
+        "satisfied customers",
+        "certified",
+        "certification",
+        "certifications",
+        "testimonial",
+        "testimonials",
+        "award",
+        "awards",
+        "award-winning",
+        "trusted by",
+        "most trusted",
+        "established in"
+      ],
+      "caseSensitive": ["ISO"],
+      "patterns": [
+        "\\d[\\d,]*\\+?\\s+(?:years?|projects|clients|customers|families)\\b",
+        "\\bsince\\s+(?:19|20)\\d{2}\\b"
+      ]
+    },
+    "superlatives": {
+      "description": "Superlatives that imply unprovable claims",
+      "phrases": [
+        "best",
+        "No. 1",
+        "No.1",
+        "number one",
+        "#1",
+        "leading",
+        "top-rated",
+        "top rated",
+        "finest",
+        "unmatched",
+        "unrivalled",
+        "unrivaled",
+        "unbeatable",
+        "world-class",
+        "world class",
+        "premier",
+        "guaranteed"
+      ],
+      "caseSensitive": [],
+      "patterns": []
+    }
+  },
+  "allow": [
+    {
+      "phrase": "best suits",
+      "reason": "\"the layout that best suits your family\" describes fit, not a claim about the company"
+    }
+  ]
+}

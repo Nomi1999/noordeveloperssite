@@ -157,6 +157,28 @@ p {
   color: var(--concrete-500);
 }
 
+/* Blueprint grid: dark sections only, never behind light ones */
+.section--blueprint {
+  background-color: var(--ink);
+  background-image:
+    linear-gradient(to right, var(--grid-line-major) var(--rule-thin), transparent var(--rule-thin)),
+    linear-gradient(to bottom, var(--grid-line-major) var(--rule-thin), transparent var(--rule-thin)),
+    linear-gradient(to right, var(--grid-line) var(--rule-thin), transparent var(--rule-thin)),
+    linear-gradient(to bottom, var(--grid-line) var(--rule-thin), transparent var(--rule-thin));
+  background-size:
+    calc(var(--grid-unit) * 4) calc(var(--grid-unit) * 4),
+    calc(var(--grid-unit) * 4) calc(var(--grid-unit) * 4),
+    var(--grid-unit) var(--grid-unit),
+    var(--grid-unit) var(--grid-unit);
+  background-position: center top;
+}
+
+.section--raised {
+  background: var(--ink-2);
+  color: var(--paper);
+  --focus-color: var(--noor);
+}
+
 .section--concrete {
   background: var(--concrete-100);
   color: var(--ink);
@@ -178,6 +200,34 @@ p {
 .section--concrete .text-muted,
 .section--paper .text-muted {
   color: var(--concrete-700);
+}
+
+/* A text link with an arrow, e.g. "See house designs →" */
+.link-arrow {
+  display: inline-block;
+  /* Touch target of at least 44px with one line of text */
+  padding-block: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-mono-strong);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-thickness: var(--rule-thin);
+  text-underline-offset: 0.4em;
+}
+
+.link-arrow::after {
+  content: "→";
+  display: inline-block;
+  margin-left: var(--space-2);
+  text-decoration: none;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.link-arrow:hover::after {
+  transform: translateX(0.25em);
 }
 
 .stack > * + * {
@@ -296,6 +346,51 @@ p {
 
 .skip-link:focus {
   transform: none;
+}
+
+/*
+ * Section motion: content rises a few pixels and dimension rules draw in as
+ * they scroll into view. CSS scroll-driven animations only, no script. The
+ * base styles above are the finished state, so browsers without scroll
+ * timelines, and visitors who prefer reduced motion, see everything at once.
+ * Elements already on screen at load are past their entry range and appear
+ * finished; scrolling back up never hides anything.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /*
+     * Longhands only: the CSS minifier folds animation-timeline into an
+     * `animation` shorthand, which browsers reject, dropping the animation.
+     */
+    .reveal {
+      animation-name: reveal-rise;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+
+    .rule-draw {
+      animation-name: rule-draw;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+  }
+}
+
+/* Movement only, no fade: text keeps its full contrast at every scroll position */
+@keyframes reveal-rise {
+  from {
+    translate: 0 1rem;
+  }
+}
+
+@keyframes rule-draw {
+  from {
+    scale: 0 1;
+  }
 }
 
 /* Reduced motion: no transitions, animations or smooth scrolling */

@@ -15,7 +15,12 @@
     "designs:export": "node scripts/export-designs.ts",
     "designs:review": "astro build && node scripts/print-review.mjs",
     "brand:build": "node brand/scripts/make-mark.mjs && node brand/scripts/make-type.mjs && node brand/scripts/build-logo.mjs && node brand/scripts/check-mark.mjs",
-    "test": "vitest run --passWithNoTests && node scripts/check-whatsapp-url.ts"
+    "test": "vitest run --passWithNoTests && node scripts/check-whatsapp-url.ts",
+    "render:fetch": "node scripts/blender.mjs fetch",
+    "render:still": "node scripts/blender.mjs still",
+    "render:frames": "node scripts/blender.mjs frames",
+    "render:sheet": "node render/contact_sheet.mjs",
+    "render:encode": "node scripts/encode-renders.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

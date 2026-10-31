@@ -284,8 +284,9 @@ export function buildExport(design: Design, facts: DesignFacts): ExportDesign {
       }),
       columns: levelColumns(design, li).map((c) => ({
         ref: c.ref,
-        x: c.x,
-        y: c.y,
+        // Columns are centred on grid intersections; the export gives the front-left corner like every box
+        x: c.x - c.w / 2,
+        y: c.y - c.d / 2,
         w: c.w,
         d: c.d,
         bottom: base,

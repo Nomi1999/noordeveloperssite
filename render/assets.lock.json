@@ -1,0 +1,599 @@
+{
+  "lockVersion": 1,
+  "note": "Every asset is CC0. Paths are relative to render/assets/. Fetch with npm run render:fetch.",
+  "assets": [
+    {
+      "id": "white_stucco",
+      "kind": "texture",
+      "use": "plaster-white",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/white_stucco",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "textures/white_stucco/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/white_stucco/white_stucco_diff_4k.jpg",
+          "sha256": "bf6faa3491ec6d7bff9c0b83cf2167504fe82ff0735acd08e3497b2b3e6a2fce"
+        },
+        {
+          "path": "textures/white_stucco/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/white_stucco/white_stucco_disp_4k.jpg",
+          "sha256": "3d5d40ebb9d9fe5de753872dc368827e5040b8f7e49f0a9d083cb935c1fc8426"
+        },
+        {
+          "path": "textures/white_stucco/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/white_stucco/white_stucco_rough_4k.jpg",
+          "sha256": "1d3bb74295a902b895ac155b24af3297a3cb5b59aa7fab487b387e0055311b7d"
+        }
+      ]
+    },
+    {
+      "id": "painted_plaster_wall",
+      "kind": "texture",
+      "use": "plaster-warm-grey, neighbour massing",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/painted_plaster_wall",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "textures/painted_plaster_wall/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/painted_plaster_wall/painted_plaster_wall_diff_4k.jpg",
+          "sha256": "0d175fb5bdcb8e8a1eedc87cd5ab41fbfd01de84ee7c4f8907017011181e3990"
+        },
+        {
+          "path": "textures/painted_plaster_wall/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/painted_plaster_wall/painted_plaster_wall_disp_4k.jpg",
+          "sha256": "93f99cdfbdb0b50c50ee4eab34ac8bf515d37caf6158e01b75d24285e1815e62"
+        },
+        {
+          "path": "textures/painted_plaster_wall/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/painted_plaster_wall/painted_plaster_wall_rough_4k.jpg",
+          "sha256": "69a4972ca8c26a752ceb7ef5e9289b83fbfab48ccb583d0f0d699ecd06120423"
+        }
+      ]
+    },
+    {
+      "id": "granite_wall",
+      "kind": "texture",
+      "use": "stone-cladding",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/granite_wall",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "textures/granite_wall/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/granite_wall/granite_wall_diff_4k.jpg",
+          "sha256": "9e1910ed11bece84ccba41b4be09b424c5a068d82f566d830ddf93dd524eb980"
+        },
+        {
+          "path": "textures/granite_wall/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/granite_wall/granite_wall_disp_4k.jpg",
+          "sha256": "bbb574bc8f91abb86b5378a931f745288477a332659322e1574ea072cabecd8f"
+        },
+        {
+          "path": "textures/granite_wall/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/granite_wall/granite_wall_rough_4k.jpg",
+          "sha256": "89de903222c571a7254e7236ccb728c6e525c2cc070d5ec69329b9077c9873b7"
+        }
+      ]
+    },
+    {
+      "id": "oak_wood_planks",
+      "kind": "texture",
+      "use": "wood-panel",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/oak_wood_planks",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "textures/oak_wood_planks/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/oak_wood_planks/oak_wood_planks_diff_4k.jpg",
+          "sha256": "aadbd93033fdfd15d875e85ce7da3558a8375ea282e55d6c3a3dd4ce5272f483"
+        },
+        {
+          "path": "textures/oak_wood_planks/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/oak_wood_planks/oak_wood_planks_disp_4k.jpg",
+          "sha256": "bca07923e851962e06b9940250f8e0f89e5447e2b8bc7ba320e5d05746f70ad2"
+        },
+        {
+          "path": "textures/oak_wood_planks/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/oak_wood_planks/oak_wood_planks_rough_4k.jpg",
+          "sha256": "4619e7936a4e123e0ce951a308086348d003865154efc47737c7ee2ee2cad086"
+        }
+      ]
+    },
+    {
+      "id": "wood_textured_concrete",
+      "kind": "texture",
+      "use": "exposed-concrete (board-formed)",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/wood_textured_concrete",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "textures/wood_textured_concrete/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/wood_textured_concrete/wood_textured_concrete_diff_4k.jpg",
+          "sha256": "5b71c327bb71d86d8f19b16cf7c3a412de69a6e343225b83de989b6bc439bdba"
+        },
+        {
+          "path": "textures/wood_textured_concrete/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/wood_textured_concrete/wood_textured_concrete_disp_4k.jpg",
+          "sha256": "ce5a5aa6e8bde50717a82673cf2c4f12574590543acf3c64b4fb6f46f5f3f53d"
+        },
+        {
+          "path": "textures/wood_textured_concrete/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/wood_textured_concrete/wood_textured_concrete_rough_4k.jpg",
+          "sha256": "580ca5d7e9f349826c6d93d709a9e820ef51b679f9ccb2c7cf82d055f4e835ad"
+        }
+      ]
+    },
+    {
+      "id": "red_brick",
+      "kind": "texture",
+      "use": "brick-structure",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/red_brick",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "textures/red_brick/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/red_brick/red_brick_diff_2k.jpg",
+          "sha256": "a1ae5ba7e63026971ceaf68ebbcf8982d9c2dadde1c99996c49b8ac1160af995"
+        },
+        {
+          "path": "textures/red_brick/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/red_brick/red_brick_disp_2k.jpg",
+          "sha256": "6fbe5a45fb9fb303d66c2a9b9ac8c93b3246a7484ab3babaca493d35f22d8bd4"
+        },
+        {
+          "path": "textures/red_brick/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/red_brick/red_brick_rough_2k.jpg",
+          "sha256": "b8b6b882b467647162433914b3e4db16e91852a0bdf866e6bcea4a76683ea00d"
+        }
+      ]
+    },
+    {
+      "id": "large_floor_tiles_02",
+      "kind": "texture",
+      "use": "porcelain-paving",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/large_floor_tiles_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "textures/large_floor_tiles_02/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/large_floor_tiles_02/large_floor_tiles_02_diff_2k.jpg",
+          "sha256": "a18c67aedef1099f5ad24abd4e65d9a9fcc44e2b9e60aba27ec255f9220708cd"
+        },
+        {
+          "path": "textures/large_floor_tiles_02/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/large_floor_tiles_02/large_floor_tiles_02_disp_2k.jpg",
+          "sha256": "faa2e995dacfb2a3f85bb3fca6c6deb80b5c61ccc0df6470c60ee1fa0cb47e72"
+        },
+        {
+          "path": "textures/large_floor_tiles_02/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/large_floor_tiles_02/large_floor_tiles_02_rough_2k.jpg",
+          "sha256": "0838441397c114faecb89c4e1fae56ce8df195748b2128d0eb1a9bb116407731"
+        }
+      ]
+    },
+    {
+      "id": "concrete_pavement",
+      "kind": "texture",
+      "use": "paving-stone, footpath",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/concrete_pavement",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "textures/concrete_pavement/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/concrete_pavement/concrete_pavement_diff_2k.jpg",
+          "sha256": "e5a1cecfe7765cc0b24a6ab0abf492bd21c9e7af64e97fc46ef6021d0645fbd3"
+        },
+        {
+          "path": "textures/concrete_pavement/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/concrete_pavement/concrete_pavement_disp_2k.jpg",
+          "sha256": "ab724fbe03ae03af5565bedf9fc299612e4cd086fffa6a2828488b78f4e0062a"
+        },
+        {
+          "path": "textures/concrete_pavement/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/concrete_pavement/concrete_pavement_rough_2k.jpg",
+          "sha256": "e97b7d190dcda5a842813502505bf3d1b2348b4cad57b1d51d1bcc694a92d137"
+        }
+      ]
+    },
+    {
+      "id": "asphalt_02",
+      "kind": "texture",
+      "use": "street",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/asphalt_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "textures/asphalt_02/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/asphalt_02/asphalt_02_diff_2k.jpg",
+          "sha256": "28f5ba8690553f192c0e5e1a5ff40f34765b4b93f4cc7059b1a3e9c795b6c28c"
+        },
+        {
+          "path": "textures/asphalt_02/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/asphalt_02/asphalt_02_disp_2k.jpg",
+          "sha256": "943f254ed5e1504131547b35afe3798771cdda33842b7fdc6c0288b8312a44b0"
+        },
+        {
+          "path": "textures/asphalt_02/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/asphalt_02/asphalt_02_rough_2k.jpg",
+          "sha256": "b9a516b61b7040a9245ac206642d5f767ad9589a0169c4a1668221429e8a998c"
+        }
+      ]
+    },
+    {
+      "id": "leafy_grass",
+      "kind": "texture",
+      "use": "lawns",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/leafy_grass",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "textures/leafy_grass/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/leafy_grass/leafy_grass_diff_2k.jpg",
+          "sha256": "8e1c6d21365d4b89bc5a35ab664da98a78dbc3ab9ba6100474881c8619a5b113"
+        },
+        {
+          "path": "textures/leafy_grass/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/leafy_grass/leafy_grass_disp_2k.jpg",
+          "sha256": "de34be0f135a3c92fe6e55cca9501a4cc40e02e84de9cc4c7fefded1da5bd3f3"
+        },
+        {
+          "path": "textures/leafy_grass/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/leafy_grass/leafy_grass_rough_2k.jpg",
+          "sha256": "34e1733bf4064b6950a575ff57e78c8b7ff71b63749eb48a49221bd65de6fb4f"
+        }
+      ]
+    },
+    {
+      "id": "farm_soil",
+      "kind": "texture",
+      "use": "planter-soil",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/farm_soil",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "textures/farm_soil/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/farm_soil/farm_soil_diff_2k.jpg",
+          "sha256": "c86b4e3e86218fb06efb69691a7fe25a61dab82fb0967542b33fbd5cacc5ddc0"
+        },
+        {
+          "path": "textures/farm_soil/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/farm_soil/farm_soil_disp_2k.jpg",
+          "sha256": "f277195afc454eeecdcd9da51486defdc7a6021828dee0a8ee430c456c1701b6"
+        },
+        {
+          "path": "textures/farm_soil/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/farm_soil/farm_soil_rough_2k.jpg",
+          "sha256": "f12bb70c420b1bbbf630c7b1b509371be43ff2418f131af1e2607a39dc181cb7"
+        }
+      ]
+    },
+    {
+      "id": "dirt",
+      "kind": "texture",
+      "use": "excavation",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/dirt",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "textures/dirt/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/dirt/dirt_diff_2k.jpg",
+          "sha256": "126d3e4886cc94b494ba609ddc323a77ff0362a1b156c3750d5d2a0a0ead02b8"
+        },
+        {
+          "path": "textures/dirt/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/dirt/dirt_disp_2k.jpg",
+          "sha256": "4678a6034a118aba4ae5219a14c8503c3d4f96f54d6ecb86347338872d54af46"
+        },
+        {
+          "path": "textures/dirt/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/dirt/dirt_rough_2k.jpg",
+          "sha256": "a17048230e1a86fc874b381360f6a821df1f6b0174ca7f85a59596c4290080fa"
+        }
+      ]
+    },
+    {
+      "id": "concrete_wall_006",
+      "kind": "texture",
+      "use": "top faces of exposed concrete (slab tops, roofs)",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/concrete_wall_006",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "textures/concrete_wall_006/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/concrete_wall_006/concrete_wall_006_diff_2k.jpg",
+          "sha256": "daee26f5b5dae37e3fb2947c64f4045fd4e6d3b89884eb0d878ba6414746e8e8"
+        },
+        {
+          "path": "textures/concrete_wall_006/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/concrete_wall_006/concrete_wall_006_disp_2k.jpg",
+          "sha256": "a448cfcc06f4046bb9d6c89f58a9296f72056481f1e723e128917c33494ecc89"
+        },
+        {
+          "path": "textures/concrete_wall_006/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/concrete_wall_006/concrete_wall_006_rough_2k.jpg",
+          "sha256": "4c463e871c50def9252c38a81e06624ff2fcd8c9ffcdd54534524efacba286ed"
+        }
+      ]
+    },
+    {
+      "id": "kloofendal_48d_partly_cloudy_puresky",
+      "kind": "hdri",
+      "use": "day sky",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "hdri/kloofendal_48d_partly_cloudy_puresky.hdr",
+          "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/4k/kloofendal_48d_partly_cloudy_puresky_4k.hdr",
+          "sha256": "3061c00a16ecae748e84fd6c44c04804f539c118bb66325db858bad87b11bf88"
+        }
+      ]
+    },
+    {
+      "id": "belfast_sunset_puresky",
+      "kind": "hdri",
+      "use": "dusk sky",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/belfast_sunset_puresky",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "hdri/belfast_sunset_puresky.hdr",
+          "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/4k/belfast_sunset_puresky_4k.hdr",
+          "sha256": "cafc52b99ce15d84bd039826a0333f5ab0259d8c1f4feb2f7faf5fafa039108a"
+        }
+      ]
+    },
+    {
+      "id": "jacaranda_tree",
+      "kind": "model",
+      "use": "trees, street trees",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/jacaranda_tree",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "models/jacaranda_tree/jacaranda_tree.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/jacaranda_tree/jacaranda_tree_2k.gltf",
+          "sha256": "5c98732eae5a139f3883eca22766c7a523f37c2629cea1d74fd16e43cbf8a472"
+        },
+        {
+          "path": "models/jacaranda_tree/textures/jacaranda_tree_branches_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/jacaranda_tree/jacaranda_tree_branches_nor_gl_2k.jpg",
+          "sha256": "e4cac77b4f35ad47ba4fcdb9061f91acf3318d9889dd259cb5e6e132b0ab60c7"
+        },
+        {
+          "path": "models/jacaranda_tree/textures/jacaranda_tree_branches_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/jacaranda_tree/jacaranda_tree_branches_diff_2k.jpg",
+          "sha256": "0c558fe09ce7e74e211ed181607be323f299724caf131af8605cc91b11335b66"
+        },
+        {
+          "path": "models/jacaranda_tree/textures/jacaranda_tree_branches_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/jacaranda_tree/jacaranda_tree_branches_arm_2k.jpg",
+          "sha256": "a39d8291ba54adf1ca42f15abe2f622d0ac59fb13c87087a0fabc755b91dfee8"
+        },
+        {
+          "path": "models/jacaranda_tree/textures/jacaranda_tree_trunk_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/jacaranda_tree/jacaranda_tree_trunk_nor_gl_2k.jpg",
+          "sha256": "bb7b2c4914c139bc61c9ac5e0e1fd1c4b38f781351ead433a1e93dd886c732d6"
+        },
+        {
+          "path": "models/jacaranda_tree/textures/jacaranda_tree_trunk_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/jacaranda_tree/jacaranda_tree_trunk_diff_2k.jpg",
+          "sha256": "d3ab4fd9f3d6237a4e7c3d2b7ac0fde9f34a8d09c3aee443c0a3e1a033ce7d96"
+        },
+        {
+          "path": "models/jacaranda_tree/textures/jacaranda_tree_trunk_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/jacaranda_tree/jacaranda_tree_trunk_arm_2k.jpg",
+          "sha256": "c98dfe0951bcc1fe40ecbf12bf893c3d6bd37fd06c2d450ebc6f9be6239e2b62"
+        },
+        {
+          "path": "models/jacaranda_tree/textures/jacaranda_tree_leaves_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/jacaranda_tree/jacaranda_tree_leaves_nor_gl_2k.jpg",
+          "sha256": "b5515c611ae7faa6245a0f1a056d50905118366e7ebf1aacb9e220160c7b989f"
+        },
+        {
+          "path": "models/jacaranda_tree/textures/jacaranda_tree_leaves_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/jacaranda_tree/jacaranda_tree_leaves_diff_2k.jpg",
+          "sha256": "8915643cdd8b4eb8abb3020bc3a3c2c239daccee0d4adbe3194935439f693d8e"
+        },
+        {
+          "path": "models/jacaranda_tree/textures/jacaranda_tree_leaves_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/jacaranda_tree/jacaranda_tree_leaves_arm_2k.jpg",
+          "sha256": "f3847a854562c8ac49d2d35ac8b08ca4d20c879c0f38bf25d414f777a0afe729"
+        },
+        {
+          "path": "models/jacaranda_tree/jacaranda_tree.bin",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/jacaranda_tree/jacaranda_tree.bin",
+          "sha256": "4310d1e25db8ac63d6d345afc8154a1df7e85b301dfad228be66d85d6c52bbfc"
+        }
+      ]
+    },
+    {
+      "id": "tree_small_02",
+      "kind": "model",
+      "use": "palm positions (no CC0 palm model on Poly Haven)",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/tree_small_02",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "models/tree_small_02/tree_small_02.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/tree_small_02/tree_small_02_2k.gltf",
+          "sha256": "a1a7c8a145c811392457c111bff8192146f655a75b5de163ec659cd32af17726"
+        },
+        {
+          "path": "models/tree_small_02/textures/tree_small_02_branch_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/tree_small_02/tree_small_02_branch_nor_gl_2k.jpg",
+          "sha256": "368505992d867bb50eccc00d77940a7a3eaf32f42de9f536d105407b0d6df3fd"
+        },
+        {
+          "path": "models/tree_small_02/textures/tree_small_02_branch_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/tree_small_02/tree_small_02_branch_diff_2k.jpg",
+          "sha256": "9032de9e063ee7e3763a6b10d19d89302f5776e85a966b6dd1c3a5634b2a80e1"
+        },
+        {
+          "path": "models/tree_small_02/textures/tree_small_02_branch_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/tree_small_02/tree_small_02_branch_arm_2k.jpg",
+          "sha256": "82da928cc4e8a45c559f6abe8053227c7ae6cc14eb8d026a30c203aedd087042"
+        },
+        {
+          "path": "models/tree_small_02/textures/tree_small_02_leaves_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/tree_small_02/tree_small_02_leaves_nor_gl_2k.jpg",
+          "sha256": "40c956e345430562cdb4d0470c7d499aa160f1fa3dd7555d88be2dedf0d7ff2e"
+        },
+        {
+          "path": "models/tree_small_02/textures/tree_small_02_leaves_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/tree_small_02/tree_small_02_leaves_diff_2k.jpg",
+          "sha256": "6c984a46861562f2a20381c54106aa5e07ce0d3fce785907f8d263157e7561af"
+        },
+        {
+          "path": "models/tree_small_02/textures/tree_small_02_leaves_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/tree_small_02/tree_small_02_leaves_arm_2k.jpg",
+          "sha256": "a126c0d92b60c44c0664e4d3651831970e259b0d5a1fb39ebb67081cbecaca96"
+        },
+        {
+          "path": "models/tree_small_02/textures/tree_small_02_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/tree_small_02/tree_small_02_nor_gl_2k.jpg",
+          "sha256": "cb7897fc0aea602964836116ecf631614ece2970f579647fe1070bccb428fe89"
+        },
+        {
+          "path": "models/tree_small_02/textures/tree_small_02_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/tree_small_02/tree_small_02_diff_2k.jpg",
+          "sha256": "4ab3210b6ec6bb1181145500bca71d1c1f81ead6baaa8600f5979c2cec50c6a4"
+        },
+        {
+          "path": "models/tree_small_02/textures/tree_small_02_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/tree_small_02/tree_small_02_arm_2k.jpg",
+          "sha256": "e96b4e84e9786b982d01562e0d249f6e58db1b656dd511db7c034d6ed60b1c92"
+        },
+        {
+          "path": "models/tree_small_02/tree_small_02.bin",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/tree_small_02/tree_small_02.bin",
+          "sha256": "8da6c3c389ad8748286d1b7488cd827f75ebdad9d8f59ef7dfb0916df5edc634"
+        }
+      ]
+    },
+    {
+      "id": "searsia_lucida",
+      "kind": "model",
+      "use": "shrubs",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/searsia_lucida",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "models/searsia_lucida/searsia_lucida.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/searsia_lucida/searsia_lucida_2k.gltf",
+          "sha256": "083eff7f2b9587e5bdb3c4e80a1bb03d10d15b51d29d011c5c988f03ff230b8f"
+        },
+        {
+          "path": "models/searsia_lucida/textures/searsia_lucida_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/searsia_lucida/searsia_lucida_diff_2k.jpg",
+          "sha256": "16eebc961b456192da906aa1385c6ab805ec9797fd600a15b3a2e72db1e3844d"
+        },
+        {
+          "path": "models/searsia_lucida/textures/searsia_lucida_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/searsia_lucida/searsia_lucida_nor_gl_2k.jpg",
+          "sha256": "1352cbc2ede3687d252b082c84b1a19ca820c083ed6385a8353073fce9c43a1f"
+        },
+        {
+          "path": "models/searsia_lucida/searsia_lucida.bin",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/searsia_lucida/searsia_lucida.bin",
+          "sha256": "e0be13cac215725de1f8438d96e1010049d655512a0608c36eabe2ba5abff851"
+        },
+        {
+          "path": "models/searsia_lucida/textures/searsia_lucida_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/searsia_lucida/searsia_lucida_arm_2k.jpg",
+          "sha256": "72223563a8fd63191c55c8a03b8917065756cdb2ae2e80e167ae341c97d62f00"
+        }
+      ]
+    },
+    {
+      "id": "grass_medium_01",
+      "kind": "model",
+      "use": "grass scatter",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/grass_medium_01",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "2k",
+      "files": [
+        {
+          "path": "models/grass_medium_01/grass_medium_01.gltf",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/grass_medium_01/grass_medium_01_2k.gltf",
+          "sha256": "aed63929a83fb694e6884e3a5c0fdb962ab8cf9153830247c8201a482ff02664"
+        },
+        {
+          "path": "models/grass_medium_01/textures/grass_medium_01_nor_gl_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/grass_medium_01/grass_medium_01_nor_gl_2k.jpg",
+          "sha256": "245349ce6d1910b3b7474da6013452a5be993f9058be78e17171a0866a6889e9"
+        },
+        {
+          "path": "models/grass_medium_01/textures/grass_medium_01_diff_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/grass_medium_01/grass_medium_01_diff_2k.jpg",
+          "sha256": "f768aa68daf14f37a92dd96621628a5252b169f4d94b4d1cc830d62cd3ac9e68"
+        },
+        {
+          "path": "models/grass_medium_01/textures/grass_medium_01_arm_2k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/grass_medium_01/grass_medium_01_arm_2k.jpg",
+          "sha256": "7b593b1c470c1817b937bb3ca00da7e4b27ca00120e98b06b43bb3a7d5810aa1"
+        },
+        {
+          "path": "models/grass_medium_01/grass_medium_01.bin",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/grass_medium_01/grass_medium_01.bin",
+          "sha256": "f4587cabdb96a2e96d8be644923dc954a248edfaaa717a0ff224cacb898bee1f"
+        }
+      ]
+    }
+  ]
+}

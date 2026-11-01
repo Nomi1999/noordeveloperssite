@@ -1,5 +1,5 @@
 /**
- * Every word the scroll-build hero shows. ScrollBuildHero.astro reads its copy
+ * Every word the build-video hero shows. BuildVideoHero.astro reads its copy
  * only from here. See src/content/APPROVALS.md for the approval record.
  */
 
@@ -17,11 +17,12 @@ export const heroCopy = {
   headline: "We design, build and finish homes.",
   /** Under the headline on the opening (dusk) screen */
   intro: "In Faisalabad, from the first drawing to the keys.",
-  scrollCue: "Scroll to see how it’s built",
-  /** First focusable element in the hero; visible by the scroll cue while scrubbing */
+  /** First focusable element in the hero, shown on keyboard focus */
   skip: "Skip past the build",
   /** One alt text for the poster: the finished dusk frame the page opens on */
-  imageAlt: "A finished 1 Kanal house by Noor Developers, lit at dusk. Scrolling shows how it was built, from blueprint lines on an empty plot.",
+  imageAlt: "A finished 1 Kanal house by Noor Developers, lit at dusk. A short video shows how it was built, from blueprint lines on an empty plot.",
+  /** The build video's playback button, by state */
+  playback: { pause: "Pause", play: "Play", replay: "Replay" },
   /** Accessible name of the ruler, whose ticks jump to each stage */
   jumpLabel: "Jump to a stage of the build",
   phasesLabel: "How a Noor home is built",

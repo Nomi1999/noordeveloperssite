@@ -4,7 +4,7 @@ The hero copy, the About copy and the fully finished checklist must be approved 
 
 | Item | File | Status |
 |---|---|---|
-| Hero headline and phase lines | `src/components/hero/hero-copy.ts` | Approved by the maintainer; 2026-11-01 additions accepted without review (see log) |
+| Hero headline and phase lines | `src/components/hero/hero-copy.ts` | Approved by the maintainer; 2026-11-01 additions accepted without review; video-hero wording awaiting review (see log) |
 | About copy | `src/content/about.ts` | Approved by the maintainer |
 | Fully finished checklist | `src/content/fully-finished.ts` | Approved by the maintainer and confirmed by the client |
 
@@ -20,3 +20,4 @@ The hero copy, the About copy and the fully finished checklist must be approved 
 | 2026-11-01 | Contact promises (`site.promises` in `src/config/site.ts`) | Maintainer | `site.ts`, homepage-refresh change | Maintainer confirmed as true: the first conversation is free with no obligation; WhatsApp replies the same working day; office visits welcome. Not confirmed, so not claimed: visits to houses under construction. |
 | 2026-11-01 | Hero copy: phase numbers 01–06 (were 00–05), skip link "Skip past the build" | Maintainer (review waived) | `hero-copy.ts` sha256 `0949cb8ce7fa` | From the second critique. Phase names and lines unchanged. |
 | 2026-11-01 | Process steps (`src/content/process.ts`) | Maintainer (review waived) | `process.ts` | Rewritten as what happens after someone gets in touch: talk to us, meet at our office, review the design, follow it to the keys. Uses only the confirmed promises. |
+| 2026-11-01 | Hero copy for the video hero: image alt ("A short video shows how it was built…", was "Scrolling shows…"), playback button labels Pause / Play / Replay, scroll cue removed | Awaiting maintainer review | `hero-copy.ts` sha256 `d3e8cdb91237` | From the video-hero change. Headline, opening line, skip link and phase lines unchanged. |

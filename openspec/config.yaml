@@ -42,10 +42,11 @@ context: |
     and that data generates both floor plan SVGs and Blender scenes. Blender 5.0 is
     driven by Python (bpy) scripts in headless mode; Cycles renders on CPU only (no GPU
     device available), EEVEE is used for fast iteration. Overnight renders are acceptable.
-  - Home hero is a scroll-scrubbed pre-rendered frame sequence (construction phases:
-    design blueprint, foundation, structure, walls, finishing, dusk "lights on"), with
-    separate landscape and portrait sequences, progressive loading and a bounded decoded
-    frame window for iOS memory limits. Overlay text is HTML, never baked into frames.
+  - Home hero plays a pre-rendered build video (construction phases: design blueprint,
+    foundation, structure, walls, finishing, dusk "lights on"), encoded from the frame
+    sequence, with separate landscape and portrait videos, opening and ending on the dusk
+    poster. (It was a scroll-scrubbed frame sequence until the video-hero change.)
+    Overlay text is HTML, never baked into frames.
     Ultra-polished visuals take priority over payload size.
 
   Planned changes, in order: site-foundation, brand-logo, house-designs (data model +

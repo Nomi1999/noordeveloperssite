@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ScrollBuildHero from "../components/hero/ScrollBuildHero.astro";
+import BuildVideoHero from "../components/hero/BuildVideoHero.astro";
 import { heroCopy } from "../components/hero/hero-copy.ts";
 import Offerings from "../components/sections/Offerings.astro";
 import FullyFinished from "../components/sections/FullyFinished.astro";
@@ -18,7 +18,7 @@ import CtaBand from "../components/sections/CtaBand.astro";
   description="Noor Developers design and build fully finished houses and commercial buildings in Faisalabad. Call or WhatsApp to talk about your build."
   whatsappMessage={heroCopy.whatsappMessage}
 >
-  <ScrollBuildHero />
+  <BuildVideoHero />
   <Offerings eyebrow={false} />
   <FullyFinished variant="compact" eyebrow={false} heading="What fully finished means" />
   <WhatWeBuild eyebrow={false} />

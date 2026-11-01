@@ -4,11 +4,12 @@
 //       every shot in render/shots/*.json → src/assets/renders/<design>/<shot>.jpg (JPEG q90 master)
 //   node scripts/encode-renders.mjs share --design 1-kanal --shot front-day [--focus 0.5,0.55] [--zoom 1]
 //       a 1200×630 crop of a delivered still → public/og/<design>.jpg
-//   node scripts/encode-renders.mjs sequence <frames folder> --orientation landscape|portrait [--out public/hero]
-//         [--avif 55] [--webp 80] [--avif-<tier> q] [--tiers <id>,<id>]
-//       every frame → AVIF and WebP at two tiers (the frames' own size and two thirds of it, see tiersFor),
-//       plus <out>/manifest.json
+//   node scripts/encode-renders.mjs video <frames folder> --orientation landscape|portrait [--out public/hero]
+//         [--fps 24] [--crf-av1 34] [--crf-h264 22]
+//       the frame sequence → <out>/video/<orientation>.av1.mp4 and .h264.mp4 (ffmpeg on PATH), the first frame as
+//       <out>/first/<orientation>.webp, plus <out>/manifest.json
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
+import { spawn } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
@@ -21,11 +22,13 @@ const opt = (name, fallback) => {
   return i >= 0 ? rest[i + 1] : fallback;
 };
 
-export const MANIFEST_VERSION = 1;
+export const MANIFEST_VERSION = 2;
+/** Playback rate of the hero video: 192 frames → 8 s */
+export const VIDEO_FPS = 24;
 /**
- * Size tiers of a sequence, from the size of its rendered frames: the full size and two thirds of it,
- * never upscaled. Named by the short side, so 1920×1080 frames give tiers "1080" and "720", and the
- * 960×540 frames on the site now give "540" and "360".
+ * Size tiers of a rendered image (the hero posters in scripts/enhance-renders.mjs follow them): the full size and two thirds of it,
+ * never upscaled. Named by the short side, so 1920×1080 gives tiers "1080" and "720", and 960×540
+ * gives "540" and "360".
  */
 export function tiersFor(width, height) {
   const short = Math.min(width, height);
@@ -126,78 +129,95 @@ export function phaseRanges(sidecars) {
   });
 }
 
-async function sequence() {
+/** Run ffmpeg (on PATH) and reject with its stderr on failure. */
+function ffmpeg(args) {
+  return new Promise((ok, fail) => {
+    const p = spawn("ffmpeg", ["-hide_banner", "-v", "error", "-y", ...args], { stdio: ["ignore", "ignore", "pipe"] });
+    let err = "";
+    p.stderr.on("data", (d) => (err += d));
+    p.on("error", fail);
+    p.on("close", (code) => (code === 0 ? ok() : fail(new Error(`ffmpeg exited ${code}: ${err}`))));
+  });
+}
+
+/**
+ * The hero's video encodings, smallest first; the player takes the first one canPlayType accepts.
+ * AV1 for current browsers, H.264 for everything else. 24 fps, no audio, yuv420p.
+ */
+export const VIDEO_CODECS = [
+  {
+    id: "av1",
+    type: 'video/mp4; codecs="av01.0.04M.08"',
+    args: (crf) => ["-c:v", "libsvtav1", "-crf", String(crf ?? 34), "-preset", "4", "-svtav1-params", "tune=0"],
+  },
+  {
+    id: "h264",
+    type: 'video/mp4; codecs="avc1.4d401f"',
+    args: (crf) => ["-c:v", "libx264", "-crf", String(crf ?? 22), "-preset", "slow", "-profile:v", "main", "-tune", "film"],
+  },
+];
+
+async function video() {
   const folder = positional[0];
   const orientation = opt("orientation");
   const outDir = join(root, opt("out", "public/hero"));
-  if (!folder || !["landscape", "portrait"].includes(orientation)) throw new Error("sequence needs <folder> and --orientation landscape|portrait");
-  const avifQuality = Number(opt("avif", "55"));
-  const webpQuality = Number(opt("webp", "80"));
+  if (!folder || !["landscape", "portrait"].includes(orientation)) throw new Error("video needs <folder> and --orientation landscape|portrait");
+  const fps = Number(opt("fps", String(VIDEO_FPS)));
   const frames = readdirSync(folder)
     .filter((f) => /^\d{4}\.png$/.test(f))
     .sort();
   if (!frames.length) throw new Error(`No frames (NNNN.png) in ${folder}`);
+  frames.forEach((f, i) => {
+    if (f !== `${String(i).padStart(4, "0")}.png`) throw new Error(`${folder}: frame ${i} is missing (found ${f})`);
+  });
   const sidecars = frames.map((f) => JSON.parse(readFileSync(join(folder, f.replace(".png", ".json")), "utf8")));
-  const only = opt("tiers")?.split(",");
   const size = await sharp(join(folder, frames[0])).metadata();
   if ((size.width > size.height) !== (orientation === "landscape")) throw new Error(`${folder} frames are ${size.width}×${size.height}, not ${orientation}`);
-  const tiers = tiersFor(size.width, size.height);
-  const totals = {};
-  for (const tier of tiers) {
-    if (only && !only.includes(tier.id)) {
-      // keep the totals of a tier encoded earlier (re-encoding one tier at a higher quality)
-      const prev = existsSync(join(outDir, "manifest.json"))
-        ? JSON.parse(readFileSync(join(outDir, "manifest.json"), "utf8")).orientations?.[orientation]?.tiers?.find((t) => t.id === tier.id)
-        : null;
-      totals[tier.id] = { avif: prev?.formats.avif.bytes ?? 0, webp: prev?.formats.webp.bytes ?? 0 };
-      continue;
-    }
-    const tierAvif = Number(opt(`avif-${tier.id}`, String(avifQuality)));
-    totals[tier.id] = { avif: 0, webp: 0 };
-    const dir = join(outDir, orientation, tier.id);
-    for (const [i, f] of frames.entries()) {
-      const name = String(i).padStart(4, "0");
-      const base = sharp(join(folder, f)).resize(tier.width, tier.height, { fit: "cover" });
-      totals[tier.id].avif += await writeAtomic(
-        join(dir, `${name}.avif`),
-        base.clone().avif({ quality: tierAvif, effort: 4, chromaSubsampling: "4:4:4" }),
-      );
-      totals[tier.id].webp += await writeAtomic(join(dir, `${name}.webp`), base.clone().webp({ quality: webpQuality, effort: 5 }));
-    }
+
+  const sources = [];
+  for (const codec of VIDEO_CODECS) {
+    const name = `${orientation}.${codec.id}.mp4`;
+    const out = join(outDir, "video", name);
+    mkdirSync(dirname(out), { recursive: true });
+    const tmp = `${out}.tmp.mp4`;
+    const crf = opt(`crf-${codec.id}`);
+    await ffmpeg([
+      "-framerate", String(fps), "-i", join(folder, "%04d.png"),
+      ...codec.args(crf && Number(crf)),
+      "-pix_fmt", "yuv420p", "-an", "-movflags", "+faststart", tmp,
+    ]);
+    renameSync(tmp, out);
+    const bytes = statSync(out).size;
+    sources.push({ url: `/hero/video/${name}`, type: codec.type, bytes });
+    console.log(`${orientation} ${codec.id}: ${size.width}×${size.height}, ${frames.length} frames at ${fps} fps → ${(bytes / 1048576).toFixed(2)} MB`);
   }
+
+  // The first frame as a still: what motion mode paints before the video's own first frame arrives
+  // (WebP only: it is a CSS background, and image-set() with types can't fall back through a custom property)
+  const firstOut = join(outDir, "first", `${orientation}.webp`);
+  const w = await writeAtomic(firstOut, sharp(join(folder, frames[0])).webp({ quality: 80, effort: 5 }));
+  console.log(`${orientation} first frame: ${(w / 1024).toFixed(0)} KB`);
 
   const manifestPath = join(outDir, "manifest.json");
-  const manifest = existsSync(manifestPath)
-    ? JSON.parse(readFileSync(manifestPath, "utf8"))
-    : { schemaVersion: MANIFEST_VERSION, frameCount: frames.length, frameDigits: 4, phases: [], orientations: {} };
-  if (manifest.frameCount !== frames.length) {
-    throw new Error(`${orientation} has ${frames.length} frames but the manifest says ${manifest.frameCount}; re-encode both orientations`);
+  const prev = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, "utf8")) : null;
+  const manifest =
+    prev?.schemaVersion === MANIFEST_VERSION
+      ? prev
+      : { schemaVersion: MANIFEST_VERSION, fps, frameCount: frames.length, phases: [], orientations: {} };
+  if (manifest.frameCount !== frames.length || manifest.fps !== fps) {
+    throw new Error(
+      `${orientation} has ${frames.length} frames at ${fps} fps but the manifest says ${manifest.frameCount} at ${manifest.fps}; re-encode both orientations`,
+    );
   }
   manifest.phases = phaseRanges(sidecars);
-  manifest.orientations[orientation] = {
-    // poster: the first view before any frame loads; staticPoster: the reduced-motion image
-    poster: Number(opt("poster", "0")),
-    staticPoster: Number(opt("static-poster", String(frames.length - 1))),
-    tiers: tiers.map((t) => ({
-      id: t.id,
-      width: t.width,
-      height: t.height,
-      formats: Object.fromEntries(
-        ["avif", "webp"].map((ext) => [ext, { url: `/hero/${orientation}/${t.id}/{frame}.${ext}`, bytes: totals[t.id][ext] }]),
-      ),
-    })),
-  };
+  manifest.orientations[orientation] = { width: size.width, height: size.height, sources };
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
-  for (const t of tiers) {
-    const mb = (n) => (n / 1048576).toFixed(2);
-    console.log(`${orientation} ${t.width}×${t.height}: avif ${mb(totals[t.id].avif)} MB, webp ${mb(totals[t.id].webp)} MB`);
-  }
-  console.log(`Wrote ${frames.length} frames per tier and ${manifestPath}`);
+  console.log(`Wrote ${manifestPath}`);
 }
 
-const commands = { stills, share, sequence };
+const commands = { stills, share, video };
 if (!commands[command]) {
-  console.error("usage: node scripts/encode-renders.mjs <stills|share|sequence> [options] (see the header of this file)");
+  console.error("usage: node scripts/encode-renders.mjs <stills|share|video> [options] (see the header of this file)");
   process.exit(1);
 }
 await commands[command]();

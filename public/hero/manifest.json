@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "fps": 24,
   "frameCount": 192,
-  "frameDigits": 4,
   "phases": [
     {
       "id": "design",
@@ -42,74 +42,34 @@
   ],
   "orientations": {
     "landscape": {
-      "poster": 0,
-      "staticPoster": 191,
-      "tiers": [
+      "width": 960,
+      "height": 540,
+      "sources": [
         {
-          "id": "540",
-          "width": 960,
-          "height": 540,
-          "formats": {
-            "avif": {
-              "url": "/hero/landscape/540/{frame}.avif",
-              "bytes": 3203369
-            },
-            "webp": {
-              "url": "/hero/landscape/540/{frame}.webp",
-              "bytes": 4050976
-            }
-          }
+          "url": "/hero/video/landscape.av1.mp4",
+          "type": "video/mp4; codecs=\"av01.0.04M.08\"",
+          "bytes": 569492
         },
         {
-          "id": "360",
-          "width": 640,
-          "height": 360,
-          "formats": {
-            "avif": {
-              "url": "/hero/landscape/360/{frame}.avif",
-              "bytes": 1768817
-            },
-            "webp": {
-              "url": "/hero/landscape/360/{frame}.webp",
-              "bytes": 2299672
-            }
-          }
+          "url": "/hero/video/landscape.h264.mp4",
+          "type": "video/mp4; codecs=\"avc1.4d401f\"",
+          "bytes": 1184954
         }
       ]
     },
     "portrait": {
-      "poster": 0,
-      "staticPoster": 191,
-      "tiers": [
+      "width": 540,
+      "height": 960,
+      "sources": [
         {
-          "id": "540",
-          "width": 540,
-          "height": 960,
-          "formats": {
-            "avif": {
-              "url": "/hero/portrait/540/{frame}.avif",
-              "bytes": 3022266
-            },
-            "webp": {
-              "url": "/hero/portrait/540/{frame}.webp",
-              "bytes": 3766586
-            }
-          }
+          "url": "/hero/video/portrait.av1.mp4",
+          "type": "video/mp4; codecs=\"av01.0.04M.08\"",
+          "bytes": 448323
         },
         {
-          "id": "360",
-          "width": 360,
-          "height": 640,
-          "formats": {
-            "avif": {
-              "url": "/hero/portrait/360/{frame}.avif",
-              "bytes": 1621686
-            },
-            "webp": {
-              "url": "/hero/portrait/360/{frame}.webp",
-              "bytes": 2050952
-            }
-          }
+          "url": "/hero/video/portrait.h264.mp4",
+          "type": "video/mp4; codecs=\"avc1.4d401f\"",
+          "bytes": 1118754
         }
       ]
     }

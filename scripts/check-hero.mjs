@@ -1,22 +1,23 @@
-// Headless Chrome checks for the scroll-build hero, against the built site (npm run build first).
+// Headless Chrome checks for the build-video hero, against the built site (npm run build first).
 //
-//   node scripts/check-hero.mjs [opening] [phases] [jump] [memory] [offscreen] [loading] [static] [rotate] [skip] [--out render/out/hero-check]
+//   node scripts/check-hero.mjs [opening] [phases] [jump] [end] [control] [offscreen] [fallback] [static] [rotate] [skip] [--out render/out/hero-check]
 //
-//   opening    at the top: the dusk poster, the opening state, the actions shown and the canvas clear;
-//              just past the opening share of the span: frame 0 drawn and the canvas shown; four screens tall
-//   phases     scroll to each phase's middle frame (landscape desktop and portrait phone), screenshot,
-//              and check the drawn frame, data-phase, the visible phase label and the compact headline
-//   jump       each ruler tick is a button that scrolls to the start of its phase
-//   memory     five full scrubs down and up (desktop and phone): decoded frames never exceed the window
-//   offscreen  no requestAnimationFrame ticks while the hero is scrolled out of view
-//   loading    throttled to Slow 4G: the first frame requests run sparse to dense, and the stage
-//              always shows the poster or a drawn frame
+//   opening    at load: the video's first frame (the blueprint) and the Design phase shown, the dusk poster hidden; the video
+//              plays at once; the hero is one screen tall
+//   phases     pause and seek to each phase's middle frame (landscape desktop and portrait phone), screenshot,
+//              and check data-phase, the visible phase label, the compact headline and the ruler fill
+//   jump       each ruler tick seeks the video to the start of its phase
+//   end        at the end: the video fades back to the poster, the Move in phase and the actions show, the
+//              toggle offers Replay, and Replay starts the build again
+//   control    the toggle pauses (and the pause survives scrolling away and back) and resumes
+//   offscreen  the video pauses while the hero is scrolled out of view and resumes when it is back
+//   fallback   a browser that can't play AV1 gets the H.264 file
 //   static     reduced motion, Save-Data, a 3G connection and JavaScript off: one screen tall, phase list
-//              and actions visible, the dusk frame, no sequence frame requests
-//   rotate     phone rotated portrait → landscape switches sequence at the same frame; an address-bar
-//              height change (orientation unchanged) reloads nothing
-//   skip       "Skip past the build" is the hero's first focusable element, is visible while scrubbing,
-//              and moves focus to #after-hero
+//              and actions visible, the dusk poster, no video requests
+//   rotate     phone rotated portrait → landscape switches source at the same time position; an address-bar
+//              height change (orientation unchanged) keeps the source
+//   skip       "Skip past the build" is the hero's first focusable element, shows on focus, and moves focus
+//              to #after-hero
 //
 // With no check named, all run. Drives Chrome over the DevTools protocol (Node's built-in WebSocket).
 import { spawn } from "node:child_process";
@@ -29,7 +30,7 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const args = process.argv.slice(2);
 const opt = (name, fallback) => (args.includes(`--${name}`) ? args[args.indexOf(`--${name}`) + 1] : fallback);
-const ALL = ["opening", "phases", "jump", "memory", "offscreen", "loading", "static", "rotate", "skip"];
+const ALL = ["opening", "phases", "jump", "end", "control", "offscreen", "fallback", "static", "rotate", "skip"];
 const chosen = args.filter((a, i) => ALL.includes(a) && !args[i - 1]?.startsWith("--"));
 const checks = chosen.length ? chosen : ALL;
 const out = resolve(root, opt("out", "render/out/hero-check"));
@@ -52,13 +53,25 @@ const TYPES = {
   ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json",
   ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".avif": "image/avif",
   ".woff2": "font/woff2", ".woff": "font/woff", ".ico": "image/x-icon", ".xml": "application/xml", ".txt": "text/plain",
+  ".mp4": "video/mp4",
 };
 const server = createServer((req, res) => {
   let path = join(dist, decodeURIComponent(new URL(req.url, "http://x").pathname));
   if (existsSync(path) && statSync(path).isDirectory()) path = join(path, "index.html");
   if (!existsSync(path)) return res.writeHead(404).end();
-  res.writeHead(200, { "content-type": TYPES[extname(path)] ?? "application/octet-stream" });
-  res.end(readFileSync(path));
+  const body = readFileSync(path);
+  const headers = { "content-type": TYPES[extname(path)] ?? "application/octet-stream", "accept-ranges": "bytes" };
+  // Byte ranges, as GitHub Pages serves them: Chrome needs them to seek in a video
+  const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range ?? "");
+  if (range) {
+    const start = range[1] ? +range[1] : Math.max(0, body.length - +range[2]);
+    const stop = range[1] && range[2] ? Math.min(+range[2], body.length - 1) : body.length - 1;
+    if (start >= body.length || start > stop) return res.writeHead(416, { "content-range": `bytes */${body.length}` }).end();
+    res.writeHead(206, { ...headers, "content-range": `bytes ${start}-${stop}/${body.length}`, "content-length": stop - start + 1 });
+    return res.end(body.subarray(start, stop + 1));
+  }
+  res.writeHead(200, { ...headers, "content-length": body.length });
+  res.end(body);
 });
 await new Promise((r) => server.listen(0, "127.0.0.1", r));
 const origin = `http://127.0.0.1:${server.address().port}`;
@@ -150,29 +163,26 @@ async function device(page, name) {
 }
 
 // Page-side helpers
-const HERO = `(() => {
-  const root = document.querySelector('[data-hero]'), stage = root.querySelector('[data-hero-stage]');
-  // top: the scroll position where progress is 0 (the stage pins below the sticky header, at its sticky top)
-  const docTop = root.getBoundingClientRect().top + scrollY, pin = parseFloat(getComputedStyle(stage).top) || 0;
-  const top = docTop - pin, span = root.offsetHeight - stage.clientHeight;
-  // intro: the opening (dusk) share of the span; frames 0 → last run over the rest
-  return { top, docTop, span, intro: parseFloat(root.dataset.intro) || 0, height: root.offsetHeight, stage: stage.clientHeight, inner: innerHeight };
-})()`;
-const scrollToFrame = (frame, count) =>
-  `(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span * (h.intro + (1 - h.intro) * ${frame} / ${count - 1}))); return scrollY; })()`;
-const STATE = `(() => { const s = document.querySelector('[data-hero-stage]'); return {
-  frame: +s.dataset.frame, decoded: +s.dataset.decoded, phase: +s.dataset.phase, ready: s.hasAttribute('data-ready'),
-  debug: document.querySelector('pre')?.textContent ?? '',
+const STATE = `(() => { const s = document.querySelector('[data-hero-stage]'), v = s.querySelector('[data-hero-video]'),
+  root = document.querySelector('[data-hero]'), t = s.querySelector('[data-hero-toggle]');
+  return {
+  phase: s.dataset.phase, ready: s.hasAttribute('data-ready'), ended: s.hasAttribute('data-ended'),
+  time: v.currentTime, paused: v.paused, src: v.currentSrc || v.src, readyState: v.readyState,
+  video: +getComputedStyle(v).opacity,
+  toggle: t.hidden ? 'hidden' : t.dataset.state, toggleText: t.hidden ? '' : t.innerText.trim(),
   label: [...s.querySelectorAll('.hero__phase')].filter((li) => +getComputedStyle(li).opacity > 0.5)
     .map((li) => li.querySelector('.hero__phase-label').textContent.replace(/\\s+/g, ' ').trim()),
   cta: getComputedStyle(s.querySelector('.hero__cta')).visibility === 'visible' && getComputedStyle(s.querySelector('.hero__cta')).display !== 'none',
-  rawPhase: s.dataset.phase, canvas: +getComputedStyle(s.querySelector('.hero__canvas')).opacity,
   title: getComputedStyle(s.querySelector('.hero__title')).transform,
+  height: root.offsetHeight, inner: innerHeight, now: performance.now(),
 }; })()`;
 const manifest = JSON.parse(readFileSync(join(dist, "hero/manifest.json"), "utf8"));
 const N = manifest.frameCount;
-// The opening and static image: the photoreal dusk poster (scripts/enhance-renders.mjs), not a sequence frame
+const FPS = manifest.fps;
+// The opening and static image: the photoreal dusk poster (scripts/enhance-renders.mjs), not a video frame
 const POSTER_PATH = "/hero/poster/";
+const playing = `(() => { const v = document.querySelector('[data-hero-video]'); return !v.paused && v.currentTime > 0; })()`;
+const click = (sel, i = 0) => `document.querySelectorAll('${sel}')[${i}].click()`;
 
 const results = [];
 function record(check, ok, detail) {
@@ -180,184 +190,148 @@ function record(check, ok, detail) {
   console.log(`${ok ? "PASS" : "FAIL"} ${check}${detail ? `: ${typeof detail === "string" ? detail : JSON.stringify(detail)}` : ""}`);
 }
 
-async function loadAll(page, timeout = 60000) {
-  return page.waitFor(`/loaded (\\d+)\\/\\1/.test(document.querySelector('pre')?.textContent ?? '')`, timeout);
+/** Open the home page on a device and wait until the build video is playing */
+async function playingPage(name, path = "/") {
+  const page = await openPage();
+  await device(page, name);
+  await page.goto(path);
+  const ok = await page.waitFor(playing, 20000);
+  if (!ok) throw new Error(`${name}: the hero video never started`);
+  return page;
+}
+
+/** Pause with the toggle (the visitor's pause) and seek; resolves once the overlays have updated */
+async function pauseAt(page, frame) {
+  if (!(await page.eval(`document.querySelector('[data-hero-video]').paused`))) await page.eval(click("[data-hero-toggle]"));
+  await page.eval(`new Promise((r) => { const v = document.querySelector('[data-hero-video]');
+    v.addEventListener('seeked', () => requestAnimationFrame(() => r()), { once: true }); v.currentTime = ${(frame + 0.25) / FPS}; })`);
 }
 
 // ---------- checks ----------
-async function phases() {
-  for (const name of ["desktop", "phone"]) {
-    const page = await openPage();
-    await device(page, name);
-    await page.goto("/?hero-debug");
-    await page.eval("scrollTo(0, 1)"); // wakes the debug overlay
-    await loadAll(page);
-    for (const [i, p] of manifest.phases.entries()) {
-      const mid = Math.round((p.start + p.end) / 2);
-      await page.eval(scrollToFrame(mid, N));
-      await page.waitFor(`+document.querySelector('[data-hero-stage]').dataset.frame === ${mid}`, 5000);
-      // overlay transition (300 ms) finished: exactly one phase fully shown
-      await page.waitFor(`[...document.querySelectorAll('.hero__phase')].filter((li) => getComputedStyle(li).opacity === '1').length === 1`, 3000);
-      const s = await page.eval(STATE);
-      const drawn = +/drawn (\d+)/.exec(s.debug)?.[1];
-      await page.shot(`phase-${name}-${i}.png`);
-      // the headline stays on screen, scaled to half
-      const scale = parseFloat(/^matrix\(([\d.]+)/.exec(s.title)?.[1] ?? "1");
-      const compact = Math.abs(scale - 0.5) < 0.02; // allows for the end of the 400 ms transition
-      const ok = s.frame === mid && drawn === mid && s.phase === i && s.label.length === 1 && s.label[0].startsWith(String(i + 1).padStart(2, "0")) && compact;
-      record(`phases ${name} ${p.id}`, ok, { frame: s.frame, drawn, phase: s.phase, label: s.label, cta: s.cta, title: s.title });
-      if (i === manifest.phases.length - 1 && name === "desktop") record(`phases ${name} CTA on move in`, s.cta);
-    }
-    // halfway down the build part of the span: frame (N-1)/2 (95.5 → 95 or 96 for 192)
-    const half = (N - 1) / 2;
-    await page.eval(`(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span * (h.intro + (1 - h.intro) / 2))); })()`);
-    await page.waitFor(`Math.abs(+document.querySelector('[data-hero-stage]').dataset.frame - ${half}) <= 1`, 5000).catch(() => {});
-    await sleep(300);
-    const m = await page.eval(STATE);
-    record(`phases ${name} mid-section frame`, Math.abs(m.frame - half) <= 1, { frame: m.frame, expected: half });
-    await page.eval(scrollToFrame(N - 1, N));
-    await page.waitFor(`+document.querySelector('[data-hero-stage]').dataset.frame === ${N - 1}`, 5000);
-    await sleep(450);
-    await page.shot(`phase-${name}-final.png`);
-    await page.close();
-  }
-}
-
 async function opening() {
   for (const name of ["desktop", "phone"]) {
     const page = await openPage();
     await device(page, name);
-    await page.goto("/?hero-debug");
-    await page.eval("scrollTo(0, 0)");
-    await sleep(800);
+    await page.goto("/");
+    // first view: the video's first frame (the blueprint) with the headline and the Design phase; the dusk poster hidden
     const s = await page.eval(STATE);
-    const img = await page.eval("document.querySelector('[data-hero-poster]').currentSrc");
+    const look = await page.eval(`(() => { const s = document.querySelector('[data-hero-stage]');
+      return { bg: getComputedStyle(s.querySelector('[data-hero-video]')).backgroundImage, poster: +getComputedStyle(s.querySelector('.hero__poster')).opacity }; })()`);
     await page.shot(`opening-${name}.png`);
-    const dusk = img.includes(POSTER_PATH);
-    // below 48rem the fixed bar carries the actions, so the hero's own are hidden there
-    const ctaOk = name === "phone" || s.cta;
-    record(`opening ${name} dusk first`, s.rawPhase === "intro" && dusk && s.canvas === 0 && ctaOk, {
-      phase: s.rawPhase, image: img.replace(origin, ""), canvasOpacity: s.canvas, cta: s.cta,
+    const o = name === "phone" ? "portrait" : "landscape";
+    record(`opening ${name} opens on the video's first frame`, s.video === 1 && look.bg.includes(`/hero/first/${o}.webp`) && look.poster === 0 && s.label.length === 1 && s.label[0].startsWith("01"), {
+      phase: s.phase, videoOpacity: s.video, background: look.bg.replace(origin, ""), posterOpacity: look.poster, label: s.label,
     });
-    await loadAll(page);
-    // just past the opening share: the blueprint (frame 0) drawn and the canvas over the poster
-    await page.eval(`(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span * h.intro) + 4); })()`);
-    await page.waitFor(`document.querySelector('[data-hero-stage]').dataset.phase === '0'`, 3000);
+    // the build starts straight away (no hold)
+    await page.waitFor(`document.querySelector('[data-hero-stage]').dataset.phase !== 'intro'`, 10000);
+    const startedAt = (await page.eval(STATE)).now;
     await sleep(800);
     const b = await page.eval(STATE);
-    await page.shot(`opening-${name}-blueprint.png`);
-    record(`opening ${name} dissolves to the blueprint`, b.rawPhase === "0" && b.frame <= 2 && b.canvas === 1, {
-      phase: b.rawPhase, frame: b.frame, canvasOpacity: b.canvas,
+    await page.shot(`opening-${name}-playing.png`);
+    record(`opening ${name} plays at once`, startedAt < 3000 && b.video === 1 && !b.paused && b.toggle === "pause", {
+      startedAtMs: Math.round(startedAt), phase: b.phase, videoOpacity: b.video, paused: b.paused, toggle: b.toggle, src: b.src.replace(origin, ""),
     });
-    const h = await page.eval(HERO);
-    record(`opening ${name} hero is four screens`, Math.abs(h.height - 4 * h.inner) <= h.inner * 0.15, { height: h.height, screen: h.inner });
+    const header = await page.eval(`parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-offset')) || 0`);
+    record(`opening ${name} hero is one screen`, b.height <= b.inner && b.height >= b.inner - header - 120, { height: b.height, screen: b.inner });
+    await page.close();
+  }
+}
+
+async function phases() {
+  for (const name of ["desktop", "phone"]) {
+    const page = await playingPage(name);
+    for (const [i, p] of manifest.phases.entries()) {
+      const mid = Math.round((p.start + p.end) / 2);
+      await pauseAt(page, mid);
+      // overlay transition (300 ms) finished: exactly one phase fully shown
+      await page.waitFor(`[...document.querySelectorAll('.hero__phase')].filter((li) => getComputedStyle(li).opacity === '1').length === 1`, 3000);
+      await sleep(450); // title transition (400 ms)
+      const s = await page.eval(STATE);
+      await page.shot(`phase-${name}-${i}.png`);
+      // the headline stays on screen, scaled to half (0.8 on short landscape screens)
+      const scale = parseFloat(/^matrix\(([\d.]+)/.exec(s.title)?.[1] ?? "1");
+      const fill = await page.eval(`+(/scaleY\\(([\\d.]+)/.exec(document.querySelector('[data-hero-fill]').style.transform)?.[1] ?? -1)`);
+      const ok = s.phase === String(i) && s.label.length === 1 && s.label[0].startsWith(String(i + 1).padStart(2, "0")) && scale < 0.85 && Math.abs(fill - mid / (N - 1)) < 0.01;
+      record(`phases ${name} ${p.id}`, ok, { frame: Math.round(s.time * FPS), phase: s.phase, label: s.label, scale, fill });
+    }
     await page.close();
   }
 }
 
 async function jump() {
   for (const name of ["desktop", "phone"]) {
-    const page = await openPage();
-    await device(page, name);
-    await page.goto("/?hero-debug");
-    await page.eval("scrollTo(0, 1)");
-    await loadAll(page);
+    const page = await playingPage(name);
     for (const [i, p] of manifest.phases.entries()) {
-      await page.eval(`document.querySelectorAll('[data-hero-jump]')[${i}].click()`);
-      const landed = await page.waitFor(`document.querySelector('[data-hero-stage]').dataset.phase === '${i}' && Math.abs(+document.querySelector('[data-hero-stage]').dataset.frame - ${p.start}) <= 1`, 5000);
+      await page.eval(click("[data-hero-jump]", i));
+      const landed = await page.waitFor(`document.querySelector('[data-hero-stage]').dataset.phase === '${i}'`, 3000);
       const s = await page.eval(STATE);
+      const frame = Math.round(s.time * FPS);
       const current = await page.eval(`document.querySelectorAll('[data-hero-jump]')[${i}].getAttribute('aria-current')`);
-      record(`jump ${name} ${p.id}`, landed && current === "step", { phase: s.rawPhase, frame: s.frame, expected: p.start, current });
+      // it plays on from the start of the phase, so allow for the frames since the click
+      record(`jump ${name} ${p.id}`, landed && current === "step" && frame >= p.start - 1 && frame <= p.start + 12, { phase: s.phase, frame, expected: p.start, current });
     }
     await page.close();
   }
 }
 
-async function memory() {
+async function end() {
   for (const name of ["desktop", "phone"]) {
-    const page = await openPage();
-    await device(page, name);
-    await page.goto("/?hero-debug");
-    await page.eval("scrollTo(0, 1)");
-    await loadAll(page);
-    let max = 0;
-    for (let k = 0; k < 5; k++) {
-      for (const dir of [1, -1]) {
-        for (let s = 0; s <= 48; s++) {
-          const f = dir > 0 ? (s / 48) * (N - 1) : (1 - s / 48) * (N - 1);
-          await page.eval(scrollToFrame(f, N));
-          await sleep(30);
-          max = Math.max(max, (await page.eval(STATE)).decoded || 0);
-        }
-      }
-    }
-    const debug = (await page.eval(STATE)).debug;
-    const limit = +/limit (\d+)/.exec(debug)[1];
-    const tracked = +/max (\d+)/.exec(debug)[1];
-    record(`memory ${name} five scrubs`, Math.max(max, tracked) <= limit, { sampledMax: max, trackedMax: tracked, limit });
+    const page = await playingPage(name);
+    const ended = await page.waitFor(`document.querySelector('[data-hero-stage]').hasAttribute('data-ended')`, 15000);
+    await sleep(800); // the video fades back out to the poster (600 ms)
+    const s = await page.eval(STATE);
+    await page.shot(`end-${name}.png`);
+    const ctaOk = name === "phone" || s.cta;
+    record(`end ${name} closes on the poster with the actions`, ended && s.phase === "5" && s.video === 0 && s.label[0]?.startsWith("06") && ctaOk && s.toggle === "replay", {
+      phase: s.phase, videoOpacity: s.video, label: s.label, cta: s.cta, toggle: s.toggle, toggleText: s.toggleText,
+    });
+    await page.eval(click("[data-hero-toggle]"));
+    await page.waitFor(playing, 3000);
+    await sleep(700);
+    const r = await page.eval(STATE);
+    record(`end ${name} replay restarts the build`, !r.ended && !r.paused && r.time < 1.5 && r.video === 1 && r.toggle === "pause", {
+      time: r.time, phase: r.phase, videoOpacity: r.video, toggle: r.toggle,
+    });
     await page.close();
   }
 }
 
-async function offscreen() {
-  const page = await openPage();
-  await device(page, "desktop");
-  await page.goto("/?hero-debug");
-  await page.eval("scrollTo(0, 1)");
-  await loadAll(page);
-  await page.eval(`(() => { const h = ${HERO}; scrollTo(0, h.docTop + h.height + 50); })()`);
-  await sleep(800);
-  const ticks = () => page.eval(`+/rAF ticks (\\d+)/.exec(document.querySelector('pre').textContent)[1]`);
-  const a = await ticks();
-  await page.eval("scrollBy(0, 40)");
+async function control() {
+  const page = await playingPage("desktop");
+  await page.eval(click("[data-hero-toggle]"));
+  await sleep(100);
+  const a = await page.eval(STATE);
+  await sleep(700);
+  const b = await page.eval(STATE);
+  record("control pause stops the build", a.paused && b.paused && a.time === b.time && b.toggle === "play" && b.toggleText.toLowerCase() === "play", {
+    before: a.time, after: b.time, toggle: b.toggle, text: b.toggleText,
+  });
+  // stays paused across an off-screen round trip (the visitor's pause wins)
+  await page.eval(`scrollTo(0, document.querySelector('[data-hero]').offsetHeight + 400)`);
   await sleep(300);
-  await page.eval("scrollBy(0, 40)");
-  await sleep(1000);
-  const b = await ticks();
-  const offState = await page.eval(`document.querySelector('pre').textContent.includes('off-screen')`);
-  record("offscreen no rAF", a === b && offState, { before: a, after: b });
+  await page.eval("scrollTo(0, 0)");
+  await sleep(500);
+  const c = await page.eval(STATE);
+  record("control visitor pause survives scrolling away and back", c.paused && c.time === b.time, { time: c.time, paused: c.paused });
+  await page.eval(click("[data-hero-toggle]"));
+  await page.waitFor(playing, 3000);
+  await sleep(300);
+  const d = await page.eval(STATE);
+  record("control play resumes", !d.paused && d.time > b.time && d.toggle === "pause", { time: d.time, toggle: d.toggle });
   await page.close();
 }
 
-async function loading() {
-  const page = await openPage();
-  await device(page, "desktop");
-  const frames = [];
-  page.on((m) => {
-    if (m.method === "Network.requestWillBeSent") {
-      const r = /\/hero\/(landscape|portrait)\/\d+\/(\d{4})\.(avif|webp)/.exec(m.params.request.url);
-      if (r) frames.push(+r[2]);
-    }
-  });
-  // DevTools "Slow 4G": 400 ms RTT (×~3.75 internal), ~0.4 Mbit/s
-  await page.send("Network.emulateNetworkConditions", {
-    offline: false, latency: 562.5, downloadThroughput: (400 * 1024) / 8 * 0.9, uploadThroughput: (400 * 1024) / 8 * 0.9,
-  });
-  // DevTools throttling can make the page report this link as 3G, which now gets the static hero;
-  // the check is about how frames load on a slow link that still scrubs, so report it as 4G
-  await page.send("Page.addScriptToEvaluateOnNewDocument", {
-    source: "Object.defineProperty(navigator, 'connection', { get: () => ({ saveData: false, effectiveType: '4g', addEventListener() {} }) });",
-  });
-  await page.goto("/?hero-debug");
-  let blank = 0;
-  for (let t = 0; t < 40; t++) {
-    const shown = await page.eval(`(() => { const s = document.querySelector('[data-hero-stage]'), img = s.querySelector('img');
-      return s.hasAttribute('data-ready') || (img.complete && img.naturalWidth > 0); })()`);
-    if (!shown) blank++;
-    if (t === 10) await page.eval(scrollToFrame(Math.round(N / 2), N));
-    await sleep(250);
-  }
-  await page.shot("loading-slow4g.png");
-  // Each request's pass: the largest stride (32 … 1) dividing its frame; the last frame is in the first pass.
-  // Requests must never go back to a sparser pass (retries of failed frames aside, which this run has none of).
-  const STRIDES = [32, 16, 8, 4, 2, 1];
-  const level = (f) => (f === N - 1 ? 0 : STRIDES.findIndex((s) => f % s === 0));
-  // The poster is its own file (public/hero/poster/), so every request counted here is a sequence frame
-  const seq = frames;
-  const levels = seq.map(level);
-  const firstPass = levels.every((l, i) => i === 0 || l >= levels[i - 1]);
-  record("loading never blank (after poster)", blank <= 1, { blankSamples: blank, note: "the first sample may precede the poster" });
-  record("loading sparse first", firstPass, { firstRequests: seq.slice(0, 12), passes: [...new Set(levels)].map((l) => STRIDES[l]), total: frames.length });
+async function offscreen() {
+  const page = await playingPage("desktop");
+  await page.eval(`scrollTo(0, document.querySelector('[data-hero]').offsetHeight + 400)`);
+  await sleep(400);
+  const a = await page.eval(STATE);
+  await sleep(600);
+  const b = await page.eval(STATE);
+  record("offscreen pauses the video", a.paused && b.paused && a.time === b.time, { before: a.time, after: b.time });
+  await page.eval("scrollTo(0, 0)");
+  const resumed = await page.waitFor(playing + " && document.querySelector('[data-hero-video]').currentTime > " + b.time, 3000);
+  record("offscreen resumes when back", resumed);
   await page.close();
 }
 
@@ -383,12 +357,16 @@ async function staticMode() {
       const page = await openPage();
       await device(page, name);
       await c.setup(page);
-      const frames = [];
+      const images = [];
+      const videos = [];
       page.on((m) => {
-        if (m.method === "Network.requestWillBeSent" && /\/hero\/.*\.(avif|webp)/.test(m.params.request.url)) frames.push(m.params.request.url);
+        if (m.method !== "Network.requestWillBeSent") return;
+        const url = m.params.request.url;
+        if (/\/hero\/.*\.(avif|webp)/.test(url)) images.push(url);
+        if (/\/hero\/.*\.mp4/.test(url)) videos.push(url);
       });
       await page.goto("/");
-      await sleep(1500);
+      await sleep(3000);
       const s = await page.eval(`(() => { const root = document.querySelector('[data-hero]'), img = root.querySelector('img');
         // the fixed mobile Call/WhatsApp bar covers the bottom of the screen: content counts as visible above it
         const bar = document.querySelector('.action-bar');
@@ -397,18 +375,18 @@ async function staticMode() {
           return r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && +cs.opacity > 0; };
         const vis = (el) => shown(el) && el.getBoundingClientRect().bottom <= limit + 0.5;
         const onScreen = (el) => shown(el) && el.getBoundingClientRect().bottom <= innerHeight + 0.5;
-        return { scrub: document.documentElement.classList.contains('hero-scrub'), height: root.offsetHeight, inner: innerHeight,
+        return { motion: document.documentElement.classList.contains('hero-motion'), height: root.offsetHeight, inner: innerHeight,
           bottom: Math.round(root.getBoundingClientRect().bottom), limit: Math.round(limit),
           img: img.currentSrc, phases: [...root.querySelectorAll('.hero__phase')].filter(vis).length,
+          toggle: shown(root.querySelector('[data-hero-toggle]')),
           actions: [...document.querySelectorAll('[data-action]')].filter(onScreen).map((a) => a.dataset.action) }; })()`);
       await page.shot(`static-${c.name}-${name}.png`);
-      const posterOnly = frames.length === 1;
       const dusk = s.img.includes(POSTER_PATH);
       const oneScreen = s.bottom <= s.limit + 1; // the hero ends within the first screen, above the action bar
       const actions = s.actions.includes("call") && s.actions.includes("whatsapp");
-      record(`static ${c.name} ${name}`, !s.scrub && posterOnly && dusk && oneScreen && s.phases === 6 && actions, {
-        heroBottom: s.bottom, visibleTo: s.limit, image: s.img.replace(origin, ""), heroImageRequests: frames.length,
-        phasesVisible: s.phases, actions: [...new Set(s.actions)],
+      record(`static ${c.name} ${name}`, !s.motion && images.length === 1 && videos.length === 0 && dusk && oneScreen && s.phases === 6 && actions && !s.toggle, {
+        heroBottom: s.bottom, visibleTo: s.limit, image: s.img.replace(origin, ""), posterRequests: images.length, videoRequests: videos.length,
+        phasesVisible: s.phases, toggle: s.toggle, actions: [...new Set(s.actions)],
       });
       await page.close();
     }
@@ -416,45 +394,29 @@ async function staticMode() {
 }
 
 async function rotate() {
-  const page = await openPage();
-  await device(page, "phone");
-  const urls = [];
-  page.on((m) => {
-    if (m.method === "Network.requestWillBeSent" && /\/hero\/(landscape|portrait)\/\d+\/\d{4}\./.test(m.params.request.url)) urls.push(m.params.request.url);
-  });
-  await page.goto("/?hero-debug");
-  await page.eval("scrollTo(0, 1)");
-  await loadAll(page);
-  const mid = Math.round(N * 0.6);
-  await page.eval(scrollToFrame(mid, N));
-  await page.waitFor(`+document.querySelector('[data-hero-stage]').dataset.frame === ${mid}`, 5000);
-  const info = () => page.eval(`(() => { const t = document.querySelector('pre').textContent;
-    return { o: /\\n(landscape|portrait) /.exec(t)[1], loaded: +/loaded (\\d+)/.exec(t)[1], frame: +/frame (\\d+)/.exec(t)[1] }; })()`);
-  const before = await info();
+  const page = await playingPage("phone");
+  await pauseAt(page, Math.round(N * 0.6));
+  const before = await page.eval(STATE);
 
   // Address bar hides: the viewport grows taller, orientation unchanged
-  const n0 = urls.length;
   await page.send("Emulation.setDeviceMetricsOverride", { ...DEVICES.phone, height: 760 });
   await sleep(300);
   await page.send("Emulation.setDeviceMetricsOverride", { ...DEVICES.phone });
-  await sleep(800);
-  const bar = await info();
-  record("rotate address-bar resize reloads nothing", bar.o === before.o && bar.loaded === before.loaded && urls.length === n0, {
-    before, after: bar, newRequests: urls.length - n0,
+  await sleep(500);
+  const bar = await page.eval(STATE);
+  record("rotate address-bar resize keeps the source", bar.src === before.src && bar.time === before.time, {
+    before: before.src.replace(origin, ""), after: bar.src.replace(origin, ""),
   });
 
   // Rotate to landscape
-  const progress = await page.eval(`(() => { const h = ${HERO}; return (scrollY - h.top) / h.span; })()`);
   await page.send("Emulation.setDeviceMetricsOverride", { ...DEVICES.phone, width: 844, height: 390, screenOrientation: { type: "landscapePrimary", angle: 90 } });
-  // keep the same progress through the (now differently sized) section, as the browser's scroll anchoring roughly does
+  await page.waitFor(`(() => { const v = document.querySelector('[data-hero-video]'); return /landscape/.test(v.currentSrc) && v.readyState >= 2 && Math.abs(v.currentTime - ${before.time}) < 0.05; })()`, 10000);
   await sleep(300);
-  await page.eval(`(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span * ${progress})); })()`);
-  await page.waitFor(`/drawn ${mid}/.test(document.querySelector('pre').textContent) && /\\nlandscape /.test(document.querySelector('pre').textContent)`, 20000);
-  const after = await info();
+  const after = await page.eval(STATE);
   await page.shot("rotate-landscape.png");
-  const sawLandscape = urls.slice(n0).some((u) => u.includes("/landscape/"));
-  record("rotate switches sequence at the same frame", after.o === "landscape" && Math.abs(after.frame - mid) <= 1 && (before.o === "landscape" || sawLandscape), {
-    before, after, landscapeRequests: urls.slice(n0).filter((u) => u.includes("/landscape/")).length,
+  record("rotate switches source at the same time", /portrait/.test(before.src) && /landscape/.test(after.src) && Math.abs(after.time - before.time) < 0.05 && after.phase === before.phase, {
+    before: { src: before.src.replace(origin, ""), time: before.time, phase: before.phase },
+    after: { src: after.src.replace(origin, ""), time: after.time, phase: after.phase },
   });
   await page.close();
 }
@@ -472,30 +434,33 @@ async function skip() {
   await key("keyDown", { key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 });
   await key("keyUp", { key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 });
   const focused = await page.eval("document.activeElement.className");
+  const shown = await page.eval(`(() => { const r = document.querySelector('.hero__skip').getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight; })()`);
   await page.shot("skip-focused.png");
   await key("keyDown", { key: "Enter", code: "Enter", windowsVirtualKeyCode: 13, text: "\r" });
   await key("keyUp", { key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
   await sleep(300);
   const after = await page.eval(`({ id: document.activeElement.id, top: Math.round(document.getElementById('after-hero').getBoundingClientRect().top), pad: Math.round(parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0) })`);
   record("skip is first focusable", first === "Skip past the build", first);
-  record("skip reached by Tab", /hero__skip/.test(focused), focused);
+  record("skip reached by Tab and shown on focus", /hero__skip/.test(focused) && shown, { focused, shown });
   record("skip moves focus to #after-hero", after.id === "after-hero" && Math.abs(after.top - after.pad) < 24, after); // lands just below the sticky header
   await page.close();
-  // Visible without focus while scrubbing, on desktop and phone: inside the screen and above the action bar
-  for (const name of ["desktop", "phone"]) {
-    const p2 = await openPage();
-    await device(p2, name);
-    await p2.goto("/");
-    await sleep(500);
-    const v = await p2.eval(`(() => { const a = document.querySelector('.hero__skip'), r = a.getBoundingClientRect();
-      const bar = document.querySelector('.action-bar'); const limit = bar && getComputedStyle(bar).display !== 'none' ? bar.getBoundingClientRect().top : innerHeight;
-      return { top: Math.round(r.top), bottom: Math.round(r.bottom), limit: Math.round(limit), w: Math.round(r.width) }; })()`);
-    record(`skip visible ${name}`, v.top >= 0 && v.bottom <= v.limit && v.w > 0, v);
-    await p2.close();
-  }
 }
 
-const run = { opening, phases, jump, memory, offscreen, loading, static: staticMode, rotate, skip };
+async function fallback() {
+  // A browser without AV1 takes the H.264 file
+  const page = await openPage();
+  await device(page, "desktop");
+  await page.send("Page.addScriptToEvaluateOnNewDocument", {
+    source: "const cpt = HTMLMediaElement.prototype.canPlayType; HTMLMediaElement.prototype.canPlayType = function (t) { return /av01/.test(t) ? '' : cpt.call(this, t); };",
+  });
+  await page.goto("/");
+  const ok = await page.waitFor(playing, 20000);
+  const s = await page.eval(STATE);
+  record("fallback plays H.264 without AV1", ok && /landscape\.h264\.mp4$/.test(s.src), { src: s.src.replace(origin, ""), playing: ok });
+  await page.close();
+}
+
+const run = { opening, phases, jump, end, control, offscreen, fallback, static: staticMode, rotate, skip };
 try {
   for (const c of checks) await run[c]();
 } finally {

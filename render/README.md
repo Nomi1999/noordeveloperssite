@@ -18,7 +18,7 @@ Run from the repository root. `BLENDER_PATH` overrides the default `C:\Program F
 | `npm run render:sheet -- render/out/1-kanal/<folder>` | Write `sheet.png` (a labelled contact sheet) for a folder of rendered frames or stills |
 | `npm run render:encode -- stills` | Encode every shot's final still (`--engine`, `--quality`; default Cycles final) into `src/assets/renders/<design>/<shot>.jpg` (JPEG q90 masters, at least 3200px wide) |
 | `npm run render:encode -- share --design 1-kanal --shot front-day --focus 0.5,0.55` | Crop a 1200×630 share image from a delivered still into `public/og/<design>.jpg` |
-| `npm run render:encode -- sequence <frames folder> --orientation landscape` | Encode a frame sequence into AVIF and WebP tiers under `public/hero/` and update `public/hero/manifest.json` |
+| `npm run render:encode -- video <frames folder> --orientation landscape` | Encode a frame sequence into the hero video (AV1 and H.264 MP4, 24 fps) under `public/hero/video/` and update `public/hero/manifest.json` (needs `ffmpeg` on PATH) |
 | `node scripts/enhance-renders.mjs generate [--only <design>/<shot>]` | Make photoreal versions of the delivered stills and the hero's last frame with an OpenRouter image model (`bytedance-seed/seedream-5-0-pro`; needs `OPENROUTER_API_KEY` in `.env`) into `render/out/ai/` |
 | `node scripts/enhance-renders.mjs encode` | Write those into `src/assets/renders/<design>/<shot>.jpg` (2048×1152) and the hero poster `public/hero/poster/<orientation>-<tier>.{avif,webp}` |
 
@@ -61,18 +61,18 @@ A sequence config (`render/shots/1-kanal-hero-landscape.json`, `…-portrait.jso
 The hero sequences: 192 frames, six 32-frame phases. In each, `build` holds for 3 frames, rises over frames 3–27 and holds again, so every label has a finished step to read. Phase 00 starts at `build` 0.28 so that the poster (frame 0) already shows the glowing plot outline. `timeOfDay` runs 0.95 → 0.9 (blue hour) over Design, eases to day by frame 48, holds to 127, then 0.55 (golden) at 159 and 1.0 (dusk) at 191; interior lights come on from 0.6, in the Move in phase only. The camera orbits about 68° from an elevated front-left view to a street-level three-quarter view of the facade.
 
 **Preview approval.** The EEVEE previews of both sequences (960×540 and 540×960, 192 frames each, no blank frames) were reviewed with the maintainer as MP4s and every-8th-frame contact sheets (`render/out/1-kanal/hero-review/`) and approved unchanged on 2026-10-31: first frame, pacing, light arc and final framing. 
-**Hero frames (decided 2026-10-31).** After checking the site with these frames on a laptop and a phone, the maintainer chose to ship the approved EEVEE previews as the hero's final frames and skip the Cycles `high` renders (about 9 min a frame at 1920px, so roughly 2½ days for both orientations). The encoder sizes tiers from the frames themselves (full size and two thirds, never upscaled), and the player takes the smallest tier that is sharp at the displayed size. Encoded at AVIF 55 / WebP 80, 192 frames per tier:
+**Hero frames (decided 2026-10-31).** After checking the site with these frames on a laptop and a phone, the maintainer chose to ship the approved EEVEE previews as the hero's final frames and skip the Cycles `high` renders (about 9 min a frame at 1920px, so roughly 2½ days for both orientations).
 
-| Tier | AVIF | WebP |
+**Hero video (decided 2026-11-01).** The hero no longer scrubs frames with the scroll: after watching the previews as an MP4, the maintainer chose to play them as a video (8 s at 24 fps, once, starting as soon as the page opens and ending on the dusk poster; see `openspec/changes/video-hero`). The encoder writes one size per orientation, the frames' own, plus the first frame as a WebP still (`public/hero/first/`, about 17 KB) that the page paints until the video's own first frame arrives:
+
+| Orientation | AV1 (SVT-AV1 CRF 34) | H.264 Main (CRF 22) |
 |---|---|---|
-| landscape 960×540 | 3.05 MB | 3.86 MB |
-| landscape 640×360 | 1.69 MB | 2.19 MB |
-| portrait 540×960 | 2.88 MB | 3.59 MB |
-| portrait 360×640 | 1.55 MB | 1.96 MB |
+| landscape 960×540 | 0.54 MB | 1.13 MB |
+| portrait 540×960 | 0.43 MB | 1.07 MB |
 
-A visitor downloads one row (one orientation, tier and format). AVIF quality check: frames 16, 176 and 191 (landscape) and 191 (portrait) measure 38–40 dB PSNR against the 16-bit PNGs; at 3× zoom the dusk sky shows no banding or blocking (compression smooths the render noise) and edges stay clean, so the default quality stands. To ship sharper frames later, render `--engine cycles --quality high` (the configs are unchanged) and re-run the two `encode-renders.mjs sequence` commands; the tiers then come out at 1920/1280 automatically.
+A visitor downloads one file: the first source in the manifest the browser can play (AV1, else H.264), for the viewport's orientation. Both measure about 43.5 dB PSNR against the 16-bit PNGs (the AVIF frames shipped before were 38–40 dB). To ship sharper video later, render `--engine cycles --quality high` (the configs are unchanged) and re-run the two `encode-renders.mjs video` commands; the video then comes out at the new frame size.
 
-On-device check (2026-10-31): the maintainer scrolled the built site on their laptop and phone: smooth, five full scrubs without a reload, rotation keeps the frame, Call and WhatsApp open the dialer and WhatsApp (placeholder numbers until `src/config/site.ts` is filled in).
+On-device check (2026-10-31, of the earlier scroll-scrubbed frames): the maintainer scrolled the built site on their laptop and phone: smooth, five full scrubs without a reload, rotation keeps the frame, Call and WhatsApp open the dialer and WhatsApp (placeholder numbers until `src/config/site.ts` is filled in).
 
 ## Output
 

@@ -1,4 +1,5 @@
 ---
+import { withBase, withoutBase } from "../lib/paths.ts";
 import { navLinks } from "../config/nav.ts";
 import Logo from "./Logo.astro";
 import CallButton from "./CallButton.astro";
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const { whatsappMessage } = Astro.props;
-const path = Astro.url.pathname;
+const path = withoutBase(Astro.url.pathname);
 
 function currentState(href: string): "page" | "true" | undefined {
   if (path === href) return "page";
@@ -20,7 +21,7 @@ function currentState(href: string): "page" | "true" | undefined {
 
 <header class="site-header" data-site-header>
   <div class="container site-header__inner">
-    <a class="brand" href="/" aria-label="Noor Developers home" aria-current={path === "/" ? "page" : undefined}>
+    <a class="brand" href={withBase("/")} aria-label="Noor Developers home" aria-current={path === "/" ? "page" : undefined}>
       <Logo variant="horizontal" accent />
     </a>
 
@@ -40,7 +41,7 @@ function currentState(href: string): "page" | "true" | undefined {
         {
           navLinks.map((link) => (
             <li>
-              <a class="site-nav__link" href={link.href} aria-current={currentState(link.href)}>
+              <a class="site-nav__link" href={withBase(link.href)} aria-current={currentState(link.href)}>
                 {link.label}
               </a>
             </li>

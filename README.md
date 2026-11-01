@@ -117,11 +117,20 @@ Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site 
 
 1. The repository must be public for free GitHub Pages hosting.
 2. Go to **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
-3. Push to `main`. The first deploy is served at `https://<user>.github.io/<repo>/`. Assets will look broken there, because the site is built for the domain root with no base path. That is expected.
+3. Push to `main`. Until a custom domain is connected, the site is served at `https://<user>.github.io/<repo>/` (currently `https://nomi1999.github.io/noordeveloperssite/`) and looks and works exactly as it does under `npm run preview`.
+
+### How the address is chosen
+
+The workflow asks GitHub Pages where it serves the site (`actions/configure-pages`) and passes that to the build as `SITE_URL` and `BASE_PATH` (read in `astro.config.mjs`):
+
+- **No custom domain:** `https://<user>.github.io` with base path `/<repo>`. Every page is `noindex` on a `github.io` address, so the placeholder details there stay out of search results.
+- **Custom domain connected:** the domain with no base path, indexed as normal. Nothing in the code changes. After saving the domain in Settings, re-run the workflow once (**Actions → Deploy to GitHub Pages → Run workflow**) so the build picks up the new address.
+
+Locally, with neither variable set, the site is built for `https://noordevelopers.pk` at the root, so `npm run preview` is unchanged. Any root-relative link or file path written in code (`href="/about/"`, `/hero/…`, `/og/…`) must go through `withBase()` from `src/lib/paths.ts` so it also works under the base path; images imported through Astro are handled automatically. To check a sub-path build locally, set both variables before `npm run build` (in PowerShell: `$env:SITE_URL='https://nomi1999.github.io'; $env:BASE_PATH='/noordeveloperssite'`), then clear them and build again.
 
 ### Custom domain (`noordevelopers.pk`)
 
-`public/CNAME` already contains `noordevelopers.pk` and is copied into every build.
+`public/CNAME` contains `noordevelopers.pk`. GitHub ignores this file when deploying with Actions; the domain is whatever you enter in **Settings → Pages → Custom domain**. If the client's domain turns out different, use that domain in the steps below and update `public/CNAME`, `site.url` in `src/config/site.ts` and the fallback in `astro.config.mjs` to match.
 
 1. Register `noordevelopers.pk` with a PKNIC-accredited registrar, and use DNS hosting that supports A, AAAA and CNAME records (the registrar's DNS, or a provider such as Cloudflare set as the domain's nameservers).
 2. Add these records:
@@ -137,8 +146,9 @@ Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site 
 
    If you use Cloudflare, set these records to **DNS only** (grey cloud) so GitHub can issue the certificate.
 3. In **Settings → Pages → Custom domain**, enter `noordevelopers.pk` and save. GitHub then checks the DNS, which can take up to 24 hours to propagate.
-4. When the certificate has been issued, tick **Enforce HTTPS**.
-5. Optionally, verify the domain under your GitHub account's **Settings → Pages → Verified domains** so no other repository can claim it.
+4. Re-run the deploy workflow (**Actions → Deploy to GitHub Pages → Run workflow**) so the site is rebuilt for the domain instead of the `github.io` address.
+5. When the certificate has been issued, tick **Enforce HTTPS**.
+6. Optionally, verify the domain under your GitHub account's **Settings → Pages → Verified domains** so no other repository can claim it.
 
 ### Rollback
 

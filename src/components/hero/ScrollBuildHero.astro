@@ -13,6 +13,7 @@
  * the opening state (data-phase="intro"): the canvas stays clear over the dusk
  * poster; the rest of the span runs frames 0 → last.
  */
+import { withBase } from "../../lib/paths.ts";
 import CallButton from "../CallButton.astro";
 import WhatsAppButton from "../WhatsAppButton.astro";
 import ContactNote from "../ContactNote.astro";
@@ -41,7 +42,7 @@ const POSTER_TIERS: Record<Orientation, Tier[]> = {
   ],
 };
 const posterSrcset = (o: Orientation, ext: string) =>
-  POSTER_TIERS[o].map((t) => `/hero/poster/${o}-${t.id}.${ext} ${t.width}w`).join(", ");
+  POSTER_TIERS[o].map((t) => `${withBase(`/hero/poster/${o}-${t.id}.${ext}`)} ${t.width}w`).join(", ");
 const sources = [
   { media: "(orientation: portrait)", o: "portrait" },
   { media: undefined, o: "landscape" },
@@ -82,7 +83,7 @@ const { phases } = heroCopy;
         ])
       }
       <img
-        src={`/hero/poster/landscape-${fallbackTier.id}.webp`}
+        src={withBase(`/hero/poster/landscape-${fallbackTier.id}.webp`)}
         width={fallbackTier.width}
         height={fallbackTier.height}
         alt={heroCopy.imageAlt}

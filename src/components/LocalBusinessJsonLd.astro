@@ -1,19 +1,20 @@
 ---
 import { site } from "../config/site.ts";
+import { withBase } from "../lib/paths.ts";
 
 // GeneralContractor is a schema.org subtype of HomeAndConstructionBusiness.
 // No ratings, reviews or priceRange, by content rule.
 const base = Astro.site ?? site.url;
 // Temporary: the share image stands in as the logo until the brand-logo change
-const logo = new URL("/og-default.png", base).href;
+const logo = new URL(withBase("/og-default.png"), base).href;
 
 const data = {
   "@context": "https://schema.org",
   "@type": "GeneralContractor",
-  "@id": new URL("/#business", base).href,
+  "@id": new URL(withBase("/#business"), base).href,
   name: site.name,
   slogan: site.tagline,
-  url: new URL("/", base).href,
+  url: new URL(withBase("/"), base).href,
   logo,
   image: logo,
   telephone: site.phone,

@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../lib/paths.ts";
 import "@fontsource/big-shoulders-display/latin-600";
 import "@fontsource/big-shoulders-display/latin-800";
 import "@fontsource/barlow/latin-400.css";
@@ -41,10 +42,10 @@ const { title, description, ogImage, ogImageAlt, whatsappMessage, noindex } = As
     </script>
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <link rel="icon" href={withBase("/favicon.ico")} sizes="32x32" />
+    <link rel="apple-touch-icon" href={withBase("/apple-touch-icon.png")} />
+    <link rel="manifest" href={withBase("/site.webmanifest")} />
     <meta name="color-scheme" content="dark" />
     <Seo title={title} description={description} ogImage={ogImage} ogImageAlt={ogImageAlt} noindex={noindex} />
     <LocalBusinessJsonLd />

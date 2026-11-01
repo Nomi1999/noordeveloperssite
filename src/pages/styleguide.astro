@@ -1,5 +1,6 @@
 ---
 // Hidden reference page for the design tokens: noindex and excluded from the sitemap
+import { withBase } from "../lib/paths.ts";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CallButton from "../components/CallButton.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
@@ -116,7 +117,7 @@ const spacing = ["--space-1", "--space-2", "--space-3", "--space-4", "--space-5"
         <WhatsAppButton variant="primary" />
         <CallButton variant="outline" size="sm" />
         <WhatsAppButton variant="primary" size="sm" />
-        <a class="btn btn--outline" href="/">Text link button</a>
+        <a class="btn btn--outline" href={withBase("/")}>Text link button</a>
       </div>
       <p class="text-accent">Accent text, allowed on dark only.</p>
     </div>
@@ -128,7 +129,7 @@ const spacing = ["--space-1", "--space-2", "--space-3", "--space-4", "--space-5"
       <div class="sg-buttons">
         <CallButton variant="outline" />
         <WhatsAppButton variant="primary" />
-        <a class="btn btn--outline" href="/">Text link button</a>
+        <a class="btn btn--outline" href={withBase("/")}>Text link button</a>
       </div>
       <p class="text-muted">Muted text on light uses --concrete-700.</p>
     </div>

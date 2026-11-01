@@ -4,6 +4,7 @@
  * `full` (What We Build, design pages): every item, grouped by area.
  * `compact` (home): the eight highlighted items and a link to the full list.
  */
+import { withBase } from "../../lib/paths.ts";
 import { checklistHighlights, fullyFinished } from "../../content/fully-finished.ts";
 import SectionHeader from "./SectionHeader.astro";
 
@@ -89,7 +90,7 @@ const letters = "ABCDEFGHIJ";
       </p>
       {
         compact && (
-          <a class="link-arrow" href="/what-we-build/#fully-finished">
+          <a class="link-arrow" href={withBase("/what-we-build/#fully-finished")}>
             See everything included
           </a>
         )

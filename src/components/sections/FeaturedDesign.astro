@@ -1,5 +1,6 @@
 ---
 /** One concept design shown large, with its key facts and a link to its page. */
+import { withBase } from "../../lib/paths.ts";
 import { getDesign } from "../../designs/index.ts";
 import { keyFacts, kindLabel } from "../../designs/display.ts";
 import { getRender } from "../../designs/renders.ts";
@@ -47,7 +48,7 @@ const what = design.kind === "house" ? "A family home" : `A ${kindLabel(design.k
           your own plot, or let us adapt it to yours.
         </p>
         <FactsList facts={keyFacts(entry)} />
-        <a class="btn btn--outline featured__link" href={`/designs/${slug}/`}>
+        <a class="btn btn--outline featured__link" href={withBase(`/designs/${slug}/`)}>
           Explore the design<span class="sr-only">: {design.name}</span>
         </a>
       </div>

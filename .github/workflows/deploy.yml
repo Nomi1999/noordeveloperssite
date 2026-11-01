@@ -21,10 +21,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+      # Reports the address Pages serves the site at: https://<user>.github.io with base path
+      # /<repo> until a custom domain is set in Settings → Pages, then the custom domain with no base path
+      - name: Get the GitHub Pages address
+        id: pages
+        uses: actions/configure-pages@v6
       - name: Install, build and upload site
         uses: withastro/action@v6
         with:
           node-version: 24
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
   # Runs only after a successful build, so a broken build never replaces the live site
   deploy:

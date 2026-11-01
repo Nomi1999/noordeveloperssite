@@ -4,6 +4,7 @@
  * and a link. Every type uses the same layout, so a new type is a new entry in
  * the data. `summary` (home): cards. `detail` (What We Build): wide rows.
  */
+import { withBase } from "../../lib/paths.ts";
 import { buildingTypes } from "../../content/building-types.ts";
 import { getRender } from "../../designs/renders.ts";
 import RenderFigure from "../RenderFigure.astro";
@@ -51,11 +52,11 @@ const types = buildingTypes.map((type) => ({ ...type, image: getRender(type.rend
                 ))}
               </ul>
               <h3 class="wwb__name">
-                {detail ? type.name : <a href={type.link.href} class="wwb__card-link">{type.name}</a>}
+                {detail ? type.name : <a href={withBase(type.link.href)} class="wwb__card-link">{type.name}</a>}
               </h3>
               <p class="wwb__text">{detail ? type.detail : type.summary}</p>
               {detail ? (
-                <a class="link-arrow" href={type.link.href}>
+                <a class="link-arrow" href={withBase(type.link.href)}>
                   {type.link.label}
                 </a>
               ) : (

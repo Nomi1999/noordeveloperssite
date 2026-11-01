@@ -1,5 +1,6 @@
 ---
 import { site } from "../config/site.ts";
+import { withBase, withoutBase } from "../lib/paths.ts";
 
 interface Props {
   title: string;
@@ -18,15 +19,19 @@ const {
   description,
   ogImage = DEFAULT_OG_IMAGE,
   ogImageAlt = `${site.name}: ${site.tagline}`,
-  noindex = false,
+  noindex: noindexPage = false,
 } = Astro.props;
 
 const base = Astro.site ?? site.url;
-const isHome = Astro.url.pathname === "/";
+const path = withoutBase(Astro.url.pathname);
+const isHome = path === "/";
+// The temporary GitHub Pages address (<user>.github.io) carries placeholder details, so it
+// stays out of search results; a custom domain is indexed as normal.
+const noindex = noindexPage || new URL(base).hostname.endsWith(".github.io");
 // Home leads with the company name; every other page is "<Page title> | Noor Developers"
 const fullTitle = isHome ? `${site.name} | ${title}` : `${title} | ${site.name}`;
-const canonical = new URL(Astro.url.pathname, base).href;
-const image = new URL(ogImage, base).href;
+const canonical = new URL(withBase(path), base).href;
+const image = new URL(withBase(ogImage), base).href;
 const isDefaultImage = ogImage === DEFAULT_OG_IMAGE;
 ---
 

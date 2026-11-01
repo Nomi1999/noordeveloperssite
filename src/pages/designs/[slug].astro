@@ -5,6 +5,7 @@
  * from the render registry (src/designs/renders.ts), and the longer
  * description from src/content/designs/<slug>.md.
  */
+import { withBase } from "../../lib/paths.ts";
 import type { GetStaticPaths, MarkdownInstance } from "astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageIntro from "../../components/sections/PageIntro.astro";
@@ -80,7 +81,7 @@ const total = n(sections);
               plot’s size and shape and to the way {isHouse ? "your family lives" : "your business works"}.
             </p>
           </aside>
-          <a class="link-arrow" href="/designs/">See all designs</a>
+          <a class="link-arrow" href={withBase("/designs/")}>See all designs</a>
         </div>
         <div class="overview__facts">
           <h3 class="overview__facts-title label">Key facts</h3>

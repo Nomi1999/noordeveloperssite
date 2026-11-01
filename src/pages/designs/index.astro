@@ -1,4 +1,5 @@
 ---
+import { withBase } from "../../lib/paths.ts";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageIntro from "../../components/sections/PageIntro.astro";
 import CtaBand from "../../components/sections/CtaBand.astro";
@@ -42,7 +43,7 @@ const cards = designs.map((entry) => ({ entry, lead: getRenders(entry.design.slu
                     Concept design · {kindLabel(design.kind)}
                   </p>
                   <h2 class="card__name">
-                    <a class="card__link" href={`/designs/${design.slug}/`}>
+                    <a class="card__link" href={withBase(`/designs/${design.slug}/`)}>
                       {design.name}
                     </a>
                   </h2>

@@ -4,6 +4,7 @@
  * no client script), a link to the full-size file, and a room schedule table
  * as the text alternative.
  */
+import { withBase } from "../lib/paths.ts";
 import "../styles/floor-plan.css";
 import { getDesign } from "../designs/index.ts";
 import { MIN_PX_PER_FOOT, planLevels, renderPlan, type PlanTheme } from "../designs/plan.ts";
@@ -25,7 +26,7 @@ if (!level) throw new Error(`Design "${slug}" has no plan for level "${levelId}"
 const id = `fp-${slug}-${level.id}-${theme}`;
 const plan = renderPlan(design, level, facts, { theme, id });
 const minWidth = Math.round(plan.width * MIN_PX_PER_FOOT);
-const fullSize = `/plans/${planFileName(design, level, theme)}`;
+const fullSize = withBase(`/plans/${planFileName(design, level, theme)}`);
 ---
 
 <figure class={`fp-figure fp-figure--${theme}`}>

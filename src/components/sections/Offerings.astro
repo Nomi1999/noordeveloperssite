@@ -6,6 +6,7 @@
  * the hero render, as its own still) for "Build on your plot".
  * `detail` (What We Build): each offering from start to finish.
  */
+import { withBase } from "../../lib/paths.ts";
 import { Picture } from "astro:assets";
 import { offerings } from "../../content/offerings.ts";
 import planOnPlot from "../../assets/stills/plan-on-plot.jpg";
@@ -79,7 +80,7 @@ const cardSizes = "(min-width: 80rem) 37rem, (min-width: 48rem) 46vw, 100vw";
                 <p class="offer__outcome">{o.outcome}</p>
               </>
             ) : (
-              <a class="link-arrow offer__link" href={`/what-we-build/#offer-${o.id}`}>
+              <a class="link-arrow offer__link" href={withBase(`/what-we-build/#offer-${o.id}`)}>
                 How it works<span class="sr-only">: {o.title}</span>
               </a>
             )}

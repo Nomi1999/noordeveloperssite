@@ -20,6 +20,7 @@
  *
  * Add ?hero-debug to the URL for an overlay with frame, decoded count and rAF ticks.
  */
+import { withBase } from "../../lib/paths.ts";
 
 type Orientation = "landscape" | "portrait";
 type Format = "avif" | "webp";
@@ -405,7 +406,8 @@ export function start(root: HTMLElement) {
     const need = Math.max(stage.clientWidth, stage.clientHeight * aspect) * Math.min(devicePixelRatio || 1, 2);
     // The smallest tier that is sharp at that size, else the largest; reduced data always takes the smallest
     const tier = nav.connection?.saveData ? tiers[0] : (tiers.find((t) => t.width >= need) ?? tiers[tiers.length - 1]);
-    urlPattern = tier.formats[format]?.url ?? tier.formats.webp.url;
+    // Manifest URLs are root-relative; prefix the base path when served from a sub-path
+    urlPattern = withBase(tier.formats[format]?.url ?? tier.formats.webp.url);
     frameW = tier.width;
     frameH = tier.height;
   }
@@ -486,7 +488,7 @@ export function start(root: HTMLElement) {
   measure();
   shown = target;
 
-  const manifestUrl = "/hero/manifest.json";
+  const manifestUrl = withBase("/hero/manifest.json");
   // Frames start loading only once the poster is on screen
   const posterReady = (
     poster.complete

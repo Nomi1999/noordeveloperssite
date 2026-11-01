@@ -6,14 +6,20 @@ import SectionHeader from "./SectionHeader.astro";
 interface Props {
   index?: string;
   total?: string;
+  /** Show the mono label above the heading */
+  eyebrow?: boolean;
 }
 
-const { index, total } = Astro.props;
+const { index, total, eyebrow = true } = Astro.props;
 ---
 
 <section class="section section--blueprint process" aria-labelledby="process-title">
   <div class="container">
-    <SectionHeader index={index} total={total} label="How we work" heading="From first call to front door" id="process-title" intro={processIntro} />
+    <SectionHeader
+      index={eyebrow ? index : undefined}
+      total={total}
+      label={eyebrow ? "How we work" : undefined}
+      heading="From first call to front door" id="process-title" intro={processIntro} />
 
     <ol class="process__steps" role="list">
       {

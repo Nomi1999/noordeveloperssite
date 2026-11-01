@@ -13,9 +13,11 @@ interface Props {
   variant?: "summary" | "detail";
   index?: string;
   total?: string;
+  /** Show the mono label above the heading */
+  eyebrow?: boolean;
 }
 
-const { variant = "summary", index, total } = Astro.props;
+const { variant = "summary", index, total, eyebrow = true } = Astro.props;
 const detail = variant === "detail";
 const types = buildingTypes.map((type) => ({ ...type, image: getRender(type.render.design, type.render.shot) }));
 ---
@@ -23,9 +25,9 @@ const types = buildingTypes.map((type) => ({ ...type, image: getRender(type.rend
 <section class="section section--concrete wwb" aria-labelledby="wwb-title">
   <div class="container">
     <SectionHeader
-      index={index}
+      index={eyebrow ? index : undefined}
       total={total}
-      label="What we build"
+      label={eyebrow ? "What we build" : undefined}
       heading="Houses and commercial buildings"
       id="wwb-title"
       intro={detail ? undefined : "Homes of every size, mainly 1 Kanal and 2 Kanal, and commercial buildings, all built the same way."}

@@ -1,18 +1,22 @@
 // Headless Chrome checks for the scroll-build hero, against the built site (npm run build first).
 //
-//   node scripts/check-hero.mjs [phases] [memory] [offscreen] [loading] [static] [skip] [--out render/out/hero-check]
+//   node scripts/check-hero.mjs [opening] [phases] [jump] [memory] [offscreen] [loading] [static] [rotate] [skip] [--out render/out/hero-check]
 //
+//   opening    at the top: the dusk poster, the opening state, the actions shown and the canvas clear;
+//              just past the opening share of the span: frame 0 drawn and the canvas shown; four screens tall
 //   phases     scroll to each phase's middle frame (landscape desktop and portrait phone), screenshot,
-//              and check the drawn frame, data-phase and the visible phase label
+//              and check the drawn frame, data-phase, the visible phase label and the compact headline
+//   jump       each ruler tick is a button that scrolls to the start of its phase
 //   memory     five full scrubs down and up (desktop and phone): decoded frames never exceed the window
 //   offscreen  no requestAnimationFrame ticks while the hero is scrolled out of view
 //   loading    throttled to Slow 4G: the first frame requests run sparse to dense, and the stage
 //              always shows the poster or a drawn frame
-//   static     reduced motion, Save-Data and JavaScript off: one screen tall, phase list and actions
-//              visible, no sequence frame requests (reduced motion shows the dusk frame)
+//   static     reduced motion, Save-Data, a 3G connection and JavaScript off: one screen tall, phase list
+//              and actions visible, the dusk frame, no sequence frame requests
 //   rotate     phone rotated portrait → landscape switches sequence at the same frame; an address-bar
 //              height change (orientation unchanged) reloads nothing
-//   skip       "Skip the animation" is the hero's first focusable element and moves focus to #after-hero
+//   skip       "Skip past the build" is the hero's first focusable element, is visible while scrubbing,
+//              and moves focus to #after-hero
 //
 // With no check named, all run. Drives Chrome over the DevTools protocol (Node's built-in WebSocket).
 import { spawn } from "node:child_process";
@@ -25,7 +29,7 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const args = process.argv.slice(2);
 const opt = (name, fallback) => (args.includes(`--${name}`) ? args[args.indexOf(`--${name}`) + 1] : fallback);
-const ALL = ["phases", "memory", "offscreen", "loading", "static", "rotate", "skip"];
+const ALL = ["opening", "phases", "jump", "memory", "offscreen", "loading", "static", "rotate", "skip"];
 const chosen = args.filter((a, i) => ALL.includes(a) && !args[i - 1]?.startsWith("--"));
 const checks = chosen.length ? chosen : ALL;
 const out = resolve(root, opt("out", "render/out/hero-check"));
@@ -151,19 +155,24 @@ const HERO = `(() => {
   // top: the scroll position where progress is 0 (the stage pins below the sticky header, at its sticky top)
   const docTop = root.getBoundingClientRect().top + scrollY, pin = parseFloat(getComputedStyle(stage).top) || 0;
   const top = docTop - pin, span = root.offsetHeight - stage.clientHeight;
-  return { top, docTop, span, height: root.offsetHeight, stage: stage.clientHeight, inner: innerHeight };
+  // intro: the opening (dusk) share of the span; frames 0 → last run over the rest
+  return { top, docTop, span, intro: parseFloat(root.dataset.intro) || 0, height: root.offsetHeight, stage: stage.clientHeight, inner: innerHeight };
 })()`;
 const scrollToFrame = (frame, count) =>
-  `(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span * ${frame} / ${count - 1})); return scrollY; })()`;
+  `(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span * (h.intro + (1 - h.intro) * ${frame} / ${count - 1}))); return scrollY; })()`;
 const STATE = `(() => { const s = document.querySelector('[data-hero-stage]'); return {
   frame: +s.dataset.frame, decoded: +s.dataset.decoded, phase: +s.dataset.phase, ready: s.hasAttribute('data-ready'),
   debug: document.querySelector('pre')?.textContent ?? '',
   label: [...s.querySelectorAll('.hero__phase')].filter((li) => +getComputedStyle(li).opacity > 0.5)
     .map((li) => li.querySelector('.hero__phase-label').textContent.replace(/\\s+/g, ' ').trim()),
   cta: getComputedStyle(s.querySelector('.hero__cta')).visibility === 'visible' && getComputedStyle(s.querySelector('.hero__cta')).display !== 'none',
+  rawPhase: s.dataset.phase, canvas: +getComputedStyle(s.querySelector('.hero__canvas')).opacity,
+  title: getComputedStyle(s.querySelector('.hero__title')).transform,
 }; })()`;
 const manifest = JSON.parse(readFileSync(join(dist, "hero/manifest.json"), "utf8"));
 const N = manifest.frameCount;
+// The opening and static image: the photoreal dusk poster (scripts/enhance-renders.mjs), not a sequence frame
+const POSTER_PATH = "/hero/poster/";
 
 const results = [];
 function record(check, ok, detail) {
@@ -192,13 +201,16 @@ async function phases() {
       const s = await page.eval(STATE);
       const drawn = +/drawn (\d+)/.exec(s.debug)?.[1];
       await page.shot(`phase-${name}-${i}.png`);
-      const ok = s.frame === mid && drawn === mid && s.phase === i && s.label.length === 1 && s.label[0].startsWith(`0${i}`);
-      record(`phases ${name} ${p.id}`, ok, { frame: s.frame, drawn, phase: s.phase, label: s.label, cta: s.cta });
+      // the headline stays on screen, scaled to half
+      const scale = parseFloat(/^matrix\(([\d.]+)/.exec(s.title)?.[1] ?? "1");
+      const compact = Math.abs(scale - 0.5) < 0.02; // allows for the end of the 400 ms transition
+      const ok = s.frame === mid && drawn === mid && s.phase === i && s.label.length === 1 && s.label[0].startsWith(String(i + 1).padStart(2, "0")) && compact;
+      record(`phases ${name} ${p.id}`, ok, { frame: s.frame, drawn, phase: s.phase, label: s.label, cta: s.cta, title: s.title });
       if (i === manifest.phases.length - 1 && name === "desktop") record(`phases ${name} CTA on move in`, s.cta);
     }
-    // halfway down the hero's scroll span: progress 0.5, so frame (N-1)/2 (95.5 → 95 or 96 for 192)
+    // halfway down the build part of the span: frame (N-1)/2 (95.5 → 95 or 96 for 192)
     const half = (N - 1) / 2;
-    await page.eval(`(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span / 2)); })()`);
+    await page.eval(`(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span * (h.intro + (1 - h.intro) / 2))); })()`);
     await page.waitFor(`Math.abs(+document.querySelector('[data-hero-stage]').dataset.frame - ${half}) <= 1`, 5000).catch(() => {});
     await sleep(300);
     const m = await page.eval(STATE);
@@ -207,6 +219,56 @@ async function phases() {
     await page.waitFor(`+document.querySelector('[data-hero-stage]').dataset.frame === ${N - 1}`, 5000);
     await sleep(450);
     await page.shot(`phase-${name}-final.png`);
+    await page.close();
+  }
+}
+
+async function opening() {
+  for (const name of ["desktop", "phone"]) {
+    const page = await openPage();
+    await device(page, name);
+    await page.goto("/?hero-debug");
+    await page.eval("scrollTo(0, 0)");
+    await sleep(800);
+    const s = await page.eval(STATE);
+    const img = await page.eval("document.querySelector('[data-hero-poster]').currentSrc");
+    await page.shot(`opening-${name}.png`);
+    const dusk = img.includes(POSTER_PATH);
+    // below 48rem the fixed bar carries the actions, so the hero's own are hidden there
+    const ctaOk = name === "phone" || s.cta;
+    record(`opening ${name} dusk first`, s.rawPhase === "intro" && dusk && s.canvas === 0 && ctaOk, {
+      phase: s.rawPhase, image: img.replace(origin, ""), canvasOpacity: s.canvas, cta: s.cta,
+    });
+    await loadAll(page);
+    // just past the opening share: the blueprint (frame 0) drawn and the canvas over the poster
+    await page.eval(`(() => { const h = ${HERO}; scrollTo(0, Math.round(h.top + h.span * h.intro) + 4); })()`);
+    await page.waitFor(`document.querySelector('[data-hero-stage]').dataset.phase === '0'`, 3000);
+    await sleep(800);
+    const b = await page.eval(STATE);
+    await page.shot(`opening-${name}-blueprint.png`);
+    record(`opening ${name} dissolves to the blueprint`, b.rawPhase === "0" && b.frame <= 2 && b.canvas === 1, {
+      phase: b.rawPhase, frame: b.frame, canvasOpacity: b.canvas,
+    });
+    const h = await page.eval(HERO);
+    record(`opening ${name} hero is four screens`, Math.abs(h.height - 4 * h.inner) <= h.inner * 0.15, { height: h.height, screen: h.inner });
+    await page.close();
+  }
+}
+
+async function jump() {
+  for (const name of ["desktop", "phone"]) {
+    const page = await openPage();
+    await device(page, name);
+    await page.goto("/?hero-debug");
+    await page.eval("scrollTo(0, 1)");
+    await loadAll(page);
+    for (const [i, p] of manifest.phases.entries()) {
+      await page.eval(`document.querySelectorAll('[data-hero-jump]')[${i}].click()`);
+      const landed = await page.waitFor(`document.querySelector('[data-hero-stage]').dataset.phase === '${i}' && Math.abs(+document.querySelector('[data-hero-stage]').dataset.frame - ${p.start}) <= 1`, 5000);
+      const s = await page.eval(STATE);
+      const current = await page.eval(`document.querySelectorAll('[data-hero-jump]')[${i}].getAttribute('aria-current')`);
+      record(`jump ${name} ${p.id}`, landed && current === "step", { phase: s.rawPhase, frame: s.frame, expected: p.start, current });
+    }
     await page.close();
   }
 }
@@ -271,6 +333,11 @@ async function loading() {
   await page.send("Network.emulateNetworkConditions", {
     offline: false, latency: 562.5, downloadThroughput: (400 * 1024) / 8 * 0.9, uploadThroughput: (400 * 1024) / 8 * 0.9,
   });
+  // DevTools throttling can make the page report this link as 3G, which now gets the static hero;
+  // the check is about how frames load on a slow link that still scrubs, so report it as 4G
+  await page.send("Page.addScriptToEvaluateOnNewDocument", {
+    source: "Object.defineProperty(navigator, 'connection', { get: () => ({ saveData: false, effectiveType: '4g', addEventListener() {} }) });",
+  });
   await page.goto("/?hero-debug");
   let blank = 0;
   for (let t = 0; t < 40; t++) {
@@ -285,12 +352,12 @@ async function loading() {
   // Requests must never go back to a sparser pass (retries of failed frames aside, which this run has none of).
   const STRIDES = [32, 16, 8, 4, 2, 1];
   const level = (f) => (f === N - 1 ? 0 : STRIDES.findIndex((s) => f % s === 0));
-  const posterReq = frames[0];
-  const seq = frames.slice(1);
+  // The poster is its own file (public/hero/poster/), so every request counted here is a sequence frame
+  const seq = frames;
   const levels = seq.map(level);
   const firstPass = levels.every((l, i) => i === 0 || l >= levels[i - 1]);
   record("loading never blank (after poster)", blank <= 1, { blankSamples: blank, note: "the first sample may precede the poster" });
-  record("loading sparse first", firstPass, { poster: posterReq, firstRequests: seq.slice(0, 12), passes: [...new Set(levels)].map((l) => STRIDES[l]), total: frames.length });
+  record("loading sparse first", firstPass, { firstRequests: seq.slice(0, 12), passes: [...new Set(levels)].map((l) => STRIDES[l]), total: frames.length });
   await page.close();
 }
 
@@ -301,6 +368,12 @@ async function staticMode() {
       name: "save-data",
       setup: (p) => p.send("Page.addScriptToEvaluateOnNewDocument", {
         source: "Object.defineProperty(navigator, 'connection', { get: () => ({ saveData: true, addEventListener() {} }) });",
+      }),
+    },
+    {
+      name: "3g",
+      setup: (p) => p.send("Page.addScriptToEvaluateOnNewDocument", {
+        source: "Object.defineProperty(navigator, 'connection', { get: () => ({ saveData: false, effectiveType: '3g', addEventListener() {} }) });",
       }),
     },
     { name: "no-js", setup: (p) => p.send("Emulation.setScriptExecutionDisabled", { value: true }) },
@@ -330,7 +403,7 @@ async function staticMode() {
           actions: [...document.querySelectorAll('[data-action]')].filter(onScreen).map((a) => a.dataset.action) }; })()`);
       await page.shot(`static-${c.name}-${name}.png`);
       const posterOnly = frames.length === 1;
-      const dusk = c.name !== "reduced-motion" || s.img.includes(`/${String(N - 1).padStart(4, "0")}.`);
+      const dusk = s.img.includes(POSTER_PATH);
       const oneScreen = s.bottom <= s.limit + 1; // the hero ends within the first screen, above the action bar
       const actions = s.actions.includes("call") && s.actions.includes("whatsapp");
       record(`static ${c.name} ${name}`, !s.scrub && posterOnly && dusk && oneScreen && s.phases === 6 && actions, {
@@ -404,13 +477,25 @@ async function skip() {
   await key("keyUp", { key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 });
   await sleep(300);
   const after = await page.eval(`({ id: document.activeElement.id, top: Math.round(document.getElementById('after-hero').getBoundingClientRect().top), pad: Math.round(parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0) })`);
-  record("skip is first focusable", first === "Skip the animation", first);
+  record("skip is first focusable", first === "Skip past the build", first);
   record("skip reached by Tab", /hero__skip/.test(focused), focused);
   record("skip moves focus to #after-hero", after.id === "after-hero" && Math.abs(after.top - after.pad) < 24, after); // lands just below the sticky header
   await page.close();
+  // Visible without focus while scrubbing, on desktop and phone: inside the screen and above the action bar
+  for (const name of ["desktop", "phone"]) {
+    const p2 = await openPage();
+    await device(p2, name);
+    await p2.goto("/");
+    await sleep(500);
+    const v = await p2.eval(`(() => { const a = document.querySelector('.hero__skip'), r = a.getBoundingClientRect();
+      const bar = document.querySelector('.action-bar'); const limit = bar && getComputedStyle(bar).display !== 'none' ? bar.getBoundingClientRect().top : innerHeight;
+      return { top: Math.round(r.top), bottom: Math.round(r.bottom), limit: Math.round(limit), w: Math.round(r.width) }; })()`);
+    record(`skip visible ${name}`, v.top >= 0 && v.bottom <= v.limit && v.w > 0, v);
+    await p2.close();
+  }
 }
 
-const run = { phases, memory, offscreen, loading, static: staticMode, rotate, skip };
+const run = { opening, phases, jump, memory, offscreen, loading, static: staticMode, rotate, skip };
 try {
   for (const c of checks) await run[c]();
 } finally {

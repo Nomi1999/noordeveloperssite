@@ -8,6 +8,7 @@ import PageIntro from "../../components/sections/PageIntro.astro";
 import SectionHeader from "../../components/sections/SectionHeader.astro";
 import CallButton from "../../components/CallButton.astro";
 import WhatsAppButton from "../../components/WhatsAppButton.astro";
+import ContactNote from "../../components/ContactNote.astro";
 import { site } from "../../config/site.ts";
 import { formatHours, mapsUrl, telUrl, whatsappDisplay, whatsappUrl } from "../../lib/contact.ts";
 
@@ -26,9 +27,10 @@ const { address } = site;
     lead="The fastest way to reach us is a phone call or a WhatsApp message. Tell us about your plot, or the home or building you have in mind."
   >
     <div class="contact-actions">
+      <CallButton variant="outline" showNumber class="contact-actions__btn" />
       <WhatsAppButton message={whatsappMessage} variant="primary" class="contact-actions__btn" />
-      <CallButton variant="outline" class="contact-actions__btn" />
     </div>
+    <ContactNote hours={false} class="contact-note--intro" />
   </PageIntro>
 
   <section class="section section--concrete" aria-labelledby="details-title">
@@ -54,7 +56,7 @@ const { address } = site;
           <dt class="label">Office</dt>
           <dd class="details__value">
             <address>
-              {address.street}<br />
+              {address.street && <>{address.street}<br /></>}
               {`${address.city}, ${address.region}`}<br />
               Pakistan
             </address>
@@ -92,6 +94,10 @@ const { address } = site;
     .contact-actions :global(.contact-actions__btn) {
       flex: 1 1 100%;
     }
+  }
+
+  :global(.contact-note--intro) {
+    margin-top: var(--space-5);
   }
 
   .details {

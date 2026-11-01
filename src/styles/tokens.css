@@ -60,6 +60,8 @@
 
   --leading-tight: 0.95;
   --leading-snug: 1.15;
+  /* Wrapping UI text: list items, captions, labels that can run to two lines */
+  --leading-ui: 1.35;
   --leading-body: 1.6;
   --tracking-display: 0.01em;
   --tracking-mono: 0.08em;

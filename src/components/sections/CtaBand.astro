@@ -1,6 +1,13 @@
 ---
-/** Full-width closing band with a short headline and the Call and WhatsApp actions. */
+/**
+ * Full-width closing band with a short headline, the Call and WhatsApp actions
+ * (Call first, showing the number) and what to expect when you get in touch.
+ * `dusk` sets it over a lit house at dusk instead of the concrete ground.
+ */
+import { Picture } from "astro:assets";
+import { capWidths, getRender } from "../../designs/renders.ts";
 import CallButton from "../CallButton.astro";
+import ContactNote from "../ContactNote.astro";
 import WhatsAppButton from "../WhatsAppButton.astro";
 
 interface Props {
@@ -8,8 +15,10 @@ interface Props {
   text?: string;
   /** Prefilled WhatsApp message; use the page's own message */
   whatsappMessage?: string;
-  /** Mono label above the heading */
-  label?: string;
+  /** Mono label above the heading; pass false for none */
+  label?: string | false;
+  /** Set the band over the 2 Kanal house at dusk */
+  dusk?: boolean;
 }
 
 const {
@@ -17,25 +26,49 @@ const {
   text = "Call us or send a WhatsApp message. Tell us about your plot or the home you have in mind, and we will take it from there.",
   whatsappMessage,
   label = "Call or WhatsApp",
+  dusk = false,
 } = Astro.props;
+const night = dusk ? getRender("2-kanal", "front-dusk") : undefined;
 ---
 
-<section class="section section--concrete cta-band" aria-labelledby="cta-title">
+<section
+  class:list={["section cta-band", dusk ? "cta-band--dusk" : "section--concrete"]}
+  aria-labelledby="cta-title"
+>
+  {
+    night && (
+      <Picture
+        src={night.image}
+        alt=""
+        formats={["avif", "webp"]}
+        fallbackFormat="jpg"
+        widths={capWidths([800, 1200, 1600, 2400], night.image.width)}
+        sizes="100vw"
+        loading="lazy"
+        decoding="async"
+        class="cta-band__bg"
+      />
+    )
+  }
   <div class="container cta-band__inner">
     <div class="cta-band__copy">
-      <p class="label cta-band__label">{label}</p>
+      {label && <p class="label cta-band__label">{label}</p>}
       <h2 class="cta-band__title" id="cta-title">{heading}</h2>
       <p class="cta-band__text">{text}</p>
     </div>
-    <div class="cta-band__actions">
-      <WhatsAppButton message={whatsappMessage} variant="primary" />
-      <CallButton variant="outline" />
+    <div class="cta-band__side">
+      <div class="cta-band__actions" data-contact-actions>
+        <CallButton variant="outline" showNumber />
+        <WhatsAppButton message={whatsappMessage} variant="primary" />
+      </div>
+      <ContactNote class="cta-band__note" />
     </div>
   </div>
 </section>
 
 <style>
   .cta-band {
+    position: relative;
     border-top: var(--rule-thick) solid var(--noor);
   }
 
@@ -65,15 +98,94 @@ const {
     max-width: 16ch;
   }
 
+  .cta-band__side {
+    display: grid;
+    gap: var(--space-5);
+  }
+
   .cta-band__actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
   }
 
+  .cta-band :global(.cta-band__note) {
+    --note-tick: var(--ink);
+  }
+
   @media (max-width: 29.999rem) {
     .cta-band__actions > :global(*) {
       flex: 1 1 100%;
     }
+  }
+
+  /* Over the house at dusk: the lit windows sit to the right, the words on the dark left */
+  .cta-band--dusk {
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(6rem, 4rem + 10vw, 12rem);
+    background: var(--ink);
+    color: var(--paper);
+    --focus-color: var(--noor);
+  }
+
+  /* Everything on the dark left; the lit house fills the right */
+  @media (min-width: 56rem) {
+    .cta-band--dusk .cta-band__inner {
+      grid-template-columns: minmax(0, 38rem);
+      align-items: start;
+    }
+  }
+
+  .cta-band--dusk :global(.cta-band__bg) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 70% 50%;
+  }
+
+  .cta-band--dusk::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(to right, rgb(18 18 18 / 0.92), rgb(18 18 18 / 0.8) 40%, rgb(18 18 18 / 0.25) 75%, rgb(18 18 18 / 0.1)),
+      linear-gradient(to top, rgb(18 18 18 / 0.7), rgb(18 18 18 / 0) 45%);
+  }
+
+  /* Narrow screens: the copy would cover the whole image, so the lit house sits above it, full width */
+  @media (max-width: 55.999rem) {
+    .cta-band--dusk {
+      padding-top: 0;
+    }
+
+    .cta-band--dusk::before {
+      content: none;
+    }
+
+    .cta-band--dusk :global(.cta-band__bg) {
+      position: static;
+      display: block;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      margin-bottom: var(--space-7);
+    }
+  }
+
+  .cta-band--dusk .cta-band__label {
+    color: var(--noor);
+  }
+
+  .cta-band--dusk .cta-band__text {
+    color: var(--concrete-300);
+  }
+
+  .cta-band--dusk :global(.cta-band__note) {
+    color: var(--concrete-300);
+    --note-tick: var(--noor);
   }
 </style>

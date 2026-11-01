@@ -118,7 +118,7 @@ p {
   font-weight: var(--weight-mono-strong);
   letter-spacing: var(--tracking-mono);
   text-transform: uppercase;
-  line-height: var(--leading-snug);
+  line-height: var(--leading-ui);
 }
 
 .dim {
@@ -211,7 +211,7 @@ p {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   font-weight: var(--weight-mono-strong);
-  line-height: var(--leading-snug);
+  line-height: var(--leading-ui);
   letter-spacing: var(--tracking-mono);
   text-transform: uppercase;
   text-decoration: underline;
@@ -303,6 +303,12 @@ p {
   min-height: 2.75rem;
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-base);
+}
+
+/* Browser surfaces: selected text in the accent, lit like a window */
+::selection {
+  background: var(--noor);
+  color: var(--ink);
 }
 
 /* Focus and accessibility helpers */

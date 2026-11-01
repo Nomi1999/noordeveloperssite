@@ -34,6 +34,11 @@ const { facts, columns = 2, class: className } = Astro.props;
     .facts--2 {
       grid-template-columns: repeat(2, 1fr);
     }
+
+    /* An odd number of facts: the first (the plot) takes the full width, so none is left alone on the last row */
+    .facts--2 > .facts__row:first-child:nth-last-child(2n + 1) {
+      grid-column: 1 / -1;
+    }
   }
 
   .facts__row {

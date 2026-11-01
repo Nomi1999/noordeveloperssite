@@ -22,7 +22,8 @@ function formatTime(hhmm: string): string {
   const [h, m] = hhmm.split(":").map(Number);
   const suffix = h < 12 ? "am" : "pm";
   const hour12 = h % 12 === 0 ? 12 : h % 12;
-  return `${hour12}:${String(m).padStart(2, "0")} ${suffix}`;
+  // No-break space: "pm" never wraps onto a line of its own
+  return `${hour12}:${String(m).padStart(2, "0")} ${suffix}`;
 }
 
 /** "Monday to Saturday, 10:00 am – 6:00 pm" for each opening-hours entry. */

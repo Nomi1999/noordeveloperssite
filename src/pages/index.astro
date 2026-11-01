@@ -9,8 +9,8 @@ import Process from "../components/sections/Process.astro";
 import FeaturedDesign from "../components/sections/FeaturedDesign.astro";
 import CtaBand from "../components/sections/CtaBand.astro";
 
-// Sections after the hero, in the order the home-page spec requires
-const TOTAL = "06";
+// Sections after the hero, in the order the home-page spec requires. Their
+// headings carry themselves: no section numbers or labels on the home page.
 ---
 
 <BaseLayout
@@ -19,14 +19,10 @@ const TOTAL = "06";
   whatsappMessage={heroCopy.whatsappMessage}
 >
   <ScrollBuildHero />
-  <Offerings index="01" total={TOTAL} />
-  <FullyFinished variant="compact" index="02" total={TOTAL} />
-  <WhatWeBuild index="03" total={TOTAL} />
-  <Process index="04" total={TOTAL} />
-  <FeaturedDesign slug="1-kanal" shot="front-dusk" index="05" total={TOTAL} />
-  <CtaBand
-    label="06 / 06 · Call or WhatsApp"
-    heading="Let’s talk about your build"
-    whatsappMessage={heroCopy.whatsappMessage}
-  />
+  <Offerings eyebrow={false} />
+  <FullyFinished variant="compact" eyebrow={false} heading="What fully finished means" />
+  <WhatWeBuild eyebrow={false} />
+  <Process eyebrow={false} />
+  <FeaturedDesign slug="1-kanal" shot="front-dusk" eyebrow={false} />
+  <CtaBand label={false} dusk heading="Let’s talk about your build" whatsappMessage={heroCopy.whatsappMessage} />
 </BaseLayout>

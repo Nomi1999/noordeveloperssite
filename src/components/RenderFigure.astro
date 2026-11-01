@@ -6,7 +6,7 @@
  */
 import { Picture } from "astro:assets";
 import { getDesign } from "../designs/index.ts";
-import type { Render } from "../designs/renders.ts";
+import { capWidths, type Render } from "../designs/renders.ts";
 
 interface Props {
   render: Render;
@@ -32,7 +32,7 @@ const name = getDesign(render.design).design.name;
       alt={render.alt}
       formats={["avif", "webp"]}
       fallbackFormat="jpg"
-      widths={widths.filter((w) => w <= render.image.width)}
+      widths={capWidths(widths, render.image.width)}
       sizes={sizes}
       loading={eager ? "eager" : "lazy"}
       fetchpriority={eager ? "high" : undefined}

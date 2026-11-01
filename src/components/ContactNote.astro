@@ -1,0 +1,53 @@
+---
+/**
+ * What a visitor can expect when they get in touch: the confirmed statements in
+ * site.promises and, optionally, the opening hours. Sits next to the Call and
+ * WhatsApp actions. Inherits its text colour from the surface it is on.
+ */
+import { site } from "../config/site.ts";
+import { formatHours } from "../lib/contact.ts";
+
+interface Props {
+  /** Show the opening hours after the statements */
+  hours?: boolean;
+  class?: string;
+}
+
+const { hours = true, class: className } = Astro.props;
+const lines = [...site.promises, ...(hours ? formatHours().map((line) => `Open ${line}`) : [])];
+---
+
+{
+  lines.length > 0 && (
+    <ul class:list={["contact-note", className]} role="list">
+      {lines.map((line) => (
+        <li>{line}</li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .contact-note {
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    line-height: var(--leading-ui);
+  }
+
+  /* A short dimension tick before each line, in the accent */
+  .contact-note li {
+    display: grid;
+    grid-template-columns: var(--space-4) 1fr;
+    gap: var(--space-2);
+    max-width: 52ch;
+    text-wrap: pretty;
+  }
+
+  .contact-note li::before {
+    content: "";
+    align-self: center;
+    height: var(--rule-thin);
+    background: var(--note-tick, var(--noor));
+  }
+</style>

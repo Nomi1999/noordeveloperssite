@@ -4,7 +4,7 @@ The hero copy, the About copy and the fully finished checklist must be approved 
 
 | Item | File | Status |
 |---|---|---|
-| Hero headline and phase lines | `src/components/hero/hero-copy.ts` | Approved by the maintainer |
+| Hero headline and phase lines | `src/components/hero/hero-copy.ts` | Approved by the maintainer; 2026-11-01 additions accepted without review (see log) |
 | About copy | `src/content/about.ts` | Approved by the maintainer |
 | Fully finished checklist | `src/content/fully-finished.ts` | Approved by the maintainer and confirmed by the client |
 
@@ -16,3 +16,7 @@ The hero copy, the About copy and the fully finished checklist must be approved 
 | 2026-10-31 | About copy | Maintainer | `about.ts` sha256 `cf039cc63e8a` | Approved as drafted |
 | 2026-10-31 | Fully finished checklist | Maintainer | `fully-finished.ts` sha256 `337f89d033e5` | Approved as drafted; awaiting the client's confirmation |
 | 2026-10-31 | Fully finished checklist | Client (confirmed through the maintainer) | `fully-finished.ts` sha256 `337f89d033e5` | Client confirmed the checklist as drafted |
+| 2026-11-01 | Hero copy: opening line, skip link, scroll cue, image alt, ruler label | Maintainer (review waived) | `hero-copy.ts` sha256 `5b41600940a9` | Added in the homepage-refresh change for the dusk-first hero. Headline and phase lines unchanged. The maintainer asked for the copy to be written without a separate approval. |
+| 2026-11-01 | Contact promises (`site.promises` in `src/config/site.ts`) | Maintainer | `site.ts`, homepage-refresh change | Maintainer confirmed as true: the first conversation is free with no obligation; WhatsApp replies the same working day; office visits welcome. Not confirmed, so not claimed: visits to houses under construction. |
+| 2026-11-01 | Hero copy: phase numbers 01–06 (were 00–05), skip link "Skip past the build" | Maintainer (review waived) | `hero-copy.ts` sha256 `0949cb8ce7fa` | From the second critique. Phase names and lines unchanged. |
+| 2026-11-01 | Process steps (`src/content/process.ts`) | Maintainer (review waived) | `process.ts` | Rewritten as what happens after someone gets in touch: talk to us, meet at our office, review the design, follow it to the keys. Uses only the confirmed promises. |

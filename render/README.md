@@ -19,6 +19,10 @@ Run from the repository root. `BLENDER_PATH` overrides the default `C:\Program F
 | `npm run render:encode -- stills` | Encode every shot's final still (`--engine`, `--quality`; default Cycles final) into `src/assets/renders/<design>/<shot>.jpg` (JPEG q90 masters, at least 3200px wide) |
 | `npm run render:encode -- share --design 1-kanal --shot front-day --focus 0.5,0.55` | Crop a 1200×630 share image from a delivered still into `public/og/<design>.jpg` |
 | `npm run render:encode -- sequence <frames folder> --orientation landscape` | Encode a frame sequence into AVIF and WebP tiers under `public/hero/` and update `public/hero/manifest.json` |
+| `node scripts/enhance-renders.mjs generate [--only <design>/<shot>]` | Make photoreal versions of the delivered stills and the hero's last frame with an OpenRouter image model (`bytedance-seed/seedream-5-0-pro`; needs `OPENROUTER_API_KEY` in `.env`) into `render/out/ai/` |
+| `node scripts/enhance-renders.mjs encode` | Write those into `src/assets/renders/<design>/<shot>.jpg` (2048×1152) and the hero poster `public/hero/poster/<orientation>-<tier>.{avif,webp}` |
+
+**AI-enhanced images (2026-11-01).** The stills on the site and the hero's opening dusk poster are photoreal restyles of these renders, not the renders themselves. The sequence frames are still the renders. To re-encode the stills straight from a render, run `render:encode -- stills`, which overwrites them. Each restyle keeps the source's design and framing: the script scores each attempt against its source and keeps the best one, and every result is reviewed side by side with its source before delivery. Design changes asked for after the renders were made (`DESIGN_EDITS`; so far, glass on every open side of the 1 Kanal terrace) are applied in a separate edit pass, so the restyle itself stays faithful. Re-cut the share images afterwards with `render:encode -- share`.
 
 Options shared by `still` and `frames`:
 

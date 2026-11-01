@@ -3,7 +3,10 @@
  *
  * - Native scroll only: the scroll position through the section picks a target
  *   frame and the shown frame eases toward it on requestAnimationFrame, which
- *   runs only while the hero is on screen and the two differ.
+ *   runs only while the hero is on screen and the two differ. The first
+ *   data-intro share of the span is the opening dusk screen (data-phase="intro",
+ *   frame 0 held under a clear canvas); the rest maps to frames 0 → last.
+ * - The ruler ticks are buttons that scroll to the start of their phase.
  * - One orientation, one size tier, one format: frames load as compressed Blobs
  *   in passes of falling stride (32, 16 … 1), nearest first, so the whole range is
  *   playable early. The nearest loaded frame stands in until the exact one arrives.
@@ -59,6 +62,8 @@ export function start(root: HTMLElement) {
   const canvas = root.querySelector<HTMLCanvasElement>("[data-hero-canvas]")!;
   const poster = root.querySelector<HTMLImageElement>("[data-hero-poster]")!;
   const fill = root.querySelector<HTMLElement>("[data-hero-fill]");
+  const tickButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-hero-jump]")];
+  const intro = clamp(parseFloat(root.dataset.intro ?? "0") || 0, 0, 0.9);
   const ctx = canvas.getContext("2d", { alpha: false });
   if (!ctx) return;
 
@@ -79,7 +84,7 @@ export function start(root: HTMLElement) {
   let last = 0;
   let drawn = -1; // frame index on the canvas
   let dirty = true; // canvas needs a redraw (resize, better frame decoded)
-  let phase = 0;
+  let phase: number | "intro" = "intro";
 
   // Sequence state, per orientation
   let orientation: Orientation = innerWidth < innerHeight ? "portrait" : "landscape";
@@ -101,14 +106,29 @@ export function start(root: HTMLElement) {
   const MAX_TRIES = 3;
 
   // ---------- scroll → target ----------
-  function measure() {
+  /** Scroll geometry: the stage pins at its sticky top (below the site header), and progress runs 0 → 1 while it's pinned */
+  function geometry() {
     const rect = root.getBoundingClientRect();
-    const span = rect.height - stage.clientHeight;
-    // The stage pins at its sticky top (below the site header): progress runs 0 → 1 while it's pinned
-    const pin = parseFloat(getComputedStyle(stage).top) || 0;
-    progress = span > 0 ? clamp((pin - rect.top) / span) : 0;
-    target = progress * (frameCount - 1);
+    return { rect, span: rect.height - stage.clientHeight, pin: parseFloat(getComputedStyle(stage).top) || 0 };
   }
+
+  function measure() {
+    const { rect, span, pin } = geometry();
+    progress = span > 0 ? clamp((pin - rect.top) / span) : 0;
+    target = progress <= intro ? 0 : ((progress - intro) / (1 - intro)) * (frameCount - 1);
+  }
+
+  /** Scroll to the first frame of phase i (programmatic, on a tick click; scroll input is never intercepted) */
+  function jumpTo(i: number) {
+    const { rect, span, pin } = geometry();
+    const start = ranges[i]?.[0] ?? 0;
+    // half a frame in, so rounding lands inside the phase
+    const p = intro + ((start + 0.5) / (frameCount - 1)) * (1 - intro);
+    const top = scrollY + rect.top - pin + p * span;
+    const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scrollTo({ top: Math.round(top), behavior: smooth ? "smooth" : "auto" });
+  }
+  for (const t of tickButtons) t.addEventListener("click", () => jumpTo(Number(t.dataset.heroJump)));
 
   function kick() {
     if (!raf && visible) {
@@ -121,6 +141,8 @@ export function start(root: HTMLElement) {
     if (!visible) return;
     measure();
     kick();
+    // Crossing into or out of the opening screen with the frame unchanged (0) needs no easing
+    if ((progress <= intro) !== (phase === "intro")) updateOverlays(Math.round(shown));
   }
 
   function tick(now: number) {
@@ -142,11 +164,14 @@ export function start(root: HTMLElement) {
   // ---------- overlays ----------
   function updateOverlays(frame: number) {
     if (fill) fill.style.transform = `scaleY(${(shown / (frameCount - 1)).toFixed(4)})`;
-    let p = 0;
-    for (let i = 0; i < ranges.length; i++) if (frame >= ranges[i][0]) p = i;
+    // The opening screen follows the scroll position itself, so it never lags behind the easing
+    let p: number | "intro" = 0;
+    if (progress <= intro) p = "intro";
+    else for (let i = 0; i < ranges.length; i++) if (frame >= ranges[i][0]) p = i;
     if (p !== phase) {
       phase = p;
       stage.dataset.phase = String(p);
+      tickButtons.forEach((t, i) => (i === p ? t.setAttribute("aria-current", "step") : t.removeAttribute("aria-current")));
     }
   }
 

@@ -39,22 +39,23 @@ export function findPlaceholders(source) {
 }
 
 /**
- * Warns at the end of `astro build` for every contact field still holding a
- * placeholder. A warning, not an error, so the site can be deployed for review.
+ * Reports every contact field still holding a placeholder at the end of
+ * `astro build`. Review builds only warn, so the site can be deployed for
+ * review; a launch build (`NOOR_LAUNCH=1`) fails, so placeholders never go live.
  *
- * @param {{ file: URL }} options
+ * @param {{ file: URL, launch?: boolean }} options
  * @returns {import("astro").AstroIntegration}
  */
-export default function placeholderCheck({ file }) {
+export default function placeholderCheck({ file, launch = process.env.NOOR_LAUNCH === "1" }) {
   return {
     name: "placeholder-check",
     hooks: {
       "astro:build:done": async ({ logger }) => {
         const fields = findPlaceholders(await readFile(file, "utf8"));
         if (fields.length === 0) return;
-        logger.warn(
-          `${fields.length} contact field(s) in src/config/site.ts still hold placeholder values: ${fields.join(", ")}`,
-        );
+        const message = `${fields.length} contact field(s) in src/config/site.ts still hold placeholder values: ${fields.join(", ")}`;
+        if (launch) throw new Error(`${message}. Launch builds (NOOR_LAUNCH=1) need the client's real details.`);
+        logger.warn(message);
       },
     },
   };

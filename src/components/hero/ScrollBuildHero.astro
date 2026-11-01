@@ -1,18 +1,25 @@
 ---
 /**
- * Home page hero: the 1 Kanal house builds itself as the visitor scrolls.
+ * Home page hero: it opens on the finished 1 Kanal house at dusk, then, as the
+ * visitor scrolls, dissolves to the blueprint and builds the house again.
  *
  * Progressive enhancement. The markup and default CSS are the static hero (one
- * screen: poster, headline, the six phases as a list, Call and WhatsApp), which
- * is what no-JS, reduced-motion and Save-Data visitors get. The inline script
- * below adds html.hero-scrub before the hero is parsed when scrubbing is wanted;
- * only then does the section grow tall with a sticky stage, and hero-player.ts
- * draws the frame sequence (public/hero/, see render/README.md) onto the canvas.
+ * screen: the dusk poster, headline, the six phases as a list, Call and
+ * WhatsApp), which is what no-JS, reduced-motion, reduced-data and slow-connection
+ * visitors get. The inline script below adds html.hero-scrub before the hero is
+ * parsed when scrubbing is wanted; only then does the section grow tall with a
+ * sticky stage, and hero-player.ts draws the frame sequence (public/hero/, see
+ * render/README.md) onto the canvas. The first INTRO share of the scroll span is
+ * the opening state (data-phase="intro"): the canvas stays clear over the dusk
+ * poster; the rest of the span runs frames 0 → last.
  */
-import { readFileSync } from "node:fs";
 import CallButton from "../CallButton.astro";
 import WhatsAppButton from "../WhatsAppButton.astro";
+import ContactNote from "../ContactNote.astro";
 import { heroCopy } from "./hero-copy.ts";
+
+/** Share of the scroll span spent on the opening dusk screen (half a screen of 3) */
+const INTRO = 1 / 6;
 
 type Orientation = "landscape" | "portrait";
 interface Tier {
@@ -21,79 +28,61 @@ interface Tier {
   height: number;
 }
 
-// The encoded sequence's manifest (scripts/encode-renders.mjs sequence). Read at build
-// time for the poster sources; the player fetches it again for frame URLs and phases.
-let manifest: { frameCount: number; orientations: Record<string, { poster?: number; staticPoster?: number; tiers: Tier[] }> } | null = null;
-try {
-  manifest = JSON.parse(readFileSync(new URL("../../../public/hero/manifest.json", import.meta.url), "utf8"));
-} catch {
-  manifest = null;
-}
-const frameCount = manifest?.frameCount ?? 192;
-// Only used when public/hero/manifest.json is missing; matches the frames on the site
-const DEFAULT_TIERS: Record<Orientation, Tier[]> = {
+// Every mode opens on the finished house at dusk: a photoreal version of the sequence's last frame
+// (public/hero/poster/, written by scripts/enhance-renders.mjs encode). The first matching <source> wins.
+const POSTER_TIERS: Record<Orientation, Tier[]> = {
   landscape: [
-    { id: "540", width: 960, height: 540 },
     { id: "360", width: 640, height: 360 },
+    { id: "540", width: 960, height: 540 },
   ],
   portrait: [
-    { id: "540", width: 540, height: 960 },
     { id: "360", width: 360, height: 640 },
+    { id: "540", width: 540, height: 960 },
   ],
 };
-const info = (o: Orientation) => {
-  const m = manifest?.orientations[o];
-  return {
-    tiers: [...(m?.tiers ?? DEFAULT_TIERS[o])].sort((a, b) => a.width - b.width),
-    poster: m?.poster ?? 0,
-    staticPoster: m?.staticPoster ?? frameCount - 1,
-  };
-};
-const pad = (n: number) => String(n).padStart(4, "0");
-const srcset = (o: Orientation, frame: number, ext: string) =>
-  info(o)
-    .tiers.map((t) => `/hero/${o}/${t.id}/${pad(frame)}.${ext} ${t.width}w`)
-    .join(", ");
-
-const REDUCED = "(prefers-reduced-motion: reduce)";
-const PORTRAIT = "(orientation: portrait)";
-// Most specific first: the first matching <source> wins
+const posterSrcset = (o: Orientation, ext: string) =>
+  POSTER_TIERS[o].map((t) => `/hero/poster/${o}-${t.id}.${ext} ${t.width}w`).join(", ");
 const sources = [
-  { media: `${REDUCED} and ${PORTRAIT}`, o: "portrait", frame: info("portrait").staticPoster },
-  { media: REDUCED, o: "landscape", frame: info("landscape").staticPoster },
-  { media: PORTRAIT, o: "portrait", frame: info("portrait").poster },
-  { media: undefined, o: "landscape", frame: info("landscape").poster },
+  { media: "(orientation: portrait)", o: "portrait" },
+  { media: undefined, o: "landscape" },
 ] as const;
-const fallback = info("landscape");
-const fallbackTier = fallback.tiers[fallback.tiers.length - 1];
+const fallbackTier = POSTER_TIERS.landscape[POSTER_TIERS.landscape.length - 1];
 const { phases } = heroCopy;
 ---
 
 <script is:inline>
-  // Scrub only with JS, no reduced-motion preference and no Save-Data. Runs before the hero is parsed.
+  // Scrub only with JS, no reduced-motion or reduced-data preference, no Save-Data and a
+  // connection faster than 3G (the sequence is several MB). Runs before the hero is parsed.
   (function () {
     var c = navigator.connection;
     var mq = function (q) {
       return window.matchMedia && matchMedia(q).matches;
     };
-    if (!mq("(prefers-reduced-motion: reduce)") && !mq("(prefers-reduced-data: reduce)") && !(c && c.saveData)) {
+    var slow = c && ["slow-2g", "2g", "3g"].indexOf(c.effectiveType) >= 0;
+    if (!mq("(prefers-reduced-motion: reduce)") && !mq("(prefers-reduced-data: reduce)") && !(c && c.saveData) && !slow) {
       document.documentElement.classList.add("hero-scrub");
     }
   })();
 </script>
 
-<section class="hero" data-hero aria-labelledby="hero-title">
-  <a class="hero__skip" href="#after-hero">{heroCopy.skip}</a>
-  <div class="hero__stage" data-hero-stage data-phase="0">
+<section class="hero" data-hero data-intro={INTRO.toFixed(4)} aria-labelledby="hero-title">
+  <div class="hero__stage" data-hero-stage data-phase="intro">
+    <!-- First focusable element; inside the pinned stage so it stays on screen while scrubbing -->
+    <a class="hero__skip" href="#after-hero">
+      <span>{heroCopy.skip}</span>
+      <svg class="hero__skip-arrow" viewBox="0 0 12 16" aria-hidden="true">
+        <path d="M6 1v13M1.5 9.5 6 14l4.5-4.5" />
+      </svg>
+    </a>
     <picture class="hero__poster">
       {
-        sources.flatMap(({ media, o, frame }) => [
-          <source media={media} type="image/avif" srcset={srcset(o, frame, "avif")} sizes="100vw" />,
-          <source media={media} type="image/webp" srcset={srcset(o, frame, "webp")} sizes="100vw" />,
+        sources.flatMap(({ media, o }) => [
+          <source media={media} type="image/avif" srcset={posterSrcset(o, "avif")} sizes="100vw" />,
+          <source media={media} type="image/webp" srcset={posterSrcset(o, "webp")} sizes="100vw" />,
         ])
       }
       <img
-        src={`/hero/landscape/${fallbackTier.id}/${pad(fallback.poster)}.webp`}
+        src={`/hero/poster/landscape-${fallbackTier.id}.webp`}
         width={fallbackTier.width}
         height={fallbackTier.height}
         alt={heroCopy.imageAlt}
@@ -107,8 +96,13 @@ const { phases } = heroCopy;
 
     <div class="hero__copy">
       <h1 class="hero__title" id="hero-title">{heroCopy.headline}</h1>
-      <h2 class="sr-only">{heroCopy.phasesLabel}</h2>
-      <ol class="hero__phases" role="list">
+      <div class="hero__swap">
+        <div class="hero__lede">
+          <p class="hero__intro">{heroCopy.intro}</p>
+          <ContactNote hours={false} class="hero__note" />
+        </div>
+        <h2 class="sr-only">{heroCopy.phasesLabel}</h2>
+        <ol class="hero__phases" role="list">
         {
           phases.map((p, i) => (
             <li class="hero__phase" data-index={i}>
@@ -121,19 +115,32 @@ const { phases } = heroCopy;
             </li>
           ))
         }
-      </ol>
-      <div class="hero__cta">
-        <WhatsAppButton message={heroCopy.whatsappMessage} variant="primary" />
-        <CallButton variant="outline" />
+        </ol>
+      </div>
+      <div class="hero__act">
+        <div class="hero__cta">
+          <CallButton variant="outline" />
+          <WhatsAppButton message={heroCopy.whatsappMessage} variant="primary" />
+        </div>
       </div>
     </div>
 
     <p class="hero__cue" aria-hidden="true"><span>{heroCopy.scrollCue}</span></p>
 
-    <div class="hero__ruler" aria-hidden="true">
+    <div class="hero__ruler" role="group" aria-label={heroCopy.jumpLabel}>
       <div class="hero__ruler-track">
         <div class="hero__ruler-fill" data-hero-fill></div>
-        {phases.map((p, i) => <span class="hero__tick" style={`--at: ${i / phases.length}`}>{p.number}</span>)}
+        {
+          phases.map((p, i) => (
+            <button type="button" class="hero__tick" style={`--at: ${i / phases.length}`} data-hero-jump={i}>
+              <span class="hero__tick-text" aria-hidden="true">
+                <span class="hero__tick-name">{p.name}</span>
+                {p.number}
+              </span>
+              <span class="sr-only">{`${p.number} ${p.name}`}</span>
+            </button>
+          ))
+        }
       </div>
     </div>
   </div>
@@ -168,11 +175,15 @@ const { phases } = heroCopy;
     background: var(--ink);
   }
 
+  /* Static mode: shown on keyboard focus only (the hero is one screen) */
   .hero__skip {
     position: absolute;
     top: var(--space-2);
     left: var(--space-2);
     z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
     padding: var(--space-3) var(--space-4);
     background: var(--noor);
     color: var(--ink);
@@ -183,10 +194,20 @@ const { phases } = heroCopy;
     text-transform: uppercase;
     text-decoration: none;
     transform: translateY(calc(-100% - var(--space-4)));
+    --focus-color: var(--paper);
   }
 
   .hero__skip:focus {
     transform: none;
+  }
+
+  .hero__skip-arrow {
+    width: 0.75rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: square;
   }
 
   .hero__stage {
@@ -222,7 +243,8 @@ const { phases } = heroCopy;
     z-index: -2;
     object-fit: cover; /* keeps the last frame filling the stage between a resize and the next draw */
     opacity: 0;
-    transition: opacity var(--duration-slow) var(--ease-out);
+    /* Leaving the opening screen, the dusk poster dissolves into the blueprint */
+    transition: opacity 600ms var(--ease-out);
   }
 
   /* Legibility: darkens the text corner only (lower-left on wide screens, top on tall ones) */
@@ -246,19 +268,28 @@ const { phases } = heroCopy;
     text-wrap: balance;
   }
 
-  .hero__phases {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-4) var(--space-5);
-    max-width: 60rem;
-    margin-top: var(--space-6);
-    padding: 0;
-    list-style: none;
+  .hero__intro {
+    margin-top: var(--space-4);
+    max-width: 36ch;
+    font-size: var(--text-lg);
+    line-height: var(--leading-ui);
+    color: var(--paper);
   }
 
-  .hero__phase {
-    padding-top: var(--space-3);
+  .hero :global(.hero__note) {
+    margin-top: var(--space-5);
+    color: var(--concrete-300);
+  }
+
+  /* Static mode: the stages read as one line of names; each stage's sentence stays for screen readers */
+  .hero__phases {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-6);
+    padding: var(--space-3) 0 0;
     border-top: var(--rule-thin) solid var(--concrete-700);
+    list-style: none;
   }
 
   .hero__phase-label {
@@ -271,10 +302,15 @@ const { phases } = heroCopy;
   }
 
   .hero__phase-line {
-    margin-top: var(--space-1);
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
     max-width: 34ch;
     font-size: var(--text-sm);
-    line-height: var(--leading-snug);
+    line-height: var(--leading-ui);
     color: var(--concrete-300);
   }
 
@@ -295,12 +331,12 @@ const { phases } = heroCopy;
 
   /* Small screens: the list shows phase names only (each line stays in the document) */
   @media (max-width: 47.999rem) {
-    /* One screen = what's between the header and the fixed Call/WhatsApp bar */
+    /* One screen = what is between the header and the fixed Call/WhatsApp bar */
     .hero__stage {
       min-height: calc(100svh - var(--header-height) - var(--space-2) - var(--action-bar-height) - env(safe-area-inset-bottom, 0px));
     }
 
-    /* Without JS the header's nav wraps onto a second row instead of collapsing into a toggle */
+    /* Without JS the header nav wraps onto a second row instead of collapsing into a toggle */
     :global(html:not(.js)) .hero__stage {
       min-height: calc(100svh - var(--header-height) - var(--space-2) - 3rem - var(--action-bar-height) - env(safe-area-inset-bottom, 0px));
     }
@@ -310,22 +346,14 @@ const { phases } = heroCopy;
       padding-bottom: var(--space-5);
     }
 
+    /* Phones have no hero actions (the fixed bar has them), so the note waits for the closing band.
+       This keeps the copy short and the lit house clear. */
+    .hero :global(.hero__note) {
+      display: none;
+    }
+
     .hero__phases {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-2) var(--space-4);
-    }
-
-    .hero__phase {
-      padding-top: var(--space-2);
-    }
-
-    .hero__phase-line {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
+      gap: var(--space-1) var(--space-4);
     }
 
     .hero__cta {
@@ -333,9 +361,23 @@ const { phases } = heroCopy;
     }
   }
 
+  /* Static mode on wide screens: one column on the dark lower left, the headline on two lines */
+  @media (min-width: 64rem) {
+    :global(html:not(.hero-scrub)) .hero__title {
+      max-width: 19ch;
+    }
+
+    :global(html:not(.hero-scrub)) .hero__scrim {
+      background:
+        linear-gradient(to top, rgb(18 18 18 / 0.88), rgb(18 18 18 / 0) 60%),
+        linear-gradient(to right, rgb(18 18 18 / 0.78), rgb(18 18 18 / 0.5) 40%, rgb(18 18 18 / 0) 65%);
+    }
+  }
+
   /* ---------- scrub mode: html.hero-scrub ---------- */
+  /* Four screens: the pinned stage plus three of scrolling (half a screen for the opening, the rest for the build) */
   :global(html.hero-scrub) .hero {
-    height: calc(6 * 100svh + 100svh);
+    height: calc(3 * 100svh + 100svh);
   }
 
   /* Pinned just below the sticky header, filling the rest of the screen */
@@ -346,7 +388,8 @@ const { phases } = heroCopy;
     min-height: 0;
   }
 
-  :global(html.hero-scrub) .hero__stage[data-ready] .hero__canvas {
+  /* The canvas covers the dusk poster once the build starts */
+  :global(html.hero-scrub) .hero__stage[data-ready]:not([data-phase="intro"]) .hero__canvas {
     opacity: 1;
   }
 
@@ -357,15 +400,47 @@ const { phases } = heroCopy;
     padding-bottom: var(--space-8);
   }
 
+  /* The headline stays through the build, at half size */
   :global(html.hero-scrub) .hero__title {
-    transition:
-      opacity 300ms var(--ease-out),
-      transform 300ms var(--ease-out);
+    transform-origin: left bottom;
+    transition: transform 400ms var(--ease-out);
   }
 
-  :global(html.hero-scrub) .hero__stage:not([data-phase="0"]) .hero__title {
+  :global(html.hero-scrub) .hero__stage:not([data-phase="intro"]) .hero__title {
+    transform: scale(0.5);
+  }
+
+  /* The opening line and the phases take turns in one place */
+  :global(html.hero-scrub) .hero__swap {
+    display: grid;
+    margin-top: var(--space-4);
+  }
+
+  :global(html.hero-scrub) .hero__lede,
+  :global(html.hero-scrub) .hero__phases {
+    grid-area: 1 / 1;
+    align-self: start;
+  }
+
+  :global(html.hero-scrub) .hero__intro {
+    margin-top: 0;
+  }
+
+  :global(html.hero-scrub) .hero__lede {
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 300ms var(--ease-out),
+      visibility 0s linear 0s;
+  }
+
+  :global(html.hero-scrub) .hero__stage:not([data-phase="intro"]) .hero__lede {
+    visibility: hidden;
     opacity: 0;
     transform: translateY(-12px);
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 300ms var(--ease-out),
+      visibility 0s linear 300ms;
   }
 
   /* One phase at a time, stacked in the same place */
@@ -373,13 +448,13 @@ const { phases } = heroCopy;
     display: grid;
     grid-template-columns: 1fr;
     max-width: 36rem;
-    margin-top: var(--space-5);
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
   }
 
   :global(html.hero-scrub) .hero__phase {
     grid-area: 1 / 1;
-    padding-top: 0;
-    border-top: 0;
     opacity: 0;
     transform: translateY(12px);
     transition:
@@ -413,35 +488,72 @@ const { phases } = heroCopy;
     transform: none;
   }
 
-  /* The actions appear with the Move in phase and can't be focused before it */
+  /* The actions show on the opening screen and with the Move in phase; the row folds away between */
+  :global(html.hero-scrub) .hero__act {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 300ms var(--ease-out);
+  }
+
+  :global(html.hero-scrub) :is([data-phase="intro"], [data-phase="5"]) .hero__act {
+    grid-template-rows: 1fr;
+  }
+
   :global(html.hero-scrub) .hero__cta {
-    display: flex;
+    min-height: 0;
+    overflow: hidden;
+    /* room for the focus ring inside the clip */
+    padding: var(--focus-ring);
+    margin: calc(var(--space-6) - var(--focus-ring)) calc(-1 * var(--focus-ring)) calc(-1 * var(--focus-ring));
     visibility: hidden;
     opacity: 0;
-    transform: translateY(12px);
     transition:
       opacity 300ms var(--ease-out),
-      transform 300ms var(--ease-out),
       visibility 0s linear 300ms;
   }
 
-  :global(html.hero-scrub) [data-phase="5"] .hero__cta {
+  :global(html.hero-scrub) :is([data-phase="intro"], [data-phase="5"]) .hero__cta {
     visibility: visible;
     opacity: 1;
-    transform: none;
     transition-delay: 0s;
+  }
+
+  /* Bottom centre: the scroll cue (opening screen only) and the skip link, always there */
+  :global(html.hero-scrub) .hero__skip {
+    position: absolute;
+    top: auto;
+    left: 50%;
+    bottom: var(--space-3);
+    z-index: 20;
+    padding: var(--space-3) var(--space-3);
+    /* its own dark ground, like the current ruler label: the pale build frames reach the bottom edge */
+    background: rgb(18 18 18 / 0.8);
+    color: var(--paper);
+    font-size: var(--text-xs);
+    text-decoration: underline;
+    text-decoration-thickness: var(--rule-thin);
+    text-underline-offset: 0.4em;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    --focus-color: var(--noor);
+  }
+
+  :global(html.hero-scrub) .hero__skip:hover {
+    color: var(--noor);
   }
 
   :global(html.hero-scrub) .hero__cue {
     display: block;
     position: absolute;
     left: 50%;
-    bottom: var(--space-5);
+    bottom: calc(var(--space-3) + 2.75rem);
     transform: translateX(-50%);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: var(--tracking-mono);
     text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
     color: var(--concrete-300);
     transition: opacity 300ms var(--ease-out);
   }
@@ -450,16 +562,16 @@ const { phases } = heroCopy;
     content: "";
     display: block;
     width: var(--rule-thin);
-    height: var(--space-6);
+    height: var(--space-5);
     margin: var(--space-2) auto 0;
     background: linear-gradient(var(--noor), transparent);
   }
 
-  :global(html.hero-scrub) .hero__stage:not([data-phase="0"]) .hero__cue {
+  :global(html.hero-scrub) .hero__stage:not([data-phase="intro"]) .hero__cue {
     opacity: 0;
   }
 
-  /* Architect's ruler: six ticks, a fill that tracks progress */
+  /* Architect ruler: six ticks that jump to their stage, a fill that tracks progress */
   :global(html.hero-scrub) .hero__ruler {
     display: block;
     position: absolute;
@@ -467,6 +579,20 @@ const { phases } = heroCopy;
     right: var(--gutter);
     height: min(50svh, 24rem);
     transform: translateY(-50%);
+  }
+
+  /* A soft dark band behind the ruler: its labels stay legible over the pale concrete frames */
+  :global(html.hero-scrub) .hero__ruler::before {
+    content: "";
+    position: absolute;
+    top: -3rem;
+    bottom: -3rem;
+    right: calc(-1 * var(--gutter));
+    width: calc(var(--gutter) + 9rem);
+    background: linear-gradient(to left, rgb(18 18 18 / 0.82), rgb(18 18 18 / 0.6) 45%, rgb(18 18 18 / 0));
+    /* feathered top and bottom, so it reads as shade rather than a panel */
+    mask-image: linear-gradient(to bottom, transparent, #000 3rem, #000 calc(100% - 3rem), transparent);
+    pointer-events: none;
   }
 
   .hero__ruler-track {
@@ -491,11 +617,20 @@ const { phases } = heroCopy;
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    /* a 44px target around a small label */
+    min-height: 2.75rem;
+    padding: 0 0 0 var(--space-3);
+    border: 0;
+    background: none;
     transform: translateY(-50%);
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: var(--text-xs);
     letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    white-space: nowrap;
     color: var(--concrete-300);
+    cursor: pointer;
+    --focus-color: var(--noor);
   }
 
   .hero__tick::after {
@@ -503,14 +638,94 @@ const { phases } = heroCopy;
     width: var(--space-3);
     height: var(--rule-thin);
     background: currentColor;
+    transition: width var(--duration-fast) var(--ease-out);
+  }
+
+  .hero__tick:hover,
+  .hero__tick[aria-current] {
+    color: var(--noor);
+  }
+
+  .hero__tick:hover::after,
+  .hero__tick[aria-current]::after {
+    width: var(--space-4);
+  }
+
+  /* The current stage is named beside its tick; the others show their number only */
+  .hero__tick-name {
+    display: none;
+  }
+
+  .hero__tick[aria-current] .hero__tick-name {
+    display: inline;
+  }
+
+  /* The current label gets its own dark ground: it reaches past the shade over the pale frames */
+  .hero__tick-text {
+    padding: var(--space-1) var(--space-2);
+    margin-right: calc(-1 * var(--space-2));
+  }
+
+  .hero__tick[aria-current] .hero__tick-text {
+    background: rgb(18 18 18 / 0.88);
+  }
+
+  .hero__tick-name {
+    margin-right: 0.5em;
+  }
+
+  /* Wide screens below 64rem: the copy reaches the centre, so the cue gives way to the skip link */
+  @media (orientation: landscape) and (max-width: 63.999rem) {
+    :global(html.hero-scrub) .hero__cue {
+      display: none;
+    }
+  }
+
+  /* Short landscape screens (phones on their side): smaller headline, no note */
+  @media (orientation: landscape) and (max-height: 32rem) {
+    /* Two lines at most, so the opening screen fits about 300px of stage */
+    :global(html.hero-scrub) .hero__title {
+      max-width: 24ch;
+      font-size: var(--text-xl);
+    }
+
+    :global(html.hero-scrub) .hero__intro {
+      font-size: var(--text-base);
+    }
+
+    /* Already small: shrink less during the build */
+    :global(html.hero-scrub) .hero__stage:not([data-phase="intro"]) .hero__title {
+      transform: scale(0.8);
+    }
+
+    :global(html.hero-scrub) .hero :global(.hero__note) {
+      display: none;
+    }
+
+    :global(html.hero-scrub) .hero__swap {
+      margin-top: var(--space-2);
+    }
+
+    :global(html.hero-scrub) .hero__cta {
+      margin-top: calc(var(--space-4) - var(--focus-ring));
+    }
+
+    :global(html.hero-scrub) .hero__copy {
+      padding-bottom: var(--space-8);
+    }
+
+    .hero__tick {
+      min-height: 2rem;
+    }
   }
 
   /* Tall screens: the text sits in the calm sky at the top, actions at the bottom */
   @media (orientation: portrait) {
+    /* Dark enough for --paper and --noor copy at AA over the brightest frames, down past the copy */
     :global(html.hero-scrub) .hero__scrim {
       background:
-        linear-gradient(to bottom, rgb(18 18 18 / 0.8), rgb(18 18 18 / 0) 42%),
-        linear-gradient(to top, rgb(18 18 18 / 0.6), rgb(18 18 18 / 0) 25%);
+        linear-gradient(to bottom, rgb(18 18 18 / 0.9), rgb(18 18 18 / 0.82) 30%, rgb(18 18 18 / 0.4) 46%, rgb(18 18 18 / 0) 60%),
+        linear-gradient(to top, rgb(18 18 18 / 0.6), rgb(18 18 18 / 0) 24%);
     }
 
     :global(html.hero-scrub) .hero__copy {
@@ -518,30 +733,54 @@ const { phases } = heroCopy;
       display: flex;
       flex-direction: column;
       padding-top: var(--space-7);
-      padding-bottom: calc(var(--action-bar-height) + var(--space-5) + env(safe-area-inset-bottom, 0px));
+      padding-bottom: calc(var(--action-bar-height) + var(--space-8) + env(safe-area-inset-bottom, 0px));
     }
 
     :global(html.hero-scrub) .hero__title {
       font-size: var(--text-3xl);
     }
 
-    :global(html.hero-scrub) .hero__cta {
+    :global(html.hero-scrub) .hero__act {
       margin-top: auto;
     }
 
+    :global(html.hero-scrub) .hero__skip {
+      bottom: calc(var(--action-bar-height) + var(--space-2) + env(safe-area-inset-bottom, 0px));
+    }
+
     :global(html.hero-scrub) .hero__cue {
-      bottom: calc(var(--action-bar-height) + var(--space-4) + env(safe-area-inset-bottom, 0px));
+      bottom: calc(var(--action-bar-height) + var(--space-2) + 2.75rem + env(safe-area-inset-bottom, 0px));
     }
 
     :global(html.hero-scrub) .hero__ruler {
       top: auto;
-      bottom: calc(var(--action-bar-height) + var(--space-6));
-      height: min(28svh, 12rem);
+      /* above the scroll cue and skip link; tall enough for six 44px targets */
+      bottom: calc(var(--action-bar-height) + 9.5rem + env(safe-area-inset-bottom, 0px));
+      height: min(34svh, 16.5rem);
       transform: none;
     }
   }
 
-  /* Below 48rem the fixed action bar already offers both actions; keep the hero's for the end frame only on wider screens */
+  /* Wide tall screens (tablets) have no action bar: the skip link and cue sit at the bottom edge */
+  @media (orientation: portrait) and (min-width: 48rem) {
+    :global(html.hero-scrub) .hero__copy {
+      padding-bottom: calc(var(--space-8) + var(--space-7));
+    }
+
+    :global(html.hero-scrub) .hero__skip {
+      bottom: var(--space-3);
+    }
+
+    :global(html.hero-scrub) .hero__cue {
+      bottom: calc(var(--space-3) + 2.75rem);
+    }
+
+    :global(html.hero-scrub) .hero__ruler {
+      bottom: var(--space-8);
+    }
+  }
+
+  /* Below 48rem the fixed action bar already offers both actions; keep the hero ones for wider screens */
   @media (max-width: 47.999rem) {
     :global(html.hero-scrub) .hero__cta {
       display: none;

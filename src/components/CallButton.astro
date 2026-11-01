@@ -6,10 +6,12 @@ import PhoneIcon from "./icons/PhoneIcon.astro";
 interface Props {
   variant?: "primary" | "outline";
   size?: "md" | "sm";
+  /** Show the number in the label, so a desktop visitor sees what they are calling */
+  showNumber?: boolean;
   class?: string;
 }
 
-const { variant = "outline", size = "md", class: className } = Astro.props;
+const { variant = "outline", size = "md", showNumber = false, class: className } = Astro.props;
 ---
 
 <a
@@ -18,5 +20,23 @@ const { variant = "outline", size = "md", class: className } = Astro.props;
   data-action="call"
 >
   <PhoneIcon />
-  <span>Call<span class="sr-only">{` ${site.name}`}</span></span>
+  {
+    showNumber ? (
+      <span>
+        <span class="sr-only">{`Call ${site.name} on `}</span>
+        <span class="call-number">{site.phoneDisplay}</span>
+      </span>
+    ) : (
+      <span>
+        Call<span class="sr-only">{` ${site.name}`}</span>
+      </span>
+    )
+  }
 </a>
+
+<style>
+  .call-number {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+</style>

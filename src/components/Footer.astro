@@ -24,7 +24,7 @@ const whatsappDisplay = formatWhatsApp();
         <Logo variant="horizontal" accent class="site-footer__logo-horizontal" />
       </a>
       <p class="label text-accent site-footer__tagline">{site.tagline}</p>
-      <div class="site-footer__actions">
+      <div class="site-footer__actions" data-contact-actions>
         <CallButton variant="outline" />
         <WhatsAppButton message={whatsappMessage} variant="primary" />
       </div>
@@ -49,7 +49,7 @@ const whatsappDisplay = formatWhatsApp();
         <dt class="label">Office</dt>
         <dd>
           <address>
-            {address.street}<br />
+            {address.street && <>{address.street}<br /></>}
             {`${address.city}, ${address.region}`}
           </address>
         </dd>
@@ -147,6 +147,7 @@ const whatsappDisplay = formatWhatsApp();
 
   .site-footer__contact dd {
     margin: 0;
+    text-wrap: pretty;
   }
 
   .site-footer__contact address {

@@ -1,15 +1,17 @@
 ---
 /**
- * Section header in the drawing-sheet style: a mono index and label
+ * Section header in the drawing-sheet style: an optional mono index and label
  * ("02 / 06 · Fully finished"), a heavy condensed heading, and a thin
- * dimension line with end ticks that draws in on first view.
+ * dimension line with end ticks that draws in on first view. The home page
+ * leaves the label and index out: its headings carry themselves.
  */
 interface Props {
   /** Two-digit section number, e.g. "02" */
   index?: string;
   /** Number of sections on the page, e.g. "06" */
   total?: string;
-  label: string;
+  /** Mono label above the heading; leave out (with index) for a bare heading */
+  label?: string;
   heading: string;
   /** Heading level: h1 for page intros, h2 for sections */
   as?: "h1" | "h2";
@@ -24,17 +26,19 @@ const { index, total, label, heading, as: Tag = "h2", id, intro, align = "start"
 ---
 
 <header class:list={["sh", `sh--${align}`, `sh--${Tag}`]}>
-  <p class="sh__meta label">
-    {
-      index && (
-        <span class="sh__index text-accent">
-          {index}
-          {total && <span class="sh__total">{` / ${total}`}</span>}
-        </span>
-      )
-    }
-    <span class="sh__label">{label}</span>
-  </p>
+  {
+    (label || index) && (
+      <p class="sh__meta label">
+        {index && (
+          <span class="sh__index text-accent">
+            {index}
+            {total && <span class="sh__total">{` / ${total}`}</span>}
+          </span>
+        )}
+        {label && <span class="sh__label">{label}</span>}
+      </p>
+    )
+  }
   <Tag class="sh__title" id={id}>{heading}</Tag>
   <div class="sh__rule rule-draw" aria-hidden="true"></div>
   {intro && <p class="sh__intro lead">{intro}</p>}

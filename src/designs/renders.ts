@@ -139,6 +139,11 @@ export function checkRenders(
 const problems = checkRenders();
 if (problems.length) throw new Error(`Render registry:\n  ${problems.join("\n  ")}`);
 
+/** Never upscale: drop widths larger than the image, and offer the image's own width as the largest instead */
+export function capWidths(widths: number[], max: number): number[] {
+  return widths.some((w) => w > max) ? [...widths.filter((w) => w < max), max] : widths;
+}
+
 /** One still of a design, with its alt text and caption */
 export function getRender(slug: string, shot: string): Render {
   const copy = renderRegistry[slug]?.shots[shot];

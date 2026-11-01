@@ -1,5 +1,6 @@
 /**
- * How a build with Noor works, in four steps. No approvals, permits or other
+ * What happens after someone gets in touch, in four steps. The build itself is
+ * shown by the hero, so it is not a step here. No approvals, permits or other
  * regulatory steps are ever mentioned here.
  */
 
@@ -10,27 +11,27 @@ export interface ProcessStep {
   text: string;
 }
 
-export const processIntro = "Four steps, one team, from the first conversation to the day you move in.";
+export const processIntro = "What happens once you get in touch, from the first conversation to the day you move in.";
 
 export const processSteps: ProcessStep[] = [
   {
     number: "01",
     title: "Talk to us",
-    text: "Call or message us about your plot, your family and the home or building you have in mind.",
+    text: "Call or message us about your plot, your family and what you want to build. The first conversation is free.",
   },
   {
     number: "02",
-    title: "Design",
-    text: "We draw the plans and show you the design in 3D, shaped around your plot and the way you live.",
+    title: "Meet at our office",
+    text: "Bring your plot details to our office in Faisalabad and go through what you need with us.",
   },
   {
     number: "03",
-    title: "Build",
-    text: "We build it from the foundation to the roof and keep you updated as it rises.",
+    title: "Review the design",
+    text: "We draw the plans and show you the home in 3D, and you go through it with us before building starts.",
   },
   {
     number: "04",
-    title: "Hand over the keys",
-    text: "We finish every room, hand you the keys, and you move in with your furniture.",
+    title: "Follow it to the keys",
+    text: "We keep you updated while we build, then hand you the keys to a finished home.",
   },
 ];

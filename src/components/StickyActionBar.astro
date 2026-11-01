@@ -14,6 +14,23 @@ const { whatsappMessage } = Astro.props;
   <WhatsAppButton message={whatsappMessage} variant="primary" class="action-bar__btn" />
 </aside>
 
+<script>
+  // Elements marked data-contact-actions hold their own Call and WhatsApp buttons;
+  // while one is on screen the bar slides away, so the same two actions never show twice.
+  const bar = document.querySelector<HTMLElement>(".action-bar");
+  const targets = document.querySelectorAll("[data-contact-actions]");
+  if (bar && targets.length && "IntersectionObserver" in window) {
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+      const away = visible.size > 0;
+      bar.toggleAttribute("data-away", away);
+      bar.inert = away;
+    });
+    targets.forEach((t) => io.observe(t));
+  }
+</script>
+
 <style>
   .action-bar {
     position: fixed;
@@ -31,6 +48,24 @@ const { whatsappMessage } = Astro.props;
     border-top: var(--rule-thin) solid var(--concrete-700);
     color: var(--paper);
     --focus-color: var(--noor);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      visibility 0s linear 0s;
+  }
+
+  .action-bar[data-away] {
+    visibility: hidden;
+    transform: translateY(100%);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      visibility 0s linear var(--duration-fast);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .action-bar,
+    .action-bar[data-away] {
+      transition: none;
+    }
   }
 
   .action-bar :global(.action-bar__btn) {

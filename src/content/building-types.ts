@@ -26,7 +26,7 @@ export const buildingTypes: BuildingType[] = [
     detail:
       "We build houses of every size, most often on 1 Kanal and 2 Kanal plots. Each one is planned around the plot and the family: drawing and dining rooms for guests, a lounge for every day, bedrooms with their own bathrooms, a kitchen that works, and a lawn and porch outside.",
     tags: ["1 Kanal", "2 Kanal", "Other sizes"],
-    render: { design: "1-kanal", shot: "front-day" },
+    render: { design: "2-kanal", shot: "front-day" },
     link: { href: "/designs/", label: "See house designs" },
   },
   {

@@ -13,23 +13,25 @@ interface Props {
   total?: string;
   /** Heading override, e.g. on design pages */
   heading?: string;
+  /** Show the mono label above the heading */
+  eyebrow?: boolean;
 }
 
-const { variant = "full", index, total, heading = "Fully finished. Just bring your furniture." } = Astro.props;
+const { variant = "full", index, total, heading = "Fully finished. Just bring your furniture.", eyebrow = true } = Astro.props;
 const compact = variant === "compact";
 const letters = "ABCDEFGHIJ";
 ---
 
 <section
-  class="section section--blueprint ff"
+  class:list={["section section--blueprint ff", compact && "ff--compact"]}
   id={compact ? undefined : "fully-finished"}
   aria-labelledby="ff-title"
 >
-  <div class="container">
+  <div class="container ff__inner">
     <SectionHeader
-      index={index}
+      index={eyebrow ? index : undefined}
       total={total}
-      label={fullyFinished.heading}
+      label={eyebrow ? fullyFinished.heading : undefined}
       heading={heading}
       id="ff-title"
       intro={fullyFinished.promise}
@@ -76,8 +78,9 @@ const letters = "ABCDEFGHIJ";
 
     <div class="ff__footer">
       <p class="ff__excluded">
-        <svg class="ff__tick ff__tick--empty" viewBox="0 0 16 16" aria-hidden="true">
+        <svg class="ff__tick ff__tick--none" viewBox="0 0 16 16" aria-hidden="true">
           <rect x="0.75" y="0.75" width="14.5" height="14.5" />
+          <path d="M4 8h8" />
         </svg>
         <span>
           <span class="label">Not included</span>
@@ -108,9 +111,21 @@ const letters = "ABCDEFGHIJ";
     }
   }
 
+  /* Home: the heading and promise on the left, the checklist as a drawing schedule on the right */
   @media (min-width: 64rem) {
-    .ff__compact {
-      grid-template-columns: repeat(4, 1fr);
+    .ff--compact .ff__inner {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 0 var(--space-8);
+      align-items: start;
+    }
+
+    .ff--compact .ff__compact {
+      margin-top: 0;
+    }
+
+    .ff--compact .ff__footer {
+      grid-column: 2;
     }
   }
 
@@ -142,7 +157,7 @@ const letters = "ABCDEFGHIJ";
     border-bottom: var(--rule-thick) solid var(--concrete-700);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    line-height: var(--leading-snug);
+    line-height: var(--leading-ui);
     color: var(--concrete-300);
   }
 
@@ -160,7 +175,7 @@ const letters = "ABCDEFGHIJ";
     grid-template-columns: 1rem 1fr;
     gap: var(--space-3);
     align-items: start;
-    line-height: var(--leading-snug);
+    line-height: var(--leading-ui);
   }
 
   .ff__tick {
@@ -180,8 +195,14 @@ const letters = "ABCDEFGHIJ";
     stroke-linecap: square;
   }
 
-  .ff__tick--empty rect {
+  /* Not included: an empty box with a dash, read as "none" rather than "to do" */
+  .ff__tick--none rect {
     fill: none;
+    stroke: var(--concrete-500);
+    stroke-width: 1.5;
+  }
+
+  .ff__tick--none path {
     stroke: var(--concrete-500);
     stroke-width: 1.5;
   }

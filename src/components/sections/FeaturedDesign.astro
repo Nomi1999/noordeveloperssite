@@ -13,9 +13,11 @@ interface Props {
   shot: string;
   index?: string;
   total?: string;
+  /** Show the mono label above the heading */
+  eyebrow?: boolean;
 }
 
-const { slug, shot, index, total } = Astro.props;
+const { slug, shot, index, total, eyebrow = true } = Astro.props;
 const entry = getDesign(slug);
 const { design } = entry;
 const render = getRender(slug, shot);
@@ -24,7 +26,13 @@ const what = design.kind === "house" ? "A family home" : `A ${kindLabel(design.k
 
 <section class="section section--raised featured" aria-labelledby="featured-title">
   <div class="container">
-    <SectionHeader index={index} total={total} label="Featured design" heading={design.name} id="featured-title" />
+    <SectionHeader
+      index={eyebrow ? index : undefined}
+      total={total}
+      label={eyebrow ? "Featured design" : undefined}
+      heading={design.name}
+      id="featured-title"
+    />
 
     <div class="featured__grid">
       <RenderFigure

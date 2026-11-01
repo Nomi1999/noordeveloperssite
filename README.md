@@ -46,13 +46,15 @@ Run these from the repository root.
 
 ### Contact details are placeholders
 
-Values in `src/config/site.ts` marked `// PLACEHOLDER(client)` are stand-ins. `npm run build` prints a warning naming each remaining one. To list them, run:
+Values in `src/config/site.ts` marked `// PLACEHOLDER(client)` are stand-ins. `npm run build` prints a warning naming each remaining one, and a launch build, `NOOR_LAUNCH=1 npm run build`, fails until none remain. A value that is not known yet (the office street address) is an empty string with the marker, and pages leave it out rather than show stand-in text. To list them, run:
 
 ```sh
 grep -rn "PLACEHOLDER(client)" src
 ```
 
 When you replace a value, remove its marker. Don't point the real domain at the site while placeholders remain, because they would appear in search results and structured data.
+
+`site.promises` in the same file holds what a visitor can expect when they get in touch (free first conversation, same-day WhatsApp reply, office visits). They are shown next to the Call and WhatsApp actions and must stay true: delete a line there and it disappears from every page.
 
 ### WhatsApp messages per page
 
@@ -80,7 +82,8 @@ All copy is English, short and plain, addressed to the visitor as "you". It neve
 Work through this before pointing `noordevelopers.pk` at the site.
 
 - [ ] **Contact details:** replace every `PLACEHOLDER(client)` value in `src/config/site.ts` with the client's real phone, WhatsApp, email, office address, postcode, hours and map location, and remove each marker.
-- [ ] **Placeholder warning gone:** `npm run build` no longer prints the `placeholder-check` warning.
+- [ ] **Placeholder check passes:** `NOOR_LAUNCH=1 npm run build` succeeds (it fails while any placeholder remains). Then set `NOOR_LAUNCH: 1` as an environment variable on the build step in `.github/workflows/deploy.yml`, so a placeholder can never go live again.
+- [ ] **Promises still true:** the client confirms each line in `site.promises`.
 - [ ] **Map link:** on `/contact/`, "Open in Google Maps" opens the real office location.
 - [ ] **Approvals recorded:** `src/content/APPROVALS.md` has an approval for the hero copy, the About copy and the fully finished checklist, and the client's confirmation of the checklist.
 - [ ] **Build passes:** `npm test` and `npm run build` pass, including the content audit.

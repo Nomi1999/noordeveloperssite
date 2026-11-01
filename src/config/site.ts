@@ -1,7 +1,9 @@
 /**
  * Company contact details: the single source for every page, CTA and
  * structured-data block. Values marked PLACEHOLDER(client) are stand-ins until
- * the client supplies real details; the build prints a warning for each one.
+ * the client supplies real details: review builds warn for each one, and launch
+ * builds (NOOR_LAUNCH=1) fail. A value not known yet is an empty string, and
+ * pages leave it out instead of printing stand-in text.
  */
 
 export type DayOfWeek =
@@ -46,6 +48,12 @@ export interface SiteConfig {
     lng: number;
   };
   defaultWhatsAppMessage: string;
+  /**
+   * What a visitor can expect when they get in touch, shown next to the Call
+   * and WhatsApp actions. Only statements the client has confirmed as true:
+   * delete one here and it disappears everywhere.
+   */
+  promises: string[];
 }
 
 export const site: SiteConfig = {
@@ -57,7 +65,7 @@ export const site: SiteConfig = {
   whatsapp: "923000000000", // PLACEHOLDER(client)
   email: "info@noordevelopers.pk", // PLACEHOLDER(client)
   address: {
-    street: "Office address to follow", // PLACEHOLDER(client)
+    street: "", // PLACEHOLDER(client)
     city: "Faisalabad",
     region: "Punjab",
     postalCode: "38000", // PLACEHOLDER(client)
@@ -76,4 +84,10 @@ export const site: SiteConfig = {
     lng: 73.135, // PLACEHOLDER(client)
   },
   defaultWhatsAppMessage: "Hello Noor Developers, I would like to know more about building with you.",
+  // Confirmed by the maintainer on 2026-11-01
+  promises: [
+    "The first conversation is free, with no obligation.",
+    "We reply to WhatsApp messages the same working day.",
+    "You are welcome to visit our office in Faisalabad.",
+  ],
 };

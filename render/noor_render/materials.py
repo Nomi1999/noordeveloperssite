@@ -34,6 +34,9 @@ TEXTURED = {
     "exposed-concrete": T("wood_textured_concrete", 1.8, (1.05, 1.05, 1.05), sat=0.15, bump=0.25,
                           top="concrete_wall_006"),
     "brick-structure": T("red_brick", 1.4, bump=0.5),
+    # Thin terracotta brick tiles: the same texture as the structure's brick, smaller and warmer
+    "brick-cladding": T("red_brick", 0.9, (1.08, 0.86, 0.72), sat=1.0, rough=(0.95, 0.0), bump=0.3),
+    "plaster-charcoal": T("painted_plaster_wall", 2.4, (0.13, 0.13, 0.135), sat=0.2, rough=(0.95, 0.0), bump=0.12),
     "porcelain-paving": T("large_floor_tiles_02", 3.0, (1.1, 1.08, 1.05), sat=0.4, rough=(0.45, 0.0), bump=0.15),
     "paving-stone": T("concrete_pavement", 1.8, (1.0, 0.98, 0.95), sat=0.6, bump=0.3),
     "grass": T("leafy_grass", 2.0, (0.5, 0.78, 0.36), sat=1.0, rough=(1.0, 0.05), bump=0.3),

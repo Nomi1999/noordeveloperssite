@@ -151,6 +151,10 @@ class Rig:
         # the whole scene and overflow the shadow budget (black frames), so reach stops past the room
         data.use_custom_distance = True
         data.cutoff_distance = max(data.size, data.size_y) + 2.5
+        # On a narrow plot the rooms overlap in view, so a shot can shorten the reach further ("roomReach", m)
+        reach = self.shot.get("light", {}).get("roomReach")
+        if reach:
+            data.cutoff_distance = min(data.cutoff_distance, reach)
         obj = bpy.data.objects.new(f"room-{l['level']}-{l['room']}", data)
         obj.location = (l["x"], l["y"], l["z"])
         obj["watts"] = ROOM_WATTS * data.size * data.size_y

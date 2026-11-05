@@ -4,107 +4,104 @@ Plays the construction sequence on the home page as the visitor scrolls, polishe
 
 ## Requirements
 
-### Requirement: Scroll-linked playback
-While the hero section is in view, the visitor's scroll position through the section SHALL determine what is displayed. The first sixth of the scroll span SHALL be an opening state that shows the finished dusk house; across the rest of the span the displayed frame SHALL run from frame 0 to frame 191. The hero SHALL be four viewport heights tall. Scrolling back SHALL play the sequence in reverse and return to the opening state. The page SHALL use the browser's native scrolling: the hero SHALL NOT intercept, delay or override scroll input.
-
-#### Scenario: Opening the page
-- **WHEN** the home page loads at the top
-- **THEN** the finished dusk house is shown with the headline and the Call and WhatsApp actions
-
-#### Scenario: Leaving the opening state
-- **WHEN** the visitor scrolls past the first sixth of the hero's scroll span
-- **THEN** the dusk image dissolves into frame 0 (the blueprint) and the build plays forward with further scrolling
-
-#### Scenario: Scrolling halfway
-- **WHEN** the visitor has scrolled halfway through the part of the span after the opening state
-- **THEN** a frame from the middle of the sequence (around frame 95) is shown
-
-#### Scenario: Scroll input untouched
-- **WHEN** the visitor uses a trackpad, mouse wheel, touch, keyboard or the scrollbar
-- **THEN** the page scrolls exactly as it would without the hero
-
-### Requirement: Smooth frame stepping
-Frame changes SHALL be drawn in step with the display refresh and eased toward the scroll target, so fast scrolling doesn't produce visible jumps. The hero SHALL do no per-frame work when it is out of view.
-
-#### Scenario: Hero scrolled away
-- **WHEN** the hero section is entirely out of the viewport
-- **THEN** no animation-frame callbacks run for it
-
 ### Requirement: Immediate first view
-Before any script runs, the hero SHALL show the finished dusk poster with the headline, the Faisalabad line and the scroll cue. The poster SHALL be the page's prioritized image.
+Before any script runs, the hero SHALL show its first view with the headline: in motion mode the video's first frame (the blueprint) and the Design phase overlay; in static mode the finished dusk poster, the Faisalabad line and the six phases. The first-frame image SHALL be loaded only in motion mode, and the video's first frame SHALL replace it without a visible change.
 
 #### Scenario: First paint on a slow connection
-- **WHEN** the home page loads on a throttled mobile connection
-- **THEN** the dusk poster, headline and scroll cue are visible before any sequence frame downloads
-
-### Requirement: Progressive loading
-Sequence frames SHALL load in passes of increasing density (sparse frames across the whole sequence first, then filling the gaps), starting nearest the current position. Whenever the exact frame isn't loaded, the nearest loaded frame SHALL be shown. The hero SHALL never show a blank canvas.
-
-#### Scenario: Scrolling before loading finishes
-- **WHEN** the visitor scrolls to the middle of the hero while only a sparse set of frames has loaded
-- **THEN** the nearest loaded frame is shown, and it is replaced by the exact frame once that frame arrives
-
-### Requirement: Orientation, tier and format selection
-The player SHALL choose the portrait sequence for viewports taller than they are wide and the landscape sequence otherwise. It SHALL choose the higher size tier only when the displayed size times the device pixel ratio needs it and the visitor hasn't requested reduced data. It SHALL use AVIF where supported and WebP otherwise. It SHALL download frames of only one orientation, tier and format at a time, and switch orientation only when the viewport's orientation actually changes.
-
-#### Scenario: Phone rotated
-- **WHEN** a phone is rotated from portrait to landscape while viewing the hero
-- **THEN** the hero switches to the landscape sequence at the matching frame, and does not reload on mere address-bar resizing
-
-### Requirement: Bounded memory
-The player SHALL keep compressed frames in memory but hold only a bounded window of decoded frames around the current position, releasing decoded frames outside it. The window SHALL be smaller on devices that report low memory or are mobile.
-
-#### Scenario: Repeated full scrubs on an iPhone
-- **WHEN** a visitor scrubs the whole sequence back and forth five times in iOS Safari
-- **THEN** the tab does not reload or crash and the number of decoded frames never exceeds the window size
+- **WHEN** the home page loads on a throttled mobile connection in motion mode
+- **THEN** the blueprint and headline are visible before the video has downloaded
 
 ### Requirement: Phase overlays
-For each of the six phases, the hero SHALL show an HTML overlay with the phase number, counted from 01, and name in the monospace face (for example `03 — STRUCTURE`) and one short line of copy, over a scrim that keeps the copy at WCAG AA contrast in both orientations. The headline SHALL stay visible, at a reduced size, during the phases. The hero SHALL show a vertical ruler-style progress indicator with six ticks and a fill that tracks progress; each tick SHALL be a button that scrolls to the start of its phase, with a target at least 44px tall where the ruler is tall enough for six. The current tick SHALL show its phase name, and the ruler labels SHALL stay at WCAG AA contrast over every frame. Overlay changes SHALL transition briefly. Text SHALL NOT be baked into the frames.
+For each of the six phases, the hero SHALL show an HTML overlay with the phase number, counted from 01, and name in the monospace face (for example `03 — STRUCTURE`) and one short line of copy, over a scrim that keeps the copy at WCAG AA contrast in both orientations, following the playing frame. The headline SHALL stay visible, at a reduced size, during the phases. The hero SHALL show a vertical ruler-style progress indicator with six ticks and a fill that tracks playback; each tick SHALL be a button that seeks the video to the start of its phase and plays from there, with a target at least 44px tall where the ruler is tall enough for six. The current tick SHALL show its phase name, and the ruler labels SHALL stay at WCAG AA contrast over every frame. Overlay changes SHALL transition briefly. Text SHALL NOT be baked into the video.
 
 #### Scenario: Entering a new phase
-- **WHEN** scrolling crosses from phase 02 into phase 03
-- **THEN** the overlay changes to `03 — WALLS` with its line of copy, and the ruler fill passes the fourth tick
+- **WHEN** playback crosses from phase 02 into phase 03
+- **THEN** the overlay changes to `03 — STRUCTURE` with its line of copy, and the ruler fill passes the third tick
 
 #### Scenario: Jumping to a phase
 - **WHEN** the visitor activates the `04` tick
-- **THEN** the page scrolls to the start of the Finishing phase
+- **THEN** the video seeks to the start of the Walls phase and plays on
 
 ### Requirement: Final call to action
-In the opening state and during the Move in phase, the hero SHALL show the Call and WhatsApp actions, using a WhatsApp message that mentions the visitor came from the home page. The Move in phase SHALL show the closing message ("Fully finished. Bring your furniture and move in." or approved equivalent).
+During the Move in phase, including after the video ends, and throughout the static hero, the hero SHALL show the Call and WhatsApp actions, using a WhatsApp message that mentions the visitor came from the home page. The Move in phase SHALL show the closing message ("Fully finished. Bring your furniture and move in." or approved equivalent).
 
 #### Scenario: End of the sequence
-- **WHEN** the visitor reaches the last frame
+- **WHEN** the video has ended
 - **THEN** the closing message and both actions are visible and operable
 
 ### Requirement: Static mode
-When the visitor prefers reduced motion, has Save-Data or reduced data enabled, is on a connection reported as 3G or slower, or JavaScript is unavailable, the hero SHALL render as a single screen without scroll-linked playback, and SHALL download no sequence frames. It SHALL show the finished dusk image, the headline, the six phases as a static list, and the Call and WhatsApp actions.
+When the visitor prefers reduced motion, has Save-Data or reduced data enabled, is on a connection reported as 3G or slower, or JavaScript is unavailable, the hero SHALL render as a single screen without video, and SHALL download no video. It SHALL show the finished dusk image, the headline, the six phases as a static list, and the Call and WhatsApp actions.
 
 #### Scenario: Reduced motion
 - **WHEN** a visitor with reduced motion enabled opens the home page
-- **THEN** the hero is one screen tall, shows the finished dusk image and the six phases as a list, and the network log shows no sequence frame requests
+- **THEN** the hero is one screen tall, shows the finished dusk image and the six phases as a list, and the network log shows no video requests
 
 #### Scenario: Slow connection
 - **WHEN** the browser reports an effective connection type of 3G or slower
-- **THEN** the hero renders in static mode and no sequence frames are requested
+- **THEN** the hero renders in static mode and no video is requested
 
 #### Scenario: JavaScript disabled
 - **WHEN** the home page is opened with JavaScript disabled
 - **THEN** the hero shows the poster, headline, phase list and actions, and the rest of the page is reachable by normal scrolling
 
 ### Requirement: Accessibility
-The canvas SHALL be hidden from assistive technology. All phase text SHALL be present in the document in reading order. A skip link ("Skip past the build") SHALL be the first focusable element in the hero, SHALL be visible next to the scroll cue in scrub mode, and SHALL move focus to the content after the hero.
+The video SHALL be hidden from assistive technology. All phase text SHALL be present in the document in reading order. A skip link ("Skip past the build") SHALL be the first focusable element in the hero, SHALL be visible when focused, and SHALL move focus to the content after the hero.
 
 #### Scenario: Keyboard user skips the hero
 - **WHEN** a keyboard user activates "Skip past the build"
 - **THEN** focus and scroll position move to the first section after the hero
 
 #### Scenario: Pointer or touch user skips the hero
-- **WHEN** a visitor taps or clicks the visible "Skip past the build" link
-- **THEN** the page moves to the first section after the hero
+- **WHEN** a visitor scrolls, swipes or uses the scrollbar on the hero
+- **THEN** the page scrolls past the one-screen hero as it would past any section
 
 ### Requirement: Loading budget
-The hero's script SHALL be under 15 KB compressed. Sequence downloads SHALL start only after the poster has rendered, and SHALL be lower priority than the page's own assets.
+The hero's script SHALL be under 15 KB compressed. The video manifest SHALL be embedded in the page, so the video download starts without waiting for another request. The first-frame image SHALL be under 30 KB.
 
 #### Scenario: Lighthouse on mobile
 - **WHEN** Lighthouse mobile is run on the home page
-- **THEN** Largest Contentful Paint is the poster and Total Blocking Time attributable to the hero is under 50 ms
+- **THEN** Largest Contentful Paint is the hero's first view and Total Blocking Time attributable to the hero is under 50 ms
+
+### Requirement: Autoplay playback
+In motion mode the hero SHALL be one screen tall below the header. It SHALL open on the video's first frame (the blueprint) with the headline and the Design phase overlay, and SHALL start loading and playing the build video as soon as the hero script runs and the hero is in view, with no hold on a still image. It SHALL play once, from frame 0 to the last frame. At the end the video SHALL fade out to the finished dusk poster. The page's scrolling SHALL NOT be affected.
+
+#### Scenario: Opening the page
+- **WHEN** the home page loads at the top
+- **THEN** the blueprint is shown with the headline and `01 — DESIGN`, and the build plays straight away
+
+#### Scenario: End of the video
+- **WHEN** the video reaches its last frame
+- **THEN** it fades back to the dusk poster and stays there
+
+#### Scenario: Autoplay refused
+- **WHEN** the browser refuses to start the video without a gesture
+- **THEN** the blueprint and the Design phase stay, and the playback button offers Play
+
+### Requirement: Playback control
+While motion mode is active and the video is ready, the hero SHALL show one button that pauses the video while it plays, resumes it while paused, and replays it from the start after it ends, labelled for its current action and at least 44px tall. A pause by the visitor SHALL persist until they resume it.
+
+#### Scenario: Pausing the build
+- **WHEN** the visitor activates Pause during playback
+- **THEN** the video stops on its current frame and the button offers Play
+
+#### Scenario: Replaying
+- **WHEN** the visitor activates Replay after the video has ended
+- **THEN** the video plays again from the blueprint
+
+### Requirement: Off-screen pause
+The video SHALL pause while the hero is out of the viewport or the tab is hidden, and SHALL resume when it is back unless the visitor paused it or it has ended. The hero SHALL do no per-frame work while the video is not playing.
+
+#### Scenario: Hero scrolled away
+- **WHEN** the hero section is scrolled entirely out of the viewport during playback
+- **THEN** the video pauses, and it resumes when the hero is scrolled back into view
+
+### Requirement: Video sources
+The player SHALL choose the portrait video for viewports taller than they are wide and the landscape video otherwise, and the first source in the manifest the browser reports it can play. It SHALL download only one orientation and format, and switch orientation only when the viewport's orientation actually changes, keeping the playback position.
+
+#### Scenario: Phone rotated
+- **WHEN** a phone is rotated from portrait to landscape while the hero is on screen
+- **THEN** the hero switches to the landscape video at the same time position, and does not reload on mere address-bar resizing
+
+#### Scenario: Browser without AV1
+- **WHEN** the browser cannot play the AV1 source
+- **THEN** it plays the H.264 source

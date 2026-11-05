@@ -11,19 +11,37 @@ The pipeline SHALL deliver these finished-building stills.
 |---|---|
 | 1 Kanal | front three-quarter day, front three-quarter dusk, street-level eye view, elevated aerial |
 | 2 Kanal | front three-quarter day, front three-quarter dusk, street-level eye view, elevated aerial |
+| 5 Marla | front three-quarter day, front three-quarter dusk, street-level eye view, elevated aerial |
+| 10 Marla | front three-quarter day, front three-quarter dusk, street-level eye view, elevated aerial |
 
-Each still SHALL be delivered in 16:9 into the site's asset folder, so the site can generate responsive sizes. A still encoded straight from a render SHALL be at least 3200px wide; an AI-enhanced still (see below) SHALL be delivered at the model's full output size, at least 2048px wide. Neither is upscaled.
+Each still SHALL be delivered in 16:9 into the site's asset folder, so the site can generate responsive sizes. A still encoded straight from a render SHALL be at least 3200px wide; an AI-enhanced still (see below) SHALL be delivered at the model's full output size, at least 2048px wide. Neither is upscaled. Adding the 5 Marla and 10 Marla stills SHALL NOT change the delivered stills of the 1 Kanal and 2 Kanal houses.
 
 #### Scenario: Stills delivered
 - **WHEN** the still set has been rendered and encoded
 - **THEN** every listed still exists in the site asset folder at 3200px wide or more (2048px or more if AI-enhanced) and is used without upscaling
 
+#### Scenario: Older stills untouched
+- **WHEN** the 5 Marla and 10 Marla stills have been delivered
+- **THEN** the 1 Kanal and 2 Kanal still files are byte-identical to before
+
 ### Requirement: AI-enhanced stills
-A still or the hero's opening poster MAY be replaced by a photoreal version made by an image model from Noor's own render of the same shot (`scripts/enhance-renders.mjs`). It SHALL keep the render's design, camera, framing and time of day, apart from design changes the maintainer has asked for, which the script records in `DESIGN_EDITS`. It SHALL still be presented as a concept, never as a photograph of built work. The Render content rules apply to it.
+A still or the hero's opening poster MAY be replaced by a photoreal version made by an image model from Noor's own render of the same shot (`scripts/enhance-renders.mjs`). The source render MAY be a fast render at 2048px or wider. The model SHALL be the one named on the command line or, failing that, by `IMAGE_MODEL` in the environment or `.env`; with neither set, the script SHALL stop and say so. The script SHALL always read the source render, never a previously enhanced image, and SHALL act only on the shots or designs it is told to. It SHALL keep the render's design, camera, framing and time of day, apart from design changes the maintainer has asked for, which the script records in `DESIGN_EDITS`. It SHALL still be presented as a concept, never as a photograph of built work. The Render content rules apply to it.
 
 #### Scenario: Enhanced still reviewed
 - **WHEN** an AI-enhanced still is reviewed before delivery
 - **THEN** it is compared side by side with its source render, and the design, framing and time of day match apart from the recorded design changes
+
+#### Scenario: No model configured
+- **WHEN** the script is run with no model on the command line and no `IMAGE_MODEL` set
+- **THEN** it stops before making any call and names the setting it needs
+
+#### Scenario: Source render missing
+- **WHEN** a shot is requested and its source render does not exist
+- **THEN** that shot fails with a message naming the render command, no call is made for it, and the script does not fall back to the delivered still
+
+#### Scenario: No shots named
+- **WHEN** the generate or encode command is run without naming any shots or designs
+- **THEN** it stops and changes no images
 
 ### Requirement: Render content rules
 Renders SHALL contain no text, logos, watermarks, people, vehicles with readable plates, recognizable real places or brand names. Neighboring buildings SHALL be generic and visually subdued so the design is always the focus.
@@ -39,23 +57,23 @@ Each design SHALL have a 1200×630 share image cropped from one of its stills, w
 - **WHEN** a design page URL is shared
 - **THEN** its preview uses that design's share image
 
-### Requirement: Frame sequence encoding
-The encoding tool SHALL turn a rendered frame sequence into web-ready frames in AVIF and WebP at two size tiers per orientation (landscape 1920×1080 and 1280×720; portrait 1080×1920 and 720×1280). It SHALL write a manifest describing them.
-
-#### Scenario: Encoding a sequence
-- **WHEN** the tool is run on a complete rendered sequence
-- **THEN** it writes every frame in both formats and both tiers, plus a manifest, and reports the total bytes per tier and format
-
-### Requirement: Sequence manifest
-A sequence manifest SHALL state: schema version, frame count, orientations, and for each orientation and tier the dimensions, formats, URL pattern and total bytes. It SHALL also give the poster frame index for each orientation, and the start and end frame of each construction phase.
-
-#### Scenario: Player reads phase ranges
-- **WHEN** a client reads the manifest
-- **THEN** it can find which frames belong to each of the six phases without any other source
-
 ### Requirement: Visual quality bar
 Delivered renders SHALL show no visible noise, fireflies, denoiser blotches, texture stretching, light leaks at wall junctions or floating geometry at full delivered size. In sequences, consecutive frames SHALL NOT flicker.
 
 #### Scenario: Pixel-level review
 - **WHEN** a delivered still is inspected at 100% zoom
 - **THEN** none of the listed artifacts is visible
+
+### Requirement: Hero video encoding
+The encoding tool SHALL turn a rendered frame sequence into the hero video for one orientation: an AV1 MP4 and an H.264 MP4 at the frames' own size, 24 frames per second, with no audio track and the index at the front of the file. It SHALL write or update a manifest describing them and SHALL report each file's size.
+
+#### Scenario: Encoding a sequence
+- **WHEN** the tool is run on a complete rendered sequence with an orientation
+- **THEN** it writes both video files for that orientation, updates the manifest, and reports the size of each file
+
+### Requirement: Hero video manifest
+The hero manifest SHALL state: schema version 2, frames per second, frame count, the start and end frame of each construction phase, and for each orientation the video's dimensions and its sources in order of preference, each with URL, MIME type including codecs, and byte size.
+
+#### Scenario: Player reads phase ranges
+- **WHEN** a client reads the manifest
+- **THEN** it can find which frames, and so which playback times, belong to each of the six phases without any other source

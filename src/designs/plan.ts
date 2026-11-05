@@ -344,7 +344,7 @@ function drawOpening(s: Sheet, f: WallFrame, o: Opening) {
   }
 }
 
-function drawStair(s: Sheet, stair: Stair, rise: number, direction: "UP" | "DN") {
+function drawStair(s: Sheet, stair: Stair, rise: number, direction: "UP" | "DN", labelInside = false) {
   const layout = stairLayout(stair, rise);
   s.rect(stair.x, stair.y, stair.w, stair.d, "fp-fix");
   for (const [a, b] of layout.nosings) s.line(a, b, "fp-fix-thin");
@@ -362,7 +362,8 @@ function drawStair(s: Sheet, stair: Stair, rise: number, direction: "UP" | "DN")
   const first = path[1];
   const v: Pt = [first[0] - start[0], first[1] - start[1]];
   const vl = Math.hypot(v[0], v[1]);
-  s.text([start[0] - (v[0] / vl) * 1.2, start[1] - (v[1] / vl) * 1.2 - TEXT * 0.35], direction, "fp-label-sub");
+  const offset = labelInside ? -1.2 : 1.2;
+  s.text([start[0] - (v[0] / vl) * offset, start[1] - (v[1] / vl) * offset - TEXT * 0.35], direction, "fp-label-sub");
 }
 
 /** A dimension line between two points along one axis, with ticks and its length */
@@ -386,6 +387,8 @@ function dimension(s: Sheet, axis: "x" | "y", from: number, to: number, at: numb
 export function renderPlan(design: Design, level: Level, facts: DesignFacts, options: PlanOptions): Plan {
   const li = design.levels.indexOf(level);
   const { width: W, depth: D } = design.plot;
+  // A narrow plot's plan has less room around its text, so a few labels sit differently
+  const narrow = W < 40;
   const s = new Sheet(D);
   const id = options.id;
   const frames = wallFrames(level);
@@ -458,7 +461,8 @@ export function renderPlan(design: Design, level: Level, facts: DesignFacts, opt
   if (below) {
     for (const st of below.stairs.filter((st) => st.to === level.id)) {
       const continues = level.stairs.some((o) => o.x === st.x && o.y === st.y && o.w === st.w && o.d === st.d);
-      if (!continues) drawStair(s, st, level.elevation - below.elevation, "DN");
+      // On a narrow plan the stair room's wall stands right at the top of the stair
+      if (!continues) drawStair(s, st, level.elevation - below.elevation, "DN", narrow);
     }
   }
 
@@ -551,22 +555,25 @@ export function renderPlan(design: Design, level: Level, facts: DesignFacts, opt
 
   // Title block: name, level, note, facts; scale bar and north arrow on the right
   const base = -3;
+  // Beside the scale bar and north arrow, the text needs the sheet's full width
+  const titleX = narrow ? -MARGIN.left + 1 : 0;
   s.line([-MARGIN.left + 1, base + 1.2], [W + MARGIN.right - 1, base + 1.2], "fp-rule");
-  s.text([0, base - 2.4], design.name.toUpperCase(), "fp-title", { anchor: "start", size: 2.4 });
-  s.text([0, base - 4.6], `${level.name} plan`.toUpperCase(), "fp-label", { anchor: "start", size: 1.3 });
-  s.text([0, base - 6.6], "Concept design. Indicative only.", "fp-note", { anchor: "start" });
+  s.text([titleX, base - 2.4], design.name.toUpperCase(), "fp-title", { anchor: "start", size: 2.4 });
+  s.text([titleX, base - 4.6], `${level.name} plan`.toUpperCase(), "fp-label", { anchor: "start", size: 1.3 });
+  s.text([titleX, base - 6.6], "Concept design. Indicative only.", "fp-note", { anchor: "start" });
   const levelArea = facts.levels.find((l) => l.id === level.id)?.coveredArea;
-  s.text([0, base - 8.4], `Plot ${dims(W, D)} · ${facts.plot.size}`, "fp-label-sub", { anchor: "start" });
-  if (levelArea) s.text([0, base - 10.2], `Covered area ${sqft(levelArea)}`, "fp-label-sub", { anchor: "start" });
+  s.text([titleX, base - 8.4], `Plot ${dims(W, D)} · ${facts.plot.size}`, "fp-label-sub", { anchor: "start" });
+  if (levelArea) s.text([titleX, base - 10.2], `Covered area ${sqft(levelArea)}`, "fp-label-sub", { anchor: "start" });
 
   const scaleEnd = W - 1;
-  const scaleStart = scaleEnd - 20;
+  const scaleLength = narrow ? 10 : 20;
+  const scaleStart = scaleEnd - scaleLength;
   const sy = base - 9.5;
-  [0, 5, 10, 20].forEach((v, i, all) => {
+  (narrow ? [0, 5, 10] : [0, 5, 10, 20]).forEach((v, i, all) => {
     if (i === all.length - 1) return;
     s.rect(scaleStart + v, sy, all[i + 1] - v, 0.6, i % 2 ? "fp-scale-b" : "fp-scale-a");
   });
-  for (const [v, t] of [[0, "0"], [10, "10'"], [20, "20'"]] as const) s.text([scaleStart + v, sy - 1.6], t, "fp-label-sub");
+  for (const v of [0, scaleLength / 2, scaleLength]) s.text([scaleStart + v, sy - 1.6], v ? `${v}'` : "0", "fp-label-sub");
 
   const nc: Pt = [scaleEnd - 2.2, base - 4.6];
   const r = 2.1;

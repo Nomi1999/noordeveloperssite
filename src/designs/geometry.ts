@@ -428,7 +428,7 @@ export function slabRegion(slab: Slab, kinds?: Slab["voids"][number]["kind"][]):
  */
 export function coveredRegion(design: Design, levelIndex: number): Region {
   const floor = slabRegion(design.levels[levelIndex].slab, ["double-height", "open"]);
-  const above = union(...design.levels.slice(levelIndex + 1).map((l) => slabOutline(l.slab)));
+  const above = union(...design.levels.slice(levelIndex + 1).map((l) => slabRegion(l.slab, ["open"])));
   return intersection(floor, above);
 }
 

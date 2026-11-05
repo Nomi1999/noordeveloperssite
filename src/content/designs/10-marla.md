@@ -1,0 +1,3 @@
+A two-storey family home that stands against its neighbour on the left, with an open side passage on the right. On the ground floor, the front door opens beside a foyer that leads to the drawing room and a guest bath, while the family side has a TV lounge, a dining and a kitchen with a store. A bedroom with its own bathroom sits downstairs too.
+
+Upstairs, the master bedroom sits in the charcoal box over the car porch, with a corner window, a dressing and its own bathroom. Two more bedrooms each have a bathroom, and there is a family lounge, a laundry and a terrace with a steel pergola. Outside: a covered two-car porch, a small front lawn, and a boundary wall with a car gate and a side gate.

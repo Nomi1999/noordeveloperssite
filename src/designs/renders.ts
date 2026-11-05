@@ -75,6 +75,52 @@ export const renderRegistry: Record<string, DesignRenderEntry> = {
       },
     },
   },
+  "5-marla": {
+    lead: "front-day",
+    gallery: ["front-dusk", "street", "aerial"],
+    share: "/og/5-marla.jpg",
+    shots: {
+      "front-day": {
+        alt: "The 5 Marla house concept by day: a narrow two-storey front with a terracotta brick bay beside a white plaster frame, a black metal jaali across the first-floor balcony, and a timber gate below.",
+        caption: "Front, day",
+      },
+      "front-dusk": {
+        alt: "The 5 Marla house concept at dusk, with warm light through the black jaali and the windows of the brick bay, and a soft glow under the porch ceiling.",
+        caption: "Front, dusk",
+      },
+      street: {
+        alt: "The 5 Marla house concept from the street: the brick bay with its tall window and wide ground-floor window, the jaali above the porch, and the timber gate in the boundary wall.",
+        caption: "Street, day",
+      },
+      aerial: {
+        alt: "The 5 Marla house concept from above, showing the flat roof with its stair room and two water tanks, the brick and white front, and the small paved porch behind the timber gate.",
+        caption: "Aerial",
+      },
+    },
+  },
+  "10-marla": {
+    lead: "front-day",
+    gallery: ["front-dusk", "street", "aerial"],
+    share: "/og/10-marla.jpg",
+    shots: {
+      "front-day": {
+        alt: "The 10 Marla house concept by day: a charcoal first-floor box with a large corner window in a concrete frame, a terrace with a steel pergola beside it, and black gates in the boundary wall.",
+        caption: "Front, day",
+      },
+      "front-dusk": {
+        alt: "The 10 Marla house concept at dusk, with warm light in the corner window and the wide ground-floor window, a lit porch ceiling, and the steel pergola and timber-slatted stair tower against a blue sky.",
+        caption: "Front, dusk",
+      },
+      street: {
+        alt: "The 10 Marla house concept from the street: the exposed concrete ground floor, the charcoal box over the car porch on a slim pier, the pergola and timber slats beyond, and the black gates.",
+        caption: "Street, day",
+      },
+      aerial: {
+        alt: "The 10 Marla house concept from above, showing the flat roof with its two water tanks, the timber-slatted stair tower, the pergola over the terrace and the paved porch behind the black gates.",
+        caption: "Aerial",
+      },
+    },
+  },
 };
 
 const stills = import.meta.glob<{ default: ImageMetadata }>("../assets/renders/*/*.jpg", { eager: true });

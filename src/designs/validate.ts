@@ -28,7 +28,7 @@ import {
   type Region,
 } from "./geometry.ts";
 import { Design, type Poly, type RoomTypeName } from "./model.ts";
-import { dims, feetInches, sqft } from "./units.ts";
+import { dims, feetInches, MARLA_SQFT, sqft } from "./units.ts";
 
 export interface Issue {
   severity: "error" | "warning";
@@ -60,6 +60,17 @@ export const MIN_ROOM: Partial<Record<RoomTypeName, { side: number; area: number
   lounge: { side: 14, area: 224, label: "lounge" },
   "tv-lounge": { side: 14, area: 224, label: "lounge" },
   "family-lounge": { side: 14, area: 224, label: "lounge" },
+};
+/** Plots smaller than 10 Marla cannot hold those sizes beside a car porch, so they use these instead */
+export const COMPACT_PLOT_AREA = 10 * MARLA_SQFT;
+export const COMPACT_MIN_ROOM: typeof MIN_ROOM = {
+  "master-bedroom": { side: 12, area: 168, label: "master bedroom" },
+  bedroom: { side: 11, area: 132, label: "bedroom" },
+  kitchen: { side: 8, area: 80, label: "kitchen" },
+  drawing: { side: 12, area: 156, label: "drawing room" },
+  lounge: { side: 12, area: 156, label: "lounge" },
+  "tv-lounge": { side: 12, area: 156, label: "lounge" },
+  "family-lounge": { side: 12, area: 156, label: "lounge" },
 };
 export const MIN_ATTACHED_BATH = { side: 5, area: 40 };
 export const CAR_BAY = { w: 9, d: 18 };
@@ -93,6 +104,7 @@ export function checkDesign(input: unknown): CheckResult {
 
   const plot = asRegion(rectPoly(0, 0, design.plot.width, design.plot.depth));
   const outsidePlot = (region: Region) => areaOutside(region, plot) > AREA_EPS;
+  const minRoom = design.plot.width * design.plot.depth < COMPACT_PLOT_AREA ? COMPACT_MIN_ROOM : MIN_ROOM;
   const outline = (level: string | undefined, element: string, poly: Poly): boolean => {
     const problem = outlineProblem(poly);
     if (problem) error(level, element, `outline is not closed: it ${problem}`);
@@ -291,7 +303,7 @@ export function checkDesign(input: unknown): CheckResult {
       if (room.type === "shop" && geo.bounds.w < MIN_SHOP_FRONTAGE - EPS) {
         warn(L, `room "${room.id}"`, `shop "${room.name}" has ${feetInches(geo.bounds.w)} of frontage; the minimum is ${feetInches(MIN_SHOP_FRONTAGE)}`);
       }
-      const min = room.type === "bathroom" && room.attachedTo ? { ...MIN_ATTACHED_BATH, label: "attached bathroom" } : MIN_ROOM[room.type];
+      const min = room.type === "bathroom" && room.attachedTo ? { ...MIN_ATTACHED_BATH, label: "attached bathroom" } : minRoom[room.type];
       if (!min) continue;
       const side = Math.min(geo.bounds.w, geo.bounds.d);
       if (side < min.side - EPS || geo.area < min.area - AREA_EPS) {

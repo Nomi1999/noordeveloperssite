@@ -17,6 +17,8 @@ from .util import (aabb, boxes_object, collection, piece_box, point_in_polygon, 
                    offset_polygon)
 
 SKIN = 0.012        # finish layer thickness over brick and concrete, m
+CLADDING = {"brick-cladding", "plaster-charcoal"}  # stand proud of plaster, which ends flush where walls meet
+ALONG_WALL = 0.3  # m: a beam whose midpoint is this close to a wall runs along it
 GRADE = 0.1524      # finished ground inside the plot (6" above the road), m
 PIT = -0.9          # excavation depth, m
 FOOTING = 1.2       # pad footing size, m
@@ -53,10 +55,11 @@ def beams(level, above):
     return out
 
 
-def _nearest_wall_material(pt, walls, fallback):
+def _nearest_wall(pt, walls, fallback, skip=()):
+    """The material of the exterior wall nearest a point, and how far away that wall is."""
     best, best_d = fallback, 1e9
     for w in walls:
-        if w["kind"] != "exterior":
+        if w["kind"] != "exterior" or w["material"] in skip:
             continue
         (x0, y0), (x1, y1) = w["from"], w["to"]
         dx, dy = x1 - x0, y1 - y0
@@ -65,7 +68,16 @@ def _nearest_wall_material(pt, walls, fallback):
         d = ((x0 + t * dx - pt[0]) ** 2 + (y0 + t * dy - pt[1]) ** 2) ** 0.5
         if d < best_d:
             best, best_d = w["material"], d
-    return best
+    return best, best_d
+
+
+def _beam_material(beam, walls, fallback):
+    """Cladding wraps only a beam that runs along it; a beam crossing a porch or a side wall stays plaster."""
+    mid = ((beam["from"][0] + beam["to"][0]) / 2, (beam["from"][1] + beam["to"][1]) / 2)
+    material, distance = _nearest_wall(mid, walls, fallback)
+    if material in CLADDING and distance > ALONG_WALL:
+        material, _ = _nearest_wall(mid, walls, fallback, skip=CLADDING)
+    return material
 
 
 def build(design, root):
@@ -115,12 +127,12 @@ def build(design, root):
                          union=True, bevel=False, role="brick", level=li)
             skins = defaultdict(list)
             for w in walls:
-                skins[w["material"]].append(piece_box(w, grow=SKIN))
+                skins[w["material"]].append(piece_box(w, grow=SKIN * 2 if w["material"] in CLADDING else SKIN))
             default = walls[0]["material"]
             for c in level["columns"]:
-                skins[_nearest_wall_material(_centre(c), walls, default)].append(rect_box(c, grow=SKIN))
+                skins[_nearest_wall(_centre(c), walls, default)[0]].append(rect_box(c, grow=SKIN))
             for b in level_beams:
-                skins[_nearest_wall_material(b["from"], walls, default)].append(piece_box(b, grow=SKIN))
+                skins[_beam_material(b, walls, default)].append(piece_box(b, grow=SKIN))
             for mat, boxes in skins.items():
                 boxes_object(f"skin-{lid}-{mat}", boxes, materials.get(mat), col, union=True, role="skin", level=li)
 

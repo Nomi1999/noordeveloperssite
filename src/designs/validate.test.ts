@@ -127,6 +127,36 @@ describe("minimum room sizes", () => {
     ]);
     expect(() => assertValid(design)).not.toThrow();
   });
+
+  describe("depend on the plot", () => {
+    // Bedroom clear of walls: 11' × 12'-1½". Only the warning matters here; this plot is too small for the test house.
+    const bedroomWarnings = (width: number, depth: number) => {
+      const design = broken("ground", (level) => {
+        level.rooms![0].outline = rect([5, 22], [16.375, 34.5]);
+      });
+      design.plot = { width, depth };
+      return checkDesign(design).warnings.filter((w) => w.element === `room "bed"`);
+    };
+
+    it("allows a compact bedroom on a 5 Marla plot", () => {
+      expect(bedroomWarnings(25, 45)).toEqual([]);
+    });
+
+    it("warns about the same bedroom on a 10 Marla plot", () => {
+      expect(bedroomWarnings(35, 65)).toHaveLength(1);
+    });
+
+    it("still warns on a 5 Marla plot below the compact minimum", () => {
+      const design = broken("ground", (level) => {
+        level.rooms![0].outline = rect([5, 22], [15.375, 34.5]);
+      });
+      design.plot = { width: 25, depth: 45 };
+      const warnings = checkDesign(design).warnings.filter((w) => w.element === `room "bed"`);
+      expect(warnings.map((w) => w.message)).toEqual([
+        `bedroom "Bedroom" is 10'-0" × 12'-2" (121 sq ft); the minimum is 11'-0" on its smaller side and 132 sq ft`,
+      ]);
+    });
+  });
 });
 
 describe("derived facts", () => {

@@ -39,4 +39,24 @@ export const buildingTypes: BuildingType[] = [
     render: { design: "2-kanal", shot: "front-day" },
     link: { href: "/designs/2-kanal/", label: "See the 2 Kanal design" },
   },
+  {
+    id: "5-marla",
+    name: "5 Marla House",
+    summary: "A compact two-storey family home on a 25′×45′ plot, with three bedrooms each having its own bathroom.",
+    detail:
+      "Our 5 Marla concept fits a 25′×45′ plot, attached on both sides: a covered one-car porch, a drawing room at the front, a TV lounge and a kitchen with a small rear yard, and a bedroom downstairs. Upstairs are a family lounge lit by an open sky court, a laundry, and a balcony behind a metal jaali. There are three bedrooms in all, each with its own bathroom.",
+    tags: ["5 Marla", "25′ × 45′", "3 bedrooms"],
+    render: { design: "5-marla", shot: "front-day" },
+    link: { href: "/designs/5-marla/", label: "See the 5 Marla design" },
+  },
+  {
+    id: "10-marla",
+    name: "10 Marla House",
+    summary: "A two-storey family home on a 35′×65′ plot, with four bedrooms each having its own bathroom.",
+    detail:
+      "Our 10 Marla concept fits a 35′×65′ plot: a covered two-car porch under the master bedroom, a drawing room and dining for guests, a TV lounge for every day, a kitchen with a store, and a bedroom downstairs. Upstairs are a family lounge, a laundry and a terrace with a steel pergola. There are four bedrooms in all, each with its own bathroom.",
+    tags: ["10 Marla", "35′ × 65′", "4 bedrooms"],
+    render: { design: "10-marla", shot: "front-day" },
+    link: { href: "/designs/10-marla/", label: "See the 10 Marla design" },
+  },
 ];

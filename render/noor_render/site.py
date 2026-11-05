@@ -6,6 +6,7 @@ get boundary walls and generic, muted massing so the design is always the bright
 and most detailed thing in frame.
 """
 
+import math
 import random
 
 from mathutils import Vector
@@ -18,6 +19,8 @@ FOOTPATH = 1.83
 KERB = 0.18
 ROAD = 9.0
 MARGIN = 0.3  # excavation working space around the footprint
+STREET_REACH = 45.0  # neighbours run at least this far along the street on each side, m
+REAR_REACH = 27.0  # and at least this far behind the plot, m
 
 
 def build(design, root, footprint, context):
@@ -151,17 +154,29 @@ def _gate(g, col):
 
 
 def _neighbours(design, ctx, far_line, context):
-    """Generic houses either side, behind and across the street, in muted plaster."""
+    """Generic houses either side, behind and across the street, in muted plaster.
+
+    Sized from the plot so they stay inside their own plots, with enough plots to fill the
+    frame on a small one. context["attached"] names the sides where the design stands on the
+    plot line; the house next door then does too. Every random value is drawn in the same
+    order whatever is done with it, so one design's neighbours never move because of another's.
+    """
     W, D = design["plot"]["width"], design["plot"]["depth"]
     rng = random.Random(design["slug"])
     wall_mat, glass_mat = materials.get("neighbour"), materials.get("neighbour-window")
+    attached = context.get("attached", [])
+    along = max(3, math.ceil(STREET_REACH / W))
+    rows_behind = max(1, math.ceil(REAR_REACH / D))
     plots = []
-    for k in (1, 2, 3):
+    for k in range(1, along + 1):
         plots.append((-k * W, 0, W, D, "front"))
         plots.append((W + (k - 1) * W, 0, W, D, "front"))
-    for k in range(-3, 4):
+    for k in range(-along, along + 1):
         plots.append((k * W, D, W, D, "back"))
         plots.append((k * W, far_line - D, W, D, "back-to-street"))
+    for row in range(2, rows_behind + 1):
+        for k in range(-along, along + 1):
+            plots.append((k * W, row * D, W, D, "back"))
     for i, (px, py, pw, pd, facing) in enumerate(plots):
         walls, mass, windows = [], [], []
         th = 0.23
@@ -171,10 +186,14 @@ def _neighbours(design, ctx, far_line, context):
         walls.append(aabb(px, py, 0, px + th, py + pd, 2.1))
         storeys = rng.choice((1, 2, 2))
         h = 3.2
-        set_front = rng.uniform(4.5, 7.5)
+        set_front = min(rng.uniform(4.5, 7.5), pd * 0.28)
         set_side = rng.uniform(0.0, 1.4)
         depth = pd * rng.uniform(0.45, 0.6)
         bx0, bx1 = px + set_side, px + pw - rng.uniform(0.0, 1.4)
+        if facing == "front" and px == -W and "left" in attached:
+            bx1 = px + pw
+        if facing == "front" and px == W and "right" in attached:
+            bx0 = px
         if facing == "back-to-street":
             by1 = py + pd - set_front
             by0 = by1 - depth
@@ -189,7 +208,7 @@ def _neighbours(design, ctx, far_line, context):
         if rng.random() < 0.6:  # a cantilevered box on the upper floor
             cx0 = bx0 + rng.uniform(0.5, 3)
             cy0, cy1 = (face_y - 0.9, face_y + 0.01) if face_n < 0 else (face_y - 0.01, face_y + 0.9)
-            mass.append(aabb(cx0, cy0, 0.45 + h, cx0 + rng.uniform(3, 5), cy1, 0.45 + 2 * h))
+            mass.append(aabb(cx0, cy0, 0.45 + h, min(cx0 + rng.uniform(3, 5), bx1), cy1, 0.45 + 2 * h))
         for st in range(storeys):
             z0 = 0.45 + st * h + 0.9
             z1 = z0 + 1.5

@@ -37,11 +37,15 @@ The home page SHALL explain that every Noor build is handed over fully finished,
 - **THEN** the home page section shows the updated items after rebuild
 
 ### Requirement: What we build section
-The home page SHALL show houses through two cards, 1 Kanal and 2 Kanal, each with a render and a link to that design's page. The section SHALL say they build houses of all sizes, mainly 1 Kanal and 2 Kanal.
+The home page SHALL show houses through four cards, 1 Kanal, 2 Kanal, 5 Marla and 10 Marla, each with a render and a link to that design's page. The section SHALL say they build houses of all sizes, mainly 1 Kanal and 2 Kanal.
 
 #### Scenario: Navigating to designs
 - **WHEN** a visitor selects the 1 Kanal card
 - **THEN** they arrive at `/designs/1-kanal/`
+
+#### Scenario: Navigating to a smaller design
+- **WHEN** a visitor selects the 5 Marla card
+- **THEN** they arrive at `/designs/5-marla/`
 
 ### Requirement: How we work section
 The home page SHALL show what happens after a visitor gets in touch as four numbered steps: talk to us, meet at the office, review the design, follow it to the keys. The build itself is shown by the hero and SHALL NOT be repeated as a step. Each step SHALL have a one-sentence description and SHALL make only claims the maintainer has confirmed (no visits to houses under construction). The steps SHALL NOT mention approvals, permits or any regulatory process.

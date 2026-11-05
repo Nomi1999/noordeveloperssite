@@ -19,6 +19,8 @@ export const MATERIALS = [
   "glass-tinted",
   "porcelain-paving",
   "brick-structure",
+  "brick-cladding",
+  "plaster-charcoal",
   "paving-stone",
   "grass",
   "planter-soil",

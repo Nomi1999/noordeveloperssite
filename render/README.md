@@ -16,19 +16,42 @@ Run from the repository root. `BLENDER_PATH` overrides the default `C:\Program F
 | `npm run render:sequence -- --config 1-kanal-hero-landscape` | Render a keyed sequence (`render/shots/<config>.json`) into `render/out/<design>/<config>-<engine>-<quality>/`, skipping frames that already exist (`--frames a-b`, `--every n`, `--width`, `--engine`, `--quality`, `--name`) |
 | `python render/camera_path.py [--svg out.svg]` | Camera continuity check for the hero sequences: per-frame displacement and rotation, and the values at each phase boundary (no Blender needed) |
 | `npm run render:sheet -- render/out/1-kanal/<folder>` | Write `sheet.png` (a labelled contact sheet) for a folder of rendered frames or stills |
-| `npm run render:encode -- stills` | Encode every shot's final still (`--engine`, `--quality`; default Cycles final) into `src/assets/renders/<design>/<shot>.jpg` (JPEG q90 masters, at least 3200px wide) |
+| `npm run render:encode -- stills` | Encode every shot's Cycles `final` still (`--engine`, `--quality`) into `src/assets/renders/<design>/<shot>.jpg` (JPEG q90 masters, at least 3200px wide). For Cycles finals only: the 5 Marla and 10 Marla stills come from `enhance-renders.mjs encode` instead |
 | `npm run render:encode -- share --design 1-kanal --shot front-day --focus 0.5,0.55` | Crop a 1200×630 share image from a delivered still into `public/og/<design>.jpg` |
 | `npm run render:encode -- video <frames folder> --orientation landscape` | Encode a frame sequence into the hero video (AV1 and H.264 MP4, 24 fps) under `public/hero/video/` and update `public/hero/manifest.json` (needs `ffmpeg` on PATH) |
-| `node scripts/enhance-renders.mjs generate [--only <design>/<shot>]` | Make photoreal versions of the delivered stills and the hero's last frame with an OpenRouter image model (`bytedance-seed/seedream-5-0-pro`; needs `OPENROUTER_API_KEY` in `.env`) into `render/out/ai/` |
-| `node scripts/enhance-renders.mjs encode` | Write those into `src/assets/renders/<design>/<shot>.jpg` (2048×1152) and the hero poster `public/hero/poster/<orientation>-<tier>.{avif,webp}` |
+| `node scripts/enhance-renders.mjs sources --design <slug>[,<slug>]` | Render each shot in `render/shots/<slug>.json` for the model to work from (EEVEE preview at 2048px by default), skipping any already there |
+| `node scripts/enhance-renders.mjs generate (--only <design>/<shot>,... \| --design <slug>,...)` | Make photoreal versions of those renders with an OpenRouter image model into `render/out/ai/`. Needs `OPENROUTER_API_KEY`, and the model in `--model` or `IMAGE_MODEL`, in `.env` or the environment |
+| `node scripts/enhance-renders.mjs encode (--only ... \| --design ...)` | Write those into `src/assets/renders/<design>/<shot>.jpg` (2048×1152) and, for hero jobs, the poster `public/hero/poster/<orientation>-<tier>.{avif,webp}` |
 
 **AI-enhanced images (2026-11-01).** The stills on the site and the hero's opening dusk poster are photoreal restyles of these renders, not the renders themselves. The sequence frames are still the renders. To re-encode the stills straight from a render, run `render:encode -- stills`, which overwrites them. Each restyle keeps the source's design and framing: the script scores each attempt against its source and keeps the best one, and every result is reviewed side by side with its source before delivery. Design changes asked for after the renders were made (`DESIGN_EDITS`; so far, glass on every open side of the 1 Kanal terrace) are applied in a separate edit pass, so the restyle itself stays faithful. Re-cut the share images afterwards with `render:encode -- share`.
+
+**Fast path for new designs (2026-11-05).** A new design doesn't need Cycles: the model downscales its input to 2048px anyway, so an EEVEE preview gives the same geometry and framing for a fraction of the time, with no dedicated GPU.
+
+```
+node scripts/enhance-renders.mjs sources --design 5-marla,10-marla
+node scripts/enhance-renders.mjs generate --design 5-marla,10-marla
+node scripts/enhance-renders.mjs encode --design 5-marla,10-marla
+npm run render:encode -- share --design 5-marla --shot front-day --focus 0.5,0.5
+```
+
+`generate` and `encode` refuse a bare run, so existing stills can't be replaced by accident. Review each still next to its source before `encode`. A framing score below 0.45 gets up to 3 tries, and the script then keeps the best and flags it to check by eye.
+
+Results with `bytedance-seed/seedream-5-0-flash` ($0.018 an image, about 15 s a call):
+
+| Shot | 5 Marla framing | 10 Marla framing | EEVEE at 2048px, 5 Marla / 10 Marla |
+|---|---|---|---|
+| `front-day` | 0.913 | 0.756 | 23 s / 20 s |
+| `front-dusk` | 0.504 | 0.719 | 40 s / 36 s |
+| `street` | 0.809 | 0.305 (flagged, accepted) | 22 s / 19 s |
+| `aerial` | 0.588 | 0.091 (flagged, accepted) | 21 s / 20 s |
+
+The 15 images generated for these 8 stills, including retries, cost $0.27. All 8 sources took under 5 minutes, including about 20 seconds of scene build per shot.
 
 Options shared by `still` and `frames`:
 
 | Option | Default | Meaning |
 |---|---|---|
-| `--design` | required | Design slug (`1-kanal`, `2-kanal`) |
+| `--design` | required | Design slug (`1-kanal`, `2-kanal`, `5-marla`, `10-marla`) |
 | `--shot` | required | Shot name from `render/shots/<design>.json` |
 | `--engine` | `eevee` | `eevee` or `cycles` |
 | `--quality` | `preview` | `preview`, `high` or `final` |
@@ -117,6 +140,8 @@ To reproduce the comparison: `npm run render:still -- --design 1-kanal --shot fr
 
 Known and accepted: lit neighbour windows at dusk are flat warm panels, and lit house windows at dusk are evenly bright backplates. Any re-render of a still needs a new review.
 
+**Approved by the maintainer on 2026-11-05**: the eight AI stills of the 5 Marla and 10 Marla in `src/assets/renders/` (front-day, front-dusk, street, aerial), each 2048×1152 and reviewed next to its EEVEE source. No text, logos, people or vehicles. Two were accepted with framing scores under the 0.45 pass mark, after checking by eye: the 10 Marla `street` (0.305), where the camera is slightly straighter and shows more road, and the 10 Marla `aerial` (0.091), chosen over a 0.481 version with busier neighbours, where the camera is lower and the left boundary wall came out as stone. The model also drew small downlights in both porch ceilings at dusk, which were accepted.
+
 ## Blender 5.0 API notes
 
 Checked against Blender 5.0.1 by introspection (`bpy` in background mode) before writing the pipeline. Differences from the design and from older examples:
@@ -128,6 +153,7 @@ Checked against Blender 5.0.1 by introspection (`bpy` in background mode) before
 - **Color management**: `view_transform = 'AgX'`. Looks are prefixed: `'AgX - Base Contrast'`, `'AgX - Medium High Contrast'`, `'AgX - Punchy'`, and so on.
 - **Cycles**: the denoiser enum offers only `OPENIMAGEDENOISE` on this machine (no GPU). Guide passes are `denoising_input_passes = 'RGB_ALBEDO_NORMAL'`. A fixed seed is `cycles.seed` with `use_animated_seed = False`. The light tree is `use_light_tree`; clamps are `sample_clamp_direct` / `sample_clamp_indirect`; `render.use_persistent_data` keeps BVH between frames.
 - **EEVEE shadows on shared-memory GPUs**: a `shadow_pool_size` of 1024 MB makes EEVEE return black frames, silently, on this machine's integrated Radeon; 512 MB (the default) is enough once every interior light has a `cutoff_distance`. Without the cutoff, bright interior lights reach the whole scene and EEVEE stops with "Reached max shadow updates". Shader-evaluated (transparent) shadows re-render every sample, so they are switched on only while the building is part-built.
+- **EEVEE room lights on narrow plots**: even with a `cutoff_distance`, dusk on a narrow plot can render black or hang, because the rooms overlap in view. A shot's `light.roomReach` caps each room light's reach in metres (both Marla dusk shots use 4.0). `scripts/blender.mjs` has no time limit, so run a new dusk shot under one: an EEVEE still takes under a minute at 2048px, and a run of several minutes is a hang.
 - **Glass** is a thin pane (Transparent BSDF plus a black dielectric for the reflection, `BLENDED`) rather than Principled transmission: without ray tracing, EEVEE refraction shows the sky probe instead of the room behind, and dithering a 90% transparent surface leaves visible noise at preview samples.
 - **Union clean-up**: merging coplanar faces after the boolean can leave concave "keyhole" ngons, which the bevel modifier renders as a dark hairline across a flat wall or a stray triangle beside an opening (clearest in Cycles). `union_islands` splits concave faces into convex ones, keeping the split only when it adds no non-manifold edges. Merging by distance is not used: it glues pieces that only touch and punches holes beside openings.
 - **Fresh-edge accent** emission is multiplied by Light Path *Is Camera Ray*, so it is drawn but casts no light: in Cycles a thin rising soffit would otherwise light the walls around it orange.

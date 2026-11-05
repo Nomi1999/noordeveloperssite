@@ -1,0 +1,37 @@
+{
+  "context": {
+    "attached": ["left"],
+    "streetTrees": [
+      { "at": [-9.5, -0.9], "height": 6.0 },
+      { "at": [20.5, -0.9], "height": 6.5 },
+      { "at": [-19.0, -11.9], "height": 5.5 },
+      { "at": [30.0, -11.9], "height": 6.0 }
+    ]
+  },
+  "shots": {
+    "front-day": {
+      "lens": 26, "sensor": 36, "verticals": true,
+      "position": [14.5, -12.5, 3.0], "target": [5.6, 4.0, 5.0],
+      "timeOfDay": 0,
+      "light": { "sunAzimuth": 235, "duskAzimuth": 115 }
+    },
+    "front-dusk": {
+      "lens": 26, "sensor": 36, "verticals": true,
+      "position": [-5.0, -12.5, 3.0], "target": [5.4, 4.0, 5.0],
+      "timeOfDay": 1,
+      "light": { "sunAzimuth": 235, "duskAzimuth": 115, "roomReach": 4.0 }
+    },
+    "street": {
+      "lens": 24, "sensor": 36, "verticals": true,
+      "position": [2.0, -9.5, 1.65], "target": [6.0, 3.5, 5.4],
+      "timeOfDay": 0,
+      "light": { "sunAzimuth": 230, "duskAzimuth": 115 }
+    },
+    "aerial": {
+      "lens": 30, "sensor": 36, "verticals": false,
+      "position": [17.0, -14.0, 24.0], "target": [5.0, 9.0, 2.0],
+      "timeOfDay": 0,
+      "light": { "sunAzimuth": 235, "duskAzimuth": 115 }
+    }
+  }
+}

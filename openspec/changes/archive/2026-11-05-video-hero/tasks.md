@@ -16,4 +16,4 @@
 
 - [x] 3.1 `scripts/check-hero.mjs`: byte-range server; opening, phases, jump, end, control, offscreen, fallback, static, rotate, skip
 - [x] 3.2 `npm run build`, `node scripts/check-hero.mjs`, `npm test`
-- [ ] 3.3 Maintainer checks the built site on a laptop and a phone
+- [x] 3.3 Maintainer checks the built site on a laptop and a phone

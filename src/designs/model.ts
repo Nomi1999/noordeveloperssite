@@ -261,7 +261,7 @@ export const FacadeElement = z.discriminatedUnion("type", [
 export const Design = z.object({
   slug: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
   name: z.string().min(1),
-  /** Open vocabulary (house, commercial, apartments, ...) so new building types are content */
+  /** Open vocabulary (house, apartments, ...) so new building types are content */
   kind: z.string().regex(/^[a-z][a-z-]*$/),
   plot: z.object({
     width: Length,

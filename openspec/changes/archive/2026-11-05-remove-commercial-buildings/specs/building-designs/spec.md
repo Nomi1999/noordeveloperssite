@@ -1,0 +1,32 @@
+## RENAMED Requirements
+
+- FROM: `### Requirement: Three concept designs`
+- TO: `### Requirement: Two concept designs`
+
+## MODIFIED Requirements
+
+### Requirement: Design data contents
+A design SHALL describe: identity (slug, name, kind such as house), plot dimensions, structural column grid, levels (elevation, floor-to-floor height, slab thickness), walls per level (endpoints, thickness, kind), openings (host wall, position, width, height, sill, type), rooms (name, type, outline), fixed fixtures (kitchen counters, bathroom fittings, built-in wardrobes), stairs, slab outlines with cantilevers and voids, roof features (parapet, stair room, water tanks), site works (boundary wall with gate, porch, driveway, lawn, planting positions) and facade elements, each with a material tag from a fixed vocabulary.
+
+#### Scenario: New building type
+- **WHEN** a new design of a kind not yet on the site (for example an apartment block) is added using the same data model
+- **THEN** it validates, exports and produces floor plans without changes to the model's code
+
+### Requirement: Derived facts
+Covered area per level and in total, number of storeys, bedrooms and bathrooms SHALL be computed from the design data, along with counts and areas of any other room types a design contains.
+
+#### Scenario: Adding a bedroom
+- **WHEN** a room of type bedroom is added to a design
+- **THEN** the computed bedroom count increases by one with no other edits
+
+### Requirement: Two concept designs
+The project SHALL include two designs.
+
+- The **1 Kanal house** (50′×90′ plot) has a ground and a first floor plus a roof with a stair room and water tanks. It contains at least five bedrooms, each with an attached bathroom, a drawing room, a dining area, a TV lounge, a main kitchen and a back kitchen, a servant room with a bathroom, a covered car porch for at least two cars, and a front lawn.
+- The **2 Kanal house** (75′×120′ plot) has the same levels, at least six bedrooms with attached bathrooms, a double-height lounge, an upstairs family lounge, a covered car porch for at least three cars, and a larger lawn.
+
+The style of both SHALL be contemporary: flat roofs with parapets, strong horizontal slabs, and a restrained palette of plaster, stone, wood and dark metal.
+
+#### Scenario: Program check
+- **WHEN** the computed facts of each design are listed
+- **THEN** each design meets every count and feature in its program

@@ -47,7 +47,7 @@ def parser():
     for name, help_ in (("still", "render one image"), ("frames", "render a frame range, skipping frames already written"),
                         ("scene", "build the scene and save it as a .blend for inspection")):
         s = sub.add_parser(name, help=help_)
-        s.add_argument("--design", required=True, help="design slug: 1-kanal, 2-kanal, commercial")
+        s.add_argument("--design", required=True, help="design slug: 1-kanal, 2-kanal")
         s.add_argument("--shot", required=True, help="shot name from render/shots/<design>.json")
         s.add_argument("--engine", choices=("eevee", "cycles"), default="eevee")
         s.add_argument("--quality", choices=("preview", "high", "final"), default="preview")

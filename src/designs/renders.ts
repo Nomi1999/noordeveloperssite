@@ -75,25 +75,6 @@ export const renderRegistry: Record<string, DesignRenderEntry> = {
       },
     },
   },
-  commercial: {
-    lead: "street-day",
-    gallery: ["street-dusk", "corner"],
-    share: "/og/commercial.jpg",
-    shots: {
-      "street-day": {
-        alt: "The commercial plaza concept from the street by day: a four-storey building in a stone-clad frame, with glazed office floors above three shopfronts.",
-        caption: "Street, day",
-      },
-      "street-dusk": {
-        alt: "The commercial plaza concept at dusk, every office floor and shopfront lit.",
-        caption: "Street, dusk",
-      },
-      corner: {
-        alt: "The commercial plaza concept seen from above the street, showing its glazed front, stone frame and planters at the shopfronts.",
-        caption: "Elevated view",
-      },
-    },
-  },
 };
 
 const stills = import.meta.glob<{ default: ImageMetadata }>("../assets/renders/*/*.jpg", { eager: true });

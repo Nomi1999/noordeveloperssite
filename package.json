@@ -31,10 +31,12 @@
     "astro": "7.4.2"
   },
   "devDependencies": {
+    "@astrojs/check": "0.9.12",
     "clipper-lib": "6.4.2",
     "opentype.js": "2.0.0",
     "sharp": "0.35.5",
     "svgo": "4.1.0",
+    "typescript": "6.0.3",
     "vitest": "5.0.5",
     "zod": "4.6.7"
   }

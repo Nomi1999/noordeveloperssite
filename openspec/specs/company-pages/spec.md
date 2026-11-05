@@ -5,7 +5,7 @@ Introduces Noor Developers as a company and gives visitors every way to reach th
 ## Requirements
 
 ### Requirement: About page
-`/about/` SHALL describe Noor Developers as a Faisalabad-based developer and builder of houses and commercial buildings, explain the meaning of *Noor* (light) and its connection to the brand, and describe their approach: design-led, built end to end, handed over fully finished. It SHALL NOT include years in business, project counts, statistics, testimonials, certifications, team photos or named real projects.
+`/about/` SHALL describe Noor Developers as a Faisalabad-based developer and builder of houses, explain the meaning of *Noor* (light) and its connection to the brand, and describe their approach: design-led, built end to end, handed over fully finished. It SHALL NOT include years in business, project counts, statistics, testimonials, certifications, team photos or named real projects.
 
 #### Scenario: About content check
 - **WHEN** the About page is audited

@@ -31,7 +31,6 @@ interface Props {
 const { entry } = Astro.props;
 const { design, facts } = entry;
 const renders = getRenders(design.slug);
-const isHouse = design.kind === "house";
 
 const blurbs = import.meta.glob<MarkdownInstance<Record<string, never>>>("../../content/designs/*.md", { eager: true });
 const Blurb = blurbs[`../../content/designs/${design.slug}.md`]?.Content;
@@ -78,7 +77,7 @@ const total = n(sections);
             <p class="label">Concept design</p>
             <p>
               This is a concept design, not a listing. We can build it on your own plot as drawn, or adapt it to your
-              plot’s size and shape and to the way {isHouse ? "your family lives" : "your business works"}.
+              plot’s size and shape and to the way your family lives.
             </p>
           </aside>
           <a class="link-arrow" href={withBase("/designs/")}>See all designs</a>

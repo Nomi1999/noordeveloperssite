@@ -64,9 +64,6 @@ const JOBS = [
     { id: `${d}/street`, note: `${NOTES.day} Seen from the street.` },
     { id: `${d}/aerial`, note: `${NOTES.aerial} ${NOTES.day}` },
   ]),
-  { id: "commercial/street-day", note: `${NOTES.day} A commercial plaza on a city street.` },
-  { id: "commercial/street-dusk", note: `${NOTES.dusk} A commercial plaza on a city street; office floors and shopfronts lit.` },
-  { id: "commercial/corner", note: `${NOTES.elevated} ${NOTES.day} A commercial plaza on a city street.` },
 ].map((j) => ({
   ...j,
   edit: DESIGN_EDITS[j.id.split("/")[0]],

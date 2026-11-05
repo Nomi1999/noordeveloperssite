@@ -7,7 +7,7 @@ context: |
   Business:
   - Two offerings: (1) houses Noor Developers build on plots they buy and then sell;
     (2) design + architecture + construction on the client's own plot.
-  - They build houses of all sizes (mainly 1 Kanal and 2 Kanal) and also commercial buildings.
+  - They build houses of all sizes (mainly 1 Kanal and 2 Kanal).
   - Every build is delivered fully finished: the client only brings furniture and moves in.
   - Customers today are local homeowners; the site must not exclude overseas Pakistanis
     or future building types (structure content so new types are just new content).
@@ -50,8 +50,7 @@ context: |
     Ultra-polished visuals take priority over payload size.
 
   Planned changes, in order: site-foundation, brand-logo, house-designs (data model +
-  floor plans for 1 Kanal, 2 Kanal; commercial G+3 plaza concept), render-pipeline,
-  scroll-build-hero, content-pages.
+  floor plans for 1 Kanal, 2 Kanal), render-pipeline, scroll-build-hero, content-pages.
 
   Units: plots in Kanal/Marla with a 225 sq ft marla; 1 Kanal drawn as 50'x90',
   2 Kanal as 75'x120'. Dimensions are shown in feet-inches.

@@ -12,7 +12,7 @@ Each concept building SHALL be defined in exactly one design file, from which ev
 - **THEN** the floor plan, the exported render data and the computed facts all reflect the moved wall
 
 ### Requirement: Design data contents
-A design SHALL describe: identity (slug, name, kind such as house or commercial), plot dimensions, structural column grid, levels (elevation, floor-to-floor height, slab thickness), walls per level (endpoints, thickness, kind), openings (host wall, position, width, height, sill, type), rooms (name, type, outline), fixed fixtures (kitchen counters, bathroom fittings, built-in wardrobes), stairs, slab outlines with cantilevers and voids, roof features (parapet, stair room, water tanks), site works (boundary wall with gate, porch, driveway, lawn, planting positions) and facade elements, each with a material tag from a fixed vocabulary.
+A design SHALL describe: identity (slug, name, kind such as house), plot dimensions, structural column grid, levels (elevation, floor-to-floor height, slab thickness), walls per level (endpoints, thickness, kind), openings (host wall, position, width, height, sill, type), rooms (name, type, outline), fixed fixtures (kitchen counters, bathroom fittings, built-in wardrobes), stairs, slab outlines with cantilevers and voids, roof features (parapet, stair room, water tanks), site works (boundary wall with gate, porch, driveway, lawn, planting positions) and facade elements, each with a material tag from a fixed vocabulary.
 
 #### Scenario: New building type
 - **WHEN** a new design of a kind not yet on the site (for example an apartment block) is added using the same data model
@@ -37,20 +37,19 @@ The build SHALL fail with a message naming the design, level and element when a 
 - **THEN** the build succeeds but prints a warning naming the room
 
 ### Requirement: Derived facts
-Covered area per level and in total, number of storeys, bedrooms, bathrooms, and (for commercial designs) shop count and office floor area SHALL be computed from the design data.
+Covered area per level and in total, number of storeys, bedrooms and bathrooms SHALL be computed from the design data, along with counts and areas of any other room types a design contains.
 
 #### Scenario: Adding a bedroom
 - **WHEN** a room of type bedroom is added to a design
 - **THEN** the computed bedroom count increases by one with no other edits
 
-### Requirement: Three concept designs
-The project SHALL include three designs.
+### Requirement: Two concept designs
+The project SHALL include two designs.
 
 - The **1 Kanal house** (50′×90′ plot) has a ground and a first floor plus a roof with a stair room and water tanks. It contains at least five bedrooms, each with an attached bathroom, a drawing room, a dining area, a TV lounge, a main kitchen and a back kitchen, a servant room with a bathroom, a covered car porch for at least two cars, and a front lawn.
 - The **2 Kanal house** (75′×120′ plot) has the same levels, at least six bedrooms with attached bathrooms, a double-height lounge, an upstairs family lounge, a covered car porch for at least three cars, and a larger lawn.
-- The **commercial plaza** (50′×90′ plot) has a ground floor of street-facing shops and three upper floors of office space, a stair core with a lift shaft, washrooms on every floor, and a roof with parapet and water tanks.
 
-The style of all three SHALL be contemporary: flat roofs with parapets, strong horizontal slabs, and a restrained palette of plaster, stone, wood and dark metal.
+The style of both SHALL be contemporary: flat roofs with parapets, strong horizontal slabs, and a restrained palette of plaster, stone, wood and dark metal.
 
 #### Scenario: Program check
 - **WHEN** the computed facts of each design are listed

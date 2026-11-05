@@ -129,6 +129,12 @@
         "\\bsince\\s+(?:19|20)\\d{2}\\b"
       ]
     },
+    "commercial-work": {
+      "description": "Claims of commercial work",
+      "phrases": ["commercial", "plaza"],
+      "caseSensitive": [],
+      "patterns": []
+    },
     "superlatives": {
       "description": "Superlatives that imply unprovable claims",
       "phrases": [

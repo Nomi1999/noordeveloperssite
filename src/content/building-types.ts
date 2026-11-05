@@ -20,23 +20,23 @@ export interface BuildingType {
 
 export const buildingTypes: BuildingType[] = [
   {
-    id: "houses",
-    name: "Houses",
-    summary: "Family homes of all sizes, mainly 1 Kanal and 2 Kanal.",
+    id: "1-kanal",
+    name: "1 Kanal House",
+    summary: "A two-storey family home on a 50′×90′ plot, with five bedrooms each having its own bathroom.",
     detail:
-      "We build houses of every size, most often on 1 Kanal and 2 Kanal plots. Each one is planned around the plot and the family: drawing and dining rooms for guests, a lounge for every day, bedrooms with their own bathrooms, a kitchen that works, and a lawn and porch outside.",
-    tags: ["1 Kanal", "2 Kanal", "Other sizes"],
-    render: { design: "2-kanal", shot: "front-day" },
-    link: { href: "/designs/", label: "See house designs" },
+      "Our 1 Kanal concept fits a 50′×90′ plot: a front lawn and a covered two-car porch under the terrace, a drawing room and dining for guests, a TV lounge for every day, a kitchen with a back kitchen behind it, an elders' bedroom downstairs, and five bedrooms in all, each with its own bathroom.",
+    tags: ["1 Kanal", "50′ × 90′", "5 bedrooms"],
+    render: { design: "1-kanal", shot: "front-day" },
+    link: { href: "/designs/1-kanal/", label: "See the 1 Kanal design" },
   },
   {
-    id: "commercial",
-    name: "Commercial buildings",
-    summary: "Plazas with shops at street level and open office floors above.",
+    id: "2-kanal",
+    name: "2 Kanal House",
+    summary: "A large two-storey family home on a 75′×120′ plot, built around a double-height lounge.",
     detail:
-      "We design and build commercial buildings: shops at street level and office floors above, served by stairs, a lift and washrooms. Built and finished the same way as our homes, ready for tenants or for your own business.",
-    tags: ["Shops", "Offices", "Plazas"],
-    render: { design: "commercial", shot: "street-day" },
-    link: { href: "/designs/commercial/", label: "See the commercial plaza" },
+      "Our 2 Kanal concept spreads a 75′×120′ plot around a double-height lounge with a full-height window wall to the lawn: a drawing room and dining at the front, seven bedrooms in all, each with its own bathroom, a gallery and family lounge upstairs, and a covered three-car porch by the guard room.",
+    tags: ["2 Kanal", "75′ × 120′", "7 bedrooms"],
+    render: { design: "2-kanal", shot: "front-day" },
+    link: { href: "/designs/2-kanal/", label: "See the 2 Kanal design" },
   },
 ];

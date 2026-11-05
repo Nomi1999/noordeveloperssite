@@ -4,7 +4,7 @@ Each design is data: one TypeScript file per building, from which the site draws
 
 | File | What it holds |
 |---|---|
-| `1-kanal.ts`, `2-kanal.ts`, `commercial.ts` | The designs |
+| `1-kanal.ts`, `2-kanal.ts` | The designs |
 | `sources.ts` | The list of designs, in site order |
 | `model.ts` | The data model (zod schema), including the material and room type vocabularies |
 | `helpers.ts` | Authoring helpers: grid references, walls, chains, doors, windows, rooms, levels |

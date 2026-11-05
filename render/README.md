@@ -28,7 +28,7 @@ Options shared by `still` and `frames`:
 
 | Option | Default | Meaning |
 |---|---|---|
-| `--design` | required | Design slug (`1-kanal`, `2-kanal`, `commercial`) |
+| `--design` | required | Design slug (`1-kanal`, `2-kanal`) |
 | `--shot` | required | Shot name from `render/shots/<design>.json` |
 | `--engine` | `eevee` | `eevee` or `cycles` |
 | `--quality` | `preview` | `preview`, `high` or `final` |
@@ -113,9 +113,9 @@ To reproduce the comparison: `npm run render:still -- --design 1-kanal --shot fr
 
 ## Content review
 
-**Approved by the maintainer on 2026-10-31**: all eleven Cycles `final` stills in `src/assets/renders/` (1-kanal and 2-kanal front-day, front-dusk, street, aerial; commercial street-day, street-dusk, corner). Checked against the content rules: no text or logos (gates, doors, parapets, neighbours), no people, no vehicles or number plates, no real places (neighbours are generated massing, skies are CC0 HDRIs, trees are CC0 models). Each still is 3200×1800 and passed the pixel-level review at 100% (no noise, fireflies, denoiser blotches, seams or blank frames; no banding in the encoded JPEGs).
+**Approved by the maintainer on 2026-10-31**: the eight house Cycles `final` stills in `src/assets/renders/` (1-kanal and 2-kanal front-day, front-dusk, street, aerial). Checked against the content rules: no text or logos (gates, doors, parapets, neighbours), no people, no vehicles or number plates, no real places (neighbours are generated massing, skies are CC0 HDRIs, trees are CC0 models). Each still is 3200×1800 and passed the pixel-level review at 100% (no noise, fireflies, denoiser blotches, seams or blank frames; no banding in the encoded JPEGs).
 
-Known and accepted: lit neighbour windows at dusk are flat warm panels, the commercial office glazing reads near-black by day, and lit house windows at dusk are evenly bright backplates. Any re-render of a still needs a new review.
+Known and accepted: lit neighbour windows at dusk are flat warm panels, and lit house windows at dusk are evenly bright backplates. Any re-render of a still needs a new review.
 
 ## Blender 5.0 API notes
 

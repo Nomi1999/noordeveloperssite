@@ -11,7 +11,7 @@ web
 - The site must not exclude overseas Pakistanis building at home, or future building types.
 
 ## Product Purpose
-A showcase that Noor Developers exists and builds fully finished houses and commercial buildings. The only conversion goal is a phone call or a WhatsApp message.
+A showcase that Noor Developers exists and builds fully finished houses. The only conversion goal is a phone call or a WhatsApp message.
 
 ## Positioning
 One team from the first drawing to the keys, and every build handed over fully finished: the owner only brings furniture. Two ways to work: buy a Noor home built on Noor's own plot, or have Noor design, architect and build on your plot.

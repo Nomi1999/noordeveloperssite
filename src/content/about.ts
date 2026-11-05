@@ -7,14 +7,14 @@
 export const about = {
   intro: {
     heading: "We build in Faisalabad",
-    lead: "Noor Developers is a Faisalabad developer and builder. We design and build houses and commercial buildings, and we hand every one over fully finished.",
+    lead: "Noor Developers is a Faisalabad developer and builder. We design and build houses, and we hand every one over fully finished.",
   },
   who: {
     label: "Who we are",
     heading: "Developer and builder",
     paragraphs: [
       "We are a property developer and builder based in Faisalabad. We work in two ways: we buy plots, build houses on them and sell them finished, and we design and build on plots our clients already own.",
-      "Most of our homes stand on 1 Kanal and 2 Kanal plots, but we build houses of every size, and commercial buildings too: shops at street level with offices above.",
+      "Most of our homes stand on 1 Kanal and 2 Kanal plots, but we build houses of every size.",
       "Either way, you deal with one team, from the first conversation to the day you get the keys.",
     ],
   },
@@ -33,7 +33,7 @@ export const about = {
       {
         number: "01",
         title: "Design first",
-        text: "Every building starts as a drawing. We plan it around the plot, the light and the people who will use it, and show it to you in 3D before building begins.",
+        text: "Every house starts as a drawing. We plan it around the plot, the light and the people who will use it, and show it to you in 3D before building begins.",
       },
       {
         number: "02",
@@ -43,7 +43,7 @@ export const about = {
       {
         number: "03",
         title: "Fully finished",
-        text: "We hand over a building ready to use: floors, kitchens, bathrooms, wardrobes and lights all done. You bring the furniture.",
+        text: "We hand over a home ready to live in: floors, kitchens, bathrooms, wardrobes and lights all done. You bring the furniture.",
       },
     ],
   },

@@ -18,7 +18,7 @@ describe("all designs", () => {
   it("have unique slugs", () => {
     const slugs = designs.map((d) => d.design.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
-    expect(slugs).toEqual(["1-kanal", "2-kanal", "commercial"]);
+    expect(slugs).toEqual(["1-kanal", "2-kanal"]);
   });
 
   it("are flat-roofed with parapets", () => {
@@ -82,42 +82,5 @@ describe("2 Kanal house", () => {
     expect(facts.porches.some((p) => p.covered && p.cars >= 3)).toBe(true);
     expect(facts.lawnArea).toBeGreaterThan(getDesign("1-kanal").facts.lawnArea);
     expect(has("2-kanal", "guard-room")).toBe(true);
-  });
-});
-
-describe("Commercial plaza", () => {
-  const { design, facts } = getDesign("commercial");
-
-  it("is on a 50' × 90' plot with a ground floor and three upper floors", () => {
-    expect([design.plot.width, design.plot.depth]).toEqual([50, 90]);
-    expect(facts.storeys).toBe(4);
-  });
-
-  it("has street-facing shops on the ground floor", () => {
-    const ground = design.levels[0];
-    const shops = ground.rooms.filter((r) => r.type === "shop");
-    expect(shops.length).toBeGreaterThanOrEqual(3);
-    // Every shop reaches the front wall at y = 15
-    for (const shop of shops) expect(Math.min(...shop.outline.map((p) => p[1]))).toBe(15);
-    expect(facts.shops).toBe(shops.length);
-  });
-
-  it("has office space on all three upper floors", () => {
-    const upper = design.levels.filter((l) => l.kind === "floor").slice(1);
-    expect(upper).toHaveLength(3);
-    for (const level of upper) expect(level.rooms.some((r) => r.type === "office"), level.id).toBe(true);
-    expect(facts.officeArea).toBeGreaterThan(3 * 2000);
-  });
-
-  it("has a stair core with a lift shaft and washrooms on every floor", () => {
-    expect(facts.levelsWithLift).toBe(facts.storeys);
-    expect(facts.levelsWithWashrooms).toBe(facts.storeys);
-    const floors = design.levels.filter((l) => l.kind === "floor");
-    for (const level of floors.slice(0, -1)) expect(level.stairs, level.id).toHaveLength(1);
-  });
-
-  it("has a roof with parapet, water tanks and a lift machine room", () => {
-    expect(facts.roof).toMatchObject({ parapet: true, stairRoom: true, machineRoom: true });
-    expect(facts.roof.tanks).toBeGreaterThanOrEqual(1);
   });
 });

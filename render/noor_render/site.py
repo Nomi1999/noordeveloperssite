@@ -153,7 +153,6 @@ def _gate(g, col):
 def _neighbours(design, ctx, far_line, context):
     """Generic houses either side, behind and across the street, in muted plaster."""
     W, D = design["plot"]["width"], design["plot"]["depth"]
-    commercial = design["kind"] == "commercial"
     rng = random.Random(design["slug"])
     wall_mat, glass_mat = materials.get("neighbour"), materials.get("neighbour-window")
     plots = []
@@ -170,13 +169,12 @@ def _neighbours(design, ctx, far_line, context):
             fy = py + pd if facing == "back-to-street" else py
             walls.append(aabb(px, fy - th / 2, 0, px + pw, fy + th / 2, 2.1))
         walls.append(aabb(px, py, 0, px + th, py + pd, 2.1))
-        storeys = rng.choice((2, 3)) if commercial else rng.choice((1, 2, 2))
-        h = 3.5 if commercial else 3.2
-        # commercial frontages share the plaza setback so the street wall lines up
-        set_front = rng.uniform(4.0, 5.0) if commercial else rng.uniform(4.5, 7.5)
-        set_side = 0.0 if commercial else rng.uniform(0.0, 1.4)
-        depth = pd * (0.75 if commercial else rng.uniform(0.45, 0.6))
-        bx0, bx1 = px + set_side, px + pw - (0 if commercial else rng.uniform(0.0, 1.4))
+        storeys = rng.choice((1, 2, 2))
+        h = 3.2
+        set_front = rng.uniform(4.5, 7.5)
+        set_side = rng.uniform(0.0, 1.4)
+        depth = pd * rng.uniform(0.45, 0.6)
+        bx0, bx1 = px + set_side, px + pw - rng.uniform(0.0, 1.4)
         if facing == "back-to-street":
             by1 = py + pd - set_front
             by0 = by1 - depth
@@ -188,14 +186,14 @@ def _neighbours(design, ctx, far_line, context):
         top = 0.45 + storeys * h
         mass.append(aabb(bx0, by0, 0, bx1, by1, top))
         mass.append(aabb(bx0 - 0.02, by0 - 0.02, top, bx1 + 0.02, by1 + 0.02, top + 0.9))  # parapet band
-        if not commercial and rng.random() < 0.6:  # a cantilevered box on the upper floor
+        if rng.random() < 0.6:  # a cantilevered box on the upper floor
             cx0 = bx0 + rng.uniform(0.5, 3)
             cy0, cy1 = (face_y - 0.9, face_y + 0.01) if face_n < 0 else (face_y - 0.01, face_y + 0.9)
             mass.append(aabb(cx0, cy0, 0.45 + h, cx0 + rng.uniform(3, 5), cy1, 0.45 + 2 * h))
         for st in range(storeys):
             z0 = 0.45 + st * h + 0.9
-            z1 = z0 + (2.6 if commercial and st == 0 else 1.5)
-            count = rng.choice((2, 3)) if not commercial else 4
+            z1 = z0 + 1.5
+            count = rng.choice((2, 3))
             span = (bx1 - bx0) / count
             for c in range(count):
                 if rng.random() < 0.2:

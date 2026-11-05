@@ -105,7 +105,6 @@ Mobile, Lighthouse 12, run against `npm run preview` on 2026-10-31 (local server
 | `/designs/` | 100 | 100 | 100 | 100 |
 | `/designs/1-kanal/` | 99 | 100 | 100 | 100 |
 | `/designs/2-kanal/` | 99 | 100 | 100 | 100 |
-| `/designs/commercial/` | 99 | 100 | 100 | 100 |
 | `/about/` | 100 | 100 | 100 | 100 |
 | `/contact/` | 100 | 100 | 100 | 100 |
 

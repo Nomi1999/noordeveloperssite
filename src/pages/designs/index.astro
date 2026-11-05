@@ -14,14 +14,14 @@ const cards = designs.map((entry) => ({ entry, lead: getRenders(entry.design.slu
 ---
 
 <BaseLayout
-  title="House and Building Designs"
-  description="Concept designs by Noor Developers: 1 Kanal and 2 Kanal houses and a commercial plaza, with renders, floor plans and key facts. Every build is delivered fully finished."
+  title="House Designs"
+  description="Concept designs by Noor Developers: 1 Kanal and 2 Kanal houses, with renders, floor plans and key facts. Every build is delivered fully finished."
   whatsappMessage={whatsappMessage}
 >
   <PageIntro
     label="02 — Designs"
     heading="Designs"
-    lead="Concept designs for houses and commercial buildings, drawn and rendered by our team. We can build any of them on your plot as drawn, or adapt one to your plot and your needs."
+    lead="Concept designs for houses, drawn and rendered by our team. We can build any of them on your plot as drawn, or adapt one to your plot and your needs."
   />
 
   <section class="section section--concrete" aria-label="All designs">
@@ -35,7 +35,7 @@ const cards = designs.map((entry) => ({ entry, lead: getRenders(entry.design.slu
                 <RenderFigure
                   render={lead}
                   caption={false}
-                  sizes="(min-width: 80rem) 25rem, (min-width: 64rem) 31vw, (min-width: 40rem) 46vw, 100vw"
+                  sizes="(min-width: 80rem) 37rem, (min-width: 40rem) 46vw, 100vw"
                   widths={[480, 800, 1200]}
                 />
                 <div class="card__body">
@@ -83,12 +83,6 @@ const cards = designs.map((entry) => ({ entry, lead: getRenders(entry.design.slu
   @media (min-width: 40rem) {
     .cards {
       grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 64rem) {
-    .cards {
-      grid-template-columns: repeat(3, 1fr);
     }
   }
 

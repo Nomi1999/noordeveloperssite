@@ -38,10 +38,10 @@ export const offerings: Offering[] = [
     summary: "You bring the land. We design, architect and build on it, and hand it over fully finished.",
     steps: [
       "We listen to what you need and study your plot.",
-      "We design and draw the building around your plot and the way you live or work.",
+      "We design and draw the house around your plot and the way you live.",
       "We build it from the foundation to the roof.",
       "We finish every room, inside and out.",
     ],
-    outcome: "You get one team from the first sketch to the keys, and a building ready to use on the day we hand it over.",
+    outcome: "You get one team from the first sketch to the keys, and a home ready to live in on the day we hand it over.",
   },
 ];

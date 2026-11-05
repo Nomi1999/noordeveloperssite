@@ -5,11 +5,11 @@ Explains in one page everything Noor Developers build and the two ways a custome
 ## Requirements
 
 ### Requirement: Building types
-The What We Build page SHALL describe houses (all sizes, mainly 1 Kanal and 2 Kanal) and commercial buildings. Each SHALL have a render and a link to the matching designs. The page structure SHALL allow adding further building types as new entries without layout changes.
+The What We Build page SHALL describe houses of all sizes, mainly 1 Kanal and 2 Kanal, with an entry each for 1 Kanal and 2 Kanal houses. Each entry SHALL have a render and a link to the matching design. The page structure SHALL allow adding further entries without layout changes.
 
 #### Scenario: Adding a building type
-- **WHEN** a new building type entry is added to the building types data
-- **THEN** it appears on the page in the same layout as the existing types
+- **WHEN** a new entry is added to the building types data
+- **THEN** it appears on the page in the same layout as the existing entries
 
 ### Requirement: Two offerings in detail
 The page SHALL explain both offerings:

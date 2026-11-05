@@ -20,6 +20,7 @@ describe("content audit fixtures", () => {
     ["regulatory", "NOC"],
     ["real-names", "Wapda City"],
     ["trust-signals", "years of experience"],
+    ["commercial-work", "commercial"],
     ["superlatives", "best"],
   ])("flags %s on its fixture page and names the matched text", (category, match) => {
     const found = onPage(`/${category}.html`);

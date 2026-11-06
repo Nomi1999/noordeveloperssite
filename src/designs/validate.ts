@@ -15,6 +15,9 @@ import {
   offset,
   outlineProblem,
   pathStrip,
+  plotArea,
+  plotEdges,
+  plotPolygon,
   rectPoly,
   regionArea,
   slabOutline,
@@ -102,14 +105,27 @@ export function checkDesign(input: unknown): CheckResult {
   const warn = (level: string | undefined, element: string | undefined, message: string) =>
     warnings.push({ severity: "warning", design: design.slug, level, element, message });
 
-  const plot = asRegion(rectPoly(0, 0, design.plot.width, design.plot.depth));
+  const plot = asRegion(plotPolygon(design));
   const outsidePlot = (region: Region) => areaOutside(region, plot) > AREA_EPS;
-  const minRoom = design.plot.width * design.plot.depth < COMPACT_PLOT_AREA ? COMPACT_MIN_ROOM : MIN_ROOM;
+  const minRoom = plotArea(design) < COMPACT_PLOT_AREA ? COMPACT_MIN_ROOM : MIN_ROOM;
   const outline = (level: string | undefined, element: string, poly: Poly): boolean => {
     const problem = outlineProblem(poly);
     if (problem) error(level, element, `outline is not closed: it ${problem}`);
     return !problem;
   };
+
+  // ---- Plot outline ----
+  if (design.plot.outline) {
+    const ring = design.plot.outline;
+    const b = bounds([ring]);
+    if (outline(undefined, "plot", ring)) {
+      if (ring.length !== 5) error(undefined, "plot", `outline has ${ring.length} corners; it needs 5, for its front, corner, right, rear and left edges`);
+      if (Math.abs(b.minX) > EPS || Math.abs(b.minY) > EPS) error(undefined, "plot", "outline must start at the plot's origin");
+      if (Math.abs(b.w - design.plot.width) > EPS || Math.abs(b.d - design.plot.depth) > EPS) {
+        error(undefined, "plot", `width and depth are ${dims(design.plot.width, design.plot.depth)} but the outline's extents are ${dims(b.w, b.d)}`);
+      }
+    }
+  }
 
   // ---- Identity and references ----
   const levelIndex = new Map<string, number>();
@@ -271,13 +287,14 @@ export function checkDesign(input: unknown): CheckResult {
       const region = asRegion(rectPoly(s.x, s.y, s.w, s.d));
       // A stair may stand in the stairwell of the stair arriving from below, so only the outline counts
       if (outsidePlot(region)) error(L, name, "extends outside the plot");
-      else if (areaOutside(region, slabArea) > AREA_EPS) error(L, name, "does not stand on the slab");
+      else if (!s.outdoor && areaOutside(region, slabArea) > AREA_EPS) error(L, name, "does not stand on the slab");
       const ti = levelIndex.get(s.to);
       if (ti === undefined || ti <= li) {
         error(L, name, `climbs to "${s.to}", which is not a level above`);
         continue;
       }
       const to = design.levels[ti];
+      if (s.outdoor) continue;
       const voids = union(...to.slab.voids.map((v) => asRegion(v.outline)));
       if (areaOutside(region, voids) > AREA_EPS) {
         error(L, name, `does not line up with an opening in the ${to.name.toLowerCase()} slab above it`);
@@ -336,6 +353,7 @@ export function checkDesign(input: unknown): CheckResult {
   }
   for (const p of site.porches) {
     const b = bounds(asRegion(p.outline));
+    if (p.cars !== undefined) continue;
     if (Math.min(b.w, b.d) < CAR_BAY.w - EPS || Math.max(b.w, b.d) < CAR_BAY.d - EPS) {
       warn(undefined, `porch "${p.id}"`, `is ${dims(b.w, b.d)}; one car needs ${dims(CAR_BAY.w, CAR_BAY.d)}`);
     }
@@ -343,9 +361,16 @@ export function checkDesign(input: unknown): CheckResult {
   for (const t of site.planting) {
     const region = asRegion(rectPoly(t.at[0] - t.size / 2, t.at[1] - t.size / 2, t.size, t.size));
     if (outsidePlot(region)) error(undefined, `planting "${t.id}"`, "extends outside the plot");
+    if (t.level && !levelIndex.has(t.level)) error(undefined, `planting "${t.id}"`, `level "${t.level}" does not exist`);
+    if (t.kind === "pot" && !t.level) error(undefined, `planting "${t.id}"`, "is a pot, so it needs the level it stands on");
   }
   for (const gate of site.boundary.gates) {
-    const length = gate.side === "front" || gate.side === "rear" ? design.plot.width : design.plot.depth;
+    const edge = design.plot.outline && plotEdges(design).find((e) => e.edge === gate.side);
+    const length = edge
+      ? Math.hypot(edge.b[0] - edge.a[0], edge.b[1] - edge.a[1])
+      : gate.side === "front" || gate.side === "rear"
+        ? design.plot.width
+        : design.plot.depth;
     if (gate.offset < 0 || gate.offset + gate.width > length + EPS) error(undefined, `gate "${gate.id}"`, `is not within the ${gate.side} boundary`);
   }
 

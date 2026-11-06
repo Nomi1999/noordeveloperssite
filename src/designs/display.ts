@@ -3,7 +3,7 @@
  * facts.ts, so changing a design's data changes the page after a rebuild.
  */
 import type { DesignEntry } from "./index.ts";
-import { dims, sqft } from "./units.ts";
+import { plotDimensions, sqft } from "./units.ts";
 
 export interface Fact {
   label: string;
@@ -23,7 +23,7 @@ export function kindLabel(kind: string): string {
 /** The key facts panel on a design page */
 export function keyFacts({ facts }: DesignEntry): Fact[] {
   const list: Fact[] = [
-    { label: "Plot", value: facts.plot.size, detail: dims(facts.plot.width, facts.plot.depth) },
+    { label: "Plot", value: facts.plot.size, detail: plotDimensions(facts.plot) },
     { label: "Covered area", value: sqft(facts.coveredArea) },
     { label: "Storeys", value: String(facts.storeys) },
   ];

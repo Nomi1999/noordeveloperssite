@@ -22,10 +22,10 @@ export const buildingTypes: BuildingType[] = [
   {
     id: "1-kanal",
     name: "1 Kanal House",
-    summary: "A two-storey family home on a 50′×90′ plot, with five bedrooms each having its own bathroom.",
+    summary: "A two-storey family home on a five-sided corner plot, with five bedrooms each having its own bathroom.",
     detail:
-      "Our 1 Kanal concept fits a 50′×90′ plot: a front lawn and a covered two-car porch under the terrace, a drawing room and dining for guests, a TV lounge for every day, a kitchen with a back kitchen behind it, an elders' bedroom downstairs, and five bedrooms in all, each with its own bathroom.",
-    tags: ["1 Kanal", "50′ × 90′", "5 bedrooms"],
+      "Our 1 Kanal concept fills a five-sided corner plot, 90′ deep and up to 59′ wide: a planted corner garden and a covered two-car porch under the terrace, a double-height stair lobby, a drawing room and dining for guests, a TV lounge, a kitchen with a raw kitchen behind it and two bedrooms downstairs, and upstairs a second TV lounge, a kitchenette, a study and three more bedrooms. All five bedrooms have their own bathroom.",
+    tags: ["1 Kanal", "Corner plot", "5 bedrooms"],
     render: { design: "1-kanal", shot: "front-day" },
     link: { href: "/designs/1-kanal/", label: "See the 1 Kanal design" },
   },

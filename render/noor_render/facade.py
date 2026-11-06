@@ -1,6 +1,7 @@
 """Facade elements, openings and what shows through them.
 
 - facade boxes (fins, cladding, soffits, canopies, frames, mullions) and railings from the export;
+- facade panels: the same, along any line, such as cladding, slats and fittings on a slanted boundary;
 - windows and glazed doors: a dark metal frame set back from the outer face, mullions
   every ≤1.4 m, and a glass pane; solid doors get a wood leaf and a pull handle;
 - behind every exterior glazed opening, an interior backplate card inside the room
@@ -24,6 +25,7 @@ MAX_PANE = 1.4
 GLAZED = {"window", "sliding-door"}
 SOLID_DOORS = {"door", "double-door"}
 NOT_ROOMS = {"terrace"}
+SMALL_PARTS = {"reveal", "led", "sconce", "wash", "slat", "lattice"}  # many small separate boxes: nothing to merge or round
 
 
 def _box_along(a, u, n, s0, s1, o0, o1, z0, z1):
@@ -68,8 +70,11 @@ def build(design, root):
     for f in design["facade"]:
         if f["type"] == "box":
             groups[(f["role"], f["material"])].append(rect_box(f))
+        elif f["type"] == "panel":
+            groups[(f["role"], f["material"])].extend(piece_box(p) for p in f["pieces"])
     for (role, mat), boxes in groups.items():
-        boxes_object(f"facade-{role}-{mat}", boxes, materials.get(mat), col, union=True, role="facade",
+        whole = role not in SMALL_PARTS
+        boxes_object(f"facade-{role}-{mat}", boxes, materials.get(mat), col, union=whole, bevel=whole, role="facade",
                      facade_role=role)
     for f in design["facade"]:
         if f["type"] != "railing":

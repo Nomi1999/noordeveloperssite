@@ -1,5 +1,5 @@
 /** Facts about a design computed from its data, never typed in by hand */
-import { AREA_EPS, asRegion, bounds, coveredArea, intersection, levelRooms, regionArea, slabOutline } from "./geometry.ts";
+import { AREA_EPS, asRegion, bounds, coveredArea, intersection, levelRooms, plotArea, regionArea, slabOutline } from "./geometry.ts";
 import type { Design, RoomTypeName } from "./model.ts";
 import { CAR_BAY } from "./validate.ts";
 import { plotSize } from "./units.ts";
@@ -11,7 +11,8 @@ export interface LevelFacts {
 }
 
 export interface DesignFacts {
-  plot: { width: number; depth: number; area: number; size: string };
+  /** `minWidth` is set when the plot is not a rectangle: its width runs from there to `width` */
+  plot: { width: number; depth: number; minWidth?: number; area: number; size: string };
   storeys: number;
   /** Levels with covered area, from the ground up */
   levels: LevelFacts[];
@@ -73,10 +74,12 @@ export function computeFacts(design: Design): DesignFacts {
   const porches = design.site.porches.map((p) => {
     const region = asRegion(p.outline);
     const b = bounds(region);
-    const cars = Math.max(
-      Math.floor(b.w / CAR_BAY.w) * Math.floor(b.d / CAR_BAY.d),
-      Math.floor(b.d / CAR_BAY.w) * Math.floor(b.w / CAR_BAY.d),
-    );
+    const cars =
+      p.cars ??
+      Math.max(
+        Math.floor(b.w / CAR_BAY.w) * Math.floor(b.d / CAR_BAY.d),
+        Math.floor(b.d / CAR_BAY.w) * Math.floor(b.w / CAR_BAY.d),
+      );
     const covered = regionArea(intersection(region, firstSlab)) >= 0.8 * regionArea(region) - AREA_EPS;
     return { id: p.id, cars, covered };
   });
@@ -86,10 +89,18 @@ export function computeFacts(design: Design): DesignFacts {
     .filter((l) => l.coveredArea > AREA_EPS);
   const roofLevels = design.levels.filter((l) => l.kind === "roof");
   const has = (types: RoomTypeName[], level: Design["levels"][number]) => level.rooms.some((r) => types.includes(r.type));
-  const area = design.plot.width * design.plot.depth;
+  const area = plotArea(design);
+  // The narrowest the plot gets along its street-side corners: every corner off the left edge
+  const minWidth = design.plot.outline && Math.min(...design.plot.outline.map(([x]) => x).filter((x) => x > 0));
 
   return {
-    plot: { width: design.plot.width, depth: design.plot.depth, area, size: plotSize(area) },
+    plot: {
+      width: design.plot.width,
+      depth: design.plot.depth,
+      ...(minWidth ? { minWidth } : {}),
+      area,
+      size: design.plot.label ?? plotSize(area),
+    },
     storeys: floors.length,
     levels,
     coveredArea: levels.reduce((sum, l) => sum + l.coveredArea, 0),

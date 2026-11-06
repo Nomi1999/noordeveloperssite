@@ -51,3 +51,7 @@ The plans must be approved by the maintainer before the `render-pipeline` change
 |---|---|---|---|
 | 2026-10-27 | Maintainer | `review/plans-review.pdf` (15 pages, all levels of all three designs) | Approved without changes |
 | 2026-11-05 | Maintainer | Plan sheets rendered from the data (ground, first and roof of the 5 Marla and 10 Marla) | Approved without changes |
+| 2026-11-06 | Maintainer | Plan sheets rendered from the data (ground, first and roof of the redrawn 1 Kanal) | Approved, keeping the drawn walls where the reference's labels contradict them; the left terrace then stopped beside the entrance, following the renders, at the maintainer's choice |
+| 2026-11-06 | Maintainer | Blender sources of the redrawn 1 Kanal beside the elevation renders, then its AI stills beside their sources | Approved, after adding the missing glass on the porch terrace and regenerating the stills from per-shot prompts |
+
+The home page hero still shows the earlier 1 Kanal house until a later hero change. The maintainer has accepted this; raise it again before any deploy.

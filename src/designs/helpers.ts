@@ -137,3 +137,123 @@ export function repeat(
     return { id: `${prefix}-${i + 1}`, type: "box", x: cx - box.w / 2, y: cy - box.d / 2, ...box };
   });
 }
+
+/**
+ * A stretch of building surface for the finish helpers below. `from` to `to` runs left to right
+ * as seen from outside, so outward is to the right of that direction in plan. `z` and `h` are
+ * relative to `level`, like every facade element.
+ */
+export interface Face {
+  level: string;
+  from: Pt;
+  to: Pt;
+  z: number;
+  h: number;
+}
+
+/** A rectangle on a face to leave clear, such as a window: `s0` to `s1` along it, `z0` to `z1` measured like the face's `z` */
+export interface Hole {
+  s0: number;
+  s1: number;
+  z0: number;
+  z1: number;
+}
+
+type Panel = Extract<FacadeInput, { type: "panel" }>;
+
+export function faceLength(face: Face): number {
+  return Math.hypot(face.to[0] - face.from[0], face.to[1] - face.from[1]);
+}
+
+/** The point `s` along a face and `out` off its surface */
+export function facePoint(face: Face, s: number, out = 0): Pt {
+  const L = faceLength(face);
+  const ux = (face.to[0] - face.from[0]) / L;
+  const uy = (face.to[1] - face.from[1]) / L;
+  return [face.from[0] + ux * s + uy * out, face.from[1] + uy * s - ux * out];
+}
+
+/** A finish standing on a face, `depth` thick from `out` off the surface. Finishes stay off the floor plans */
+function band(id: string, role: string, material: Panel["material"], face: Face, s0: number, s1: number, z: number, h: number, out: number, depth: number): Panel {
+  const mid = out + depth / 2;
+  return { id, type: "panel", level: face.level, role, material, path: [facePoint(face, s0, mid), facePoint(face, s1, mid)], thickness: depth, z, h, plan: false };
+}
+
+/** The parts of the range a to b that the given spans leave uncovered */
+function uncovered(a: number, b: number, spans: [number, number][]): [number, number][] {
+  const out: [number, number][] = [];
+  let at = a;
+  for (const [s0, s1] of [...spans].sort((p, q) => p[0] - q[0])) {
+    if (s0 > at) out.push([at, Math.min(s0, b)]);
+    at = Math.max(at, s1);
+    if (at >= b) return out;
+  }
+  if (at < b) out.push([at, b]);
+  return out;
+}
+
+/** A finish over a whole face, in as few rectangles as its holes allow */
+export function cladding(prefix: string, face: Face, material: Panel["material"], options: { holes?: Hole[]; out?: number; depth?: number } = {}): Panel[] {
+  const { holes = [], out = 0, depth = 0.08 } = options;
+  const L = faceLength(face);
+  const top = face.z + face.h;
+  const cuts = [...new Set([0, L, ...holes.flatMap((h) => [h.s0, h.s1])])].filter((s) => s >= 0 && s <= L).sort((a, b) => a - b);
+  const panels: Panel[] = [];
+  cuts.slice(1).forEach((s1, i) => {
+    const s0 = cuts[i];
+    const across = holes.filter((h) => h.s0 < s1 && h.s1 > s0);
+    for (const [z0, z1] of uncovered(face.z, top, across.map((h) => [h.z0, h.z1]))) {
+      panels.push(band(`${prefix}-${panels.length + 1}`, "cladding", material, face, s0, s1, z0, z1 - z0, out, depth));
+    }
+  });
+  return panels;
+}
+
+/** Thin dark joints between tiles, `width` by `height`, measured from the face's left end and base; none cross a hole */
+export function tileJoints(prefix: string, face: Face, options: { width: number; height: number; holes?: Hole[]; out?: number }): Panel[] {
+  const { width, height, holes = [], out = 0.08 } = options;
+  const JOINT = 0.04;
+  const L = faceLength(face);
+  const top = face.z + face.h;
+  const panels: Panel[] = [];
+  const joint = (s0: number, s1: number, z: number, h: number) =>
+    panels.push(band(`${prefix}-${panels.length + 1}`, "reveal", "plaster-charcoal", face, s0, s1, z, h, out, 0.015));
+  for (let s = width; s < L - 0.01; s += width) {
+    const across = holes.filter((h) => h.s0 < s && h.s1 > s).map((h): [number, number] => [h.z0, h.z1]);
+    for (const [z0, z1] of uncovered(face.z, top, across)) joint(s - JOINT / 2, s + JOINT / 2, z0, z1 - z0);
+  }
+  for (let z = face.z + height; z < top - 0.01; z += height) {
+    const across = holes.filter((h) => h.z0 < z && h.z1 > z).map((h): [number, number] => [h.s0, h.s1]);
+    for (const [s0, s1] of uncovered(0, L, across)) joint(s0, s1, z - JOINT / 2, JOINT);
+  }
+  return panels;
+}
+
+/** Vertical slats centred along a face, on a dark backing board */
+export function slatRun(prefix: string, face: Face, options: { width?: number; gap?: number; depth?: number; out?: number; backing?: Panel["material"] } = {}): Panel[] {
+  const { width = 0.25, gap = 0.17, depth = 0.15, out = 0, backing = "plaster-charcoal" } = options;
+  const L = faceLength(face);
+  const count = Math.floor((L + gap) / (width + gap));
+  const start = (L - (count * width + (count - 1) * gap)) / 2;
+  const slats = Array.from({ length: count }, (_, i) => {
+    const s = start + i * (width + gap);
+    return band(`${prefix}-${i + 1}`, "slat", "wood-slat", face, s, s + width, face.z, face.h, out + 0.05, depth);
+  });
+  return [band(`${prefix}-backing`, "cladding", backing, face, 0, L, face.z, face.h, out, 0.05), ...slats];
+}
+
+/** LED lines running up a face at the given distances along it */
+export function ledLines(prefix: string, face: Face, at: number[], out = 0.08): Panel[] {
+  return at.map((s, i) => band(`${prefix}-${i + 1}`, "led", "led-strip", face, s - 0.03, s + 0.03, face.z, face.h, out, 0.03));
+}
+
+/** Wall lights, each a dark box the renderer gives an up and a down spot; `at` is [along the face, height of its centre] */
+export function sconces(prefix: string, face: Face, at: [number, number][], out = 0.08): Panel[] {
+  const SIZE = 0.7;
+  return at.map(([s, z], i) => band(`${prefix}-${i + 1}`, "sconce", "metal-dark", face, s - SIZE / 2, s + SIZE / 2, z - SIZE / 2, SIZE, out, 0.3));
+}
+
+/** Hidden downlights that scallop a wall, at height `z` (their top) and `out` off its surface */
+export function washLights(prefix: string, face: Face, at: number[], z: number, out = 0.3): Panel[] {
+  return at.map((s, i) => band(`${prefix}-${i + 1}`, "wash", "metal-dark", face, s - 0.1, s + 0.1, z - 0.05, 0.05, out, 0.1));
+}

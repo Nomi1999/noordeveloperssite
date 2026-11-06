@@ -10,6 +10,12 @@ export function feetInches(feet: number): string {
 /** "13'-5" × 16'-0"" */
 export const dims = (w: number, d: number): string => `${feetInches(w)} × ${feetInches(d)}`;
 
+/** A plot's size in words: `75'-0" × 120'-0"`, or a width range for one that is not a rectangle */
+export function plotDimensions(plot: { width: number; depth: number; minWidth?: number }): string {
+  if (plot.minWidth === undefined) return dims(plot.width, plot.depth);
+  return `${feetInches(plot.minWidth)} to ${feetInches(plot.width)} wide × ${feetInches(plot.depth)} deep`;
+}
+
 /** 1234.4 → "1,234 sq ft" */
 export const sqft = (area: number): string => `${Math.round(area).toLocaleString("en-US")} sq ft`;
 

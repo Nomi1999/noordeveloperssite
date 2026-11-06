@@ -24,6 +24,8 @@ PIT = -0.9          # excavation depth, m
 FOOTING = 1.2       # pad footing size, m
 BEAM_DEPTH = 0.4572  # 1'-6"
 BEAM_WIDTH = 0.2286  # 9", the exterior wall thickness
+TREAD = 0.05        # spiral stair tread thickness, m
+POLE = 0.05         # half the width of a spiral stair's pole, m
 
 
 def _centre(c):
@@ -80,6 +82,18 @@ def _beam_material(beam, walls, fallback):
     return material
 
 
+def _spiral(lid, li, st, col):
+    """Separate radial treads around a steel pole."""
+    mat = materials.get("metal-dark")
+    for i, t in enumerate(st["treadPolygons"]):
+        prism_object(f"stair-{lid}-{st['id']}-{i}", t["outline"], [], t["top"] - TREAD, t["top"], mat, col, bevel=False,
+                     role="stair", level=li)
+    cx, cy = st["x"] + st["w"] / 2, st["y"] + st["d"] / 2
+    top = st["treadPolygons"][-1]["top"] + 0.9
+    boxes_object(f"stair-{lid}-{st['id']}-pole", [aabb(cx - POLE, cy - POLE, st["bottom"] - 0.4, cx + POLE, cy + POLE, top)],
+                 mat, col, role="stair", level=li)
+
+
 def build(design, root):
     col = collection("structure", root)
     levels = design["levels"]
@@ -118,8 +132,11 @@ def build(design, root):
             boxes_object(f"beams-{lid}", [piece_box(b) for b in level_beams], materials.get("exposed-concrete"), col,
                          union=True, role="beam", level=li)
         for st in level["stairs"]:
-            boxes_object(f"stair-{lid}-{st['id']}", [rect_box(s) for s in st["steps"]],
-                         materials.get("exposed-concrete"), col, union=True, role="stair", level=li)
+            if st["steps"]:
+                boxes_object(f"stair-{lid}-{st['id']}", [rect_box(s) for s in st["steps"]],
+                             materials.get("exposed-concrete"), col, union=True, role="stair", level=li)
+            if "treadPolygons" in st:
+                _spiral(lid, li, st, col)
 
         walls = level["walls"]
         if walls:

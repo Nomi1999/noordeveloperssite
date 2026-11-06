@@ -19,7 +19,7 @@ import LevelSwitcher from "../../components/designs/LevelSwitcher.astro";
 import { designs, type DesignEntry } from "../../designs/index.ts";
 import { cardFacts, keyFacts, kindLabel } from "../../designs/display.ts";
 import { getRenders } from "../../designs/renders.ts";
-import { dims } from "../../designs/units.ts";
+import { plotDimensions } from "../../designs/units.ts";
 
 export const getStaticPaths = (() =>
   designs.map((entry) => ({ params: { slug: entry.design.slug }, props: { entry } }))) satisfies GetStaticPaths;
@@ -36,7 +36,7 @@ const blurbs = import.meta.glob<MarkdownInstance<Record<string, never>>>("../../
 const Blurb = blurbs[`../../content/designs/${design.slug}.md`]?.Content;
 
 const whatsappMessage = `Hello Noor Developers, I am interested in your ${design.name} design.`;
-const plot = `${facts.plot.size} plot (${dims(facts.plot.width, facts.plot.depth)})`;
+const plot = `${facts.plot.size} plot (${plotDimensions(facts.plot)})`;
 const description = `${design.name}: a concept design by Noor Developers for a ${plot}. ${cardFacts(entry).join(", ")}. Built on your plot and delivered fully finished.`;
 const sections = renders.gallery.length ? 4 : 3;
 const n = (i: number) => String(i).padStart(2, "0");

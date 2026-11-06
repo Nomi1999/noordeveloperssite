@@ -4,6 +4,10 @@ Plot ground sits at GRADE (6" above the road). The street runs along the plot fr
 (y < 0): footpath, kerb, asphalt, then the far kerb and footpath. Neighbouring plots
 get boundary walls and generic, muted massing so the design is always the brightest
 and most detailed thing in frame.
+
+A corner plot names the side in context["sideStreet"]: a second road runs along that
+edge of the plot, and no neighbour stands on it. context["frontRoad"] and ["sideRoad"]
+widen a road so a far camera can stand on it; nothing then stands across that road.
 """
 
 import math
@@ -33,7 +37,7 @@ def build(design, root, footprint, context):
     inset = 0.02
     holes = [[(min(max(x, inset), W - inset), min(max(y, inset), D - inset)) for x, y in offset_polygon(f, MARGIN)]
              for f in footprint]
-    plot = [(0, 0), (W, 0), (W, D), (0, D)]
+    plot = design["plot"].get("outline") or [(0, 0), (W, 0), (W, D), (0, D)]
     prism_object("plot-ground", plot, holes, PIT - 0.05, GRADE - 0.02, materials.get("soil"), site, bevel=False)
     for i, (outer, hole) in enumerate(zip(footprint, holes)):
         prism_object(f"pit-floor-{i}", hole, [], PIT - 0.05, PIT, materials.get("soil"), site, bevel=False)
@@ -70,6 +74,8 @@ def build(design, root, footprint, context):
                      materials.get("exposed-concrete"), site, union=True, role="boundary-skin")
     posts = []
     for g in b["gates"]:
+        if g.get("open"):
+            continue
         for end in (g["from"], g["to"]):
             x, y = end
             posts.append(aabb(x - 0.18, y - 0.18, 0, x + 0.18, y + 0.18, g["top"] + 0.18))
@@ -80,10 +86,17 @@ def build(design, root, footprint, context):
     # ---- street ----
     x0, x1 = -120.0, W + 120.0
     near_kerb = -FOOTPATH
-    far_kerb = near_kerb - KERB - ROAD
-    boxes_object("footpath", [aabb(x0, near_kerb, -0.2, x1, 0, GRADE)], materials.get("footpath"), ctx, bevel=False)
-    boxes_object("kerb", [aabb(x0, near_kerb - KERB, -0.2, x1, near_kerb, GRADE + 0.01),
-                          aabb(x0, far_kerb, -0.2, x1, far_kerb + KERB, GRADE + 0.01)], materials.get("kerb"), ctx)
+    far_kerb = near_kerb - KERB - context.get("frontRoad", ROAD)
+    side_street = _side_street_line(design, context)
+    side_road = context.get("sideRoad", ROAD)
+    near = [(x0, x1)]
+    if side_street:
+        # The front street's near side stops either side of where the side street joins it
+        near = [(x0, side_street.x_at(near_kerb, FOOTPATH + KERB)), (side_street.x_at(near_kerb, FOOTPATH + KERB + side_road), x1)]
+    boxes_object("footpath", [aabb(a, near_kerb, -0.2, b, 0, GRADE) for a, b in near], materials.get("footpath"), ctx,
+                 bevel=False)
+    boxes_object("kerb", [aabb(a, near_kerb - KERB, -0.2, b, near_kerb, GRADE + 0.01) for a, b in near]
+                 + [aabb(x0, far_kerb, -0.2, x1, far_kerb + KERB, GRADE + 0.01)], materials.get("kerb"), ctx)
     boxes_object("road", [aabb(x0, far_kerb + KERB, -0.3, x1, near_kerb - KERB, 0)], materials.get("asphalt"), ctx,
                  bevel=False)
     boxes_object("far-footpath", [aabb(x0, far_kerb - FOOTPATH, -0.2, x1, far_kerb, GRADE)],
@@ -98,8 +111,59 @@ def build(design, root, footprint, context):
                      top_z=lambda x, y: 0.003 + (GRADE) * max(0.0, min(1.0, (y - (near_kerb - KERB)) / 1.0)))
     boxes_object("ground-far", [aabb(-600, -600, -0.35, 600, 600, -0.25)], materials.get("soil"), ctx, bevel=False)
 
-    _neighbours(design, ctx, far_kerb - FOOTPATH, context)
+    if side_street:
+        _side_street(design, side_street, near_kerb, side_road, ctx)
+    _neighbours(design, ctx, far_kerb - FOOTPATH, context, side_street)
     return ctx
+
+
+class _SideStreet:
+    """The right edge of a plot, extended both ways: positions are offsets outward from it."""
+
+    def __init__(self, a, b):
+        self.a = Vector(a)
+        self.u = (Vector(b) - self.a).normalized()
+        self.n = Vector((self.u.y, -self.u.x))
+
+    def point(self, along, offset):
+        return tuple(self.a + self.u * along + self.n * offset)
+
+    def along_at_y(self, y, offset=0.0):
+        return (y - self.a.y - self.n.y * offset) / self.u.y
+
+    def x_at(self, y, offset):
+        return self.point(self.along_at_y(y, offset), offset)[0]
+
+
+def _side_street_line(design, context):
+    if context.get("sideStreet") != "right":
+        return None
+    outline = design["plot"].get("outline")
+    if outline:
+        return _SideStreet(outline[-3], outline[-2])
+    W, D = design["plot"]["width"], design["plot"]["depth"]
+    return _SideStreet((W, 0), (W, D))
+
+
+def _side_street(design, line, near_kerb, road, ctx):
+    """A road along the plot's right edge that runs into the front street, with a footpath each side."""
+    far = line.along_at_y(design["plot"]["depth"]) + 150.0
+
+    def strip(name, material, o0, o1, z0, z1, y_start):
+        s0, s1 = line.along_at_y(y_start, o0), line.along_at_y(y_start, o1)
+        outline = [line.point(s0, o0), line.point(s1, o1), line.point(far, o1), line.point(far, o0)]
+        prism_object(name, outline, [], z0, z1, materials.get(material), ctx, bevel=False)
+
+    strip("side-footpath", "footpath", 0, FOOTPATH, -0.2, GRADE, 0)
+    strip("side-kerb", "kerb", FOOTPATH, FOOTPATH + KERB, -0.2, GRADE + 0.01, near_kerb - KERB)
+    strip("side-road", "asphalt", FOOTPATH + KERB, FOOTPATH + KERB + road, -0.3, 0, near_kerb - KERB)
+    strip("side-far-kerb", "kerb", FOOTPATH + KERB + road, FOOTPATH + 2 * KERB + road, -0.2, GRADE + 0.01, near_kerb - KERB)
+    strip("side-far-footpath", "footpath", FOOTPATH + 2 * KERB + road, 2 * FOOTPATH + 2 * KERB + road, -0.2, GRADE, 0)
+    # The footpath fills the cut corner, between the plot and the extended edge
+    outline = design["plot"].get("outline")
+    if outline and outline[1][0] < outline[2][0]:
+        corner = [(outline[1][0], 0), line.point(line.along_at_y(0), 0), outline[2]]
+        prism_object("corner-footpath", corner, [], -0.2, GRADE, materials.get("footpath"), ctx, bevel=False)
 
 
 def _entry_steps(design, col):
@@ -129,7 +193,9 @@ def _entry_steps(design, col):
 
 
 def _gate(g, col):
-    """A dark metal gate of vertical slats between top and bottom rails."""
+    """A dark metal gate of vertical slats between top and bottom rails. An open gate has no leaf."""
+    if g.get("open"):
+        return
     a, b = Vector((*g["from"], 0)), Vector((*g["to"], 0))
     u = (b - a).normalized()
     n = Vector((-u.y, u.x, 0))
@@ -153,7 +219,7 @@ def _gate(g, col):
     boxes_object(f"gate-{g['id']}", parts, materials.get(g["material"]), col, union=True, role="gate")
 
 
-def _neighbours(design, ctx, far_line, context):
+def _neighbours(design, ctx, far_line, context, side_street=None):
     """Generic houses either side, behind and across the street, in muted plaster.
 
     Sized from the plot so they stay inside their own plots, with enough plots to fill the
@@ -177,6 +243,13 @@ def _neighbours(design, ctx, far_line, context):
     for row in range(2, rows_behind + 1):
         for k in range(-along, along + 1):
             plots.append((k * W, row * D, W, D, "back"))
+    if side_street:
+        # Nothing stands on the side street or across it. Random values are drawn from what remains,
+        # and only designs that ask for a side street get here
+        reach = lambda y: side_street.x_at(y, 0)
+        plots = [p for p in plots if p[4] == "back-to-street" or p[0] + p[2] <= min(reach(p[1]), reach(p[1] + p[3]))]
+    if "frontRoad" in context:
+        plots = [p for p in plots if p[4] != "back-to-street"]
     for i, (px, py, pw, pd, facing) in enumerate(plots):
         walls, mass, windows = [], [], []
         th = 0.23

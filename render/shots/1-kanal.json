@@ -1,36 +1,48 @@
 {
   "context": {
+    "sideStreet": "right",
     "streetTrees": [
-      { "at": [-12.5, -0.9], "height": 6.5 },
-      { "at": [27.5, -0.9], "height": 7.0 },
-      { "at": [-9.0, -11.9], "height": 6.0 },
-      { "at": [31.0, -11.9], "height": 6.5 }
+      {"at": [30.0, 26.0], "height": 10.0},
+      {"at": [-5.0, 22.0], "height": 9.0},
+      {"at": [9.0, 34.0], "height": 9.0}
     ]
   },
   "shots": {
     "front-day": {
-      "lens": 30, "sensor": 36, "verticals": true,
-      "position": [-3.0, -11.5, 6.0], "target": [8.0, 12.0, 4.2],
+      "lens": 33, "sensor": 36, "verticals": true,
+      "position": [0.5, -13.0, 2.2], "target": [7.3, 6.9, 4.5],
       "timeOfDay": 0,
-      "light": { "sunAzimuth": 235, "duskAzimuth": 115 }
+      "hideBoundary": ["front", "corner", "right"],
+      "context": {"frontRoad": 22.0},
+      "light": {"sunAzimuth": 235, "duskAzimuth": 115, "exposureDay": 0.5, "look": "AgX - Base Contrast"}
     },
     "front-dusk": {
-      "lens": 28, "sensor": 36, "verticals": true,
-      "position": [16.5, -12.5, 4.8], "target": [6.5, 12.0, 4.4],
+      "lens": 39, "sensor": 36, "verticals": true,
+      "position": [16.5, -17.0, 2.0], "target": [8.15, 6.6, 4.8],
       "timeOfDay": 1,
-      "light": { "sunAzimuth": 235, "duskAzimuth": 115 }
+      "hideBoundary": ["front", "corner", "right"],
+      "context": {"frontRoad": 22.0},
+      "light": {"sunAzimuth": 235, "duskAzimuth": 115, "exposureDusk": 1.5, "backplateGlow": 0.3, "duskTint": [1.0, 0.97, 0.95]}
     },
     "street": {
-      "lens": 28, "sensor": 36, "verticals": true,
-      "position": [19.0, -11.8, 1.65], "target": [9.0, 10.0, 4.8],
+      "lens": 29, "sensor": 36, "verticals": true,
+      "position": [8.8, -15.0, 3.4], "target": [8.8, 8.0, 3.1],
       "timeOfDay": 0,
-      "light": { "sunAzimuth": 230, "duskAzimuth": 115 }
+      "context": {"frontRoad": 22.0},
+      "light": {"sunAzimuth": 235, "duskAzimuth": 115, "exposureDay": 0.5, "look": "AgX - Base Contrast"}
     },
     "aerial": {
-      "lens": 30, "sensor": 36, "verticals": false,
-      "position": [-4.0, -21.0, 27.0], "target": [7.6, 13.0, 2.0],
+      "lens": 37, "sensor": 36, "verticals": false,
+      "position": [32.0, -21.0, 24.0], "target": [9.0, 11.5, 3.0],
       "timeOfDay": 0,
-      "light": { "sunAzimuth": 235, "duskAzimuth": 115 }
+      "light": {"sunAzimuth": 235, "duskAzimuth": 115, "exposureDay": 0.5, "look": "AgX - Base Contrast", "haze": 0.002}
+    },
+    "side": {
+      "lens": 50, "sensor": 36, "verticals": true,
+      "position": [47.0, -8.0, 5.0], "target": [10.3, 12.5, 4.7],
+      "timeOfDay": 1,
+      "context": {"sideRoad": 42.0, "streetTrees": [{"at": [9.0, 34.0], "height": 9.0}]},
+      "light": {"sunAzimuth": 235, "duskAzimuth": 115, "exposureDusk": 1.5, "backplateGlow": 0.3, "duskTint": [1.0, 0.97, 0.95]}
     }
   }
 }

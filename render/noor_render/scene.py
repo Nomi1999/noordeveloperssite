@@ -6,6 +6,9 @@ from . import assets, construction, facade, geometry, lighting, loader, material
 from .util import collection
 
 
+KERB_HEIGHT = 0.335  # m, where a shot hides a boundary wall
+
+
 def clear():
     for obj in list(bpy.data.objects):
         bpy.data.objects.remove(obj)
@@ -16,16 +19,27 @@ def clear():
     materials.reset()
 
 
+def hide_boundary(design, sides):
+    """Leaves the named plot edges out of one shot: the panels above the base go, and any taller wall drops to a kerb."""
+    prefixes = tuple(f"boundary-{side}-" for side in sides)
+    if prefixes:
+        design["facade"] = [f for f in design["facade"] if not f["id"].startswith(prefixes)]
+    for w in design["site"]["boundary"]["walls"]:
+        if w["side"] in sides:
+            w["top"] = min(w["top"], KERB_HEIGHT)
+
+
 class Scene:
     def __init__(self, slug, shot_name, clay=None, shot=None):
         """shot: a shot dict to use instead of looking shot_name up (a sequence's first frame)."""
         design = loader.load(slug)  # stops on an unsupported export before anything is built
         config = shots.load(slug)
         shot = shot or shots.get(config, shot_name)
+        hide_boundary(design, shot.get("hideBoundary", []))
         assets.check_all()
         clear()
         root = collection("noor")
-        context = config.get("context", {})
+        context = {**config.get("context", {}), **shot.get("context", {})}
         footprint = geometry.build(design, root)
         room_lights = facade.build(design, root)
         site.build(design, root, footprint, context)
@@ -33,7 +47,7 @@ class Scene:
         construction.blueprint(design, root)
         construction.assign(design)
         soffits = [f for f in design["facade"] if f["type"] == "box" and f["role"] in ("soffit", "canopy")]
-        self.rig = lighting.Rig(shot, room_lights, soffits, root)
+        self.rig = lighting.Rig(shot, room_lights, soffits, root, design["facade"])
         self.camera = shots.camera(shot)
         if clay:
             materials.apply_clay(keep_glass=clay == "glass")

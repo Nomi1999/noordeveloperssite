@@ -7,7 +7,7 @@ import RenderFigure from "../../components/RenderFigure.astro";
 import { designs } from "../../designs/index.ts";
 import { cardFacts, kindLabel } from "../../designs/display.ts";
 import { getRenders } from "../../designs/renders.ts";
-import { dims } from "../../designs/units.ts";
+import { plotDimensions } from "../../designs/units.ts";
 
 const whatsappMessage = "Hello Noor Developers, I would like to talk about one of your designs.";
 const cards = designs.map((entry) => ({ entry, lead: getRenders(entry.design.slug).lead }));
@@ -48,7 +48,7 @@ const cards = designs.map((entry) => ({ entry, lead: getRenders(entry.design.slu
                     </a>
                   </h2>
                   <p class="card__plot dim">
-                    {facts.plot.size} plot · {dims(facts.plot.width, facts.plot.depth)}
+                    {facts.plot.size} plot · {plotDimensions(facts.plot)}
                   </p>
                   <ul class="card__facts" role="list">
                     {cardFacts(entry).map((fact) => (

@@ -5,7 +5,7 @@
  * A Region is a list of rings: outer rings counter-clockwise, holes clockwise.
  */
 import ClipperLib from "clipper-lib";
-import type { Design, Level, Opening, Poly, Pt, Room, SideName, Slab, Stair, Wall } from "./model.ts";
+import type { Design, Level, Opening, PlotEdgeName, Poly, Pt, Room, SideName, Slab, Stair, Wall } from "./model.ts";
 
 export type Region = Poly[];
 
@@ -353,10 +353,41 @@ export const wallHeight = (wall: Wall, design: Design, levelIndex: number): numb
 
 // ---- Site ----
 
+/** The plot as a closed polygon: its outline, or the rectangle its width and depth give */
+export const plotPolygon = (design: Design): Poly => design.plot.outline ?? rectPoly(0, 0, design.plot.width, design.plot.depth);
+
+export const plotArea = (design: Design): number => Math.abs(signedArea(plotPolygon(design)));
+
+const OUTLINE_EDGES: PlotEdgeName[] = ["front", "corner", "right", "rear", "left"];
+
+/** The centreline of the boundary wall along each edge of a plot outline, mitred where edges meet */
+export function plotEdges(design: Design): { edge: PlotEdgeName; a: Pt; b: Pt }[] {
+  const ring = design.plot.outline!;
+  const mid = design.site.boundary.thickness / 2;
+  const n = ring.length;
+  const inward = (i: number): Pt => {
+    const [p, q] = [ring[i], ring[(i + 1) % n]];
+    const len = Math.hypot(q[0] - p[0], q[1] - p[1]);
+    return [-(q[1] - p[1]) / len, (q[0] - p[0]) / len];
+  };
+  // Where the inset lines of the edges before and after a corner cross
+  const corner = (i: number): Pt => {
+    const [n0, n1] = [inward((i + n - 1) % n), inward(i)];
+    const denom = 1 + n0[0] * n1[0] + n0[1] * n1[1];
+    return [ring[i][0] + (mid * (n0[0] + n1[0])) / denom, ring[i][1] + (mid * (n0[1] + n1[1])) / denom];
+  };
+  return ring.map((_, i) => ({ edge: OUTLINE_EDGES[i], a: corner(i), b: corner((i + 1) % n) }));
+}
+
 /** A point on the centreline of the boundary wall along one plot side, `v` feet along it */
 export function boundaryPoint(design: Design, side: SideName, v: number): Pt {
   const { width: W, depth: D } = design.plot;
   const mid = design.site.boundary.thickness / 2;
+  if (design.plot.outline) {
+    const { a, b } = plotEdges(design).find((e) => e.edge === side)!;
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    return [a[0] + ((b[0] - a[0]) / len) * v, a[1] + ((b[1] - a[1]) / len) * v];
+  }
   return side === "front" ? [v, mid] : side === "rear" ? [v, D - mid] : side === "left" ? [mid, v] : [W - mid, v];
 }
 
@@ -364,9 +395,28 @@ export function boundaryPoint(design: Design, side: SideName, v: number): Pt {
  * Boundary wall pieces along the plot sides, broken at gates. Side walls stop
  * at the front and rear walls, so no two pieces overlap.
  */
-export function boundaryPieces(design: Design): (Piece & { side: SideName })[] {
+export function boundaryPieces(design: Design): (Piece & { side: PlotEdgeName })[] {
   const { sides, thickness, gates } = design.site.boundary;
-  const out: (Piece & { side: SideName })[] = [];
+  const out: (Piece & { side: PlotEdgeName })[] = [];
+  if (design.plot.outline) {
+    for (const { edge, a, b } of plotEdges(design)) {
+      if (edge === "corner" ? !(sides.includes("front") && sides.includes("right")) : !sides.includes(edge)) continue;
+      const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      const u: Pt = [(b[0] - a[0]) / length, (b[1] - a[1]) / length];
+      const at = (v: number): Pt => [a[0] + u[0] * v, a[1] + u[1] * v];
+      const spans = gates
+        .filter((g) => g.side === edge)
+        .sort((p, q) => p.offset - q.offset)
+        .map((g) => [g.offset, g.offset + g.width]);
+      // Ends run on by half the thickness so the corners are filled
+      let start = -thickness / 2;
+      for (const [p, q] of [...spans, [length + thickness / 2, length + thickness / 2]]) {
+        if (p - start > EPS) out.push({ side: edge, from: at(start), to: at(p), thickness });
+        start = q;
+      }
+    }
+    return out;
+  }
   for (const side of sides) {
     const horizontal = side === "front" || side === "rear";
     const length = horizontal ? design.plot.width : design.plot.depth;
@@ -492,10 +542,18 @@ export interface StairLayout {
   path: Pt[];
   /** Dog-leg only: the handrail line between the two flights */
   rail?: [Pt, Pt];
+  /** What it covers in plan, when that is not its rectangle */
+  outline?: Poly;
+  /** Spiral only: its wedge-shaped treads, in order of climbing */
+  wedges?: { outline: Poly; top: number }[];
 }
 
 /** Target riser height: 7 inches */
 const RISER_TARGET = 7 / 12;
+/** The shallowest tread a stair is laid out with: 10 inches */
+const TREAD_MIN = 10 / 12;
+/** A spiral stair turns this far per tread */
+const SPIRAL_STEP = Math.PI / 6;
 
 /**
  * Lays out the treads of a stair climbing `rise` feet. A dog-leg has two
@@ -518,6 +576,53 @@ export function stairLayout(stair: Stair, rise: number): StairLayout {
     const [x1, y1] = at(s1, r1);
     return [Math.min(x0, x1), Math.min(y0, y1), Math.abs(x1 - x0), Math.abs(y1 - y0)];
   };
+
+  if (stair.type === "spiral") return spiralLayout(stair, rise);
+  if (stair.type === "l-shaped") {
+    // Two flights around a corner landing. An outdoor stair like this may be steeper than the
+    // target riser, so the plan's run sets the number of treads and the rise is shared among them.
+    const flight = stair.flight ?? 2.25;
+    const run1 = along - flight;
+    const run2 = across - flight;
+    const treads = Math.floor((run1 + run2) / TREAD_MIN + 1e-9);
+    const n1 = Math.round((treads * run1) / (run1 + run2));
+    const n2 = treads - n1;
+    const risers = treads + 2;
+    const riser = rise / risers;
+    const [t1, t2] = [run1 / n1, run2 / n2];
+    // The first flight keeps to its side; the second runs along the far edge, back across the stair
+    const toRight = stair.firstFlight === "left";
+    const [a0, a1] = toRight ? [0, flight] : [across - flight, across];
+    const across2 = (v: number) => (toRight ? flight + v : across - flight - v);
+    const steps: StairStep[] = [];
+    const nosings: [Pt, Pt][] = [];
+    for (let i = 0; i < n1; i++) {
+      steps.push({ rect: box(i * t1, (i + 1) * t1, a0, a1), top: (i + 1) * riser });
+      nosings.push([at(i * t1, a0), at(i * t1, a1)]);
+    }
+    nosings.push([at(run1, a0), at(run1, a1)]);
+    steps.push({ rect: box(run1, along, a0, a1), top: (n1 + 1) * riser });
+    for (let i = 0; i < n2; i++) {
+      const [r0, r1] = [across2(i * t2), across2((i + 1) * t2)];
+      steps.push({ rect: box(run1, along, Math.min(r0, r1), Math.max(r0, r1)), top: (n1 + i + 2) * riser });
+      nosings.push([at(run1, r0), at(along, r0)]);
+    }
+    nosings.push([at(run1, across2(run2)), at(along, across2(run2))]);
+    const m = (a0 + a1) / 2;
+    const turn = run1 + flight / 2;
+    const inner1 = toRight ? a1 : a0;
+    const outer1 = toRight ? a0 : a1;
+    const far = across2(run2);
+    return {
+      risers,
+      riser,
+      tread: Math.min(t1, t2),
+      steps,
+      nosings,
+      path: [at(0, m), at(turn, m), at(turn, far)],
+      outline: [at(0, inner1), at(run1, inner1), at(run1, far), at(along, far), at(along, outer1), at(0, outer1)],
+    };
+  }
 
   const risers = Math.ceil(rise / RISER_TARGET - 1e-9);
   const riser = rise / risers;
@@ -543,6 +648,38 @@ export function stairLayout(stair: Stair, rise: number): StairLayout {
   const [f1a, f1b] = stair.firstFlight === "right" ? [across - flight, across] : [0, flight];
   const [f2a, f2b] = stair.firstFlight === "right" ? [0, flight] : [across - flight, across];
   const run = along - landing;
+
+  if (stair.extraRun > 0) {
+    // The first flight starts before the outline, so the flights differ in length and landing sits higher up
+    const extra = stair.extraRun;
+    const even = (2 * run + extra) / (risers - 2);
+    const n2 = Math.max(1, Math.round(run / even));
+    const n1 = risers - 2 - n2;
+    const [t1, t2] = [(run + extra) / n1, run / n2];
+    for (let i = 0; i < n1; i++) {
+      steps.push({ rect: box(i * t1 - extra, (i + 1) * t1 - extra, f1a, f1b), top: (i + 1) * riser });
+      nosings.push([at(i * t1 - extra, f1a), at(i * t1 - extra, f1b)]);
+    }
+    nosings.push([at(run, f1a), at(run, f1b)]);
+    steps.push({ rect: box(run, along, 0, across), top: (n1 + 1) * riser });
+    for (let i = 0; i < n2; i++) {
+      steps.push({ rect: box(run - (i + 1) * t2, run - i * t2, f2a, f2b), top: (n1 + i + 2) * riser });
+      nosings.push([at(run - i * t2, f2a), at(run - i * t2, f2b)]);
+    }
+    nosings.push([at(0, f2a), at(0, f2b)]);
+    const [m1, m2] = [(f1a + f1b) / 2, (f2a + f2b) / 2];
+    const turn = run + landing / 2;
+    return {
+      risers,
+      riser,
+      tread: Math.min(t1, t2),
+      steps,
+      nosings,
+      path: [at(-extra, m1), at(turn, m1), at(turn, m2), at(0, m2)],
+      rail: [at(0, across / 2), at(run, across / 2)],
+      outline: [at(-extra, f1a), at(0, f1a), at(0, 0), at(along, 0), at(along, across), at(0, across), at(0, f1b), at(-extra, f1b)],
+    };
+  }
 
   for (let i = 0; i < r1 - 1; i++) {
     steps.push({ rect: box(run - (r1 - 1 - i) * tread, run - (r1 - 2 - i) * tread, f1a, f1b), top: (i + 1) * riser });
@@ -571,6 +708,27 @@ export function stairLayout(stair: Stair, rise: number): StairLayout {
     path: [at(run - (r1 - 1) * tread, m1), at(turn, m1), at(turn, m2), at(run - (r2 - 1) * tread, m2)],
     rail: [at(0, across / 2), at(run, across / 2)],
   };
+}
+
+/** A spiral around the centre of its outline, climbing counter-clockwise from the `up` side */
+function spiralLayout(stair: Stair, rise: number): StairLayout {
+  const c: Pt = [stair.x + stair.w / 2, stair.y + stair.d / 2];
+  const r = Math.min(stair.w, stair.d) / 2;
+  const hub = 0.25;
+  const start = Math.atan2(SIDE_DIR[stair.up][1], SIDE_DIR[stair.up][0]);
+  const risers = Math.ceil(rise / RISER_TARGET - 1e-9);
+  const riser = rise / risers;
+  const at = (radius: number, angle: number): Pt => [c[0] + radius * Math.cos(angle), c[1] + radius * Math.sin(angle)];
+  const wedges = Array.from({ length: risers - 1 }, (_, i) => {
+    const [a0, a1] = [start + i * SPIRAL_STEP, start + (i + 1) * SPIRAL_STEP];
+    return { outline: [at(hub, a0), at(r, a0), at(r, (a0 + a1) / 2), at(r, a1), at(hub, a1)], top: (i + 1) * riser };
+  });
+  // One full turn is enough to draw: the plan shows the top of the stair over the rest
+  const turn = Math.round((2 * Math.PI) / SPIRAL_STEP);
+  const nosings = Array.from({ length: turn }, (_, i): [Pt, Pt] => [at(hub, start + i * SPIRAL_STEP), at(r, start + i * SPIRAL_STEP)]);
+  const walk = r * 0.65;
+  const path = Array.from({ length: turn - 1 }, (_, i) => at(walk, start + (i + 0.5) * SPIRAL_STEP));
+  return { risers, riser, tread: SPIRAL_STEP * walk, steps: [], nosings, path, wedges };
 }
 
 // ---- Labels ----

@@ -24,6 +24,15 @@ export const MATERIALS = [
   "paving-stone",
   "grass",
   "planter-soil",
+  "stone-tile-grey",
+  "travertine",
+  "tile-beige",
+  "tile-bronze",
+  "marble-bronze",
+  "granite-black",
+  "wood-slat",
+  "plaster-sand",
+  "led-strip",
 ] as const;
 export const Material = z.enum(MATERIALS);
 
@@ -56,6 +65,7 @@ export const ROOM_TYPES = [
   "lift",
   "shaft",
   "machine-room",
+  "study",
   "other",
 ] as const;
 export const RoomType = z.enum(ROOM_TYPES);
@@ -79,6 +89,8 @@ export const OpeningType = z.enum(OPENING_TYPES);
 
 /** Plot-relative sides: front faces the street (y = 0), rear is y = depth */
 export const Side = z.enum(["front", "rear", "left", "right"]);
+/** Edges of a plot outline: its sides, plus the cut corner between front and right */
+export const PlotEdge = z.enum(["front", "corner", "right", "rear", "left"]);
 
 const Id = z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "ids are lowercase letters, digits and dashes");
 const Length = z.number().positive();
@@ -128,6 +140,8 @@ export const Room = z.object({
   /** For bathrooms and dressings: the room they belong to */
   attachedTo: Id.optional(),
   floor: Material.default("porcelain-paving"),
+  /** Too small or too full to carry text on the plan; the room schedule still lists it */
+  unlabelled: z.boolean().default(false),
 });
 
 export const Fixture = z.object({
@@ -140,7 +154,7 @@ export const Fixture = z.object({
 
 export const Stair = z.object({
   id: Id,
-  type: z.enum(["dog-leg", "straight"]),
+  type: z.enum(["dog-leg", "straight", "l-shaped", "spiral"]),
   ...rect,
   /** The level it climbs to */
   to: Id,
@@ -148,6 +162,12 @@ export const Stair = z.object({
   up: Side,
   /** Dog-leg only: the half of the stair the first flight takes, looking along `up` */
   firstFlight: z.enum(["left", "right"]).default("right"),
+  /** Dog-leg only: how far the first flight starts before the stair's outline, outside the stairwell */
+  extraRun: z.number().min(0).default(0),
+  /** L-shaped only: width of a flight */
+  flight: Length.optional(),
+  /** In the open air: not under the slab above, so no stairwell or arrival room is needed */
+  outdoor: z.boolean().default(false),
 });
 
 export const Void = z.object({
@@ -212,6 +232,8 @@ export const Gate = z.object({
   width: Length,
   kind: z.enum(["vehicle", "pedestrian"]),
   material: Material.default("metal-dark"),
+  /** An opening between piers, with no leaves */
+  open: z.boolean().default(false),
 });
 
 const Area = z.object({ id: Id, outline: Polygon });
@@ -226,7 +248,15 @@ export const Site = z.object({
     gates: z.array(Gate).default([]),
   }),
   /** Car porches; car capacity is computed from their size */
-  porches: z.array(Area.extend({ material: Material.default("porcelain-paving") })).default([]),
+  porches: z
+    .array(
+      Area.extend({
+        material: Material.default("porcelain-paving"),
+        /** Cars it holds, for a porch that parks them partly on the driveway; otherwise computed from its size */
+        cars: z.number().int().positive().optional(),
+      }),
+    )
+    .default([]),
   driveways: z.array(Area.extend({ material: Material.default("paving-stone") })).default([]),
   lawns: z.array(Area).default([]),
   paving: z.array(Area.extend({ material: Material.default("paving-stone") })).default([]),
@@ -234,10 +264,12 @@ export const Site = z.object({
     .array(
       z.object({
         id: Id,
-        kind: z.enum(["tree", "palm", "shrub", "hedge"]),
+        kind: z.enum(["tree", "palm", "shrub", "hedge", "pot"]),
         at: Point,
         /** Canopy or clump diameter */
         size: Length,
+        /** Pots: the level they stand on; everything else stands on the ground */
+        level: Id.optional(),
       }),
     )
     .default([]),
@@ -253,11 +285,19 @@ const FacadeBase = {
   z: z.number(),
   h: Length,
   material: Material,
+  /** Finishes a floor plan does not show, such as tile joints and wall lights, set this to false */
+  plan: z.boolean().default(true),
 };
 
 export const FacadeElement = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("box"), ...FacadeBase, ...rect }),
+  z.object({
+    type: z.literal("box"),
+    ...FacadeBase,
+    ...rect,
+  }),
   z.object({ type: z.literal("railing"), ...FacadeBase, path: z.array(Point).min(2), thickness: Length.default(0.15) }),
+  /** A flat band along a path at any angle, with no cap or shoe, e.g. cladding on a slanted boundary */
+  z.object({ type: z.literal("panel"), ...FacadeBase, path: z.array(Point).min(2), thickness: Length.default(0.1) }),
 ]);
 
 export const Design = z.object({
@@ -270,6 +310,14 @@ export const Design = z.object({
     depth: Length,
     /** Direction of north, in degrees clockwise from +y (into the plot) */
     north: z.number().default(0),
+    /**
+     * For a plot that is not a rectangle: its corners counter-clockwise from the
+     * front-left, in the order front, corner, right, rear, left. Width and depth
+     * are then its extents.
+     */
+    outline: Polygon.optional(),
+    /** The plot's size as sold, when it differs from the size computed from its area */
+    label: z.string().min(1).optional(),
   }),
   grid: z.object({
     /** Grid lines along x are lettered A, B, C ... */
@@ -291,6 +339,7 @@ export type RoomTypeName = z.infer<typeof RoomType>;
 export type FixtureTypeName = z.infer<typeof FixtureType>;
 export type OpeningTypeName = z.infer<typeof OpeningType>;
 export type SideName = z.infer<typeof Side>;
+export type PlotEdgeName = z.infer<typeof PlotEdge>;
 export type Pt = z.infer<typeof Point>;
 export type Poly = Pt[];
 export type Wall = z.output<typeof Wall>;

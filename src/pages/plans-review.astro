@@ -12,7 +12,7 @@ import "../styles/floor-plan.css";
 import { designs } from "../designs/index.ts";
 import { planLevels, renderPlan } from "../designs/plan.ts";
 import { checkDesign, formatIssue } from "../designs/validate.ts";
-import { feetInches, sqft } from "../designs/units.ts";
+import { plotDimensions, sqft } from "../designs/units.ts";
 
 const yesNo = (v: boolean) => (v ? "Yes" : "No");
 const count = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
@@ -20,7 +20,7 @@ const count = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? on
 const sheets = designs.map(({ design, facts }) => {
   const floors = design.levels.filter((l) => l.kind === "floor").length;
   const rows: [string, string][] = [
-    ["Plot", `${feetInches(design.plot.width)} × ${feetInches(design.plot.depth)} (${facts.plot.size}, ${sqft(facts.plot.area)})`],
+    ["Plot", `${plotDimensions(facts.plot)} (${facts.plot.size}, ${sqft(facts.plot.area)})`],
     ["Storeys", String(facts.storeys)],
     ...facts.levels.map((l): [string, string] => [`Covered area, ${l.name.toLowerCase()}`, sqft(l.coveredArea)]),
     ["Covered area, total", sqft(facts.coveredArea)],

@@ -23,7 +23,11 @@ Run from the repository root. `BLENDER_PATH` overrides the default `C:\Program F
 | `node scripts/enhance-renders.mjs generate (--only <design>/<shot>,... \| --design <slug>,...)` | Make photoreal versions of those renders with an OpenRouter image model into `render/out/ai/`. Needs `OPENROUTER_API_KEY`, and the model in `--model` or `IMAGE_MODEL`, in `.env` or the environment |
 | `node scripts/enhance-renders.mjs encode (--only ... \| --design ...)` | Write those into `src/assets/renders/<design>/<shot>.jpg` (2048×1152) and, for hero jobs, the poster `public/hero/poster/<orientation>-<tier>.{avif,webp}` |
 
-**AI-enhanced images (2026-11-01).** The stills on the site and the hero's opening dusk poster are photoreal restyles of these renders, not the renders themselves. The sequence frames are still the renders. To re-encode the stills straight from a render, run `render:encode -- stills`, which overwrites them. Each restyle keeps the source's design and framing: the script scores each attempt against its source and keeps the best one, and every result is reviewed side by side with its source before delivery. Design changes asked for after the renders were made (`DESIGN_EDITS`; so far, glass on every open side of the 1 Kanal terrace) are applied in a separate edit pass, so the restyle itself stays faithful. Re-cut the share images afterwards with `render:encode -- share`.
+**AI-enhanced images (2026-11-01).** The stills on the site and the hero's opening dusk poster are photoreal restyles of these renders, not the renders themselves. The sequence frames are still the renders. To re-encode the stills straight from a render, run `render:encode -- stills`, which overwrites them. Each restyle keeps the source's design and framing: the script scores each attempt against its source and keeps the best one, and every result is reviewed side by side with its source before delivery. Design changes asked for after the renders were made (`DESIGN_EDITS`; so far, glass on every open side of the 2 Kanal terrace, and `HERO_EDIT` for the same on the hero posters) are applied in a separate edit pass, so the restyle itself stays faithful. Re-cut the share images afterwards with `render:encode -- share`.
+
+**1 Kanal redesign (2026-11-06).** The 1 Kanal stills are EEVEE sources restyled with `bytedance-seed/seedream-5-0-flash`. Its prompts come from `SHOT_NOTES`, one note per shot naming only what that render shows: a part named in a shot that cannot see it gets drawn anyway. Both reviews were approved by the maintainer: the sources beside the elevation renders, and the stills beside their sources. An attempt that fails the framing check is not offered for review, even though the script keeps the best one, so these used `--attempts 5`.
+
+**Temporary hero mismatch.** The home page hero video and posters still show the earlier 1 Kanal house, above stills of the new one, until a later hero change. `render/shots/1-kanal-hero-*.json` and the old frames in `render/out/1-kanal/` are kept for that reason. The maintainer has accepted this; raise it again before any deploy.
 
 **Fast path for new designs (2026-11-05).** A new design doesn't need Cycles: the model downscales its input to 2048px anyway, so an EEVEE preview gives the same geometry and framing for a fraction of the time, with no dedicated GPU.
 
@@ -137,6 +141,8 @@ To reproduce the comparison: `npm run render:still -- --design 1-kanal --shot fr
 ## Content review
 
 **Approved by the maintainer on 2026-10-31**: the eight house Cycles `final` stills in `src/assets/renders/` (1-kanal and 2-kanal front-day, front-dusk, street, aerial). Checked against the content rules: no text or logos (gates, doors, parapets, neighbours), no people, no vehicles or number plates, no real places (neighbours are generated massing, skies are CC0 HDRIs, trees are CC0 models). Each still is 3200×1800 and passed the pixel-level review at 100% (no noise, fireflies, denoiser blotches, seams or blank frames; no banding in the encoded JPEGs).
+
+The redrawn 1 Kanal has since replaced its four stills and added a side-street still; see "1 Kanal redesign" above.
 
 Known and accepted: lit neighbour windows at dusk are flat warm panels, and lit house windows at dusk are evenly bright backplates. Any re-render of a still needs a new review.
 

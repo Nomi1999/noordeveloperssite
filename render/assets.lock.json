@@ -354,6 +354,87 @@
       ]
     },
     {
+      "id": "beige_wall_001",
+      "kind": "texture",
+      "use": "tile-beige, plaster-sand",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/beige_wall_001",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "textures/beige_wall_001/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/beige_wall_001/beige_wall_001_diff_4k.jpg",
+          "sha256": "80062445c4122f72bd067cbc4ac511146c6a7de4a3bb4fe78237c9838e4def37"
+        },
+        {
+          "path": "textures/beige_wall_001/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/beige_wall_001/beige_wall_001_disp_4k.jpg",
+          "sha256": "79a1342cc297f780bf9b0e6d301ec3423f245ca531eb84a17293f6f45100f820"
+        },
+        {
+          "path": "textures/beige_wall_001/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/beige_wall_001/beige_wall_001_rough_4k.jpg",
+          "sha256": "662874883ceb729365eb16f5c01457e993ca29474ce659bb96eb0a16be09264a"
+        }
+      ]
+    },
+    {
+      "id": "beige_wall_002",
+      "kind": "texture",
+      "use": "travertine, tile-bronze",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/beige_wall_002",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "textures/beige_wall_002/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/beige_wall_002/beige_wall_002_diff_4k.jpg",
+          "sha256": "abb72f02f38709a06522ee48f823ce40a1e55a7f5d430deb9f5fe97eafcbb506"
+        },
+        {
+          "path": "textures/beige_wall_002/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/beige_wall_002/beige_wall_002_disp_4k.jpg",
+          "sha256": "e720033bab871cc76847936e150225cac7bb92fe9ed3dfb2668289c887924678"
+        },
+        {
+          "path": "textures/beige_wall_002/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/beige_wall_002/beige_wall_002_rough_4k.jpg",
+          "sha256": "201d4ddbe72acec8265357ea83db02f7e1d29e99cf159b3cffd625da8767084b"
+        }
+      ]
+    },
+    {
+      "id": "dark_wood",
+      "kind": "texture",
+      "use": "wood-slat",
+      "source": "Poly Haven",
+      "page": "https://polyhaven.com/a/dark_wood",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "resolution": "4k",
+      "files": [
+        {
+          "path": "textures/dark_wood/diff.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/dark_wood/dark_wood_diff_4k.jpg",
+          "sha256": "23b0d56932232c77b453f3db2b135f1a6375744be4b667c4b0f9f0ccb68a1481"
+        },
+        {
+          "path": "textures/dark_wood/disp.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/dark_wood/dark_wood_disp_4k.jpg",
+          "sha256": "354c8499e90514ab5918af19ca92d6262806a05af044f97ccc19f8e7edc5cc2a"
+        },
+        {
+          "path": "textures/dark_wood/rough.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/dark_wood/dark_wood_rough_4k.jpg",
+          "sha256": "45c781b364500b0343d81e86698cbc5e0f0a43f871d8d97acd5d00f04b0e64e0"
+        }
+      ]
+    },
+    {
       "id": "kloofendal_48d_partly_cloudy_puresky",
       "kind": "hdri",
       "use": "day sky",

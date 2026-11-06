@@ -1,3 +1,3 @@
-A two-storey family home. On the ground floor, guests come in through the foyer to the drawing room and dining, while the family side has a TV lounge and a kitchen with a back kitchen and store behind it. A guest bedroom with its own bathroom sits downstairs too, with a servant room and laundry at the back.
+A two-storey family home on a five-sided corner plot. On the ground floor, a double-height stair lobby leads to the drawing room and dining, while the family side has a TV lounge and a kitchen with a raw kitchen behind it. Two bedrooms sit downstairs too, each with its own bathroom.
 
-Upstairs, the master bedroom has a dressing and its own bathroom, three more bedrooms each have a bathroom, and there is a family lounge and a terrace. Outside: a covered car porch, a front lawn, and a boundary wall with a car gate and a side gate.
+Upstairs, the master bedroom has a dressing and its own bathroom, two more bedrooms each have a bathroom, and there is a second TV lounge, a kitchenette, a study and terraces. Outside: a covered two-car porch, a planted corner garden, and a stone boundary wall with a car entrance and two timber doors.

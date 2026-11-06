@@ -17,7 +17,7 @@ A showcase that Noor Developers exists and builds fully finished houses. The onl
 One team from the first drawing to the keys, and every build handed over fully finished: the owner only brings furniture. Two ways to work: buy a Noor home built on Noor's own plot, or have Noor design, architect and build on your plot.
 
 ## Operating Context
-- Plots are measured in Kanal and Marla (1 Kanal drawn as 50'×90', 2 Kanal as 75'×120'); dimensions are shown in feet and inches.
+- Plots are measured in Kanal and Marla (1 Kanal is a five-sided corner plot, 52'-3" to 59'-3" wide and 90' deep; 2 Kanal is drawn as 75'×120'); dimensions are shown in feet and inches.
 - Contact is by tel: and wa.me links (page-specific prefilled WhatsApp messages) and a sticky Call/WhatsApp bar on phones. No forms.
 
 ## Capabilities and Constraints
@@ -34,6 +34,7 @@ One team from the first drawing to the keys, and every build handed over fully f
 ## Evidence on Hand
 - Own 3D renders only (`src/assets/renders/`, the 192-frame build sequence in `public/hero/`). No stock photos, no photography of real work.
 - The design stills and the hero's opening dusk poster are AI-enhanced (2026-11-01, `scripts/enhance-renders.mjs`): photoreal versions made from those same renders, keeping each design and camera. The 1 Kanal terrace is shown with glass on every open side, as the maintainer asked. They are still concepts and must never be presented as photos of built houses.
+- The 1 Kanal design was redrawn on 2026-11-06. Its stills show the new house, but the home page hero video and poster still show the earlier one until a later hero change: raise this before any deploy.
 - No testimonials, statistics, years in business, certifications or completed-project counts exist or may be invented.
 
 ## Product Principles

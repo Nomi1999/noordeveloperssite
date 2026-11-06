@@ -68,18 +68,96 @@ const DESIGN_NOTES = {
     "The upper box is smooth charcoal-grey plaster, framed around its corner window in exposed concrete; the ground floor front is exposed concrete and the other walls are light warm-grey plaster. The stair tower is faced in straight, evenly spaced vertical timber slats, and the terrace has a slim black steel pergola: keep every slat and rafter in place. The house is attached to its neighbour on the left and has an open side passage on the right.",
 };
 
+// The 1 Kanal's notes are per shot and name only what that shot's render shows: a part named in a shot
+// that cannot see it gets drawn anyway, such as the side terrace's pergola sticking out past the house.
+const KANAL = {
+  pier: "The tall pier, with its thin straight white LED lines, is plain mid-grey natural stone in large tiles with thin dark joints: never travertine or beige.",
+  block: "The ground-floor block to the right of the pier is a soft taupe travertine with fine horizontal grain.",
+  entrance: "The entrance is a pale beige tile panel with tall warm timber stiles, slits of dark glass and long black pull handles.",
+  porch: "Under the white porch beam the columns are polished black granite, plain and without white veins, and the wide back wall of the porch is only large bronze-brown tiles.",
+  marble: "The side panel of the porch, and only that panel, is a book-matched bronze marble with fine thin golden veins: matt natural stone whose veins do not glow.",
+  upper: "The upper wall on the left is a black panel with thin LED lines, warm timber vertical slats and a dark glass panel under a slim black hood.",
+  roof: "The wide roof overhang has a dark charcoal fascia and a warm timber soffit, and the lower canopy matches it, with a flat top.",
+  glass: "The terrace railings are frameless smoked grey glass, and the terrace over the porch has this glass on all three open sides.",
+  emptyTerrace: "The terrace over the porch is completely empty: no pots, plants or furniture on it.",
+  onePot: "The only potted plant is the one pot on the right-hand terrace, as a fan palm in a dark pot, where the input has it.",
+  noPergola: "Nothing projects beyond the right-hand side of the house: no pergola, frame, grille or louvres past that wall, only what the input shows there.",
+  bed: "The bed behind the low white kerb, to the right of the entrance steps, is full of rounded clipped shrubs and lavender, with one broad-leafed palm where the input has its small tree at the right-hand end. These plants stay inside that bed.",
+  clearDrive: "The driveway and porch floor are clear paving, with no plants, pots or beds on them or beside them.",
+  noWall: "The front boundary wall is not in this view. To the left of the porch there is only the plain grey wall of the input: no lattice, no timber, no slats, no gate and no wall lights there, and the neighbouring buildings have none either.",
+  frontWall: "The front boundary wall, from left to right, is exactly as in the input: a flat ochre panel that is not a door, then one plain timber door, then a low rectangular screen of black geometric metal lattice, then the angled corner in warm timber slats under a dark hood. It is grey stone in large tiles on a white base, and the two gate piers are black granite.",
+  noPavementPlants: "Nothing grows outside the boundary wall: the pavement is clear to the foot of the wall.",
+  kerb: "The kerb and pavement run straight, exactly as in the input, with no curved corner.",
+  neighbours: "The neighbouring houses are plain, boxy and in good repair: no ruined walls, rubble, overhead wires or clutter.",
+  noPorchLights: "The porch ceiling has no lights.",
+  details: "Keep every slat, joint, wall light and LED line in place.",
+};
+const SHOT_NOTES = {
+  "1-kanal": {
+    "front-day": [KANAL.pier, KANAL.block, KANAL.entrance, KANAL.porch, "No marble shows in this view.", KANAL.upper, KANAL.roof, KANAL.glass, KANAL.emptyTerrace, KANAL.onePot, KANAL.noPergola, KANAL.bed, KANAL.clearDrive, KANAL.noWall, KANAL.neighbours, KANAL.details],
+    "front-dusk": [KANAL.pier, KANAL.block, KANAL.entrance, KANAL.porch, KANAL.marble, KANAL.upper, KANAL.roof, KANAL.glass, KANAL.emptyTerrace, KANAL.onePot, KANAL.noPergola, KANAL.bed, KANAL.clearDrive, KANAL.noWall, KANAL.neighbours, KANAL.noPorchLights, KANAL.details],
+    street: [KANAL.pier, "The ground-floor block to the right of the pier is taupe travertine with fine horizontal grain.", KANAL.entrance, KANAL.porch, KANAL.marble, KANAL.upper, KANAL.roof, KANAL.glass, KANAL.emptyTerrace, KANAL.onePot, KANAL.noPergola, KANAL.frontWall, "Above the corner of the wall, only the top of the planting in the input shows.", KANAL.clearDrive, KANAL.noPavementPlants, KANAL.kerb, KANAL.neighbours, KANAL.details],
+    side: [
+      "This is the long right-hand side of the house, seen from along the side street, exactly as in the input: do not swing the camera round towards the front of the house. From left to right the frame shows the small porch, the pier, the corner terrace with its large windows, the recessed side terrace with its windows on both floors, the tall stone mass and the sand-coloured rear block, and the boundary wall runs across the full width of the frame in front of them.",
+      "Every wall, window and terrace stays where the input has it, and no window is added behind the terrace over the porch.",
+      "The pier and the tall side masses are plain mid-grey natural stone in large tiles with thin dark joints, with straight thin white LED lines. The rear block is plain sand-coloured plaster. The drawing room block is soft taupe travertine with fine horizontal grain, with its tall panel of warm timber slats.",
+      KANAL.marble,
+      "The slim black steel pergola stays inside the recess over the side terrace, between its walls, and does not stick out.",
+      KANAL.roof,
+      KANAL.glass,
+      "The only potted plants are the two in the input, as fan palms in dark pots: one on the corner terrace and one on the side terrace. The terrace over the porch has no plants.",
+      "The boundary wall is grey stone in large tiles on a white base, with warm timber slats under dark hoods and plain timber doors, exactly where the input has them. On the short front part at the far left, a flat ochre panel stays a panel and is not a door, and there is one timber door only.",
+      "The only planting is what shows over the wall at the corner. There are no plants in front of the porch, in the driveway, or outside the boundary wall.",
+      KANAL.neighbours,
+      KANAL.noPorchLights,
+      KANAL.details,
+    ],
+    aerial: [
+      "Seen from this height the timber soffits under the overhangs cannot be seen: the roofs show only their flat charcoal tops and fascias, and the pier has no cap of its own, only the flat canopy over it.",
+      "The main roof is flat grey with its low sand-coloured parapets and two small tank covers, and it stays fully visible.",
+      KANAL.pier,
+      "The walls of the corner block are soft taupe travertine with fine horizontal grain, with a tall panel of warm timber slats.",
+      KANAL.entrance,
+      KANAL.porch,
+      KANAL.marble,
+      KANAL.upper,
+      "The slim black steel pergola stays inside the recess over the side terrace, between its walls.",
+      KANAL.glass,
+      KANAL.emptyTerrace,
+      "The only potted plants are the two in the input, as fan palms in dark pots: one on the corner terrace and one on the side terrace.",
+      KANAL.frontWall,
+      "The side boundary wall is the same stone with warm timber slats under dark hoods.",
+      "The lawn bed behind the wall at the corner has rounded clipped shrubs, lavender and one broad-leafed palm. These plants stay inside that bed.",
+      KANAL.clearDrive,
+      KANAL.noPavementPlants,
+      "The roads are plain dark asphalt.",
+      KANAL.details,
+    ],
+  },
+};
+
+// Where a design differs from the general notes
+const NOTE_OVERRIDES = {
+  "1-kanal": {
+    dusk: "Dusk: a soft blue-grey evening sky with the light still in it, and warm interior light behind sheer curtains in the windows. Keep every exterior light exactly where the input has it and do not add any: the warm wall lights with their soft up and down glow, the small round downlights in the timber soffits with their glow on the walls below, the soft scallops of light under the overhangs and the hood, and the thin white LED lines. The facade stays clearly readable, not dark.",
+    aerial:
+      "A high drone photograph looking down at the building and its corner plot, exactly as in the input: the flat roof and its charcoal overhang are fully visible from above, with no stair room, and the porch and the rest of the plot are seen from above. The two roads meet at the corner of the plot, and the neighbouring roofs are on the far side only. The neighbouring houses are as plain as in the input: clean flat roofs with no tanks or clutter, simple rectangular windows, no arches or ornament, tidy paved yards with no bare dirt. Keep this high viewpoint and downward angle; do not lower the camera or turn it into a street-level or front view.",
+  },
+};
+
 // Pass 2, only for the designs listed: one narrow edit to the pass-1 photo, for a design change the
 // source render does not show yet. Asked separately because mixing it into pass 1 makes the model
 // loosen the rest of the design.
 const EDIT_LOCK =
   "Edit this photograph. Change only what is described here and keep everything else exactly the same: the camera, framing, building, colours, light, sky, trees, walls, gate and neighbouring houses stay as they are.";
+// The hero house is still the earlier 1 Kanal design, so its posters keep this edit
+const HERO_EDIT = `${EDIT_LOCK} The first-floor terrace over the car porch gets a frameless clear glass railing, the same height and style as the existing glass, along every open edge: the glass runs the full length of the front edge up to the house wall and along both short ends, so all open sides of the terrace are closed by glass. If the terrace is not visible, change nothing.`;
 const DESIGN_EDITS = {
-  "1-kanal": `${EDIT_LOCK} The first-floor terrace over the car porch gets a frameless clear glass railing, the same height and style as the existing glass, along every open edge: the glass runs the full length of the front edge up to the house wall and along both short ends, so all open sides of the terrace are closed by glass. If the terrace is not visible, change nothing.`,
   "2-kanal": `${EDIT_LOCK} The first-floor terrace over the car porch must have a frameless clear glass railing on all three open sides. The front and right-hand glass already exist; keep them. Add the missing glass along the left-hand short end of the terrace, the same height and style as the existing glass, running from the front corner back to the house wall, so the terrace is fully enclosed by glass. If the terrace is not visible, change nothing.`,
 };
 
 /** Designs whose stills were made from Cycles finals; every other design starts from a fast render */
-const CYCLES_FINAL = new Set(["1-kanal", "2-kanal"]);
+const CYCLES_FINAL = new Set(["2-kanal"]);
 
 /** The render a still is made from, and the command that writes it */
 function stillSource(design, shot) {
@@ -97,11 +175,13 @@ function stillSource(design, shot) {
 }
 
 function stillNote(design, shot, config) {
+  const notes = { ...NOTES, ...NOTE_OVERRIDES[design] };
   const parts = [];
-  if (shot === "aerial") parts.push(NOTES.aerial);
-  parts.push((config.timeOfDay ?? 0) >= 0.5 ? NOTES.dusk : NOTES.day);
+  if (shot === "aerial") parts.push(notes.aerial);
+  parts.push((config.timeOfDay ?? 0) >= 0.5 ? notes.dusk : notes.day);
   if (shot === "street") parts.push("Seen from the street.");
   if (DESIGN_NOTES[design]) parts.push(DESIGN_NOTES[design]);
+  if (SHOT_NOTES[design]?.[shot]) parts.push(SHOT_NOTES[design][shot].join(" "));
   return parts.join(" ");
 }
 
@@ -137,7 +217,7 @@ for (const orientation of ["landscape", "portrait"]) {
     aspect: orientation === "landscape" ? "16:9" : "9:16",
     resolution: "2K",
     note: `${NOTES.dusk} The finished house seen from the street.`,
-    edit: DESIGN_EDITS["1-kanal"], // the hero house is the 1 Kanal design
+    edit: HERO_EDIT,
   });
 }
 

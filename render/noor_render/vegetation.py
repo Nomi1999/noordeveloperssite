@@ -17,7 +17,7 @@ from .geometry import GRADE
 from .util import aabb, boxes_object, collection, point_in_polygon, bounds
 
 # Garden trees are slender with high canopies so the ground floor stays visible; the broad jacaranda is for the street
-MODELS = {"tree": "tree_small_02", "palm": "tree_small_02", "shrub": "searsia_lucida", "grass": "grass_medium_01",
+MODELS = {"tree": "tree_small_02", "palm": "tree_small_02", "pot": "tree_small_02", "shrub": "searsia_lucida", "grass": "grass_medium_01",
           "street": "jacaranda_tree"}
 FT = 0.3048
 _library = {}
@@ -139,6 +139,18 @@ def _planter(name, at, size, col):
     return GRADE + 0.42
 
 
+def _pot(name, at, bottom, size, col):
+    """A plain dark pot on a floor above the ground, returning the height of its soil."""
+    s = max(0.3, size * 0.4)
+    h = 0.55
+    x, y = at
+    boxes_object(f"{name}-pot", [aabb(x - s, y - s, bottom, x + s, y + s, bottom + h)], materials.get("plaster-charcoal"), col,
+                 role="planter")
+    boxes_object(f"{name}-soil", [aabb(x - s + 0.03, y - s + 0.03, bottom + h - 0.04, x + s - 0.03, y + s - 0.03, bottom + h + 0.01)],
+                 materials.get("planter-soil"), col, bevel=False, role="planter")
+    return bottom + h
+
+
 def build(design, root, context):
     col = collection("vegetation", root)
     rng = random.Random(design["slug"] + "-planting")
@@ -149,11 +161,13 @@ def build(design, root, context):
             _hedge(p, area if surface == "lawn" else None, col)
             continue
         z = GRADE
-        if surface != "lawn":
+        if kind == "pot":
+            z = _pot(p["id"], p["at"], p["bottom"], p["size"], col)
+        elif surface != "lawn":
             z = _planter(p["id"], p["at"], p["size"], col)
         variants = _load(MODELS[kind], root)
         size = p["size"]
-        height = {"tree": size * 1.9, "palm": size * 3.6, "shrub": size * 1.1}[kind]
+        height = {"tree": size * 1.9, "palm": size * 3.6, "pot": size * 2.0, "shrub": size * 1.1}[kind]
         _place(p["id"], variants[rng.randrange(len(variants))], p["at"], z, height, col, rng)
 
     for i, t in enumerate(context.get("streetTrees", [])):

@@ -25,7 +25,7 @@ const items = await Promise.all(
 ---
 
 <div class="gallery" data-gallery>
-  <ul class="gallery__grid" role="list">
+  <ul class:list={["gallery__grid", { "gallery__grid--pairs": items.length === 4 }]} role="list">
     {
       items.map(({ render, full, caption }) => (
         <li class="gallery__cell reveal">
@@ -44,7 +44,7 @@ const items = await Promise.all(
                 formats={["avif", "webp"]}
                 fallbackFormat="jpg"
                 widths={[480, 800, 1200]}
-                sizes="(min-width: 80rem) 25rem, (min-width: 40rem) 46vw, 100vw"
+                sizes={items.length === 4 ? "(min-width: 40rem) 46vw, 100vw" : "(min-width: 80rem) 25rem, (min-width: 40rem) 46vw, 100vw"}
                 loading="lazy"
                 decoding="async"
                 class="gallery__img"
@@ -129,6 +129,11 @@ const items = await Promise.all(
   @media (min-width: 64rem) {
     .gallery__grid {
       grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Four stills sit two by two, so none is left alone on a row */
+    .gallery__grid--pairs {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 

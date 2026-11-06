@@ -24,7 +24,7 @@ import {
   wallHeight,
   pointInRegion,
 } from "./geometry.ts";
-import { FixtureType, Material, OpeningType, Point, Polygon, RoomType, Side, type Design, type Poly } from "./model.ts";
+import { FixtureType, Material, OpeningType, PlotEdge, Point, Polygon, RoomType, Side, type Design, type Poly } from "./model.ts";
 
 /** Raise when the format changes incompatibly; the renderer refuses other versions */
 export const SCHEMA_VERSION = 1;
@@ -106,7 +106,7 @@ const ExportLevel = z.strictObject({
   stairs: z.array(
     z.strictObject({
       id: Id,
-      type: z.enum(["dog-leg", "straight"]),
+      type: z.enum(["dog-leg", "straight", "l-shaped", "spiral"]),
       x: Num,
       y: Num,
       w: Num,
@@ -119,6 +119,8 @@ const ExportLevel = z.strictObject({
       tread: Num,
       /** Treads and any mid landing in climbing order, each a box from the stair's bottom */
       steps: z.array(z.strictObject(box)),
+      /** Spiral only: wedge-shaped treads in climbing order, each from the stair's bottom */
+      treadPolygons: z.array(z.strictObject({ outline: Polygon, bottom: Num, top: Num })).optional(),
     }),
   ),
   /** Columns from this floor to the underside of the slab above */
@@ -139,6 +141,8 @@ export const ExportDesign = z.strictObject({
     depth: Num,
     /** Direction of north, in degrees clockwise from +y */
     north: Num,
+    /** Corners of a plot that is not a rectangle: front, corner, right, rear, left edges in order */
+    outline: Polygon.optional(),
   }),
   grid: z.strictObject({
     x: z.array(z.strictObject({ ref: z.string(), at: Num })),
@@ -148,23 +152,33 @@ export const ExportDesign = z.strictObject({
   site: z.strictObject({
     boundary: z.strictObject({
       material: Material,
-      walls: z.array(z.strictObject({ side: Side, ...piece })),
-      gates: z.array(z.strictObject({ id: Id, side: Side, kind: z.enum(["vehicle", "pedestrian"]), ...piece, material: Material })),
+      walls: z.array(z.strictObject({ side: PlotEdge, ...piece })),
+      gates: z.array(z.strictObject({ id: Id, side: Side, kind: z.enum(["vehicle", "pedestrian"]), ...piece, material: Material, open: z.boolean().optional() })),
     }),
     porches: z.array(Area),
     driveways: z.array(Area),
     lawns: z.array(z.strictObject({ id: Id, outline: Polygon })),
     paving: z.array(Area),
-    planting: z.array(z.strictObject({ id: Id, kind: z.enum(["tree", "palm", "shrub", "hedge"]), at: Point, size: Num })),
+    planting: z.array(
+      z.strictObject({
+        id: Id,
+        kind: z.enum(["tree", "palm", "shrub", "hedge", "pot"]),
+        at: Point,
+        size: Num,
+        /** Pots: the height of the floor they stand on */
+        bottom: Num.optional(),
+      }),
+    ),
   }),
   facade: z.array(
     z.discriminatedUnion("type", [
       z.strictObject({ type: z.literal("box"), id: Id, role: z.string(), ...box, material: Material }),
       z.strictObject({ type: z.literal("railing"), id: Id, role: z.string(), pieces: z.array(z.strictObject(piece)), material: Material }),
+      z.strictObject({ type: z.literal("panel"), id: Id, role: z.string(), pieces: z.array(z.strictObject(piece)), material: Material }),
     ]),
   ),
   facts: z.strictObject({
-    plot: z.strictObject({ width: Num, depth: Num, area: Num, size: z.string() }),
+    plot: z.strictObject({ width: Num, depth: Num, minWidth: Num.optional(), area: Num, size: z.string() }),
     storeys: z.number().int(),
     levels: z.array(z.strictObject({ id: Id, name: z.string(), coveredArea: Num })),
     coveredArea: Num,
@@ -280,6 +294,7 @@ export function buildExport(design: Design, facts: DesignFacts): ExportDesign {
           riser: layout.riser,
           tread: layout.tread,
           steps: layout.steps.map(({ rect: [x, y, w, d], top }) => ({ x, y, w, d, bottom: base, top: base + top })),
+          ...(layout.wedges ? { treadPolygons: layout.wedges.map((w) => ({ outline: w.outline, bottom: base, top: base + w.top })) } : {}),
         };
       }),
       columns: levelColumns(design, li).map((c) => ({
@@ -327,7 +342,12 @@ export function buildExport(design: Design, facts: DesignFacts): ExportDesign {
     slug: design.slug,
     name: design.name,
     kind: design.kind,
-    plot: { width: design.plot.width, depth: design.plot.depth, north: design.plot.north },
+    plot: {
+      width: design.plot.width,
+      depth: design.plot.depth,
+      north: design.plot.north,
+      ...(design.plot.outline ? { outline: design.plot.outline } : {}),
+    },
     grid: {
       x: gridRefs(design.grid.x, (i) => String.fromCharCode(65 + i)),
       y: gridRefs(design.grid.y, (i) => String(i + 1)),
@@ -347,20 +367,27 @@ export function buildExport(design: Design, facts: DesignFacts): ExportDesign {
           bottom: 0,
           top: boundary.height,
           material: g.material,
+          ...(g.open ? { open: true } : {}),
         })),
       },
       porches: design.site.porches.map(area),
       driveways: design.site.driveways.map(area),
       lawns: design.site.lawns.map((l) => ({ id: l.id, outline: l.outline })),
       paving: design.site.paving.map(area),
-      planting: design.site.planting.map((p) => ({ id: p.id, kind: p.kind, at: p.at, size: p.size })),
+      planting: design.site.planting.map((p) => ({
+        id: p.id,
+        kind: p.kind,
+        at: p.at,
+        size: p.size,
+        ...(p.level ? { bottom: elevation(p.level) } : {}),
+      })),
     },
     facade: design.facade.map((el) => {
       const bottom = elevation(el.level) + el.z;
       return el.type === "box"
         ? { type: "box" as const, id: el.id, role: el.role, x: el.x, y: el.y, w: el.w, d: el.d, bottom, top: bottom + el.h, material: el.material }
         : {
-            type: "railing" as const,
+            type: el.type,
             id: el.id,
             role: el.role,
             pieces: pathPieces(el.path, false, el.thickness).map((pc) => ({ ...pc, bottom, top: bottom + el.h })),

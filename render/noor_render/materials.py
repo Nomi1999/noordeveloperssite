@@ -23,9 +23,10 @@ ACCENT = (0.888, 0.396, 0.044)  # --noor #f2a93b in linear sRGB
 WARM_INTERIOR = (1.0, 0.70, 0.42)  # ≈3000K, pulled slightly toward the accent
 
 # tex: texture id; size: tile size (m); tint: linear RGB multiplier; sat: saturation;
-# rough: (scale, bias) applied to the roughness map; bump: strength; top: texture for upward faces
-T = lambda tex, size, tint=(1, 1, 1), sat=1.0, rough=(1.0, 0.0), bump=0.2, top=None: dict(
-    tex=tex, size=size, tint=tint, sat=sat, rough=rough, bump=bump, top=top)
+# rough: (scale, bias) applied to the roughness map; bump: strength; top: texture for upward faces;
+# grain_up: turn a horizontal grain to run up vertical faces, as on a timber slat
+T = lambda tex, size, tint=(1, 1, 1), sat=1.0, rough=(1.0, 0.0), bump=0.2, top=None, grain_up=False: dict(
+    tex=tex, size=size, tint=tint, sat=sat, rough=rough, bump=bump, top=top, grain_up=grain_up)
 TEXTURED = {
     "plaster-white": T("white_stucco", 2.0, (1.0, 1.0, 1.0), sat=0.35, rough=(1.0, 0.05), bump=0.12),
     "plaster-warm-grey": T("painted_plaster_wall", 2.4, (0.66, 0.645, 0.62), sat=0.45, bump=0.1),
@@ -39,6 +40,13 @@ TEXTURED = {
     "plaster-charcoal": T("painted_plaster_wall", 2.4, (0.13, 0.13, 0.135), sat=0.2, rough=(0.95, 0.0), bump=0.12),
     "porcelain-paving": T("large_floor_tiles_02", 3.0, (1.1, 1.08, 1.05), sat=0.4, rough=(0.45, 0.0), bump=0.15),
     "paving-stone": T("concrete_pavement", 1.8, (1.0, 0.98, 0.95), sat=0.6, bump=0.3),
+    "stone-tile-grey": T("beige_wall_002", 1.3, (0.4, 0.395, 0.38), sat=0.2, bump=0.45),
+    "travertine": T("beige_wall_002", 2.2, (0.74, 0.71, 0.66), sat=0.28, rough=(0.85, 0.0), bump=0.2),
+    "tile-beige": T("beige_wall_001", 2.4, (0.92, 0.88, 0.8), sat=0.7, rough=(0.7, 0.0), bump=0.06),
+    "tile-bronze": T("beige_wall_002", 1.6, (0.98, 0.78, 0.5), sat=0.7, rough=(0.6, 0.0), bump=0.1),
+    "granite-black": T("beige_wall_002", 0.8, (0.075, 0.075, 0.075), sat=0.1, rough=(0.5, 0.0), bump=0.3),
+    "wood-slat": T("dark_wood", 1.2, (1.1, 0.84, 0.5), sat=0.5, rough=(0.8, 0.0), bump=0.1, grain_up=True),
+    "plaster-sand": T("beige_wall_001", 2.6, (0.85, 0.8, 0.72), sat=0.6, bump=0.08),
     "grass": T("leafy_grass", 2.0, (0.5, 0.78, 0.36), sat=1.0, rough=(1.0, 0.05), bump=0.3),
     "planter-soil": T("farm_soil", 1.5, bump=0.4),
     # context and construction tags (not in the design vocabulary)
@@ -236,6 +244,36 @@ def _mix(nt, kind, fac, a, b):
     return m.outputs["Result"]
 
 
+def _grain_up(nt, vec):
+    """Mapping that turns a horizontal grain to run up vertical faces, and leaves soffits as they are."""
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(vec, sep.inputs[0])
+    across = nt.nodes.new("ShaderNodeMath")
+    across.operation = "ADD"
+    nt.links.new(sep.outputs["X"], across.inputs[0])
+    nt.links.new(sep.outputs["Y"], across.inputs[1])
+    turned = nt.nodes.new("ShaderNodeCombineXYZ")
+    nt.links.new(sep.outputs["Z"], turned.inputs["X"])
+    nt.links.new(sep.outputs["Z"], turned.inputs["Y"])
+    nt.links.new(across.outputs[0], turned.inputs["Z"])
+    geo = nt.nodes.new("ShaderNodeNewGeometry")
+    nz = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(geo.outputs["Normal"], nz.inputs[0])
+    flat = nt.nodes.new("ShaderNodeMath")
+    flat.operation = "ABSOLUTE"
+    nt.links.new(nz.outputs["Z"], flat.inputs[0])
+    level = nt.nodes.new("ShaderNodeMath")
+    level.operation = "GREATER_THAN"
+    level.inputs[1].default_value = 0.5
+    nt.links.new(flat.outputs[0], level.inputs[0])
+    mix = nt.nodes.new("ShaderNodeMix")
+    mix.data_type = "VECTOR"
+    nt.links.new(level.outputs[0], mix.inputs[0])  # Factor
+    nt.links.new(turned.outputs[0], mix.inputs[4])  # vector A
+    nt.links.new(vec, mix.inputs[5])  # vector B
+    return mix.outputs[1]
+
+
 def textured(tag):
     spec = TEXTURED[tag]
     mat, nt, bsdf = _new(tag)
@@ -244,6 +282,8 @@ def textured(tag):
     mapping.inputs["Scale"].default_value = (1 / spec["size"],) * 3
     nt.links.new(coord.outputs["Object"], mapping.inputs["Vector"])
     vec = mapping.outputs[0]
+    if spec["grain_up"]:
+        vec = _grain_up(nt, vec)
     color, rough, disp = _layer(nt, vec, spec["tex"])
     if spec["top"]:
         # upward faces (slab tops, roofs) take a plain texture; board marks belong on vertical faces
@@ -320,6 +360,78 @@ def metal_dark():
     nt.links.new(noise.outputs["Fac"], r.inputs["Value"])
     nt.links.new(r.outputs["Result"], bsdf.inputs["Roughness"])
     return _finish(mat, bsdf)
+
+
+def marble_bronze():
+    """Polished bronze marble with thin golden veins, mirrored both ways about the slab's centre like a book-matched panel."""
+    mat, nt, bsdf = _new("marble-bronze")
+    coord = nt.nodes.new("ShaderNodeTexCoord")
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(coord.outputs["Generated"], sep.inputs[0])
+    mirrored = nt.nodes.new("ShaderNodeCombineXYZ")
+    for axis in "XYZ":
+        away = nt.nodes.new("ShaderNodeMath")
+        away.operation = "SUBTRACT"
+        away.inputs[1].default_value = 0.5
+        nt.links.new(sep.outputs[axis], away.inputs[0])
+        size = nt.nodes.new("ShaderNodeMath")
+        size.operation = "ABSOLUTE"
+        nt.links.new(away.outputs[0], size.inputs[0])
+        nt.links.new(size.outputs[0], mirrored.inputs[axis])
+    wander = nt.nodes.new("ShaderNodeTexNoise")
+    wander.inputs["Scale"].default_value = 3.5
+    wander.inputs["Detail"].default_value = 4
+    nt.links.new(mirrored.outputs[0], wander.inputs["Vector"])
+    bent = nt.nodes.new("ShaderNodeVectorMath")
+    bent.operation = "SCALE"
+    bent.inputs["Scale"].default_value = 0.16
+    nt.links.new(wander.outputs["Color"], bent.inputs[0])
+    at = nt.nodes.new("ShaderNodeVectorMath")
+    at.operation = "ADD"
+    nt.links.new(mirrored.outputs[0], at.inputs[0])
+    nt.links.new(bent.outputs[0], at.inputs[1])
+
+    def veins(scale, width):
+        v = nt.nodes.new("ShaderNodeTexVoronoi")
+        v.feature = "DISTANCE_TO_EDGE"
+        v.inputs["Scale"].default_value = scale
+        nt.links.new(at.outputs[0], v.inputs["Vector"])
+        r = nt.nodes.new("ShaderNodeMapRange")
+        r.inputs["From Min"].default_value, r.inputs["From Max"].default_value = 0.0, width
+        r.inputs["To Min"].default_value, r.inputs["To Max"].default_value = 1.0, 0.0
+        nt.links.new(v.outputs["Distance"], r.inputs["Value"])
+        return r.outputs["Result"]
+
+    field = nt.nodes.new("ShaderNodeValToRGB")
+    field.color_ramp.elements[0].color = (0.085, 0.042, 0.018, 1)
+    field.color_ramp.elements[1].color = (0.36, 0.2, 0.085, 1)
+    cloud = nt.nodes.new("ShaderNodeTexNoise")
+    cloud.inputs["Scale"].default_value = 5
+    cloud.inputs["Detail"].default_value = 5
+    nt.links.new(at.outputs[0], cloud.inputs["Vector"])
+    nt.links.new(cloud.outputs["Fac"], field.inputs["Fac"])
+    color = field.outputs["Color"]
+    for fac, gold in ((veins(2.4, 0.016), (0.82, 0.58, 0.26, 1)), (veins(6.0, 0.012), (0.5, 0.33, 0.14, 1))):
+        m = nt.nodes.new("ShaderNodeMixRGB")
+        nt.links.new(fac, m.inputs["Fac"])
+        nt.links.new(color, m.inputs["Color1"])
+        m.inputs["Color2"].default_value = gold
+        color = m.outputs["Color"]
+    nt.links.new(color, bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = 0.2
+    return _finish(mat, bsdf)
+
+
+def led_strip():
+    """A white strip by day that glows warm white at dusk. Strength is set through the node named "glow"."""
+    mat, nt, bsdf = _new("led-strip")
+    bsdf.inputs["Base Color"].default_value = (0.86, 0.85, 0.82, 1)
+    bsdf.inputs["Roughness"].default_value = 0.4
+    bsdf.inputs["Emission Color"].default_value = (1.0, 0.86, 0.68, 1)
+    glow = nt.nodes.new("ShaderNodeValue")
+    glow.name = "glow"
+    nt.links.new(glow.outputs[0], bsdf.inputs["Emission Strength"])
+    return _finish(mat, bsdf, fresh_strength=0.0)
 
 
 def glass(tag):
@@ -476,6 +588,8 @@ def clay_material():
 
 _SPECIAL = {
     "metal-dark": metal_dark,
+    "led-strip": led_strip,
+    "marble-bronze": marble_bronze,
     "glass-clear": lambda: glass("glass-clear"),
     "glass-tinted": lambda: glass("glass-tinted"),
     "hedge": hedge,

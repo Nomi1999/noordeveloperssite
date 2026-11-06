@@ -31,23 +31,27 @@ export interface DesignRenderEntry {
 export const renderRegistry: Record<string, DesignRenderEntry> = {
   "1-kanal": {
     lead: "front-day",
-    gallery: ["front-dusk", "street", "aerial"],
+    gallery: ["front-dusk", "street", "side", "aerial"],
     share: "/og/1-kanal.jpg",
     shots: {
       "front-day": {
-        alt: "The 1 Kanal house concept by day: a two-storey white house with dark vertical fins, a glass-railed terrace over the car porch, and a boundary wall with a black gate.",
+        alt: "The 1 Kanal house concept by day: a tall grey stone pier with white LED lines beside a timber and beige entrance, warm timber slats above a glass-railed terrace over the car porch, and a wide charcoal roof overhang with a timber soffit.",
         caption: "Front, day",
       },
       "front-dusk": {
-        alt: "The 1 Kanal house concept at dusk, its windows lit warm on both floors behind the boundary wall and gate.",
+        alt: "The 1 Kanal house concept at dusk, with warm wall lights, downlights in the timber soffits, thin LED lines on the stone pier and lit, curtained windows on both floors.",
         caption: "Front, dusk",
       },
       street: {
-        alt: "The 1 Kanal house concept from the street: the boundary wall and black gates, with the two-storey front and its terrace behind.",
+        alt: "The 1 Kanal house concept from the street: a grey stone boundary wall with a timber door and a black metal lattice, black granite gate piers, and the two-storey front behind.",
         caption: "Street, day",
       },
+      side: {
+        alt: "The 1 Kanal house concept from the side street at dusk: a long stone boundary wall with lit timber slats, in front of the corner terrace, the recessed side terrace under its steel pergola and the sand-coloured rear block.",
+        caption: "Side street, dusk",
+      },
       aerial: {
-        alt: "The 1 Kanal house concept from above, showing the roof with its stair room, the front lawn and the covered car porch.",
+        alt: "The 1 Kanal house concept from above on its corner plot, showing the flat roof behind low parapets, the planted corner garden, the covered car porch and the two roads that meet at the corner.",
         caption: "Aerial",
       },
     },

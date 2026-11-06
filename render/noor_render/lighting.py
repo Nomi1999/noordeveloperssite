@@ -26,6 +26,10 @@ DAY = ("kloofendal_48d_partly_cloudy_puresky", "hdri/kloofendal_48d_partly_cloud
 DUSK = ("belfast_sunset_puresky", "hdri/belfast_sunset_puresky.hdr")
 ROOM_WATTS = 22.0      # per m² of ceiling light
 SOFFIT_WATTS = 9.0     # per downlight
+SCONCE_WATTS = 14.0    # per spot, one up and one down from each wall light
+SOFFIT_GLOW_WATTS = 5.0
+WASH_WATTS = 9.0       # per hidden downlight that scallops the wall below it
+LED_GLOW = 22.0        # emission of the LED lines at full dusk
 BACKPLATE_GLOW = 2.2
 BACKPLATE_DAY = 0.1     # rooms seen through glass by day: dim, never a black void
 NEIGHBOUR_GLOW = 0.15
@@ -73,7 +77,7 @@ def _sun_direction(path):
 
 
 class Rig:
-    def __init__(self, shot, lights, facade_boxes, root):
+    def __init__(self, shot, lights, facade_boxes, root, facade=()):
         self.shot = shot
         look = shot.get("light", {})
         self.day_az = math.radians(look.get("sunAzimuth", 210))
@@ -90,6 +94,9 @@ class Rig:
         materials.haze_group().nodes["density"].outputs[0].default_value = look.get("haze", 0.006)
         self.room_lights = [self._room_light(l) for l in lights]
         self.soffit_lights = self._soffits(facade_boxes)
+        self.fittings = self._fittings(facade)
+        self.has_leds = any(f["role"] == "led" for f in facade)
+        self.backplate_glow = look.get("backplateGlow", BACKPLATE_GLOW)
 
     # ---- world ----
     def _world(self, day_path, dusk_path, day_rot, dusk_rot):
@@ -118,7 +125,7 @@ class Rig:
             return t.outputs[0]
 
         day = env(day_path, day_rot, 12.0, (1.0, 1.0, 1.0))
-        dusk = env(dusk_path, dusk_rot, 3.0, (0.55, 0.66, 1.0))  # pushed toward blue hour
+        dusk = env(dusk_path, dusk_rot, 3.0, tuple(self.shot.get("light", {}).get("duskTint", (0.55, 0.66, 1.0))))  # pushed toward blue hour
         mix = nt.nodes.new("ShaderNodeMix")
         mix.data_type = "RGBA"
         mix.name = "tod"
@@ -182,6 +189,40 @@ class Rig:
                     obj["watts"] = SOFFIT_WATTS
                     bpy.context.scene.collection.objects.link(obj)
                     lights.append(obj)
+                    if b["material"] == "wood-slat":  # a timber soffit glows in the light bouncing back up, which EEVEE doesn't trace
+                        lights.append(self._spot("soffit-glow", (obj.location.x, obj.location.y, b["bottom"] - 0.6), False, 150, 1.5, SOFFIT_GLOW_WATTS))
+        return lights
+
+    def _spot(self, name, at, down, size, reach, watts):
+        data = bpy.data.lights.new(name, "SPOT")
+        data.spot_size = math.radians(size)
+        data.spot_blend = 1.0
+        data.shadow_soft_size = 0.02
+        data.use_temperature = True
+        data.temperature = 3400
+        data.use_shadow = False  # each one lights only the wall beside it
+        data.use_custom_distance = True
+        data.cutoff_distance = reach
+        obj = bpy.data.objects.new(name, data)
+        obj.location = at
+        obj.rotation_euler = (0 if down else math.pi, 0, 0)
+        obj["watts"] = watts
+        bpy.context.scene.collection.objects.link(obj)
+        return obj
+
+    def _fittings(self, facade):
+        """Wall lights throw a scallop up and down the wall; hidden downlights throw one down it."""
+        lights = []
+        for f in facade:
+            if f["role"] not in ("sconce", "wash"):
+                continue
+            p = f["pieces"][0]
+            x, y = (p["from"][0] + p["to"][0]) / 2, (p["from"][1] + p["to"][1]) / 2
+            if f["role"] == "sconce":
+                lights.append(self._spot("sconce-up", (x, y, p["top"] + 0.01), False, 70, 1.8, SCONCE_WATTS))
+                lights.append(self._spot("sconce-down", (x, y, p["bottom"] - 0.01), True, 70, 1.8, SCONCE_WATTS))
+            else:
+                lights.append(self._spot("wash", (x, y, p["bottom"] - 0.01), True, 95, 2.4, WASH_WATTS))
         return lights
 
     # ---- the control ----
@@ -204,13 +245,15 @@ class Rig:
         haze["color"].outputs[0].default_value = (*[lerp(a, b, mix) for a, b in zip((0.62, 0.70, 0.82), (0.035, 0.05, 0.10))], 1)
 
         inside = smoothstep(0.6, 1.0, tod) * max(0.0, min(1.0, (build - 4.8) / 0.2))
-        for l in self.room_lights + self.soffit_lights:
+        for l in self.room_lights + self.soffit_lights + self.fittings:
             l.data.energy = l["watts"] * inside
             l.hide_render = inside <= 0
-        for name, value in (("backplate", lerp(BACKPLATE_DAY, BACKPLATE_GLOW, inside)), ("neighbour-window", NEIGHBOUR_GLOW * smoothstep(0.6, 1.0, tod))):
+        for name, value in (("backplate", lerp(BACKPLATE_DAY, self.backplate_glow, inside)), ("neighbour-window", NEIGHBOUR_GLOW * smoothstep(0.6, 1.0, tod))):
             mat = materials.get(name)
             mat.node_tree.nodes["glow"].outputs[0].default_value = value
         materials.get("backplate").node_tree.nodes["warmth"].inputs["Factor"].default_value = inside
+        if self.has_leds:
+            materials.get("led-strip").node_tree.nodes["glow"].outputs[0].default_value = LED_GLOW * inside
 
         vs = scene.view_settings
         vs.view_transform = "AgX"

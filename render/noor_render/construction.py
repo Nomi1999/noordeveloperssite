@@ -148,7 +148,8 @@ def blueprint(design, root):
     mat = materials.get("blueprint")
     z = GRADE - 0.012
     W, D = design["plot"]["width"], design["plot"]["depth"]
-    lines = [("plot", [(0, 0), (W, 0), (W, D), (0, D), (0, 0)], 0.035)]
+    outline = design["plot"].get("outline") or [(0, 0), (W, 0), (W, D), (0, D)]
+    lines = [("plot", [tuple(p) for p in outline] + [tuple(outline[0])], 0.035)]
     walls = {}
     for w in design["levels"][0]["walls"]:
         walls.setdefault(w["wall"], []).append(w)

@@ -57,7 +57,7 @@ describe("Design schema", () => {
   });
 
   it("keeps the material vocabulary fixed", () => {
-    expect(MATERIALS).toHaveLength(15);
+    expect(MATERIALS).toHaveLength(24);
     expect(MATERIALS).toContain("brick-cladding");
     expect(MATERIALS).toContain("plaster-charcoal");
   });

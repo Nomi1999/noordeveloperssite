@@ -17,6 +17,7 @@ import {
   levelRooms,
   pathStrip,
   pieceStrip,
+  plotPolygon,
   pointInRegion,
   poleOfInaccessibility,
   rectPoly,
@@ -34,7 +35,7 @@ import {
   type WallFrame,
 } from "./geometry.ts";
 import type { Design, Fixture, Level, Opening, Poly, Pt, Stair } from "./model.ts";
-import { dims, feetInches, sqft } from "./units.ts";
+import { dims, feetInches, plotDimensions, sqft } from "./units.ts";
 
 export type PlanTheme = "dark" | "light";
 
@@ -70,7 +71,7 @@ export interface Plan {
 }
 
 /** Levels that get a plan: those with walls or rooms */
-export const planLevels = (design: Design): Level[] => design.levels.filter((l) => l.walls.length || l.rooms.length);
+export const planLevels = (design: Design): Level[] => design.levels.filter((l) => l.walls.length || l.rooms.length || l.parapets.length);
 
 export const planTitle = (design: Design, level: Level) => `${design.name}, ${level.name.toLowerCase()} plan`;
 
@@ -346,7 +347,9 @@ function drawOpening(s: Sheet, f: WallFrame, o: Opening) {
 
 function drawStair(s: Sheet, stair: Stair, rise: number, direction: "UP" | "DN", labelInside = false) {
   const layout = stairLayout(stair, rise);
-  s.rect(stair.x, stair.y, stair.w, stair.d, "fp-fix");
+  if (stair.type === "spiral") s.circle([stair.x + stair.w / 2, stair.y + stair.d / 2], Math.min(stair.w, stair.d) / 2, "fp-fix");
+  else if (layout.outline) s.path(s.ring(layout.outline), "fp-fix");
+  else s.rect(stair.x, stair.y, stair.w, stair.d, "fp-fix");
   for (const [a, b] of layout.nosings) s.line(a, b, "fp-fix-thin");
   if (layout.rail) s.line(layout.rail[0], layout.rail[1], "fp-fix-thin");
   const path = direction === "UP" ? layout.path : [...layout.path].reverse();
@@ -402,7 +405,7 @@ export function renderPlan(design: Design, level: Level, facts: DesignFacts, opt
   s.rect(-MARGIN.left, -MARGIN.bottom, vbW, vbH, "fp-bg");
 
   // Plot line and boundary walls
-  s.path(s.ring(rectPoly(0, 0, W, D)), "fp-plot");
+  s.path(s.ring(plotPolygon(design)), "fp-plot");
   if (li === 0) {
     s.path(s.region(union(boundaryPieces(design).map(pieceStrip))), "fp-boundary");
     for (const g of design.site.boundary.gates) {
@@ -416,7 +419,7 @@ export function renderPlan(design: Design, level: Level, facts: DesignFacts, opt
     for (const p of design.site.driveways) s.path(s.ring(p.outline), "fp-pave");
     for (const l of design.site.lawns) s.path(s.ring(l.outline), "fp-lawn", { fill: `url(#${id}-lawn)` });
     for (const p of design.site.porches) s.path(s.ring(p.outline), "fp-porch");
-    for (const t of design.site.planting) {
+    for (const t of design.site.planting.filter((t) => !t.level)) {
       s.circle(t.at, t.size / 2, "fp-plant");
       if (t.kind === "tree" || t.kind === "palm") s.circle(t.at, 0.25, "fp-plant");
       if (t.kind === "palm") {
@@ -428,11 +431,13 @@ export function renderPlan(design: Design, level: Level, facts: DesignFacts, opt
     }
   }
 
+  for (const t of design.site.planting.filter((t) => t.level === level.id)) s.circle(t.at, t.size / 2, "fp-plant");
+
   // This level's slab edge (terraces, cantilevers) and the slab above where it overhangs
   if (li > 0) s.path(s.region(slabOutline(level.slab)), "fp-slab");
   if (above) s.path(s.region(difference(slabOutline(above.slab), slabOutline(level.slab))), "fp-above");
   for (const el of design.facade) {
-    if (el.level !== level.id || el.type !== "box" || el.z <= 4) continue;
+    if (el.level !== level.id || el.type !== "box" || el.z <= 4 || !el.plan) continue;
     s.rect(el.x, el.y, el.w, el.d, "fp-above");
   }
 
@@ -458,6 +463,14 @@ export function renderPlan(design: Design, level: Level, facts: DesignFacts, opt
     const to = design.levels.find((l) => l.id === st.to)!;
     drawStair(s, st, to.elevation - level.elevation, "UP");
   }
+  // An outdoor stair from further down passes this level on its way to one above
+  for (const lower of design.levels.slice(0, li)) {
+    for (const st of lower.stairs.filter((st) => st.outdoor)) {
+      const to = design.levels.find((l) => l.id === st.to)!;
+      if (to.elevation > level.elevation) drawStair(s, st, to.elevation - lower.elevation, "UP");
+      else if (to === level && lower !== below) drawStair(s, st, to.elevation - lower.elevation, "DN");
+    }
+  }
   if (below) {
     for (const st of below.stairs.filter((st) => st.to === level.id)) {
       const continues = level.stairs.some((o) => o.x === st.x && o.y === st.y && o.w === st.w && o.d === st.d);
@@ -468,8 +481,9 @@ export function renderPlan(design: Design, level: Level, facts: DesignFacts, opt
 
   // Railings and facade elements cut by the plan (about 4 ft above the floor)
   for (const el of design.facade) {
-    if (el.level !== level.id) continue;
+    if (el.level !== level.id || !el.plan) continue;
     if (el.type === "railing" && el.z <= 4 && el.z + el.h > 2) s.polyline(el.path, "fp-rail");
+    if (el.type === "panel" && el.z <= 4 && el.z + el.h > 4) s.polyline(el.path, "fp-cut");
     if (el.type === "box" && el.z <= 4 && el.z + el.h > 4) s.rect(el.x, el.y, el.w, el.d, "fp-cut");
   }
 
@@ -499,7 +513,7 @@ export function renderPlan(design: Design, level: Level, facts: DesignFacts, opt
     ...(below?.stairs ?? []).filter((st) => st.to === level.id).map((st) => asRegion(rectPoly(st.x, st.y, st.w, st.d))),
   );
   const voids = union(...level.slab.voids.filter((v) => v.kind === "double-height").map((v) => asRegion(v.outline)));
-  for (const geo of rooms) {
+  for (const geo of rooms.filter((geo) => !geo.room.unlabelled)) {
     const open = difference(difference(geo.clear, obstacles), voids);
     label(s, regionArea(open) > geo.area * 0.2 ? open : geo.clear, geo.clear, geo.room.name, [dims(geo.bounds.w, geo.bounds.d)]);
   }
@@ -562,7 +576,7 @@ export function renderPlan(design: Design, level: Level, facts: DesignFacts, opt
   s.text([titleX, base - 4.6], `${level.name} plan`.toUpperCase(), "fp-label", { anchor: "start", size: 1.3 });
   s.text([titleX, base - 6.6], "Concept design. Indicative only.", "fp-note", { anchor: "start" });
   const levelArea = facts.levels.find((l) => l.id === level.id)?.coveredArea;
-  s.text([titleX, base - 8.4], `Plot ${dims(W, D)} · ${facts.plot.size}`, "fp-label-sub", { anchor: "start" });
+  s.text([titleX, base - 8.4], `Plot ${plotDimensions(facts.plot)} · ${facts.plot.size}`, "fp-label-sub", { anchor: "start" });
   if (levelArea) s.text([titleX, base - 10.2], `Covered area ${sqft(levelArea)}`, "fp-label-sub", { anchor: "start" });
 
   const scaleEnd = W - 1;

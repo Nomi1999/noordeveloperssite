@@ -768,7 +768,9 @@ const firstStyle = (["landscape", "portrait"] as const)
   @media (max-width: 47.999rem) and (orientation: portrait) {
     :global(html.hero-motion) .hero__title {
       font-size: clamp(2.75rem, 2.1rem + 3.2vw, 3.5rem);
-      max-width: 11ch;
+      max-width: 13ch;
+      /* Motion mode shrinks the headline to scale(0.5); on phones that left it ~20px, so keep it larger */
+      transform: scale(0.85);
     }
   }
 

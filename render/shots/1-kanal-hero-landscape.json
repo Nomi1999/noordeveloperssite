@@ -8,9 +8,15 @@
     7.6,
     14.0
   ],
+  "hideBoundary": ["front", "corner", "right"],
+  "context": {"frontRoad": 22.0},
   "light": {
     "sunAzimuth": 235,
-    "duskAzimuth": 115
+    "duskAzimuth": 115,
+    "exposureDusk": 1.5,
+    "backplateGlow": 0.3,
+    "duskTint": [1.0, 0.97, 0.95],
+    "dawn": {"exposure": 0.0, "tint": [0.55, 0.66, 1.0]}
   },
   "easeCamera": true,
   "aspect": [
@@ -18,11 +24,11 @@
     9
   ],
   "camera": [
-    {"frame": 0, "azimuth": -134, "distance": 21, "height": 21, "target": [7.6, 14.5, 0.0], "lens": 28, "verticals": 0, "shiftX": -0.06},
-    {"frame": 40, "azimuth": -121, "distance": 23, "height": 17, "target": [7.6, 14.5, 0.8], "lens": 28, "verticals": 0},
-    {"frame": 88, "azimuth": -104, "distance": 25, "height": 11.5, "target": [7.6, 14.0, 2.4], "lens": 30, "verticals": 0.15},
-    {"frame": 136, "azimuth": -86, "distance": 26, "height": 6.5, "target": [7.8, 13.5, 3.6], "lens": 32, "verticals": 0.55},
-    {"frame": 191, "azimuth": -66, "distance": 27, "height": 1.6, "target": [8.3, 12.5, 4.6], "lens": 35, "verticals": 1, "shiftX": -0.06}
+    {"frame": 0, "azimuth": -15, "distance": 23, "height": 22, "target": [8.2, 13.2, 0.0], "lens": 27, "verticals": 0},
+    {"frame": 40, "azimuth": -28, "distance": 23.5, "height": 17, "target": [7.6, 14.0, 0.8], "lens": 28, "verticals": 0},
+    {"frame": 88, "azimuth": -44, "distance": 26.5, "height": 11.5, "target": [7.8, 12.0, 2.4], "lens": 31, "verticals": 0.15},
+    {"frame": 136, "azimuth": -60, "distance": 29.5, "height": 6.5, "target": [8.0, 9.0, 3.8], "lens": 35, "verticals": 0.55},
+    {"frame": 191, "azimuth": -73.98116, "distance": 32.25229, "height": 2.0, "target": [8.15, 6.6, 4.8], "lens": 39, "verticals": 1, "shiftX": 0, "shiftY": 0}
   ],
   "build": [[0, 0.28], [3, 0.28], [27, 1], [35, 1], [59, 2], [67, 2], [91, 3], [99, 3], [123, 4], [131, 4], [155, 5], [163, 5], [187, 6], [191, 6]],
   "timeOfDay": [[0, 0.95], [31, 0.9], [48, 0], [127, 0], [159, 0.55], [191, 1.0]]

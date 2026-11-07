@@ -37,6 +37,7 @@ const POSTER_TIERS: Record<Orientation, Tier[]> = {
   landscape: [
     { id: "360", width: 640, height: 360 },
     { id: "540", width: 960, height: 540 },
+    { id: "1080", width: 1920, height: 1080 },
   ],
   portrait: [
     { id: "360", width: 360, height: 640 },
@@ -62,7 +63,7 @@ const firstStyle = (["landscape", "portrait"] as const)
 
 <script is:inline>
   // Motion only with JS, no reduced-motion or reduced-data preference, no Save-Data and a
-  // connection faster than 3G (the video is about 1 MB). Runs before the hero is parsed.
+  // connection faster than 3G (the video is 1 to 4 MB). Runs before the hero is parsed.
   (function () {
     var c = navigator.connection;
     var mq = function (q) {

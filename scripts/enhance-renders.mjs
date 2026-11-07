@@ -438,9 +438,10 @@ async function encode() {
       );
       console.log(`${out} (${(bytes / 1024).toFixed(0)} KB)`);
     } else {
-      // Same tiers (full size and two thirds, see tiersFor in scripts/encode-renders.mjs) and quality as the frame sequence
+      // Keep in step with POSTER_TIERS in src/components/hero/BuildVideoHero.astro. Landscape also has 1080, the upscaled video's size
       const [bw, bh] = job.orientation === "landscape" ? [960, 540] : [540, 960];
       const tiers = [1, 2 / 3].map((k) => ({ id: String(Math.round(540 * k)), width: Math.round((bw * k) / 2) * 2, height: Math.round((bh * k) / 2) * 2 }));
+      if (job.orientation === "landscape") tiers.unshift({ id: "1080", width: 1920, height: 1080 });
       for (const tier of tiers) {
         const img = sharp(raw).resize(tier.width, tier.height, { fit: "cover" });
         const stem = join(root, "public/hero/poster", `${job.orientation}-${tier.id}`);

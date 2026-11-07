@@ -85,13 +85,14 @@ def _beam_material(beam, walls, fallback):
 def _spiral(lid, li, st, col):
     """Separate radial treads around a steel pole."""
     mat = materials.get("metal-dark")
-    for i, t in enumerate(st["treadPolygons"]):
+    treads = st["treadPolygons"]
+    for i, t in enumerate(treads):
         prism_object(f"stair-{lid}-{st['id']}-{i}", t["outline"], [], t["top"] - TREAD, t["top"], mat, col, bevel=False,
-                     role="stair", level=li)
+                     role="spiral", order=i / len(treads), level=li)
     cx, cy = st["x"] + st["w"] / 2, st["y"] + st["d"] / 2
     top = st["treadPolygons"][-1]["top"] + 0.9
     boxes_object(f"stair-{lid}-{st['id']}-pole", [aabb(cx - POLE, cy - POLE, st["bottom"] - 0.4, cx + POLE, cy + POLE, top)],
-                 mat, col, role="stair", level=li)
+                 mat, col, role="spiral", order=0.0, level=li)
 
 
 def build(design, root):

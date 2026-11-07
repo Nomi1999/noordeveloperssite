@@ -239,6 +239,8 @@ class Sequence:
             "aspect": self.config.get("aspect", [16, 9]),
             "light": self.config.get("light", {}),
             "timeOfDay": self.tod(frame),
+            "hideBoundary": self.config.get("hideBoundary", []),
+            "context": self.config.get("context", {}),
         }
         return shot
 

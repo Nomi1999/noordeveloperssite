@@ -4,9 +4,9 @@
 |---|---|
 | 0–1 | design: plan linework draws itself onto the empty plot |
 | 1–2 | foundation: excavation, footings, column stubs, plinth, ground slab |
-| 2–3 | structure: per level, columns rise, then beams and the slab above form |
+| 2–3 | structure: per level, columns rise (with the facade columns that carry a slab), then beams and the slab above form |
 | 3–4 | walls: brick rises course by course, level by level; boundary walls; tanks |
-| 4–5 | finishing: skins sweep down over the brick, facade, frames, glass, doors, railings, gate, landscaping |
+| 4–5 | finishing: skins sweep down over the brick, facade, frames, steel spiral stairs, glass, doors, railings, gate, landscaping |
 | 5–6 | complete |
 
 Each phased object gets `phase`, `t0`, `t1` (its window inside the phase, 0–1)
@@ -110,8 +110,14 @@ def assign(design):
             _set(obj, 4, 0.4, 0.5, "skin", jitter=0.1)
         elif role == "boundary-skin":
             _set(obj, 4, 0.3, 0.5, "skin", jitter=0.2)
+        elif role == "facade" and obj.get("facade_role") == "column":
+            _set(obj, 2, 0.0, 0.55 / ns, "rise")
         elif role == "facade":
             _set(obj, 4, 0.44, 0.62, "rise")
+        elif role == "spiral":
+            # steel, fitted once the house stands: tread by tread from the bottom, not as a floating helix
+            t0 = 0.5 + 0.14 * obj["order"]
+            _set(obj, 4, t0, t0 + 0.03, "rise")
         elif role == "gate-post":
             _set(obj, 4, 0.45, 0.55, "rise")
         elif role == "frame":

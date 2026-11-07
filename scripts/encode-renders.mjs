@@ -143,17 +143,19 @@ function ffmpeg(args) {
 /**
  * The hero's video encodings, smallest first; the player takes the first one canPlayType accepts.
  * AV1 for current browsers, H.264 for everything else. 24 fps, no audio, yuv420p.
+ * The type states the level the frame size needs: up to 720p, AV1 3.0 and H.264 3.1; above it, level 4.0 for both.
+ * Four reference frames keep 1080p H.264 at level 4.0 (the slow preset's five would make it 5.0).
  */
 export const VIDEO_CODECS = [
   {
     id: "av1",
-    type: 'video/mp4; codecs="av01.0.04M.08"',
+    type: (large) => `video/mp4; codecs="av01.0.${large ? "08" : "04"}M.08"`,
     args: (crf) => ["-c:v", "libsvtav1", "-crf", String(crf ?? 34), "-preset", "4", "-svtav1-params", "tune=0"],
   },
   {
     id: "h264",
-    type: 'video/mp4; codecs="avc1.4d401f"',
-    args: (crf) => ["-c:v", "libx264", "-crf", String(crf ?? 22), "-preset", "slow", "-profile:v", "main", "-tune", "film"],
+    type: (large) => `video/mp4; codecs="avc1.4d40${large ? "28" : "1f"}"`,
+    args: (crf) => ["-c:v", "libx264", "-crf", String(crf ?? 22), "-preset", "slow", "-refs", "4", "-profile:v", "main", "-tune", "film"],
   },
 ];
 
@@ -188,14 +190,20 @@ async function video() {
     ]);
     renameSync(tmp, out);
     const bytes = statSync(out).size;
-    sources.push({ url: `/hero/video/${name}`, type: codec.type, bytes });
+    sources.push({ url: `/hero/video/${name}`, type: codec.type(size.width * size.height > 1280 * 720), bytes });
     console.log(`${orientation} ${codec.id}: ${size.width}×${size.height}, ${frames.length} frames at ${fps} fps → ${(bytes / 1048576).toFixed(2)} MB`);
   }
 
   // The first frame as a still: what motion mode paints before the video's own first frame arrives
-  // (WebP only: it is a CSS background, and image-set() with types can't fall back through a custom property)
+  // (WebP only: it is a CSS background, and image-set() with types can't fall back through a custom property).
+  // At most 960px on its long side: it shows only for a moment, and it loads before everything else.
   const firstOut = join(outDir, "first", `${orientation}.webp`);
-  const w = await writeAtomic(firstOut, sharp(join(folder, frames[0])).webp({ quality: 80, effort: 5 }));
+  const w = await writeAtomic(
+    firstOut,
+    sharp(join(folder, frames[0]))
+      .resize({ width: 960, height: 960, fit: "inside", withoutEnlargement: true })
+      .webp({ quality: 80, effort: 5 }),
+  );
   console.log(`${orientation} first frame: ${(w / 1024).toFixed(0)} KB`);
 
   const manifestPath = join(outDir, "manifest.json");

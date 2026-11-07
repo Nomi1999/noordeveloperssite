@@ -33,8 +33,8 @@ One team from the first drawing to the keys, and every build handed over fully f
 
 ## Evidence on Hand
 - Own 3D renders only (`src/assets/renders/`, the 192-frame build sequence in `public/hero/`). No stock photos, no photography of real work.
-- The design stills and the hero's opening dusk poster are AI-enhanced (2026-11-01, `scripts/enhance-renders.mjs`): photoreal versions made from those same renders, keeping each design and camera. The 1 Kanal terrace is shown with glass on every open side, as the maintainer asked. They are still concepts and must never be presented as photos of built houses.
-- The 1 Kanal design was redrawn on 2026-11-06. Its stills show the new house, but the home page hero video and poster still show the earlier one until a later hero change: raise this before any deploy.
+- The design stills are AI-enhanced (`scripts/enhance-renders.mjs`): photoreal versions made from those same renders, keeping each design and camera. They are still concepts and must never be presented as photos of built houses.
+- The hero video and poster are AI restyles of the redrawn 1 Kanal's render (2026-11-07), also concepts. They differ from the stills in details the maintainer has accepted (`render/README.md`), so they must not be read as an exact record of the design.
 - No testimonials, statistics, years in business, certifications or completed-project counts exist or may be invented.
 
 ## Product Principles

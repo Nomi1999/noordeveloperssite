@@ -84,6 +84,8 @@ class Rig:
         self.dusk_az = math.radians(look.get("duskAzimuth", look.get("sunAzimuth", 210) + 40))
         self.dusk_elevation = math.radians(look.get("duskElevation", 3))
         self.exposure = (look.get("exposureDay", 0.0), look.get("exposureDusk", 0.0))
+        self.dusk_tint = tuple(look.get("duskTint", (0.55, 0.66, 1.0)))  # pushed toward blue hour
+        self.dawn = look.get("dawn")  # a sequence's opening twilight, when it differs from its lit ending
         self.look = look.get("look", "AgX - Medium High Contrast")
         day_path = assets.require(*DAY)
         dusk_path = assets.require(*DUSK)
@@ -125,7 +127,8 @@ class Rig:
             return t.outputs[0]
 
         day = env(day_path, day_rot, 12.0, (1.0, 1.0, 1.0))
-        dusk = env(dusk_path, dusk_rot, 3.0, tuple(self.shot.get("light", {}).get("duskTint", (0.55, 0.66, 1.0))))  # pushed toward blue hour
+        dusk = env(dusk_path, dusk_rot, 3.0, self.dusk_tint)
+        dusk.node.name = "dusk-tint"
         mix = nt.nodes.new("ShaderNodeMix")
         mix.data_type = "RGBA"
         mix.name = "tod"
@@ -232,6 +235,14 @@ class Rig:
         self.world.node_tree.nodes["tod"].inputs["Factor"].default_value = mix
         self.world.node_tree.nodes["sky"].inputs["Strength"].default_value = lerp(1.0, 0.32, mix)
 
+        # Twilight comes twice in a sequence: `dawn` holds until the finishes go on, then gives way to the dusk settings.
+        twilight_exposure, tint = self.exposure[1], self.dusk_tint
+        if self.dawn:
+            k = max(0.0, min(1.0, build - 4.0))
+            twilight_exposure = lerp(self.dawn.get("exposure", 0.0), twilight_exposure, k)
+            tint = tuple(lerp(a, b, k) for a, b in zip(self.dawn.get("tint", tint), tint))
+        self.world.node_tree.nodes["dusk-tint"].inputs[1].default_value = tint
+
         elevation = lerp(self.day_elevation, self.dusk_elevation, smoothstep(0.0, 0.95, tod))
         azimuth = lerp(self.day_az, self.dusk_az, smoothstep(0.0, 0.95, tod))
         d = Vector((math.cos(elevation) * math.cos(azimuth), math.cos(elevation) * math.sin(azimuth), math.sin(elevation)))
@@ -258,5 +269,5 @@ class Rig:
         vs = scene.view_settings
         vs.view_transform = "AgX"
         vs.look = self.look
-        vs.exposure = lerp(*self.exposure, mix)
+        vs.exposure = lerp(self.exposure[0], twilight_exposure, mix)
         scene["time_of_day"] = tod

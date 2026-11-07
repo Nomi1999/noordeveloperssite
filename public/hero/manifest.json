@@ -42,18 +42,18 @@
   ],
   "orientations": {
     "landscape": {
-      "width": 960,
-      "height": 540,
+      "width": 1920,
+      "height": 1080,
       "sources": [
         {
           "url": "/hero/video/landscape.av1.mp4",
-          "type": "video/mp4; codecs=\"av01.0.04M.08\"",
-          "bytes": 569492
+          "type": "video/mp4; codecs=\"av01.0.08M.08\"",
+          "bytes": 2782990
         },
         {
           "url": "/hero/video/landscape.h264.mp4",
-          "type": "video/mp4; codecs=\"avc1.4d401f\"",
-          "bytes": 1184954
+          "type": "video/mp4; codecs=\"avc1.4d4028\"",
+          "bytes": 4057205
         }
       ]
     },
@@ -64,12 +64,12 @@
         {
           "url": "/hero/video/portrait.av1.mp4",
           "type": "video/mp4; codecs=\"av01.0.04M.08\"",
-          "bytes": 448323
+          "bytes": 627153
         },
         {
           "url": "/hero/video/portrait.h264.mp4",
           "type": "video/mp4; codecs=\"avc1.4d401f\"",
-          "bytes": 1118754
+          "bytes": 1481816
         }
       ]
     }

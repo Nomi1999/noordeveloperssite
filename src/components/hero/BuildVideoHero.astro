@@ -764,6 +764,14 @@ const firstStyle = (["landscape", "portrait"] as const)
     }
   }
 
+  /* Phones (portrait): larger headline than the tablet/desktop scale */
+  @media (max-width: 47.999rem) and (orientation: portrait) {
+    :global(html.hero-motion) .hero__title {
+      font-size: clamp(2.75rem, 2.1rem + 3.2vw, 3.5rem);
+      max-width: 11ch;
+    }
+  }
+
   .hero-after:focus {
     outline: none;
   }

@@ -20,13 +20,17 @@ def clear():
 
 
 def hide_boundary(design, sides):
-    """Leaves the named plot edges out of one shot: the panels above the base go, and any taller wall drops to a kerb."""
+    """Leaves the named plot edges out of one shot: the panels above the base go, any taller wall drops to a kerb,
+    and their gates stand open."""
     prefixes = tuple(f"boundary-{side}-" for side in sides)
     if prefixes:
         design["facade"] = [f for f in design["facade"] if not f["id"].startswith(prefixes)]
     for w in design["site"]["boundary"]["walls"]:
         if w["side"] in sides:
             w["top"] = min(w["top"], KERB_HEIGHT)
+    for g in design["site"]["boundary"]["gates"]:
+        if g["side"] in sides:
+            g["open"] = True
 
 
 class Scene:

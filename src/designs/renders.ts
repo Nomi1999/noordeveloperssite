@@ -58,20 +58,24 @@ export const renderRegistry: Record<string, DesignRenderEntry> = {
   },
   "2-kanal": {
     lead: "front-day",
-    gallery: ["front-dusk", "street", "aerial"],
+    gallery: ["front-dusk", "street", "street-open", "aerial"],
     share: "/og/2-kanal.jpg",
     shots: {
       "front-day": {
-        alt: "The 2 Kanal house concept by day: a wide two-storey white house with dark fins and a long glass-railed terrace, a large lawn to one side and a guard room by the gate.",
+        alt: "The 2 Kanal house concept by day: a wide two-storey house in charcoal, grey stone and travertine with black fins, a long glass-railed terrace with potted palms over a charcoal-beamed porch, a large lawn to one side and a guard room by the gate.",
         caption: "Front, day",
       },
       "front-dusk": {
-        alt: "The 2 Kanal house concept at dusk, with lit windows on both floors behind the boundary wall.",
+        alt: "The 2 Kanal house concept at dusk, with lit windows, wall lights and glowing timber soffits behind a grey stone boundary wall with black granite piers and black gates.",
         caption: "Front, dusk",
       },
       street: {
-        alt: "The 2 Kanal house concept from the street, behind its boundary wall and wide black gates.",
+        alt: "The 2 Kanal house concept from the street, behind a grey stone boundary wall with a black metal lattice, black granite piers, a black pedestrian gate and a wide black car gate.",
         caption: "Street, day",
+      },
+      "street-open": {
+        alt: "The 2 Kanal house concept from the street with the boundary wall left out, showing the travertine ground floor with its two wide windows and timber front door, the porch under the charcoal beam, the lawn and the guard room.",
+        caption: "Front, without the boundary wall",
       },
       aerial: {
         alt: "The 2 Kanal house concept from above, showing the roof, the long lawn along one side and the porch at the front.",

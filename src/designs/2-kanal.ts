@@ -7,24 +7,41 @@
  * rear, a 3-car porch and a guard room by the gate. First: master suite with
  * the terrace over the porch, four more bedrooms with baths, and a gallery and
  * family lounge overlooking the double-height void. Roof: stair room, tanks.
+ *
+ * Outside: a charcoal bedroom box with black fins over a travertine drawing room, a grey stone
+ * pier and entrance tower, a travertine porch and terrace over a charcoal beam on granite columns,
+ * a charcoal roof overhang with a timber soffit over the terrace, and black fins on the lounge
+ * glass. The front boundary is grey stone with a black lattice, granite piers and black gates.
  */
 import {
+  BOUNDARY_BASE,
+  BOUNDARY_TOP,
+  boundaryKit,
   chain,
+  cladding,
   defineDesign,
   door,
   EXT,
+  finishKit,
   fixture,
   gap,
   int,
+  ledLines,
   makeGrid,
   outset,
   PLINTH,
   rect,
   repeat,
   room,
+  sconces,
   stack,
+  stoneTile,
   STOREY,
+  tileJoints,
+  washLights,
   win,
+  withDots,
+  type FacadeInput,
 } from "./helpers.ts";
 
 const G = makeGrid([22, 40, 48, 56, 70], [28, 48, 64, 74, 94, 106]);
@@ -43,12 +60,143 @@ const mumty = rect([47.875, 58.125], [56.125, 76.375]);
 // Height of the double-height window wall: up to the underside of the roof slab
 const doubleHeight = 2 * STOREY - 0.5;
 
+// ---- Finishes ----
+// Every height here is above the road. The ground floor is at 2', the first at 13', the roof slab's
+// top at 24' and the parapet's top at 27'-6".
+
+const { above, face, hole, box } = finishKit(PLINTH);
+const sand = { material: "plaster-sand" } as const;
+const charcoal = { material: "plaster-charcoal" } as const;
+
+/** The height of a wall light's centre */
+const LIGHT = 7.5;
+/** The underside of the first floor's slab, where the soffits sit */
+const SOFFIT = 12.4;
+
+const FRONT = 27.625;
+const LEFT = 21.625;
+const RIGHT = 70.375;
+/** The front of the stone pier and the stone tower above the entrance */
+const PIER = 26.625;
+const TOWER_END = 46.5;
+const PIER_END = 42;
+
+const boxFront = face([LEFT, 24.625], [40.375, 24.625], 12.4, 27.5);
+const boxLeft = face([LEFT, 47.625], [LEFT, 24.625], 12.5, 27.5);
+const drawingFront = face([LEFT, FRONT], [40.375, FRONT], 0, SOFFIT);
+const drawingSide = face([LEFT, 47.625], [LEFT, FRONT], 0, 12.5);
+const towerFront = face([40.375, PIER], [TOWER_END, PIER], 13, 28.5);
+const pierFront = face([40.375, PIER], [PIER_END, PIER], 0, 13);
+const entrance = face([PIER_END, FRONT], [48, FRONT], 0, SOFFIT);
+const porchWall = face([48, FRONT], [RIGHT, FRONT], 0, SOFFIT);
+const terraceWall = face([TOWER_END, FRONT], [RIGHT, FRONT], 13, 24);
+const loungeSide = face([LEFT, 74.375], [LEFT, 47.625], 0, 27.5);
+const rightFront = face([RIGHT, FRONT], [RIGHT, 48], 0, 24);
+const rightMass = face([RIGHT, 48], [RIGHT, 62], 0, 27.5);
+
+const house: FacadeInput[] = [
+  // The bedroom box: charcoal around its window, with LED lines at the corner and black fins in front
+  ...cladding("box-front", boxFront, "plaster-charcoal", { holes: [hole(2.375, 16.375, 14, 21)] }),
+  ...ledLines("box-led", boxFront, [0.8, 1.4]),
+  ...cladding("box-left", boxLeft, "plaster-charcoal", { holes: [hole(2.625, 4.625, 19, 21), hole(8.625, 16.625, 16, 21)] }),
+  ...cladding("box-return", face([40.375, 24.625], [40.375, PIER], 13, 27.5), "plaster-charcoal"),
+  ...withDots(box("box-soffit", "soffit", "wood-slat", [LEFT, 24.625], [40.375, FRONT], SOFFIT, 12.5)),
+
+  // The drawing room under the box, in travertine with its wall lights
+  ...cladding("drawing-front", drawingFront, "travertine", { holes: [hole(3.375, 15.375, 3, 10)] }),
+  ...sconces("drawing-sconce", drawingFront, [[1.7, above(LIGHT)], [17, above(LIGHT)]]),
+  ...cladding("drawing-side", drawingSide, "travertine", { holes: [hole(2.125, 4.125, 8, 10), hole(9.625, 17.625, 5, 10)] }),
+  ...sconces("drawing-side-sconce", drawingSide, [[8.4, above(LIGHT)], [18.8, above(LIGHT)]]),
+
+  // The stone pier beside the door, and the tower over the entrance that passes through the roofline
+  box("stone-pier", "cladding", "stone-tile-grey", [40.375, PIER], [PIER_END, FRONT], 0, 13),
+  ...tileJoints("stone-pier-joint", pierFront, { width: 99, height: 2.7, out: 0 }),
+  box("stone-tower", "cladding", "stone-tile-grey", [40.375, PIER], [TOWER_END, 28.375], 13, 28.5),
+  ...tileJoints("stone-tower-joint", towerFront, { width: 99, height: 2.7, out: 0 }),
+  ...ledLines("stone-tower-led", towerFront, [0.6, 5.525], 0),
+
+  // The entrance: beige tile around the door and over it, up to the soffit
+  ...cladding("entrance-tile", entrance, "tile-beige", { holes: [hole(0, 4.5, 2, 10)] }),
+  ...tileJoints("entrance-joint", entrance, { width: 99, height: 5.5, holes: [hole(0, 4.5, 2, 10)] }),
+  ...sconces("entrance-sconce", entrance, [[5.25, above(LIGHT)]]),
+  ...washLights("entrance-wash", entrance, [0.75, 2.25, 3.75], above(12.3)),
+
+  // The porch: travertine around the dining window, a charcoal beam on granite columns and a timber ceiling
+  ...cladding("porch-stone", porchWall, "travertine", { holes: [hole(4, 18, 3, 10)] }),
+  box("beam-front", "beam", "plaster-charcoal", [40.355, 10.98], [70.395, 11.6], 10.6, 13.02),
+  box("beam-left", "beam", "plaster-charcoal", [40.355, 10.98], [41, PIER], 10.6, 13.02),
+  box("beam-right", "beam", "plaster-charcoal", [69.8, 10.98], [70.395, FRONT], 10.6, 13.02),
+  ...withDots(box("porch-ceiling", "soffit", "wood-slat", [41, 11.6], [69.8, FRONT], SOFFIT, 12.5)),
+
+  // The terrace's back wall, in travertine around the sliding door
+  ...cladding("terrace-stone", terraceWall, "travertine", { holes: [hole(7.5, 17.5, 13, 21)] }),
+  ...sconces("terrace-sconce", terraceWall, [[20.7, above(18)]]),
+  ...washLights("terrace-wash", terraceWall, [1.5, 3.75, 6, 9.5, 12.5, 15.5, 18.5, 21.5], above(23.85)),
+
+  // The roof over the terrace: a charcoal fascia over a timber soffit, running on down the right side
+  box("fascia-front", "fascia", "plaster-charcoal", [TOWER_END, 23.5], [71.4, 28], 24, 27.6),
+  box("fascia-side", "fascia", "plaster-charcoal", [RIGHT, 28], [71.4, 40], 24, 27.6),
+  ...withDots(box("soffit-roof-front", "soffit", "wood-slat", [TOWER_END, 23.5], [71.4, 28], 23.9, 24)),
+  ...withDots(box("soffit-roof-side", "soffit", "wood-slat", [RIGHT, 28], [71.4, 40], 23.9, 24)),
+
+  // The lounge's window wall on the lawn, framed in stone
+  ...stoneTile("lounge-stone", loungeSide, 99, 3.5, [hole(1.375, 25.375, 2, 23)]),
+
+  // The right side: travertine at the front, then a tall stone mass with LED lines
+  ...cladding("right-front", rightFront, "travertine", { holes: [hole(4.375, 12.375, 5, 10), hole(5.375, 13.375, 16, 21)] }),
+  ...sconces("right-sconce", rightFront, [[2.2, above(LIGHT)], [14.5, above(LIGHT)]]),
+  ...washLights("right-wash", rightFront, [2.5, 5.5, 8.5, 11.5], above(23.85)),
+  ...stoneTile("right-mass", rightMass, 3.5, 3.5, [hole(4, 10, 5.5, 10), hole(5, 13, 16, 21)]),
+  ...ledLines("right-mass-led", rightMass, [1, 1.6]),
+
+  // The guard room's cap
+  box("guard-cap", "fascia", "plaster-charcoal", [66.1, 1.1], [73.9, 8.9], 12.4, 13.4),
+];
+
+// ---- The boundary above its base ----
+
+const { run, inWall, stoneWall, wallLights } = boundaryKit<"front" | "right" | "rear" | "left">(PLINTH, {
+  front: [[0, 0], [75, 0]],
+  right: [[75, 0], [75, 120]],
+  rear: [[75, 120], [0, 120]],
+  left: [[0, 120], [0, 0]],
+});
+const lattice = (id: string, s0: number, s1: number, z0: number, z1: number): FacadeInput => ({
+  ...cladding(id, run("front", s0, s1, z0, z1), "metal-dark", { out: -0.15, depth: 0.05 })[0],
+  role: "lattice",
+});
+const pier = (id: string, x0: number, x1: number): FacadeInput => ({
+  id, type: "box", level: "ground", role: "pier", x: x0, y: 0, w: x1 - x0, d: 1.5, z: -PLINTH, h: 8.5, material: "granite-black",
+});
+// The panels on the sides stop short of the corners, where the front and rear panels run through
+const SIDE_START = 0.52;
+
+const boundary: FacadeInput[] = [
+  // Front, left to right: stone with a lattice onto the lawn, the gate piers, then stone past the guard room
+  ...stoneWall("boundary-front-stone-a", "front", 0, 36, [hole(12, 22, BOUNDARY_BASE, 3.5)]),
+  ...[1.6, 2.2, 2.8].map((z, i) => lattice(`boundary-front-lattice-rail-${i + 1}`, 12, 22, z - 0.03, z + 0.03)),
+  ...Array.from({ length: 18 }, (_, i) => {
+    const x = 12 + (10 * (i + 0.5)) / 18;
+    return lattice(`boundary-front-lattice-bar-${i + 1}`, x - 0.03, x + 0.03, BOUNDARY_BASE, 3.5);
+  }),
+  pier("boundary-front-pier-a", 36, 38.16),
+  pier("boundary-front-pier-b", 41.84, 44.66),
+  pier("boundary-front-pier-c", 63.34, 65.4),
+  ...stoneWall("boundary-front-stone-b", "front", 65.4, 75),
+  ...wallLights("boundary-front-sconce", "front", [3.5, 9.5, 24.5, 30.5, 70]),
+  // The neighbours' sides in plain plaster
+  ...cladding("boundary-right-wall", run("right", SIDE_START, 120 - SIDE_START, BOUNDARY_BASE, BOUNDARY_TOP), "plaster-warm-grey", inWall),
+  ...cladding("boundary-rear-wall", run("rear", 0, 75, BOUNDARY_BASE, BOUNDARY_TOP), "plaster-warm-grey", inWall),
+  ...cladding("boundary-left-wall", run("left", SIDE_START, 120 - SIDE_START, BOUNDARY_BASE, BOUNDARY_TOP), "plaster-warm-grey", inWall),
+];
+
 export default defineDesign({
   slug: "2-kanal",
   name: "2 Kanal House",
   kind: "house",
   plot: { width: 75, depth: 120 },
-  grid: { x: G.x, y: G.y, omit: ["B3"] },
+  // Columns are as deep as the walls, and none stands in a window or door
+  grid: { x: G.x, y: G.y, column: [EXT, EXT], omit: ["B3", "D1", "A3", "A5", "B6", "C4"] },
   levels: stack(PLINTH, [
     {
       id: "ground",
@@ -57,10 +205,10 @@ export default defineDesign({
       height: STOREY,
       slab: { outline: outset(rect(g("A", 1), g("E", 6)), EXT / 2), islands: [guardSlab] },
       walls: [
-        ...chain("out", [g("A", 1), g("E", 1), g("E", 6), g("A", 6), g("A", 4), g("A", 2)], { closed: true, kind: "exterior" }).map(
+        ...chain("out", [g("A", 1), g("E", 1), g("E", 6), g("A", 6), g("A", 4), g("A", 2)], { closed: true, kind: "exterior", ...sand }).map(
           (w) => (w.id === "out-5" ? { ...w, height: doubleHeight } : w),
         ),
-        ...chain("guard", guard, { closed: true, kind: "exterior" }),
+        ...chain("guard", guard, { closed: true, kind: "exterior", material: "travertine" }),
         int("pw-a", [22, 41], [28, 41]),
         int("pw-b", [28, 41], [28, 48]),
         int("b1", g("B", 1), g("B", 2)),
@@ -191,7 +339,7 @@ export default defineDesign({
         ],
       },
       walls: [
-        ...chain("f", [[22, 48], ...firstWalls, [22, 74]], { kind: "exterior" }),
+        ...chain("f", [[22, 48], ...firstWalls, [22, 74]], { kind: "exterior", ...sand }),
         int("y2a", g("A", 2), g("C", 2)),
         int("y2b", g("C", 2), g("E", 2)),
         int("b1", [40, 28], g("B", 2)),
@@ -285,13 +433,13 @@ export default defineDesign({
       kind: "roof",
       height: 9,
       slab: { outline: outset(firstWalls, EXT / 2), voids: [{ id: "stairwell", kind: "stair", outline: stairwell }] },
-      walls: chain("mumty", mumty, { closed: true, kind: "exterior", material: "plaster-warm-grey" }),
+      walls: chain("mumty", mumty, { closed: true, kind: "exterior", ...charcoal }),
       openings: [door("roof-door", "mumty-4", 0.6, { opensTo: "right" })],
       rooms: [room("stair-room", "Stair room", "stair-room", mumty)],
-      parapets: [{ id: "parapet", path: firstWalls }],
+      parapets: [{ id: "parapet", path: firstWalls, ...charcoal }],
       tanks: [
-        { id: "tank-1", x: 58.5, y: 60, w: 5, d: 5, height: 5 },
-        { id: "tank-2", x: 58.5, y: 67, w: 5, d: 5, height: 5 },
+        { id: "tank-1", x: 58.5, y: 60, w: 5, d: 5, height: 5, ...charcoal },
+        { id: "tank-2", x: 58.5, y: 67, w: 5, d: 5, height: 5, ...charcoal },
       ],
     },
     {
@@ -304,9 +452,15 @@ export default defineDesign({
   ]),
   site: {
     boundary: {
+      // The white base: the wall above it is panels in `boundary`, because its finish changes every few feet
+      height: BOUNDARY_BASE,
+      material: "plaster-white",
+      // Each gate runs from pier to pier, so the white base stops at the piers' outer faces and never
+      // shows at their foot. The renderer insets a leaf 8" from its ends, so both openings meet inside
+      // the middle pier and the leaves end hidden in the piers
       gates: [
-        { id: "car-gate", side: "front", offset: 44, width: 20, kind: "vehicle" },
-        { id: "front-gate", side: "front", offset: 38, width: 4, kind: "pedestrian" },
+        { id: "car-gate", side: "front", offset: 42.6, width: 22.8, kind: "vehicle", height: BOUNDARY_TOP, posts: false },
+        { id: "front-gate", side: "front", offset: 36, width: 6.6, kind: "pedestrian", height: BOUNDARY_TOP, posts: false },
       ],
     },
     porches: [{ id: "porch", outline: rect([40, 9.5], [70.375, 27.625]) }],
@@ -321,24 +475,29 @@ export default defineDesign({
     ],
     planting: [
       { id: "tree-1", kind: "tree", at: [5, 5], size: 8 },
-      { id: "tree-2", kind: "tree", at: [30, 6], size: 8 },
+      { id: "tree-2", kind: "tree", at: [10, 20], size: 8 },
       { id: "tree-3", kind: "tree", at: [6, 96], size: 8 },
-      { id: "palm-1", kind: "palm", at: [16, 40], size: 5 },
-      { id: "palm-2", kind: "palm", at: [16, 82], size: 5 },
-      { id: "hedge-1", kind: "hedge", at: [18, 1.75], size: 2 },
+      { id: "palm-1", kind: "palm", at: [5, 45], size: 5 },
+      { id: "palm-2", kind: "palm", at: [5, 85], size: 5 },
+      ...[13.5, 16, 18.5, 21].map((x, i) => ({ id: `lattice-shrub-${i + 1}`, kind: "shrub" as const, at: [x, 2.2] as [number, number], size: 2.2 })),
       { id: "shrub-1", kind: "shrub", at: [3, 60], size: 3 },
       { id: "shrub-2", kind: "shrub", at: [35, 24], size: 3 },
+      // Two plants in dark pots on the terrace: at its front corner by the bedroom box, and beside the sliding door
+      { id: "pot-terrace-corner", kind: "pot", at: [42.6, 13.4], size: 2.5, level: "first" },
+      { id: "pot-terrace-door", kind: "pot", at: [66.6, 25.6], size: 2.5, level: "first" },
     ],
   },
   facade: [
-    { id: "stone-pier", type: "box", level: "ground", role: "cladding", x: 40.375, y: 26.625, w: 2, d: 1, z: 0, h: 25.5, material: "stone-cladding" },
-    { id: "porch-soffit", type: "box", level: "ground", role: "soffit", x: 42.375, y: 11, w: 28, d: 16.625, z: 10.4, h: 0.1, material: "wood-panel" },
-    { id: "box-soffit", type: "box", level: "ground", role: "soffit", x: 21.625, y: 24.625, w: 18.75, d: 3, z: 10.4, h: 0.1, material: "wood-panel" },
-    { id: "canopy-band", type: "box", level: "first", role: "slab-edge", x: 40.375, y: 11, w: 30, d: 0.5, z: -0.5, h: 1.25, material: "exposed-concrete" },
+    // Granite columns under the porch beam
+    { id: "porch-column-a", type: "box", level: "ground", role: "column", x: 40.375, y: 11, w: 0.75, d: 1.5, z: -PLINTH, h: 10.6, material: "granite-black" },
+    { id: "porch-column-b", type: "box", level: "ground", role: "column", x: 69.625, y: 11, w: 0.75, d: 1.5, z: -PLINTH, h: 10.6, material: "granite-black" },
     ...repeat("fin", 11, [23.5, 24.2], [38.5, 24.2], { level: "first", role: "fin", w: 0.25, d: 0.6, z: 0, h: 10.5, material: "metal-dark" }),
     // Vertical fins in front of the double-height window wall
     ...repeat("side-fin", 9, [21.2, 50], [21.2, 72], { level: "ground", role: "fin", w: 0.6, d: 0.25, z: 0, h: doubleHeight, material: "metal-dark" }),
-    { id: "terrace-rail", type: "railing", level: "first", role: "balustrade", path: [[42.5, 11.25], [70.125, 11.25], [70.125, 27.5]], z: 0, h: 3.5, material: "glass-clear" },
+    // Glass on all three open sides of the terrace, from the bedroom box's wall round to the house wall
+    { id: "terrace-rail", type: "railing", level: "first", role: "balustrade", path: [[40.45, 25], [40.45, 11.25], [70.125, 11.25], [70.125, 27.625]], z: 0, h: 3.5, material: "glass-tinted" },
     { id: "void-rail", type: "railing", level: "first", role: "balustrade", path: [[22.4, 52.1], [43.9, 52.1], [43.9, 73.9], [22.4, 73.9]], z: 0, h: 3.5, material: "glass-clear" },
+    ...house,
+    ...boundary,
   ],
 });

@@ -1262,6 +1262,9 @@
                   },
                   "open": {
                     "type": "boolean"
+                  },
+                  "posts": {
+                    "type": "boolean"
                   }
                 },
                 "required": [

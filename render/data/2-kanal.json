@@ -133,7 +133,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -151,7 +151,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 3,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -169,7 +169,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -187,7 +187,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -205,7 +205,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -223,7 +223,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -241,7 +241,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 3,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -259,7 +259,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -277,7 +277,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -295,7 +295,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -313,7 +313,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -331,7 +331,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -349,7 +349,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -367,7 +367,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -385,7 +385,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -403,7 +403,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -421,7 +421,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -439,7 +439,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -457,7 +457,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -475,7 +475,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -493,7 +493,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -511,7 +511,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 8,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -529,7 +529,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -547,7 +547,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -565,7 +565,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -583,7 +583,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -601,7 +601,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -619,7 +619,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -637,7 +637,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -655,7 +655,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -673,7 +673,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 8,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -691,7 +691,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -709,7 +709,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -727,7 +727,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -745,7 +745,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -763,7 +763,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 6,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -781,7 +781,7 @@
           "thickness": 0.75,
           "bottom": 9,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -799,7 +799,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -817,7 +817,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 8,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -835,7 +835,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -853,7 +853,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-4",
@@ -871,7 +871,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-4",
@@ -889,7 +889,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 3,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-4",
@@ -907,7 +907,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-4",
@@ -925,7 +925,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -943,7 +943,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -961,7 +961,7 @@
           "thickness": 0.75,
           "bottom": 23,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -979,7 +979,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-6",
@@ -997,7 +997,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-6",
@@ -1015,7 +1015,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 8,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-6",
@@ -1033,7 +1033,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-6",
@@ -1051,7 +1051,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-6",
@@ -1069,7 +1069,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-6",
@@ -1087,7 +1087,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-6",
@@ -1105,7 +1105,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "guard-1",
@@ -1123,7 +1123,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-1",
@@ -1141,7 +1141,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-1",
@@ -1159,7 +1159,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-1",
@@ -1177,7 +1177,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-2",
@@ -1195,7 +1195,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-3",
@@ -1213,7 +1213,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-3",
@@ -1231,7 +1231,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-3",
@@ -1249,7 +1249,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-3",
@@ -1267,7 +1267,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-4",
@@ -1285,7 +1285,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-4",
@@ -1303,7 +1303,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "guard-4",
@@ -1321,7 +1321,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "travertine"
         },
         {
           "wall": "pw-a",
@@ -3862,262 +3862,217 @@
       "columns": [
         {
           "ref": "A1",
-          "x": 21.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 21.625,
+          "y": 27.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "A2",
-          "x": 21.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 2,
-          "top": 12.5
-        },
-        {
-          "ref": "A3",
-          "x": 21.5,
-          "y": 63.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 21.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "A4",
-          "x": 21.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 2,
-          "top": 12.5
-        },
-        {
-          "ref": "A5",
-          "x": 21.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 21.625,
+          "y": 73.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "A6",
-          "x": 21.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 21.625,
+          "y": 105.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "B1",
-          "x": 39.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 39.625,
+          "y": 27.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "B2",
-          "x": 39.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 39.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "B4",
-          "x": 39.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 39.625,
+          "y": 73.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "B5",
-          "x": 39.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 2,
-          "top": 12.5
-        },
-        {
-          "ref": "B6",
-          "x": 39.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 39.625,
+          "y": 93.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "C1",
-          "x": 47.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 27.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "C2",
-          "x": 47.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "C3",
-          "x": 47.5,
-          "y": 63.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 2,
-          "top": 12.5
-        },
-        {
-          "ref": "C4",
-          "x": 47.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 63.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "C5",
-          "x": 47.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 93.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "C6",
-          "x": 47.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 2,
-          "top": 12.5
-        },
-        {
-          "ref": "D1",
-          "x": 55.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 105.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "D2",
-          "x": 55.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "D3",
-          "x": 55.5,
-          "y": 63.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 63.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "D4",
-          "x": 55.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 73.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "D5",
-          "x": 55.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 93.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "D6",
-          "x": 55.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 105.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "E1",
-          "x": 69.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 27.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "E2",
-          "x": 69.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "E3",
-          "x": 69.5,
-          "y": 63.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 63.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "E4",
-          "x": 69.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 73.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "E5",
-          "x": 69.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 93.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         },
         {
           "ref": "E6",
-          "x": 69.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 105.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 2,
           "top": 12.5
         }
@@ -4330,7 +4285,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-1",
@@ -4348,7 +4303,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 19,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-1",
@@ -4366,7 +4321,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-1",
@@ -4384,7 +4339,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-1",
@@ -4402,7 +4357,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 16,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-1",
@@ -4420,7 +4375,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-1",
@@ -4438,7 +4393,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-2",
@@ -4456,7 +4411,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-2",
@@ -4474,7 +4429,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 14,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-2",
@@ -4492,7 +4447,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-2",
@@ -4510,7 +4465,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-3",
@@ -4528,7 +4483,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-4",
@@ -4546,7 +4501,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-4",
@@ -4564,7 +4519,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-4",
@@ -4582,7 +4537,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4600,7 +4555,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4618,7 +4573,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 16,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4636,7 +4591,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4654,7 +4609,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4672,7 +4627,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 16,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4690,7 +4645,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4708,7 +4663,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4726,7 +4681,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 19,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4744,7 +4699,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4762,7 +4717,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4780,7 +4735,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 16,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4798,7 +4753,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4816,7 +4771,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4834,7 +4789,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 19,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4852,7 +4807,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -4870,7 +4825,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-6",
@@ -4888,7 +4843,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-6",
@@ -4906,7 +4861,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 16,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-6",
@@ -4924,7 +4879,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-6",
@@ -4942,7 +4897,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-7",
@@ -4960,7 +4915,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-7",
@@ -4978,7 +4933,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 14,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-7",
@@ -4996,7 +4951,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-7",
@@ -5014,7 +4969,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-7",
@@ -5032,7 +4987,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 14,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-7",
@@ -5050,7 +5005,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-7",
@@ -5068,7 +5023,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "y2a",
@@ -7168,253 +7123,217 @@
       "columns": [
         {
           "ref": "A1",
-          "x": 21.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 21.625,
+          "y": 27.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "A2",
-          "x": 21.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 21.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "A4",
-          "x": 21.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 13,
-          "top": 23.5
-        },
-        {
-          "ref": "A5",
-          "x": 21.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 21.625,
+          "y": 73.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "A6",
-          "x": 21.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 21.625,
+          "y": 105.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "B1",
-          "x": 39.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 39.625,
+          "y": 27.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "B2",
-          "x": 39.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 39.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "B4",
-          "x": 39.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 39.625,
+          "y": 73.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "B5",
-          "x": 39.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 13,
-          "top": 23.5
-        },
-        {
-          "ref": "B6",
-          "x": 39.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 39.625,
+          "y": 93.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "C1",
-          "x": 47.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 27.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "C2",
-          "x": 47.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "C3",
-          "x": 47.5,
-          "y": 63.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 13,
-          "top": 23.5
-        },
-        {
-          "ref": "C4",
-          "x": 47.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 63.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "C5",
-          "x": 47.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 93.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "C6",
-          "x": 47.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 13,
-          "top": 23.5
-        },
-        {
-          "ref": "D1",
-          "x": 55.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 105.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "D2",
-          "x": 55.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "D3",
-          "x": 55.5,
-          "y": 63.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 63.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "D4",
-          "x": 55.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 73.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "D5",
-          "x": 55.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 93.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "D6",
-          "x": 55.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 105.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "E1",
-          "x": 69.5,
-          "y": 27.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 27.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "E2",
-          "x": 69.5,
-          "y": 47.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 47.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "E3",
-          "x": 69.5,
-          "y": 63.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 63.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "E4",
-          "x": 69.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 73.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "E5",
-          "x": 69.5,
-          "y": 93.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 93.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         },
         {
           "ref": "E6",
-          "x": 69.5,
-          "y": 105.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 69.625,
+          "y": 105.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 13,
           "top": 23.5
         }
@@ -7525,7 +7444,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-charcoal"
         },
         {
           "wall": "mumty-2",
@@ -7543,7 +7462,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-charcoal"
         },
         {
           "wall": "mumty-3",
@@ -7561,7 +7480,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-charcoal"
         },
         {
           "wall": "mumty-4",
@@ -7579,7 +7498,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-charcoal"
         },
         {
           "wall": "mumty-4",
@@ -7597,7 +7516,7 @@
           "thickness": 0.75,
           "bottom": 32,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-charcoal"
         },
         {
           "wall": "mumty-4",
@@ -7615,7 +7534,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-charcoal"
         }
       ],
       "openings": [
@@ -7672,37 +7591,28 @@
       "columns": [
         {
           "ref": "C3",
-          "x": 47.5,
-          "y": 63.25,
-          "w": 1,
-          "d": 1.5,
-          "bottom": 24,
-          "top": 32.5
-        },
-        {
-          "ref": "C4",
-          "x": 47.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 47.625,
+          "y": 63.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 24,
           "top": 32.5
         },
         {
           "ref": "D3",
-          "x": 55.5,
-          "y": 63.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 63.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 24,
           "top": 32.5
         },
         {
           "ref": "D4",
-          "x": 55.5,
-          "y": 73.25,
-          "w": 1,
-          "d": 1.5,
+          "x": 55.625,
+          "y": 73.625,
+          "w": 0.75,
+          "d": 0.75,
           "bottom": 24,
           "top": 32.5
         }
@@ -7721,7 +7631,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-charcoal"
         },
         {
           "parapet": "parapet",
@@ -7736,7 +7646,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-charcoal"
         },
         {
           "parapet": "parapet",
@@ -7751,7 +7661,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-charcoal"
         },
         {
           "parapet": "parapet",
@@ -7766,7 +7676,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-charcoal"
         },
         {
           "parapet": "parapet",
@@ -7781,7 +7691,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-charcoal"
         },
         {
           "parapet": "parapet",
@@ -7796,7 +7706,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-charcoal"
         }
       ],
       "tanks": [
@@ -7808,7 +7718,7 @@
           "d": 5,
           "bottom": 24,
           "top": 29,
-          "material": "plaster-warm-grey"
+          "material": "plaster-charcoal"
         },
         {
           "id": "tank-2",
@@ -7818,7 +7728,7 @@
           "d": 5,
           "bottom": 24,
           "top": 29,
-          "material": "plaster-warm-grey"
+          "material": "plaster-charcoal"
         }
       ]
     },
@@ -7870,7 +7780,7 @@
   ],
   "site": {
     "boundary": {
-      "material": "plaster-warm-grey",
+      "material": "plaster-white",
       "walls": [
         {
           "side": "front",
@@ -7879,31 +7789,17 @@
             0.375
           ],
           "to": [
-            38,
+            36,
             0.375
           ],
           "thickness": 0.75,
           "bottom": 0,
-          "top": 7
+          "top": 1.1
         },
         {
           "side": "front",
           "from": [
-            42,
-            0.375
-          ],
-          "to": [
-            44,
-            0.375
-          ],
-          "thickness": 0.75,
-          "bottom": 0,
-          "top": 7
-        },
-        {
-          "side": "front",
-          "from": [
-            64,
+            65.4,
             0.375
           ],
           "to": [
@@ -7912,7 +7808,7 @@
           ],
           "thickness": 0.75,
           "bottom": 0,
-          "top": 7
+          "top": 1.1
         },
         {
           "side": "rear",
@@ -7926,7 +7822,7 @@
           ],
           "thickness": 0.75,
           "bottom": 0,
-          "top": 7
+          "top": 1.1
         },
         {
           "side": "left",
@@ -7940,7 +7836,7 @@
           ],
           "thickness": 0.75,
           "bottom": 0,
-          "top": 7
+          "top": 1.1
         },
         {
           "side": "right",
@@ -7954,7 +7850,7 @@
           ],
           "thickness": 0.75,
           "bottom": 0,
-          "top": 7
+          "top": 1.1
         }
       ],
       "gates": [
@@ -7963,34 +7859,36 @@
           "side": "front",
           "kind": "vehicle",
           "from": [
-            44,
+            42.6,
             0.375
           ],
           "to": [
-            64,
+            65.4,
             0.375
           ],
           "thickness": 0.75,
           "bottom": 0,
           "top": 7,
-          "material": "metal-dark"
+          "material": "metal-dark",
+          "posts": false
         },
         {
           "id": "front-gate",
           "side": "front",
           "kind": "pedestrian",
           "from": [
-            38,
+            36,
             0.375
           ],
           "to": [
-            42,
+            42.6,
             0.375
           ],
           "thickness": 0.75,
           "bottom": 0,
           "top": 7,
-          "material": "metal-dark"
+          "material": "metal-dark",
+          "posts": false
         }
       ]
     },
@@ -8155,8 +8053,8 @@
         "id": "tree-2",
         "kind": "tree",
         "at": [
-          30,
-          6
+          10,
+          20
         ],
         "size": 8
       },
@@ -8173,8 +8071,8 @@
         "id": "palm-1",
         "kind": "palm",
         "at": [
-          16,
-          40
+          5,
+          45
         ],
         "size": 5
       },
@@ -8182,19 +8080,46 @@
         "id": "palm-2",
         "kind": "palm",
         "at": [
-          16,
-          82
+          5,
+          85
         ],
         "size": 5
       },
       {
-        "id": "hedge-1",
-        "kind": "hedge",
+        "id": "lattice-shrub-1",
+        "kind": "shrub",
         "at": [
-          18,
-          1.75
+          13.5,
+          2.2
         ],
-        "size": 2
+        "size": 2.2
+      },
+      {
+        "id": "lattice-shrub-2",
+        "kind": "shrub",
+        "at": [
+          16,
+          2.2
+        ],
+        "size": 2.2
+      },
+      {
+        "id": "lattice-shrub-3",
+        "kind": "shrub",
+        "at": [
+          18.5,
+          2.2
+        ],
+        "size": 2.2
+      },
+      {
+        "id": "lattice-shrub-4",
+        "kind": "shrub",
+        "at": [
+          21,
+          2.2
+        ],
+        "size": 2.2
       },
       {
         "id": "shrub-1",
@@ -8213,57 +8138,53 @@
           24
         ],
         "size": 3
+      },
+      {
+        "id": "pot-terrace-corner",
+        "kind": "pot",
+        "at": [
+          42.6,
+          13.4
+        ],
+        "size": 2.5,
+        "bottom": 13
+      },
+      {
+        "id": "pot-terrace-door",
+        "kind": "pot",
+        "at": [
+          66.6,
+          25.6
+        ],
+        "size": 2.5,
+        "bottom": 13
       }
     ]
   },
   "facade": [
     {
       "type": "box",
-      "id": "stone-pier",
-      "role": "cladding",
-      "x": 40.375,
-      "y": 26.625,
-      "w": 2,
-      "d": 1,
-      "bottom": 2,
-      "top": 27.5,
-      "material": "stone-cladding"
-    },
-    {
-      "type": "box",
-      "id": "porch-soffit",
-      "role": "soffit",
-      "x": 42.375,
-      "y": 11,
-      "w": 28,
-      "d": 16.625,
-      "bottom": 12.4,
-      "top": 12.5,
-      "material": "wood-panel"
-    },
-    {
-      "type": "box",
-      "id": "box-soffit",
-      "role": "soffit",
-      "x": 21.625,
-      "y": 24.625,
-      "w": 18.75,
-      "d": 3,
-      "bottom": 12.4,
-      "top": 12.5,
-      "material": "wood-panel"
-    },
-    {
-      "type": "box",
-      "id": "canopy-band",
-      "role": "slab-edge",
+      "id": "porch-column-a",
+      "role": "column",
       "x": 40.375,
       "y": 11,
-      "w": 30,
-      "d": 0.5,
-      "bottom": 12.5,
-      "top": 13.75,
-      "material": "exposed-concrete"
+      "w": 0.75,
+      "d": 1.5,
+      "bottom": 0,
+      "top": 10.6,
+      "material": "granite-black"
+    },
+    {
+      "type": "box",
+      "id": "porch-column-b",
+      "role": "column",
+      "x": 69.625,
+      "y": 11,
+      "w": 0.75,
+      "d": 1.5,
+      "bottom": 0,
+      "top": 10.6,
+      "material": "granite-black"
     },
     {
       "type": "box",
@@ -8512,7 +8433,20 @@
       "pieces": [
         {
           "from": [
-            42.5,
+            40.45,
+            25
+          ],
+          "to": [
+            40.45,
+            11.175
+          ],
+          "thickness": 0.15,
+          "bottom": 13,
+          "top": 16.5
+        },
+        {
+          "from": [
+            40.375,
             11.25
           ],
           "to": [
@@ -8530,14 +8464,14 @@
           ],
           "to": [
             70.125,
-            27.5
+            27.625
           ],
           "thickness": 0.15,
           "bottom": 13,
           "top": 16.5
         }
       ],
-      "material": "glass-clear"
+      "material": "glass-tinted"
     },
     {
       "type": "railing",
@@ -8585,6 +8519,3843 @@
         }
       ],
       "material": "glass-clear"
+    },
+    {
+      "type": "panel",
+      "id": "box-front-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.625,
+            24.585
+          ],
+          "to": [
+            24,
+            24.585
+          ],
+          "thickness": 0.08,
+          "bottom": 12.4,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-front-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            24,
+            24.585
+          ],
+          "to": [
+            38,
+            24.585
+          ],
+          "thickness": 0.08,
+          "bottom": 12.4,
+          "top": 14
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-front-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            24,
+            24.585
+          ],
+          "to": [
+            38,
+            24.585
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-front-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            38,
+            24.585
+          ],
+          "to": [
+            40.375,
+            24.585
+          ],
+          "thickness": 0.08,
+          "bottom": 12.4,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-led-1",
+      "role": "led",
+      "pieces": [
+        {
+          "from": [
+            22.395,
+            24.53
+          ],
+          "to": [
+            22.455,
+            24.53
+          ],
+          "thickness": 0.03,
+          "bottom": 12.4,
+          "top": 27.5
+        }
+      ],
+      "material": "led-strip"
+    },
+    {
+      "type": "panel",
+      "id": "box-led-2",
+      "role": "led",
+      "pieces": [
+        {
+          "from": [
+            22.995,
+            24.53
+          ],
+          "to": [
+            23.055,
+            24.53
+          ],
+          "thickness": 0.03,
+          "bottom": 12.4,
+          "top": 27.5
+        }
+      ],
+      "material": "led-strip"
+    },
+    {
+      "type": "panel",
+      "id": "box-left-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            47.625
+          ],
+          "to": [
+            21.585,
+            45
+          ],
+          "thickness": 0.08,
+          "bottom": 12.5,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-left-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            45
+          ],
+          "to": [
+            21.585,
+            43
+          ],
+          "thickness": 0.08,
+          "bottom": 12.5,
+          "top": 19
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-left-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            45
+          ],
+          "to": [
+            21.585,
+            43
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-left-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            43
+          ],
+          "to": [
+            21.585,
+            39
+          ],
+          "thickness": 0.08,
+          "bottom": 12.5,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-left-5",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            39
+          ],
+          "to": [
+            21.585,
+            31
+          ],
+          "thickness": 0.08,
+          "bottom": 12.5,
+          "top": 16
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-left-6",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            39
+          ],
+          "to": [
+            21.585,
+            31
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-left-7",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            31
+          ],
+          "to": [
+            21.585,
+            24.625
+          ],
+          "thickness": 0.08,
+          "bottom": 12.5,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "box-return-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            40.415,
+            24.625
+          ],
+          "to": [
+            40.415,
+            26.625
+          ],
+          "thickness": 0.08,
+          "bottom": 13,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "box",
+      "id": "box-soffit",
+      "role": "soffit",
+      "x": 21.625,
+      "y": 24.625,
+      "w": 18.75,
+      "d": 3,
+      "bottom": 12.4,
+      "top": 12.5,
+      "material": "wood-slat"
+    },
+    {
+      "type": "box",
+      "id": "box-soffit-dot-1",
+      "role": "led",
+      "x": 24.63,
+      "y": 26.005,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "box-soffit-dot-2",
+      "role": "led",
+      "x": 30.88,
+      "y": 26.005,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "box-soffit-dot-3",
+      "role": "led",
+      "x": 37.13,
+      "y": 26.005,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-front-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.625,
+            27.585
+          ],
+          "to": [
+            25,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-front-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            25,
+            27.585
+          ],
+          "to": [
+            37,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-front-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            25,
+            27.585
+          ],
+          "to": [
+            37,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.4
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-front-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            37,
+            27.585
+          ],
+          "to": [
+            40.375,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-sconce-1",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            22.975,
+            27.395
+          ],
+          "to": [
+            23.675,
+            27.395
+          ],
+          "thickness": 0.3,
+          "bottom": 7.15,
+          "top": 7.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-sconce-2",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            38.275,
+            27.395
+          ],
+          "to": [
+            38.975,
+            27.395
+          ],
+          "thickness": 0.3,
+          "bottom": 7.15,
+          "top": 7.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-side-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            47.625
+          ],
+          "to": [
+            21.585,
+            45.5
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.5
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-side-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            45.5
+          ],
+          "to": [
+            21.585,
+            43.5
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 8
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-side-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            45.5
+          ],
+          "to": [
+            21.585,
+            43.5
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.5
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-side-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            43.5
+          ],
+          "to": [
+            21.585,
+            38
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.5
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-side-5",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            38
+          ],
+          "to": [
+            21.585,
+            30
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 5
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-side-6",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            38
+          ],
+          "to": [
+            21.585,
+            30
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.5
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-side-7",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            30
+          ],
+          "to": [
+            21.585,
+            27.625
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.5
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-side-sconce-1",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            21.395,
+            39.575
+          ],
+          "to": [
+            21.395,
+            38.875
+          ],
+          "thickness": 0.3,
+          "bottom": 7.15,
+          "top": 7.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "drawing-side-sconce-2",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            21.395,
+            29.175
+          ],
+          "to": [
+            21.395,
+            28.475
+          ],
+          "thickness": 0.3,
+          "bottom": 7.15,
+          "top": 7.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "stone-pier",
+      "role": "cladding",
+      "x": 40.375,
+      "y": 26.625,
+      "w": 1.625,
+      "d": 1,
+      "bottom": 0,
+      "top": 13,
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "stone-pier-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            40.375,
+            26.6175
+          ],
+          "to": [
+            42,
+            26.6175
+          ],
+          "thickness": 0.015,
+          "bottom": 2.68,
+          "top": 2.72
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "stone-pier-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            40.375,
+            26.6175
+          ],
+          "to": [
+            42,
+            26.6175
+          ],
+          "thickness": 0.015,
+          "bottom": 5.38,
+          "top": 5.42
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "stone-pier-joint-3",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            40.375,
+            26.6175
+          ],
+          "to": [
+            42,
+            26.6175
+          ],
+          "thickness": 0.015,
+          "bottom": 8.08,
+          "top": 8.12
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "stone-pier-joint-4",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            40.375,
+            26.6175
+          ],
+          "to": [
+            42,
+            26.6175
+          ],
+          "thickness": 0.015,
+          "bottom": 10.78,
+          "top": 10.82
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "box",
+      "id": "stone-tower",
+      "role": "cladding",
+      "x": 40.375,
+      "y": 26.625,
+      "w": 6.125,
+      "d": 1.75,
+      "bottom": 13,
+      "top": 28.5,
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "stone-tower-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            40.375,
+            26.6175
+          ],
+          "to": [
+            46.5,
+            26.6175
+          ],
+          "thickness": 0.015,
+          "bottom": 15.68,
+          "top": 15.72
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "stone-tower-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            40.375,
+            26.6175
+          ],
+          "to": [
+            46.5,
+            26.6175
+          ],
+          "thickness": 0.015,
+          "bottom": 18.38,
+          "top": 18.42
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "stone-tower-joint-3",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            40.375,
+            26.6175
+          ],
+          "to": [
+            46.5,
+            26.6175
+          ],
+          "thickness": 0.015,
+          "bottom": 21.08,
+          "top": 21.12
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "stone-tower-joint-4",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            40.375,
+            26.6175
+          ],
+          "to": [
+            46.5,
+            26.6175
+          ],
+          "thickness": 0.015,
+          "bottom": 23.78,
+          "top": 23.82
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "stone-tower-joint-5",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            40.375,
+            26.6175
+          ],
+          "to": [
+            46.5,
+            26.6175
+          ],
+          "thickness": 0.015,
+          "bottom": 26.48,
+          "top": 26.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "stone-tower-led-1",
+      "role": "led",
+      "pieces": [
+        {
+          "from": [
+            40.945,
+            26.61
+          ],
+          "to": [
+            41.005,
+            26.61
+          ],
+          "thickness": 0.03,
+          "bottom": 13,
+          "top": 28.5
+        }
+      ],
+      "material": "led-strip"
+    },
+    {
+      "type": "panel",
+      "id": "stone-tower-led-2",
+      "role": "led",
+      "pieces": [
+        {
+          "from": [
+            45.87,
+            26.61
+          ],
+          "to": [
+            45.93,
+            26.61
+          ],
+          "thickness": 0.03,
+          "bottom": 13,
+          "top": 28.5
+        }
+      ],
+      "material": "led-strip"
+    },
+    {
+      "type": "panel",
+      "id": "entrance-tile-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            42,
+            27.585
+          ],
+          "to": [
+            46.5,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 2
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "entrance-tile-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            42,
+            27.585
+          ],
+          "to": [
+            46.5,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.4
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "entrance-tile-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            46.5,
+            27.585
+          ],
+          "to": [
+            48,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "entrance-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            46.5,
+            27.5375
+          ],
+          "to": [
+            48,
+            27.5375
+          ],
+          "thickness": 0.015,
+          "bottom": 5.48,
+          "top": 5.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "entrance-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            42,
+            27.5375
+          ],
+          "to": [
+            48,
+            27.5375
+          ],
+          "thickness": 0.015,
+          "bottom": 10.98,
+          "top": 11.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "entrance-sconce-1",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            46.9,
+            27.395
+          ],
+          "to": [
+            47.6,
+            27.395
+          ],
+          "thickness": 0.3,
+          "bottom": 7.15,
+          "top": 7.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "entrance-wash-1",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            42.65,
+            27.275
+          ],
+          "to": [
+            42.85,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 12.25,
+          "top": 12.3
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "entrance-wash-2",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            44.15,
+            27.275
+          ],
+          "to": [
+            44.35,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 12.25,
+          "top": 12.3
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "entrance-wash-3",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            45.65,
+            27.275
+          ],
+          "to": [
+            45.85,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 12.25,
+          "top": 12.3
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "porch-stone-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            48,
+            27.585
+          ],
+          "to": [
+            52,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "porch-stone-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            52,
+            27.585
+          ],
+          "to": [
+            66,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "porch-stone-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            52,
+            27.585
+          ],
+          "to": [
+            66,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.4
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "porch-stone-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            66,
+            27.585
+          ],
+          "to": [
+            70.375,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "box",
+      "id": "beam-front",
+      "role": "beam",
+      "x": 40.355,
+      "y": 10.98,
+      "w": 30.04,
+      "d": 0.62,
+      "bottom": 10.6,
+      "top": 13.02,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "box",
+      "id": "beam-left",
+      "role": "beam",
+      "x": 40.355,
+      "y": 10.98,
+      "w": 0.645,
+      "d": 15.645,
+      "bottom": 10.6,
+      "top": 13.02,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "box",
+      "id": "beam-right",
+      "role": "beam",
+      "x": 69.8,
+      "y": 10.98,
+      "w": 0.595,
+      "d": 16.645,
+      "bottom": 10.6,
+      "top": 13.02,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "box",
+      "id": "porch-ceiling",
+      "role": "soffit",
+      "x": 41,
+      "y": 11.6,
+      "w": 28.8,
+      "d": 16.025,
+      "bottom": 12.4,
+      "top": 12.5,
+      "material": "wood-slat"
+    },
+    {
+      "type": "box",
+      "id": "porch-ceiling-dot-1",
+      "role": "led",
+      "x": 44.48,
+      "y": 15.4863,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "porch-ceiling-dot-2",
+      "role": "led",
+      "x": 51.68,
+      "y": 15.4863,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "porch-ceiling-dot-3",
+      "role": "led",
+      "x": 58.88,
+      "y": 15.4863,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "porch-ceiling-dot-4",
+      "role": "led",
+      "x": 66.08,
+      "y": 15.4863,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "porch-ceiling-dot-5",
+      "role": "led",
+      "x": 44.48,
+      "y": 23.4987,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "porch-ceiling-dot-6",
+      "role": "led",
+      "x": 51.68,
+      "y": 23.4987,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "porch-ceiling-dot-7",
+      "role": "led",
+      "x": 58.88,
+      "y": 23.4987,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "porch-ceiling-dot-8",
+      "role": "led",
+      "x": 66.08,
+      "y": 23.4987,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-stone-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            46.5,
+            27.585
+          ],
+          "to": [
+            54,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 13,
+          "top": 24
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-stone-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            54,
+            27.585
+          ],
+          "to": [
+            64,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 24
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-stone-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            64,
+            27.585
+          ],
+          "to": [
+            70.375,
+            27.585
+          ],
+          "thickness": 0.08,
+          "bottom": 13,
+          "top": 24
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-sconce-1",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            66.85,
+            27.395
+          ],
+          "to": [
+            67.55,
+            27.395
+          ],
+          "thickness": 0.3,
+          "bottom": 17.65,
+          "top": 18.35
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-wash-1",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            47.9,
+            27.275
+          ],
+          "to": [
+            48.1,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-wash-2",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            50.15,
+            27.275
+          ],
+          "to": [
+            50.35,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-wash-3",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            52.4,
+            27.275
+          ],
+          "to": [
+            52.6,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-wash-4",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            55.9,
+            27.275
+          ],
+          "to": [
+            56.1,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-wash-5",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            58.9,
+            27.275
+          ],
+          "to": [
+            59.1,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-wash-6",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            61.9,
+            27.275
+          ],
+          "to": [
+            62.1,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-wash-7",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            64.9,
+            27.275
+          ],
+          "to": [
+            65.1,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "terrace-wash-8",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            67.9,
+            27.275
+          ],
+          "to": [
+            68.1,
+            27.275
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "fascia-front",
+      "role": "fascia",
+      "x": 46.5,
+      "y": 23.5,
+      "w": 24.9,
+      "d": 4.5,
+      "bottom": 24,
+      "top": 27.6,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "box",
+      "id": "fascia-side",
+      "role": "fascia",
+      "x": 70.375,
+      "y": 28,
+      "w": 1.025,
+      "d": 12,
+      "bottom": 24,
+      "top": 27.6,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "box",
+      "id": "soffit-roof-front",
+      "role": "soffit",
+      "x": 46.5,
+      "y": 23.5,
+      "w": 24.9,
+      "d": 4.5,
+      "bottom": 23.9,
+      "top": 24,
+      "material": "wood-slat"
+    },
+    {
+      "type": "box",
+      "id": "soffit-roof-front-dot-1",
+      "role": "led",
+      "x": 50.53,
+      "y": 25.63,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 23.88,
+      "top": 23.9,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "soffit-roof-front-dot-2",
+      "role": "led",
+      "x": 58.83,
+      "y": 25.63,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 23.88,
+      "top": 23.9,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "soffit-roof-front-dot-3",
+      "role": "led",
+      "x": 67.13,
+      "y": 25.63,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 23.88,
+      "top": 23.9,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "soffit-roof-side",
+      "role": "soffit",
+      "x": 70.375,
+      "y": 28,
+      "w": 1.025,
+      "d": 12,
+      "bottom": 23.9,
+      "top": 24,
+      "material": "wood-slat"
+    },
+    {
+      "type": "box",
+      "id": "soffit-roof-side-dot-1",
+      "role": "led",
+      "x": 70.7675,
+      "y": 30.88,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 23.88,
+      "top": 23.9,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "soffit-roof-side-dot-2",
+      "role": "led",
+      "x": 70.7675,
+      "y": 36.88,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 23.88,
+      "top": 23.9,
+      "material": "led-strip"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            74.375
+          ],
+          "to": [
+            21.585,
+            73
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 27.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            73
+          ],
+          "to": [
+            21.585,
+            49
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 2
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            73
+          ],
+          "to": [
+            21.585,
+            49
+          ],
+          "thickness": 0.08,
+          "bottom": 23,
+          "top": 27.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.585,
+            49
+          ],
+          "to": [
+            21.585,
+            47.625
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 27.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            74.375
+          ],
+          "to": [
+            21.5375,
+            73
+          ],
+          "thickness": 0.015,
+          "bottom": 3.48,
+          "top": 3.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            49
+          ],
+          "to": [
+            21.5375,
+            47.625
+          ],
+          "thickness": 0.015,
+          "bottom": 3.48,
+          "top": 3.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-3",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            74.375
+          ],
+          "to": [
+            21.5375,
+            73
+          ],
+          "thickness": 0.015,
+          "bottom": 6.98,
+          "top": 7.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-4",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            49
+          ],
+          "to": [
+            21.5375,
+            47.625
+          ],
+          "thickness": 0.015,
+          "bottom": 6.98,
+          "top": 7.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-5",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            74.375
+          ],
+          "to": [
+            21.5375,
+            73
+          ],
+          "thickness": 0.015,
+          "bottom": 10.48,
+          "top": 10.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-6",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            49
+          ],
+          "to": [
+            21.5375,
+            47.625
+          ],
+          "thickness": 0.015,
+          "bottom": 10.48,
+          "top": 10.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-7",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            74.375
+          ],
+          "to": [
+            21.5375,
+            73
+          ],
+          "thickness": 0.015,
+          "bottom": 13.98,
+          "top": 14.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-8",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            49
+          ],
+          "to": [
+            21.5375,
+            47.625
+          ],
+          "thickness": 0.015,
+          "bottom": 13.98,
+          "top": 14.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-9",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            74.375
+          ],
+          "to": [
+            21.5375,
+            73
+          ],
+          "thickness": 0.015,
+          "bottom": 17.48,
+          "top": 17.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-10",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            49
+          ],
+          "to": [
+            21.5375,
+            47.625
+          ],
+          "thickness": 0.015,
+          "bottom": 17.48,
+          "top": 17.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-11",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            74.375
+          ],
+          "to": [
+            21.5375,
+            73
+          ],
+          "thickness": 0.015,
+          "bottom": 20.98,
+          "top": 21.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-12",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            49
+          ],
+          "to": [
+            21.5375,
+            47.625
+          ],
+          "thickness": 0.015,
+          "bottom": 20.98,
+          "top": 21.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "lounge-stone-joint-13",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5375,
+            74.375
+          ],
+          "to": [
+            21.5375,
+            47.625
+          ],
+          "thickness": 0.015,
+          "bottom": 24.48,
+          "top": 24.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-front-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            27.625
+          ],
+          "to": [
+            70.415,
+            32
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 24
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "right-front-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            32
+          ],
+          "to": [
+            70.415,
+            33
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 5
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "right-front-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            32
+          ],
+          "to": [
+            70.415,
+            33
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 24
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "right-front-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            33
+          ],
+          "to": [
+            70.415,
+            40
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 5
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "right-front-5",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            33
+          ],
+          "to": [
+            70.415,
+            40
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 16
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "right-front-6",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            33
+          ],
+          "to": [
+            70.415,
+            40
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 24
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "right-front-7",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            40
+          ],
+          "to": [
+            70.415,
+            41
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 16
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "right-front-8",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            40
+          ],
+          "to": [
+            70.415,
+            41
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 24
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "right-front-9",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            41
+          ],
+          "to": [
+            70.415,
+            48
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 24
+        }
+      ],
+      "material": "travertine"
+    },
+    {
+      "type": "panel",
+      "id": "right-sconce-1",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            70.605,
+            29.475
+          ],
+          "to": [
+            70.605,
+            30.175
+          ],
+          "thickness": 0.3,
+          "bottom": 7.15,
+          "top": 7.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "right-sconce-2",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            70.605,
+            41.775
+          ],
+          "to": [
+            70.605,
+            42.475
+          ],
+          "thickness": 0.3,
+          "bottom": 7.15,
+          "top": 7.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "right-wash-1",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            70.725,
+            30.025
+          ],
+          "to": [
+            70.725,
+            30.225
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "right-wash-2",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            70.725,
+            33.025
+          ],
+          "to": [
+            70.725,
+            33.225
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "right-wash-3",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            70.725,
+            36.025
+          ],
+          "to": [
+            70.725,
+            36.225
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "right-wash-4",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            70.725,
+            39.025
+          ],
+          "to": [
+            70.725,
+            39.225
+          ],
+          "thickness": 0.1,
+          "bottom": 23.8,
+          "top": 23.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            48
+          ],
+          "to": [
+            70.415,
+            52
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 27.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            52
+          ],
+          "to": [
+            70.415,
+            53
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 5.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            52
+          ],
+          "to": [
+            70.415,
+            53
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 27.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            53
+          ],
+          "to": [
+            70.415,
+            58
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 5.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-5",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            53
+          ],
+          "to": [
+            70.415,
+            58
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 16
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-6",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            53
+          ],
+          "to": [
+            70.415,
+            58
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 27.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-7",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            58
+          ],
+          "to": [
+            70.415,
+            61
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 16
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-8",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            58
+          ],
+          "to": [
+            70.415,
+            61
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 27.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-9",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            70.415,
+            61
+          ],
+          "to": [
+            70.415,
+            62
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 27.5
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            51.48
+          ],
+          "to": [
+            70.4625,
+            51.52
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            54.98
+          ],
+          "to": [
+            70.4625,
+            55.02
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 5.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-3",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            54.98
+          ],
+          "to": [
+            70.4625,
+            55.02
+          ],
+          "thickness": 0.015,
+          "bottom": 10,
+          "top": 16
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-4",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            54.98
+          ],
+          "to": [
+            70.4625,
+            55.02
+          ],
+          "thickness": 0.015,
+          "bottom": 21,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-5",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            58.48
+          ],
+          "to": [
+            70.4625,
+            58.52
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 16
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-6",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            58.48
+          ],
+          "to": [
+            70.4625,
+            58.52
+          ],
+          "thickness": 0.015,
+          "bottom": 21,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-7",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            48
+          ],
+          "to": [
+            70.4625,
+            62
+          ],
+          "thickness": 0.015,
+          "bottom": 3.48,
+          "top": 3.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-8",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            48
+          ],
+          "to": [
+            70.4625,
+            52
+          ],
+          "thickness": 0.015,
+          "bottom": 6.98,
+          "top": 7.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-9",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            58
+          ],
+          "to": [
+            70.4625,
+            62
+          ],
+          "thickness": 0.015,
+          "bottom": 6.98,
+          "top": 7.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-10",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            48
+          ],
+          "to": [
+            70.4625,
+            62
+          ],
+          "thickness": 0.015,
+          "bottom": 10.48,
+          "top": 10.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-11",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            48
+          ],
+          "to": [
+            70.4625,
+            62
+          ],
+          "thickness": 0.015,
+          "bottom": 13.98,
+          "top": 14.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-12",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            48
+          ],
+          "to": [
+            70.4625,
+            53
+          ],
+          "thickness": 0.015,
+          "bottom": 17.48,
+          "top": 17.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-13",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            61
+          ],
+          "to": [
+            70.4625,
+            62
+          ],
+          "thickness": 0.015,
+          "bottom": 17.48,
+          "top": 17.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-14",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            48
+          ],
+          "to": [
+            70.4625,
+            62
+          ],
+          "thickness": 0.015,
+          "bottom": 20.98,
+          "top": 21.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-joint-15",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.4625,
+            48
+          ],
+          "to": [
+            70.4625,
+            62
+          ],
+          "thickness": 0.015,
+          "bottom": 24.48,
+          "top": 24.52
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-led-1",
+      "role": "led",
+      "pieces": [
+        {
+          "from": [
+            70.47,
+            48.97
+          ],
+          "to": [
+            70.47,
+            49.03
+          ],
+          "thickness": 0.03,
+          "bottom": 0,
+          "top": 27.5
+        }
+      ],
+      "material": "led-strip"
+    },
+    {
+      "type": "panel",
+      "id": "right-mass-led-2",
+      "role": "led",
+      "pieces": [
+        {
+          "from": [
+            70.47,
+            49.57
+          ],
+          "to": [
+            70.47,
+            49.63
+          ],
+          "thickness": 0.03,
+          "bottom": 0,
+          "top": 27.5
+        }
+      ],
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "guard-cap",
+      "role": "fascia",
+      "x": 66.1,
+      "y": 1.1,
+      "w": 7.8,
+      "d": 7.8,
+      "bottom": 12.4,
+      "top": 13.4,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            0,
+            0.37
+          ],
+          "to": [
+            12,
+            0.37
+          ],
+          "thickness": 0.3,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            12,
+            0.37
+          ],
+          "to": [
+            22,
+            0.37
+          ],
+          "thickness": 0.3,
+          "bottom": 3.5,
+          "top": 7
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            22,
+            0.37
+          ],
+          "to": [
+            36,
+            0.37
+          ],
+          "thickness": 0.3,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            5.48,
+            0.2125
+          ],
+          "to": [
+            5.52,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.98,
+            0.2125
+          ],
+          "to": [
+            11.02,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-joint-3",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            16.48,
+            0.2125
+          ],
+          "to": [
+            16.52,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 3.5,
+          "top": 7
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-joint-4",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.98,
+            0.2125
+          ],
+          "to": [
+            22.02,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-joint-5",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            27.48,
+            0.2125
+          ],
+          "to": [
+            27.52,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-joint-6",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            32.98,
+            0.2125
+          ],
+          "to": [
+            33.02,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-a-joint-7",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0,
+            0.2125
+          ],
+          "to": [
+            36,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 4.03,
+          "top": 4.07
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-rail-1-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            12,
+            0.345
+          ],
+          "to": [
+            22,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.57,
+          "top": 1.63
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-rail-2-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            12,
+            0.345
+          ],
+          "to": [
+            22,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 2.17,
+          "top": 2.23
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-rail-3-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            12,
+            0.345
+          ],
+          "to": [
+            22,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 2.77,
+          "top": 2.83
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-1-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            12.2478,
+            0.345
+          ],
+          "to": [
+            12.3078,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-2-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            12.8033,
+            0.345
+          ],
+          "to": [
+            12.8633,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-3-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            13.3589,
+            0.345
+          ],
+          "to": [
+            13.4189,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-4-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            13.9144,
+            0.345
+          ],
+          "to": [
+            13.9744,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-5-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            14.47,
+            0.345
+          ],
+          "to": [
+            14.53,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-6-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            15.0256,
+            0.345
+          ],
+          "to": [
+            15.0856,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-7-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            15.5811,
+            0.345
+          ],
+          "to": [
+            15.6411,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-8-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            16.1367,
+            0.345
+          ],
+          "to": [
+            16.1967,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-9-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            16.6922,
+            0.345
+          ],
+          "to": [
+            16.7522,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-10-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            17.2478,
+            0.345
+          ],
+          "to": [
+            17.3078,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-11-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            17.8033,
+            0.345
+          ],
+          "to": [
+            17.8633,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-12-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            18.3589,
+            0.345
+          ],
+          "to": [
+            18.4189,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-13-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            18.9144,
+            0.345
+          ],
+          "to": [
+            18.9744,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-14-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            19.47,
+            0.345
+          ],
+          "to": [
+            19.53,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-15-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            20.0256,
+            0.345
+          ],
+          "to": [
+            20.0856,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-16-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            20.5811,
+            0.345
+          ],
+          "to": [
+            20.6411,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-17-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            21.1367,
+            0.345
+          ],
+          "to": [
+            21.1967,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-lattice-bar-18-1",
+      "role": "lattice",
+      "pieces": [
+        {
+          "from": [
+            21.6922,
+            0.345
+          ],
+          "to": [
+            21.7522,
+            0.345
+          ],
+          "thickness": 0.05,
+          "bottom": 1.1,
+          "top": 3.5
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-pier-a",
+      "role": "pier",
+      "x": 36,
+      "y": 0,
+      "w": 2.16,
+      "d": 1.5,
+      "bottom": 0,
+      "top": 8.5,
+      "material": "granite-black"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-pier-b",
+      "role": "pier",
+      "x": 41.84,
+      "y": 0,
+      "w": 2.82,
+      "d": 1.5,
+      "bottom": 0,
+      "top": 8.5,
+      "material": "granite-black"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-pier-c",
+      "role": "pier",
+      "x": 63.34,
+      "y": 0,
+      "w": 2.06,
+      "d": 1.5,
+      "bottom": 0,
+      "top": 8.5,
+      "material": "granite-black"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-b-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            65.4,
+            0.37
+          ],
+          "to": [
+            75,
+            0.37
+          ],
+          "thickness": 0.3,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-b-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            70.88,
+            0.2125
+          ],
+          "to": [
+            70.92,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-stone-b-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            65.4,
+            0.2125
+          ],
+          "to": [
+            75,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 4.03,
+          "top": 4.07
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-sconce-1",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            3.15,
+            0.17
+          ],
+          "to": [
+            3.85,
+            0.17
+          ],
+          "thickness": 0.3,
+          "bottom": 4.25,
+          "top": 4.95
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-sconce-2",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            9.15,
+            0.17
+          ],
+          "to": [
+            9.85,
+            0.17
+          ],
+          "thickness": 0.3,
+          "bottom": 4.25,
+          "top": 4.95
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-sconce-3",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            24.15,
+            0.17
+          ],
+          "to": [
+            24.85,
+            0.17
+          ],
+          "thickness": 0.3,
+          "bottom": 4.25,
+          "top": 4.95
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-sconce-4",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            30.15,
+            0.17
+          ],
+          "to": [
+            30.85,
+            0.17
+          ],
+          "thickness": 0.3,
+          "bottom": 4.25,
+          "top": 4.95
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-sconce-5",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            69.65,
+            0.17
+          ],
+          "to": [
+            70.35,
+            0.17
+          ],
+          "thickness": 0.3,
+          "bottom": 4.25,
+          "top": 4.95
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-right-wall-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            74.63,
+            0.52
+          ],
+          "to": [
+            74.63,
+            119.48
+          ],
+          "thickness": 0.3,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "plaster-warm-grey"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-rear-wall-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            75,
+            119.63
+          ],
+          "to": [
+            0,
+            119.63
+          ],
+          "thickness": 0.3,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "plaster-warm-grey"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-left-wall-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            0.37,
+            119.48
+          ],
+          "to": [
+            0.37,
+            0.52
+          ],
+          "thickness": 0.3,
+          "bottom": 1.1,
+          "top": 7
+        }
+      ],
+      "material": "plaster-warm-grey"
     }
   ],
   "facts": {

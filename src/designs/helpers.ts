@@ -257,3 +257,95 @@ export function sconces(prefix: string, face: Face, at: [number, number][], out 
 export function washLights(prefix: string, face: Face, at: number[], z: number, out = 0.3): Panel[] {
   return at.map((s, i) => band(`${prefix}-${i + 1}`, "wash", "metal-dark", face, s - 0.1, s + 0.1, z - 0.05, 0.05, out, 0.1));
 }
+
+/** The grey stone tile, with its joints */
+export const stoneTile = (id: string, f: Face, width: number, height: number, holes: Hole[] = []) => [
+  ...cladding(id, f, "stone-tile-grey", { holes }),
+  ...tileJoints(`${id}-joint`, f, { width, height, holes }),
+];
+
+/** The bright dots of a soffit's downlights, spaced as the renderer spaces the lights themselves: one per 2.2 m */
+export const downlightDots = (soffit: FacadeInput): FacadeInput[] => {
+  if (soffit.type !== "box") return [];
+  const count = (length: number) => Math.max(1, Math.round((length * 0.3048) / 2.2));
+  const [nx, ny] = [count(soffit.w), count(soffit.d)];
+  return Array.from({ length: nx * ny }, (_, k) => {
+    const [i, j] = [k % nx, Math.floor(k / nx)];
+    const [x, y] = [soffit.x + ((i + 0.5) * soffit.w) / nx, soffit.y + ((j + 0.5) * soffit.d) / ny];
+    return { id: `${soffit.id}-dot-${k + 1}`, type: "box", level: "ground", role: "led", material: "led-strip", x: x - 0.12, y: y - 0.12, w: 0.24, d: 0.24, z: soffit.z - 0.02, h: 0.02, plan: false };
+  });
+};
+
+export const withDots = (soffit: FacadeInput) => [soffit, ...downlightDots(soffit)];
+
+/** A horizontal LED line */
+export const ledEdge = (id: string, f: Face): FacadeInput => ({ ...cladding(id, f, "led-strip", { depth: 0.03 })[0], id, role: "led" });
+
+/** Finish helpers for the ground level whose heights are given above the road, for a design with this plinth */
+export function finishKit(plinth: number) {
+  const above = (height: number) => height - plinth;
+  const face = (from: Pt, to: Pt, z0: number, z1: number): Face => ({ level: "ground", from, to, z: above(z0), h: z1 - z0 });
+  const hole = (s0: number, s1: number, z0: number, z1: number): Hole => ({ s0, s1, z0: above(z0), z1: above(z1) });
+  const box = (id: string, role: string, material: FacadeInput["material"], a: Pt, b: Pt, z0: number, z1: number): FacadeInput => ({
+    id,
+    type: "box",
+    level: "ground",
+    role,
+    material,
+    x: a[0],
+    y: a[1],
+    w: b[0] - a[0],
+    d: b[1] - a[1],
+    z: above(z0),
+    h: z1 - z0,
+    plan: false,
+  });
+  return { above, face, hole, box };
+}
+
+/** Height of a panelled boundary's white base */
+export const BOUNDARY_BASE = 1.1;
+/** Height of a panelled boundary's top */
+export const BOUNDARY_TOP = 7;
+/** How far the stone stands inside the plot line, so the white base shows at its foot */
+const BOUNDARY_INSET = 0.22;
+/** How far the slats sit behind the hood above them */
+const SLAT_INSET = 0.45;
+const BOUNDARY_PANEL = 0.3;
+
+/**
+ * A boundary whose finish changes every few feet: panels standing on a low white base.
+ * `edges` are the plot's edges in outline order, so each runs left to right as seen from the street.
+ * Name each panel `boundary-<edge>-...`, so a shot can hide that edge.
+ */
+export function boundaryKit<E extends string>(plinth: number, edges: Record<E, [Pt, Pt]>) {
+  const { above, face } = finishKit(plinth);
+  const run = (edge: E, s0: number, s1: number, z0: number, z1: number, inset = BOUNDARY_INSET): Face => {
+    const line: Face = { level: "ground", from: edges[edge][0], to: edges[edge][1], z: 0, h: 1 };
+    return face(facePoint(line, s0, -inset), facePoint(line, s1, -inset), z0, z1);
+  };
+  const inWall = { out: -BOUNDARY_PANEL, depth: BOUNDARY_PANEL };
+
+  /** Stone tile wall on one edge: `holes` are measured from the start of this stretch */
+  const stoneWall = (id: string, edge: E, s0: number, s1: number, holes: Hole[] = []) => {
+    const f = run(edge, s0, s1, BOUNDARY_BASE, BOUNDARY_TOP);
+    return [...cladding(id, f, "stone-tile-grey", { ...inWall, holes }), ...tileJoints(`${id}-joint`, f, { width: 5.5, height: 2.95, holes, out: 0 })];
+  };
+  /** A run of slats set back under a dark hood with hidden lights */
+  const hoodedSlats = (id: string, edge: E, s0: number, s1: number) => {
+    const slats = run(edge, s0, s1, BOUNDARY_BASE, 5.4, SLAT_INSET);
+    const count = Math.round((s1 - s0) / 1.8);
+    const lights = Array.from({ length: count }, (_, i) => ((i + 0.5) * (s1 - s0)) / count);
+    return [
+      ...slatRun(id, slats, { out: -0.05 }),
+      ...cladding(`${id}-hood`, run(edge, s0, s1, 5.4, BOUNDARY_TOP, 0.02), "plaster-charcoal", { out: -SLAT_INSET, depth: SLAT_INSET }),
+      ...washLights(`${id}-wash`, slats, lights, above(5.35)),
+    ];
+  };
+  const timberDoor = (id: string, f: Face) => slatRun(id, f, { width: 0.14, gap: 0.05, depth: 0.05, out: -0.1 });
+  // The 90 only sets the direction of the line the lights are measured along
+  const wallLights = (id: string, edge: E, at: number[]) =>
+    sconces(id, run(edge, 0, 90, BOUNDARY_BASE, BOUNDARY_TOP), at.map((s): [number, number] => [s, above(4.6)]), -0.1);
+
+  return { run, inWall, stoneWall, hoodedSlats, timberDoor, wallLights };
+}

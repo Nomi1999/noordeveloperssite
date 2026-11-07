@@ -1,5 +1,6 @@
 /** Each concept design meets the program in the building-designs spec, checked from computed facts */
 import { describe, expect, it } from "vitest";
+import { buildExport } from "./export.ts";
 import { designs, getDesign } from "./index.ts";
 import { designSources } from "./sources.ts";
 import { checkDesign, formatIssue } from "./validate.ts";
@@ -196,6 +197,80 @@ describe("2 Kanal house", () => {
     expect(facts.porches.some((p) => p.covered && p.cars >= 3)).toBe(true);
     expect(facts.lawnArea).toBeGreaterThan(getDesign("1-kanal").facts.lawnArea);
     expect(has("2-kanal", "guard-room")).toBe(true);
+  });
+
+  describe("exterior", () => {
+    const data = buildExport(design, facts);
+    const exterior = data.levels.flatMap((l) => l.walls.filter((w) => w.kind === "exterior"));
+    const panels = design.facade.map((f) => f.material);
+
+    it("has no white exterior walls or parapets", () => {
+      expect(exterior.length).toBeGreaterThan(0);
+      expect(exterior.filter((w) => w.material === "plaster-white")).toEqual([]);
+      expect(data.levels.flatMap((l) => l.parapets).filter((p) => p.material === "plaster-white")).toEqual([]);
+    });
+
+    it("uses the full set of finishes, and no white on the house", () => {
+      for (const material of ["stone-tile-grey", "travertine", "wood-slat", "plaster-charcoal", "tile-beige", "granite-black", "metal-dark", "led-strip"] as const) {
+        expect(panels, material).toContain(material);
+      }
+      // The maintainer's choices: travertine rather than bronze behind the porch and the terrace, and black fins on both faces
+      for (const material of ["tile-bronze", "marble-bronze"] as const) expect(panels, material).not.toContain(material);
+      expect(new Set(design.facade.filter((f) => f.role === "fin").map((f) => f.material))).toEqual(new Set(["metal-dark"]));
+      expect(design.facade.filter((f) => f.role === "fin")).toHaveLength(20);
+      expect(design.facade.filter((f) => f.material === "plaster-white")).toEqual([]);
+      expect(new Set(design.facade.filter((f) => f.role === "beam").map((f) => f.material))).toEqual(new Set(["plaster-charcoal"]));
+    });
+
+    it("closes every open side of the terrace with glass, from wall to wall", () => {
+      const rail = design.facade.find((f) => f.id === "terrace-rail");
+      if (rail?.type !== "railing") throw new Error("terrace-rail is not a railing");
+      expect(rail.material).toBe("glass-tinted");
+      const first = design.levels.find((l) => l.id === "first")!;
+      const terrace = first.rooms.find((r) => r.id === "terrace")!.outline;
+      const [left, right] = [Math.min(...terrace.map((p) => p[0])), Math.max(...terrace.map((p) => p[0]))];
+      const front = Math.min(...terrace.map((p) => p[1]));
+      const [start, cornerA, cornerB, end] = rail.path;
+      // Up the left side, across the front and back along the right, all within a foot of the edges
+      expect(start[0]).toBeCloseTo(cornerA[0]);
+      expect(Math.abs(cornerA[0] - left)).toBeLessThan(1);
+      expect(Math.abs(cornerA[1] - front)).toBeLessThan(1);
+      expect(cornerB[1]).toBeCloseTo(cornerA[1]);
+      expect(Math.abs(cornerB[0] - right)).toBeLessThan(1);
+      expect(end[0]).toBeCloseTo(cornerB[0]);
+      // The left end reaches the bedroom box's side wall and the right end the house wall's face
+      expect(start[1]).toBeGreaterThanOrEqual(24.625);
+      expect(end[1]).toBe(27.625);
+    });
+
+    it("has no column standing in a window or door", () => {
+      for (const level of data.levels) {
+        const walls = new Set(level.walls.filter((w) => w.kind === "exterior").map((w) => w.wall));
+        for (const op of level.openings.filter((o) => walls.has(o.wall) && o.type !== "opening")) {
+          const [x0, x1] = [Math.min(op.from[0], op.to[0]), Math.max(op.from[0], op.to[0])];
+          const [y0, y1] = [Math.min(op.from[1], op.to[1]), Math.max(op.from[1], op.to[1])];
+          const inside = level.columns.filter((c) => c.x < x1 + 0.1 && c.x + c.w > x0 - 0.1 && c.y < y1 + 0.1 && c.y + c.d > y0 - 0.1);
+          expect(inside.map((c) => c.ref), `${level.id} ${op.id}`).toEqual([]);
+        }
+      }
+    });
+
+    it("keeps its columns inside the walls, so none stands proud of the cladding", () => {
+      expect(design.grid.column).toEqual([0.75, 0.75]);
+    });
+
+    it("has a low white boundary base and closed gates 7 ft high with piers drawn in the design", () => {
+      const { walls, gates } = data.site.boundary;
+      expect(new Set(walls.map((w) => w.top))).toEqual(new Set([1.1]));
+      expect(data.site.boundary.material).toBe("plaster-white");
+      expect(gates.map((g) => [g.id, g.top, g.posts])).toEqual([["car-gate", 7, false], ["front-gate", 7, false]]);
+      expect(gates.map((g) => g.material)).toEqual(["metal-dark", "metal-dark"]);
+      expect(gates.some((g) => g.open)).toBe(false);
+      expect(design.facade.filter((f) => f.role === "pier" && f.material === "granite-black")).toHaveLength(3);
+      // The front wall is grey stone throughout, with no timber
+      const front = design.facade.filter((f) => f.id.startsWith("boundary-front-"));
+      expect(front.filter((f) => f.material === "wood-slat" || f.material === "wood-panel")).toEqual([]);
+    });
   });
 });
 

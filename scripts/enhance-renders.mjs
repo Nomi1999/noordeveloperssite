@@ -92,7 +92,39 @@ const KANAL = {
   noPorchLights: "The porch ceiling has no lights.",
   details: "Keep every slat, joint, wall light and LED line in place.",
 };
+const TWO_KANAL = {
+  box: "The first-floor box on the left is smooth dark charcoal plaster, with thin straight white LED lines at its left corner. Eleven slim black metal vertical fins stand in front of its wide window: keep every fin, evenly spaced, and black, never timber.",
+  drawing: "The ground-floor drawing room under the box is soft taupe travertine with fine horizontal grain, with square black wall lights beside its window.",
+  tower: "The stone pier beside the front door, and the wider tower above it, are plain mid-grey natural stone in large tiles with thin dark joints and thin straight white LED lines: never travertine or beige. The tower's top is level with the top of the charcoal bedroom box beside it, exactly as in the input, with only sky above both: it never rises above the house like a chimney.",
+  entrance: "The entrance is a pale beige tile panel with a warm timber double door and long black pull handles; above the door the same plain beige tile runs up to the ceiling, with no timber, slats or pattern there.",
+  porch: "The porch has a deep plain dark charcoal beam, never white, on two slim polished black granite columns without white veins, and a warm timber ceiling. Its back wall, around the wide window, is entirely soft taupe travertine with fine horizontal grain: no tiles, marble or timber on it.",
+  terrace: "The wall at the back of the terrace, around the wide glass sliding door, is entirely soft taupe travertine with fine horizontal grain: no timber slats or other material on it.",
+  sameStone: "The porch's back wall and the terrace's back wall are the same soft warm taupe travertine as the drawing room, and keep that colour in shade: the shadow under the porch and the overhang makes them only a little darker, never grey, blue, brown or charcoal, and both walls match each other and the input.",
+  roof: "The roof over the terrace has a wide overhang with a dark charcoal fascia and a warm timber soffit.",
+  glass: "The terrace railing is frameless smoked grey glass on all three open sides: along the left side from the bedroom box to the front corner, across the whole front, and along the right side back to the house wall. No side of the terrace is open.",
+  pots: "The terrace has exactly two plants, each a fan palm in a plain dark square pot, where the input has them: one in the front corner beside the bedroom box and one beside the sliding door. No other pots, plants or furniture on the terrace, and no pots or plants on the porch floor or the driveway.",
+  clearGlass: "No column, pier, beam or post stands in front of or inside any window or glass door: each one runs clear from side to side, apart from its own slim black mullions.",
+  guard: "The small guard room by the gate is soft taupe travertine with a flat dark charcoal cap and a timber door.",
+  lawnSide: "The long side facing the lawn is dark charcoal on the first floor at the front, soft taupe travertine below it, then a tall window wall framed in grey stone with nine slim black metal fins in front of it, then plain sand-coloured plaster towards the rear. Keep every fin, black, never timber.",
+  rightSide: "The long right side is soft taupe travertine at the front, then a tall grey stone mass with thin straight white LED lines, then plain sand-coloured plaster, under a dark charcoal parapet.",
+  roofTop: "The parapets, the stair room and the water tanks are dark charcoal, and the flat roof itself is plain grey.",
+  wall: "The front boundary wall stands on a low plain white base and is grey stone in large tiles with thin dark joints along its whole length, with square black wall lights: no timber, slats, hoods or coloured panels anywhere on it. Where the input shows them, it has a low screen of thin black metal bars looking onto the lawn, three plain black granite piers, black from top to bottom with no white or other material at their foot, a narrow closed gate of thin black metal vertical bars, and a wide closed car gate of the same black bars.",
+  noWall: "There is no front boundary wall in this view: only a low kerb along the front of the plot, so the whole ground floor, the porch, the lawn and the guard room are in full view. Do not add a wall, gate, fence or hedge along the front.",
+  planting: "The only planting is what the input shows, inside the plot: nothing grows outside the boundary wall.",
+  neighbours: "The neighbouring houses are plain, boxy and in good repair: no ruined walls, rubble, overhead wires or clutter.",
+  details: "Keep every fin, joint, wall light and LED line in place.",
+};
 const SHOT_NOTES = {
+  "2-kanal": {
+    "front-day": [TWO_KANAL.box, TWO_KANAL.drawing, TWO_KANAL.tower, TWO_KANAL.entrance, TWO_KANAL.porch, TWO_KANAL.terrace, TWO_KANAL.sameStone, TWO_KANAL.roof, TWO_KANAL.glass, TWO_KANAL.pots, TWO_KANAL.clearGlass, TWO_KANAL.guard, TWO_KANAL.lawnSide, TWO_KANAL.wall, TWO_KANAL.planting, TWO_KANAL.neighbours, TWO_KANAL.details],
+    "front-dusk": [
+      "A view from the street in front of the house, a little to the right of its middle, exactly as in the input: keep the camera where it is, at the same height and angle. The house fills the middle of the frame behind its boundary wall and gates, with a little of the neighbouring houses at each side and the road across the bottom. Everything stays at the place and size the input has it.",
+      TWO_KANAL.box, TWO_KANAL.drawing, TWO_KANAL.tower, TWO_KANAL.entrance, TWO_KANAL.porch, TWO_KANAL.terrace, TWO_KANAL.sameStone, TWO_KANAL.roof, TWO_KANAL.glass, TWO_KANAL.pots, TWO_KANAL.clearGlass, TWO_KANAL.guard, TWO_KANAL.rightSide, TWO_KANAL.wall, TWO_KANAL.planting, TWO_KANAL.neighbours, TWO_KANAL.details,
+    ],
+    street: [TWO_KANAL.box, "Under the charcoal box, the ground-floor wall around the wide window is soft warm taupe travertine with fine horizontal grain, the same colour as the guard room and the walls behind the terrace: in the shade of the box it is only a little darker, never charcoal, grey or black.", TWO_KANAL.tower, "Over the gate, under a deep plain dark charcoal beam and a warm timber ceiling, the porch's back wall around the wide window is entirely soft taupe travertine with fine horizontal grain.", TWO_KANAL.terrace, TWO_KANAL.sameStone, TWO_KANAL.roof, TWO_KANAL.glass, TWO_KANAL.pots, TWO_KANAL.clearGlass, TWO_KANAL.guard, TWO_KANAL.wall, TWO_KANAL.planting, TWO_KANAL.neighbours, TWO_KANAL.details],
+    "street-open": [TWO_KANAL.noWall, "Between the charcoal bedroom box and the terrace there is a vertical band of grey stone tiles. It ends at exactly the same height as the top of the charcoal box, in one flat line with it, and nothing rises above that line: only sky.", "The two wide windows on the ground floor, one either side of the front door, are windows with a sill and slim black frames, not doors, and stay the size the input has them.", TWO_KANAL.box, TWO_KANAL.drawing, TWO_KANAL.tower, TWO_KANAL.entrance, TWO_KANAL.porch, TWO_KANAL.terrace, TWO_KANAL.sameStone, TWO_KANAL.roof, TWO_KANAL.glass, TWO_KANAL.pots, TWO_KANAL.clearGlass, TWO_KANAL.guard, "The only planting is what the input shows, inside the plot.", TWO_KANAL.neighbours, TWO_KANAL.details],
+    aerial: [TWO_KANAL.roofTop, TWO_KANAL.box, TWO_KANAL.drawing, TWO_KANAL.tower, TWO_KANAL.terrace, TWO_KANAL.roof, TWO_KANAL.glass, TWO_KANAL.pots, TWO_KANAL.clearGlass, "The porch has a deep plain dark charcoal beam, never white, on two slim polished black granite columns.", TWO_KANAL.guard, TWO_KANAL.lawnSide, TWO_KANAL.wall, TWO_KANAL.planting, TWO_KANAL.neighbours, TWO_KANAL.details],
+  },
   "1-kanal": {
     "front-day": [KANAL.pier, KANAL.block, KANAL.entrance, KANAL.porch, "No marble shows in this view.", KANAL.upper, KANAL.roof, KANAL.glass, KANAL.emptyTerrace, KANAL.onePot, KANAL.noPergola, KANAL.bed, KANAL.clearDrive, KANAL.noWall, KANAL.neighbours, KANAL.details],
     "front-dusk": [KANAL.pier, KANAL.block, KANAL.entrance, KANAL.porch, KANAL.marble, KANAL.upper, KANAL.roof, KANAL.glass, KANAL.emptyTerrace, KANAL.onePot, KANAL.noPergola, KANAL.bed, KANAL.clearDrive, KANAL.noWall, KANAL.neighbours, KANAL.noPorchLights, KANAL.details],
@@ -138,6 +170,9 @@ const SHOT_NOTES = {
 
 // Where a design differs from the general notes
 const NOTE_OVERRIDES = {
+  "2-kanal": {
+    dusk: "Dusk: a soft blue-grey evening sky with the light still in it, and warm interior light behind sheer curtains in the windows. Keep every exterior light exactly where the input has it and do not add any: the warm wall lights with their soft up and down glow, the small round downlights in the timber soffits with their glow on the walls below, the wall lights on the stone boundary wall, and the thin white LED lines. The facade stays clearly readable, not dark.",
+  },
   "1-kanal": {
     dusk: "Dusk: a soft blue-grey evening sky with the light still in it, and warm interior light behind sheer curtains in the windows. Keep every exterior light exactly where the input has it and do not add any: the warm wall lights with their soft up and down glow, the small round downlights in the timber soffits with their glow on the walls below, the soft scallops of light under the overhangs and the hood, and the thin white LED lines. The facade stays clearly readable, not dark.",
     aerial:
@@ -152,25 +187,21 @@ const EDIT_LOCK =
   "Edit this photograph. Change only what is described here and keep everything else exactly the same: the camera, framing, building, colours, light, sky, trees, walls, gate and neighbouring houses stay as they are.";
 // The hero house is still the earlier 1 Kanal design, so its posters keep this edit
 const HERO_EDIT = `${EDIT_LOCK} The first-floor terrace over the car porch gets a frameless clear glass railing, the same height and style as the existing glass, along every open edge: the glass runs the full length of the front edge up to the house wall and along both short ends, so all open sides of the terrace are closed by glass. If the terrace is not visible, change nothing.`;
+// Keyed by design, or by "<design>/<shot>" for one shot only
 const DESIGN_EDITS = {
-  "2-kanal": `${EDIT_LOCK} The first-floor terrace over the car porch must have a frameless clear glass railing on all three open sides. The front and right-hand glass already exist; keep them. Add the missing glass along the left-hand short end of the terrace, the same height and style as the existing glass, running from the front corner back to the house wall, so the terrace is fully enclosed by glass. If the terrace is not visible, change nothing.`,
+  // The model kept drawing the stone band over the entrance as a tall chimney in this view only
+  "2-kanal/street-open": `${EDIT_LOCK} The grey stone pillar between the charcoal first-floor box and the terrace rises too high above the roof. Lower it so that its top is exactly level with the top of the charcoal box beside it, in one flat line, and fill the space where it stood above that line with the same sky. Keep its grey stone tiles and the two thin straight white LED lines that run up its full height near its left and right edges. Change nothing else.`,
 };
-
-/** Designs whose stills were made from Cycles finals; every other design starts from a fast render */
-const CYCLES_FINAL = new Set(["2-kanal"]);
 
 /** The render a still is made from, and the command that writes it */
 function stillSource(design, shot) {
-  const fromFlags = opt("engine") || opt("quality") || !CYCLES_FINAL.has(design);
-  const engine = fromFlags ? opt("engine", "eevee") : "cycles";
-  const quality = fromFlags ? opt("quality", "preview") : "final";
+  const engine = opt("engine", "eevee");
+  const quality = opt("quality", "preview");
   return {
     engine,
     quality,
     source: join(root, "render/out", design, "stills", `${shot}-${engine}-${quality}.png`),
-    render: fromFlags
-      ? `node scripts/enhance-renders.mjs sources --only ${design}/${shot} --engine ${engine} --quality ${quality}`
-      : `npm run render:still -- --design ${design} --shot ${shot} --engine ${engine} --quality ${quality}`,
+    render: `node scripts/enhance-renders.mjs sources --only ${design}/${shot} --engine ${engine} --quality ${quality}`,
   };
 }
 
@@ -201,7 +232,7 @@ const JOBS = shotFiles.flatMap(({ design, config }) =>
     kind: "still",
     ...stillSource(design, shot),
     note: stillNote(design, shot, shotConfig),
-    edit: DESIGN_EDITS[design],
+    edit: DESIGN_EDITS[`${design}/${shot}`] ?? DESIGN_EDITS[design],
     aspect: "16:9",
     resolution: "2K",
   })),

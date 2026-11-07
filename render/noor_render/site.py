@@ -76,9 +76,10 @@ def build(design, root, footprint, context):
     for g in b["gates"]:
         if g.get("open"):
             continue
-        for end in (g["from"], g["to"]):
-            x, y = end
-            posts.append(aabb(x - 0.18, y - 0.18, 0, x + 0.18, y + 0.18, g["top"] + 0.18))
+        if g.get("posts", True):
+            for end in (g["from"], g["to"]):
+                x, y = end
+                posts.append(aabb(x - 0.18, y - 0.18, 0, x + 0.18, y + 0.18, g["top"] + 0.18))
         _gate(g, site)
     if posts:
         boxes_object("gate-posts", posts, materials.get("stone-cladding"), site, union=True, role="gate-post")

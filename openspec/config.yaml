@@ -49,8 +49,8 @@ context: |
     Overlay text is HTML, never baked into frames.
     Ultra-polished visuals take priority over payload size.
   - Stills on the site are photoreal AI restyles of the renders, reviewed next to their
-    source. 2 Kanal starts from Cycles finals; every other design starts from EEVEE
-    previews (scripts/enhance-renders.mjs, model in IMAGE_MODEL).
+    source. Every design starts from EEVEE previews (scripts/enhance-renders.mjs,
+    model in IMAGE_MODEL).
 
   Planned changes, in order: site-foundation, brand-logo, house-designs (data model +
   floor plans for 1 Kanal, 2 Kanal), render-pipeline, scroll-build-hero, content-pages.

@@ -234,6 +234,10 @@ export const Gate = z.object({
   material: Material.default("metal-dark"),
   /** An opening between piers, with no leaves */
   open: z.boolean().default(false),
+  /** Defaults to the boundary's height; a low panelled boundary's base is too low for a gate */
+  height: Length.optional(),
+  /** False when the design draws its own piers beside the gate, as facade elements */
+  posts: z.boolean().default(true),
 });
 
 const Area = z.object({ id: Id, outline: Polygon });

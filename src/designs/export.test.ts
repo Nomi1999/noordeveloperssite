@@ -23,6 +23,21 @@ describe("render export", () => {
     }
   });
 
+  it("gives a gate the boundary's height and posts unless it declares otherwise", () => {
+    for (const { design, data } of exports) {
+      for (const [i, gate] of data.site.boundary.gates.entries()) {
+        const declared = design.site.boundary.gates[i];
+        expect(gate.top).toBe(declared.height ?? design.site.boundary.height);
+        expect(gate.posts).toBe(declared.posts ? undefined : false);
+      }
+    }
+    const [plain] = exports.filter(({ design }) => design.slug === "5-marla");
+    expect(plain.data.site.boundary.gates.every((g) => g.top === plain.design.site.boundary.height && !("posts" in g))).toBe(true);
+    const [tall] = exports.filter(({ design }) => design.slug === "2-kanal");
+    expect(tall.data.site.boundary.gates.every((g) => g.top === 7)).toBe(true);
+    expect(tall.data.site.boundary.walls.every((w) => w.top === 1.1)).toBe(true);
+  });
+
   it("refuses another schema version", () => {
     const { data } = exports[0];
     expect(ExportDesign.safeParse({ ...data, schemaVersion: 2 }).success).toBe(false);

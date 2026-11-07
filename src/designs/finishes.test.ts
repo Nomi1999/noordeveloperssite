@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cladding, facePoint, ledLines, sconces, slatRun, tileJoints, washLights, type Face } from "./helpers.ts";
+import { BOUNDARY_BASE, boundaryKit, cladding, downlightDots, facePoint, finishKit, ledLines, sconces, slatRun, stoneTile, tileJoints, washLights, withDots, type Face } from "./helpers.ts";
 
 const wall: Face = { level: "ground", from: [0, 0], to: [10, 0], z: 0, h: 8 };
 const side: Face = { level: "ground", from: [5, 0], to: [5, 10], z: 0, h: 8 };
@@ -59,5 +59,39 @@ describe("finish helpers", () => {
     expect(span(sconce)).toEqual([3.65, 4.35]);
     const [wash] = washLights("w", wall, [4], 7.5);
     expect(wash).toMatchObject({ z: 7.45, h: 0.05, role: "wash" });
+  });
+
+  it("measures a finish kit's heights above the road, from the design's plinth", () => {
+    const { above, face, hole, box } = finishKit(2);
+    expect(above(13)).toBe(11);
+    expect(face([0, 0], [5, 0], 0, 13)).toMatchObject({ level: "ground", z: -2, h: 13 });
+    expect(hole(1, 3, 3, 10)).toEqual({ s0: 1, s1: 3, z0: 1, z1: 8 });
+    expect(box("b", "beam", "plaster-white", [1, 2], [4, 3], 10, 13)).toMatchObject({ x: 1, y: 2, w: 3, d: 1, z: 8, h: 3, plan: false });
+  });
+
+  it("puts tile joints on stone tile, stopping at holes", () => {
+    const panels = stoneTile("t", wall, 3, 3, [{ s0: 2, s1: 7, z0: 2, z1: 5 }]);
+    expect(panels.filter((p) => p.role === "cladding").every((p) => p.material === "stone-tile-grey")).toBe(true);
+    expect(panels.some((p) => p.role === "reveal")).toBe(true);
+  });
+
+  it("spaces a soffit's dots as the renderer spaces its lights: one per 2.2 m", () => {
+    const soffit = finishKit(2).box("s", "soffit", "wood-slat", [0, 0], [14.4, 7.2], 12, 12.1);
+    const dots = downlightDots(soffit);
+    expect(dots).toHaveLength(2 * 1);
+    expect(dots[0]).toMatchObject({ id: "s-dot-1", role: "led", material: "led-strip", plan: false });
+    expect(withDots(soffit)).toHaveLength(3);
+  });
+
+  it("stands boundary panels inside the plot line, on the base, along each edge", () => {
+    const kit = boundaryKit<"front" | "right">(2, { front: [[0, 0], [75, 0]], right: [[75, 0], [75, 120]] });
+    const front = kit.run("front", 0, 10, BOUNDARY_BASE, 7);
+    expect(front.from[1]).toBeCloseTo(0.22);
+    expect(front).toMatchObject({ z: BOUNDARY_BASE - 2, h: 7 - BOUNDARY_BASE });
+    expect(kit.run("right", 0, 10, BOUNDARY_BASE, 7).from[0]).toBeCloseTo(74.78);
+
+    const slats = kit.hoodedSlats("h", "front", 0, 7);
+    expect(slats.map((p) => p.role)).toEqual(expect.arrayContaining(["slat", "cladding", "wash"]));
+    expect(kit.stoneWall("w", "front", 7, 26).some((p) => p.role === "reveal")).toBe(true);
   });
 });

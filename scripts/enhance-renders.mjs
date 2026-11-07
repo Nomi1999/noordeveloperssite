@@ -63,7 +63,7 @@ const NOTES = {
 // What each new design's materials are, and how it stands on its plot. The older designs' prompts have no such note.
 const DESIGN_NOTES = {
   "5-marla":
-    "The street-facing bay is real terracotta brick tile with fine mortar joints; the frame beside it, and the other walls, are smooth off-white plaster. The black metal jaali across the first-floor balcony is a grid of square openings: keep every bar straight, evenly spaced and in place. The porch ceiling and the gate are timber. The house is attached on both sides: the neighbouring houses stand against it with no gap between them.",
+    "This is a light, warm, modern house: large-format beige tile, sand-coloured plaster and warm timber, with black metal as the only dark accent and grey stone for the piers. There is no brick anywhere and nothing bronze, orange or red. The house is attached on both sides: the neighbouring houses stand against it with no gap between them.",
   "10-marla":
     "The upper box is smooth charcoal-grey plaster, framed around its corner window in exposed concrete; the ground floor front is exposed concrete and the other walls are light warm-grey plaster. The stair tower is faced in straight, evenly spaced vertical timber slats, and the terrace has a slim black steel pergola: keep every slat and rafter in place. The house is attached to its neighbour on the left and has an open side passage on the right.",
 };
@@ -114,7 +114,28 @@ const TWO_KANAL = {
   neighbours: "The neighbouring houses are plain, boxy and in good repair: no ruined walls, rubble, overhead wires or clutter.",
   details: "Keep every fin, joint, wall light and LED line in place.",
 };
+const FIVE_MARLA = {
+  bay: "The street-facing bay, over both floors, is large-format beige porcelain tile in big rectangular slabs with thin dark joints, with a thin dark charcoal line at each floor level and a thin charcoal cap along the top of the parapet. It is smooth and matt: never brick, never orange or terracotta.",
+  frame: "The balcony frame, the side walls and the walls behind are smooth warm sand-coloured plaster, a little darker than the tile.",
+  plainLeft: "The left side of the balcony frame is plain sand plaster, with no timber on it.",
+  cheek: "The right-hand side of the balcony frame, facing the street, is covered in vertical warm timber slats.",
+  jaali: "The black metal jaali across the first-floor balcony is a grid of square openings: keep every bar straight, evenly spaced and in place. It is a full-height screen that fills the whole opening from the balcony floor slab up to the timber ceiling above, with no open gap above it and no low balustrade or railing: the balcony behind is only seen through the grid.",
+  porch: "The car porch has a warm pale timber slat ceiling, and its back wall and side wall are the same beige tile as the bay with thin dark joints.",
+  porchPier: "The slim square column under the right-hand corner of the balcony frame is the same smooth sand-coloured plaster as the frame and the wall on the other side of the porch: never stone, grey or a different colour.",
+  piers: "The three piers (one at the left end of the gate, one between the gate and the boundary wall, and one at the far right end of the boundary wall) are all the same colour from their foot to their cap: plain mid-grey natural stone tile with a thin dark charcoal cap, and no different-coloured band at their foot. The far right pier is grey stone exactly like the other two, never sand-coloured, beige or plaster, exactly as in the input.",
+  gate: "The wide car gate is black metal with two warm timber doors set in it: a large leaf and, next to it on the right, a small wicket door, with the black frame showing between and around them and a slim black handle. Both timber doors are plain flat vertical-grain timber: no carving, leaf, motif, pattern or decoration on them.",
+  wall: "The front boundary wall beside the gate is a solid wall, never a fence: a low sand-coloured plaster base, then smooth beige tile with thin dark joints, a thin charcoal reveal line and a thin charcoal cap, with two square black wall lights. No slats, gaps, bars, timber or bronze on it.",
+  roof: "The flat roof is plain dark grey, with the stair room and the two water tanks in sand-coloured plaster and a thin charcoal cap along the front parapet.",
+  neighbours: "The neighbouring houses are plain, boxy and in good repair: no ruined walls, rubble, overhead wires or clutter.",
+  details: "Keep every tile joint, wall light and jaali bar in place.",
+};
 const SHOT_NOTES = {
+  "5-marla": {
+    "front-day": [FIVE_MARLA.bay, FIVE_MARLA.frame, FIVE_MARLA.plainLeft, FIVE_MARLA.jaali, FIVE_MARLA.porchPier, FIVE_MARLA.porch, FIVE_MARLA.piers, FIVE_MARLA.gate, FIVE_MARLA.wall, FIVE_MARLA.neighbours, FIVE_MARLA.details],
+    "front-dusk": [FIVE_MARLA.bay, FIVE_MARLA.frame, FIVE_MARLA.cheek, FIVE_MARLA.jaali, FIVE_MARLA.porchPier, FIVE_MARLA.porch, FIVE_MARLA.piers, FIVE_MARLA.gate, FIVE_MARLA.wall, FIVE_MARLA.neighbours, FIVE_MARLA.details],
+    street: [FIVE_MARLA.bay, FIVE_MARLA.frame, FIVE_MARLA.cheek, FIVE_MARLA.jaali, FIVE_MARLA.porchPier, FIVE_MARLA.porch, FIVE_MARLA.piers, FIVE_MARLA.gate, FIVE_MARLA.wall, FIVE_MARLA.neighbours, FIVE_MARLA.details],
+    aerial: [FIVE_MARLA.roof, FIVE_MARLA.bay, FIVE_MARLA.frame, FIVE_MARLA.jaali, FIVE_MARLA.porchPier, FIVE_MARLA.piers, FIVE_MARLA.gate, "Behind the front wall, a low planter holds a few small shrubs.", FIVE_MARLA.wall, FIVE_MARLA.neighbours, FIVE_MARLA.details],
+  },
   "2-kanal": {
     "front-day": [TWO_KANAL.box, TWO_KANAL.drawing, TWO_KANAL.tower, TWO_KANAL.entrance, TWO_KANAL.porch, TWO_KANAL.terrace, TWO_KANAL.sameStone, TWO_KANAL.roof, TWO_KANAL.glass, TWO_KANAL.pots, TWO_KANAL.clearGlass, TWO_KANAL.guard, TWO_KANAL.lawnSide, TWO_KANAL.wall, TWO_KANAL.planting, TWO_KANAL.neighbours, TWO_KANAL.details],
     "front-dusk": [
@@ -170,6 +191,9 @@ const SHOT_NOTES = {
 
 // Where a design differs from the general notes
 const NOTE_OVERRIDES = {
+  "5-marla": {
+    dusk: "This must be a real dusk photograph, taken in the blue hour just after sunset, and it must look dark: a deep indigo-blue evening sky with only a faint warm glow low at the horizon, no visible sun, no daylight and no bright or overcast grey sky. The street and the neighbouring houses are in dim blue-grey shadow, and the whole image is dark and moody, never bright: the house is only as bright as its own lights make it. Warm interior light glows from the windows and through the jaali. Keep every exterior light exactly where the input has it and do not add any: the warm wall lights with their soft up and down glow, the small round downlights in the timber porch ceiling, and the wall lights on the boundary wall. Do not brighten the scene or lift the shadows.",
+  },
   "2-kanal": {
     dusk: "Dusk: a soft blue-grey evening sky with the light still in it, and warm interior light behind sheer curtains in the windows. Keep every exterior light exactly where the input has it and do not add any: the warm wall lights with their soft up and down glow, the small round downlights in the timber soffits with their glow on the walls below, the wall lights on the stone boundary wall, and the thin white LED lines. The facade stays clearly readable, not dark.",
   },

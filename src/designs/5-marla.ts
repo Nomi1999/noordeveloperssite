@@ -10,11 +10,42 @@
  * porch, family lounge, sky court, second bedroom with bath, laundry.
  * Roof: stair room, water tanks, parapet.
  *
- * Facade: a terracotta brick bay beside a white plaster frame that holds a metal
- * jaali across the balcony, over a timber porch ceiling and a timber gate.
+ * Facade: a light, warm palette. A beige tile bay with thin charcoal reveals beside a sand plaster
+ * frame that holds a black metal jaali across the balcony, over a timber porch ceiling, with
+ * timber slats on the balcony's cheek, a sand plaster porch pier, and a black gate with timber doors
+ * set between grey stone piers in a solid beige tile boundary wall.
  */
-import { chain, defineDesign, door, ext, fixture, gap, INT, int, makeGrid, outset, PLINTH, rect, repeat, room, SLAB, stack, STOREY, wall, win } from "./helpers.ts";
-import type { WallInput } from "./helpers.ts";
+import {
+  BOUNDARY_BASE,
+  boundaryKit,
+  chain,
+  cladding,
+  defineDesign,
+  door,
+  ext,
+  finishKit,
+  fixture,
+  gap,
+  INT,
+  int,
+  makeGrid,
+  outset,
+  PLINTH,
+  rect,
+  repeat,
+  room,
+  sconces,
+  SLAB,
+  slatRun,
+  stack,
+  STOREY,
+  tileJoints,
+  wall,
+  washLights,
+  win,
+  withDots,
+} from "./helpers.ts";
+import type { FacadeInput } from "./helpers.ts";
 import type { Poly } from "./model.ts";
 
 /** Party walls stand just inside the plot, so their outer faces are on the plot line */
@@ -43,8 +74,8 @@ const vent = (id: string, host: string, offset: number) => win(id, host, offset,
 /** Tall front glazing, head in line with the doors */
 const tall = { sill: 1, height: 7 };
 
-/** Brick on the bay that faces the street; every other wall stays plaster */
-const brickFront = (name: string) => (w: WallInput): WallInput => (w.id === name ? { ...w, material: "brick-cladding" } : w);
+/** Every exterior wall is sand plaster; the street bay's tile and the other finishes stand on it as panels */
+const SAND = { material: "plaster-sand" } as const;
 
 const stair = { type: "dog-leg", x: 13.25, y: 16.0625, w: 11, d: 6.75, up: "right", firstFlight: "right" } as const;
 const stairwell = rect([stair.x, stair.y], [stair.x + stair.w, stair.y + stair.d]);
@@ -55,6 +86,88 @@ const courtOpening = rect([13.1875, 23.5625], [24.25, 28.1875]);
 
 /** The first floor and roof reach forward over the porch to frame the balcony */
 const upperOutline: Poly = [[0, 0.75], [10.875, 0.75], [10.875, 2.875], [25, 2.875], [25, 41.375], [0, 41.375]];
+
+// ---- Finishes ----
+// Every height here is above the road. The ground floor is at 2', the first at 13', the roof slab top at
+// 24' and the parapet top at 27'-6". Panels stand on the walls, holed around the openings.
+
+const { above, face, hole, box } = finishKit(PLINTH);
+/** The outer face of the street wall, half a wall thickness in front of its centre line */
+const FACE = FRONT - 0.375;
+/** The height of a wall light centre */
+const LIGHT = 7.5;
+/** The underside of the first floor slab, where the soffits sit */
+const SOFFIT = 12.4;
+/** The height of the boundary panels and of the car gate */
+const TOP = 5;
+
+// The street bay: beige tile over both floors and the parapet, left bare at each slab edge so the charcoal shows
+const bayFront = face([10.125, FACE], [25, FACE], 0, 27.5);
+const bayHoles = [
+  hole(3.375, 11.375, 3, 10), // the drawing room window
+  hole(3.375, 7.375, 14, 21), // the master bedroom window
+  hole(10.375, 12.375, 19, 21), // the master bath ventilator
+  hole(0, 14.875, 12.5, 13), // the first floor slab edge
+  hole(0, 14.875, 23.5, 24), // the roof slab edge
+];
+// The balcony right cheek faces the street at an angle
+const cheek = face([10.875, 0.75], [10.875, FACE], 13, 24);
+// The porch back wall and its inner side wall, both seen from the street
+const porchBack = face([0, 18.75], [10.125, 18.75], 0, SOFFIT);
+const porchBackHoles = [hole(1.375, 5.875, 3, 10), hole(6.375, 9.875, 2, 10)];
+const porchSide = face([0.75, 0.75], [0.75, 18.75], 0, SOFFIT);
+
+const house: FacadeInput[] = [
+  ...cladding("bay-tile", bayFront, "tile-beige", { holes: bayHoles }),
+  ...tileJoints("bay-joint", bayFront, { width: 3.7, height: 3, holes: bayHoles }),
+  ...sconces("bay-sconce", face([10.125, FACE], [25, FACE], 0, SOFFIT), [[1.7, above(LIGHT)], [13.2, above(LIGHT)]]),
+  // A thin charcoal cap on the parapet
+  box("roof-cap", "fascia", "plaster-charcoal", [10.125, FACE - 0.08], [25, 3.45], 27.5, 27.85),
+  // Timber on the balcony cheek, matching the porch ceiling
+  ...slatRun("cheek-slat", cheek, { backing: "plaster-sand" }),
+  // The porch, in the same tile
+  ...cladding("porch-back", porchBack, "tile-beige", { holes: porchBackHoles }),
+  ...tileJoints("porch-back-joint", porchBack, { width: 3.4, height: 3, holes: porchBackHoles }),
+  ...cladding("porch-side", porchSide, "tile-beige"),
+  ...tileJoints("porch-side-joint", porchSide, { width: 3.9, height: 3 }),
+  ...washLights("porch-side-wash", porchSide, [3, 7.5, 12, 16.5], above(SOFFIT - 0.1)),
+];
+
+// ---- The boundary above its base ----
+
+const { run, inWall, timberDoor } = boundaryKit<"front" | "right" | "rear" | "left">(
+  PLINTH,
+  { front: [[0, 0], [25, 0]], right: [[25, 0], [25, 45]], rear: [[25, 45], [0, 45]], left: [[0, 45], [0, 0]] },
+  { panel: "plaster-sand", top: TOP, hood: 0.7 },
+);
+const pier = (id: string, x0: number, x1: number): FacadeInput[] => [
+  box(id, "pier", "stone-tile-grey", [x0, 0], [x1, 1.3], 0, TOP + 0.4),
+  box(`${id}-cap`, "pier", "plaster-charcoal", [x0, 0], [x1 + 0.1, 1.4], TOP + 0.4, TOP + 0.6),
+];
+
+// The solid wall beside the gate: beige tile to the cap, like the street bay
+const tileFace = run("front", 11, 23.7, BOUNDARY_BASE, TOP - 0.7);
+
+const boundary: FacadeInput[] = [
+  // Front, left to right: a pier, the car gate with a wicket door in it, a pier, then a solid wall of beige tile with
+  // a charcoal reveal line, under a charcoal cap, to the last pier
+  ...pier("boundary-front-pier-a", 0, 1.8),
+  ...pier("boundary-front-pier-b", 9.1, 11),
+  // The black leaf shows between the two timber doors and around them, as the frame of the wicket
+  ...timberDoor("boundary-front-gate-a", run("front", 2, 7, 0.5, TOP - 0.4)),
+  ...timberDoor("boundary-front-gate-b", run("front", 7.35, 8.9, 0.5, TOP - 0.4)),
+  box("boundary-front-gate-handle", "handle", "metal-dark", [7.1, 0.02], [7.22, 0.1], 2.6, 3.6),
+  ...cladding("boundary-front-tile", tileFace, "tile-beige", inWall),
+  ...tileJoints("boundary-front-tile-joint", tileFace, { width: 3.7, height: 99, out: 0 }),
+  ...cladding("boundary-front-reveal", run("front", 11, 23.7, 3.1, 3.25), "plaster-charcoal", { out: -0.35, depth: 0.1 }),
+  ...cladding("boundary-front-cap", run("front", 11, 23.7, TOP - 0.7, TOP), "plaster-charcoal", inWall),
+  ...sconces("boundary-front-sconce", run("front", 0, 25, BOUNDARY_BASE, TOP), [[12.6, above(3.1)], [19, above(3.1)]], -0.1),
+  ...pier("boundary-front-pier-c", 23.7, 24.9),
+  // The planter between the wall and the house, holding the shrubs
+  box("front-planter", "planter", "tile-beige", [11.2, 1.2], [24, 2.5], 0, 1),
+  // The rear wall, in plain sand plaster
+  ...cladding("boundary-rear-wall", run("rear", 0, 25, BOUNDARY_BASE, TOP), "plaster-sand", inWall),
+];
 
 export default defineDesign({
   slug: "5-marla",
@@ -71,6 +184,7 @@ export default defineDesign({
       slab: {
         outline: [[10.125, 2.875], [25, 2.875], [25, 41.375], [0, 41.375], [0, 18.75], [10.125, 18.75]],
         // Strips along the plot line that carry the porch side wall and the low yard walls
+        material: "plaster-charcoal",
         islands: [
           rect([0, 0.75], [0.75, 18.75]),
           rect([24.25, 0.75], [25, 2.875]),
@@ -79,12 +193,12 @@ export default defineDesign({
         ],
       },
       walls: [
-        ...chain("out", [[LEFT, PORCH_BACK], [PORCH_SIDE, PORCH_BACK], [PORCH_SIDE, FRONT], [RIGHT, FRONT], [RIGHT, REAR], [LEFT, REAR]], { closed: true, kind: "exterior" }).map(brickFront("out-3")),
+        ...chain("out", [[LEFT, PORCH_BACK], [PORCH_SIDE, PORCH_BACK], [PORCH_SIDE, FRONT], [RIGHT, FRONT], [RIGHT, REAR], [LEFT, REAR]], { closed: true, kind: "exterior", ...SAND }),
         // Carries the first floor over the porch
-        ext("porch-side", [LEFT, 0.75], [LEFT, PORCH_BACK]),
-        ext("front-cheek", [RIGHT, 0.75], [RIGHT, 2.875], { height: 3 }),
-        ext("yard-left", [LEFT, 41.375], [LEFT, 44.25], { height: 3 }),
-        ext("yard-right", [RIGHT, 41.375], [RIGHT, 44.25], { height: 3 }),
+        ext("porch-side", [LEFT, 0.75], [LEFT, PORCH_BACK], SAND),
+        ext("front-cheek", [RIGHT, 0.75], [RIGHT, 2.875], { height: 3, ...SAND }),
+        ext("yard-left", [LEFT, 41.375], [LEFT, 44.25], { height: 3, ...SAND }),
+        ext("yard-right", [RIGHT, 41.375], [RIGHT, 44.25], { height: 3, ...SAND }),
         int("drawing-back", [PORCH_SIDE, MID], [RIGHT, MID]),
         int("stair-back", [SPINE, STAIR_BACK], [RIGHT, STAIR_BACK]),
         int("spine", [SPINE, STAIR_BACK], [SPINE, REAR]),
@@ -133,6 +247,7 @@ export default defineDesign({
       height: STOREY,
       slab: {
         outline: upperOutline,
+        material: "plaster-charcoal",
         voids: [{ id: "stairwell", kind: "stair", outline: stairwell }],
         cantilevers: [
           { id: "balcony", outline: rect([0.75, 0.75], [10.875, 2.875]) },
@@ -140,15 +255,15 @@ export default defineDesign({
         ],
       },
       walls: [
-        ...chain("f", [[LEFT, 7], [PORCH_SIDE, 7], [PORCH_SIDE, FRONT], [RIGHT, FRONT], [RIGHT, REAR], [LEFT, REAR]], { closed: true, kind: "exterior" }).map(brickFront("f-3")),
+        ...chain("f", [[LEFT, 7], [PORCH_SIDE, 7], [PORCH_SIDE, FRONT], [RIGHT, FRONT], [RIGHT, REAR], [LEFT, REAR]], { closed: true, kind: "exterior", ...SAND }),
         // The cheeks either side of the balcony
-        ext("balcony-left", [LEFT, 0.75], [LEFT, 7]),
-        ext("balcony-right", [PORCH_SIDE, 0.75], [PORCH_SIDE, FRONT]),
+        ext("balcony-left", [LEFT, 0.75], [LEFT, 7], SAND),
+        ext("balcony-right", [PORCH_SIDE, 0.75], [PORCH_SIDE, FRONT], SAND),
         int("master-back", [LEFT, MID], [RIGHT, MID]),
         int("master-side", [18.125, FRONT], [18.125, MID]),
-        wall("court-front", [SPINE, STAIR_BACK], [RIGHT, STAIR_BACK], { kind: "exterior", thickness: INT }),
-        wall("court-left", [SPINE, STAIR_BACK], [SPINE, COURT_BACK], { kind: "exterior", thickness: INT }),
-        wall("court-back", [SPINE, COURT_BACK], [RIGHT, COURT_BACK], { kind: "exterior", thickness: INT }),
+        wall("court-front", [SPINE, STAIR_BACK], [RIGHT, STAIR_BACK], { kind: "exterior", thickness: INT, ...SAND }),
+        wall("court-left", [SPINE, STAIR_BACK], [SPINE, COURT_BACK], { kind: "exterior", thickness: INT, ...SAND }),
+        wall("court-back", [SPINE, COURT_BACK], [RIGHT, COURT_BACK], { kind: "exterior", thickness: INT, ...SAND }),
         int("spine", [SPINE, COURT_BACK], [SPINE, REAR]),
         int("lounge-back", [LEFT, 32.25], [SPINE, 32.25]),
         int("bath2-side", [7, 32.25], [7, REAR]),
@@ -198,22 +313,23 @@ export default defineDesign({
       height: 9,
       slab: {
         outline: upperOutline,
+        material: "plaster-charcoal",
         voids: [
           { id: "stairwell", kind: "stair", outline: stairwell },
           { id: "sky-court", kind: "open", outline: courtOpening },
         ],
       },
-      walls: chain("mumty", mumty, { closed: true, kind: "exterior", material: "plaster-warm-grey" }),
+      walls: chain("mumty", mumty, { closed: true, kind: "exterior", material: "plaster-sand" }),
       openings: [door("roof-door", "mumty-4", 2, { opensTo: "right" })],
       rooms: [room("stair-room", "Stair room", "stair-room", mumty)],
       parapets: [
-        { id: "parapet", path: [[RIGHT, FRONT], [RIGHT, REAR], [LEFT, REAR], [LEFT, 1.125], [PORCH_SIDE, 1.125], [PORCH_SIDE, FRONT]], closed: false, material: "plaster-white" },
-        { id: "parapet-front", path: [[PORCH_SIDE, FRONT], [RIGHT, FRONT]], closed: false, material: "brick-cladding" },
-        { id: "court-parapet", path: court, thickness: INT },
+        { id: "parapet", path: [[RIGHT, FRONT], [RIGHT, REAR], [LEFT, REAR], [LEFT, 1.125], [PORCH_SIDE, 1.125], [PORCH_SIDE, FRONT]], closed: false, material: "plaster-sand" },
+        { id: "parapet-front", path: [[PORCH_SIDE, FRONT], [RIGHT, FRONT]], closed: false, material: "tile-beige" },
+        { id: "court-parapet", path: court, thickness: INT, material: "plaster-sand" },
       ],
       tanks: [
-        { id: "tank-1", x: 2, y: 34, w: 4, d: 4, height: 4 },
-        { id: "tank-2", x: 7, y: 34, w: 4, d: 4, height: 4 },
+        { id: "tank-1", x: 2, y: 34, w: 4, d: 4, height: 4, material: "plaster-sand" },
+        { id: "tank-2", x: 7, y: 34, w: 4, d: 4, height: 4, material: "plaster-sand" },
       ],
     },
     {
@@ -221,16 +337,21 @@ export default defineDesign({
       name: "Stair room roof",
       kind: "roof",
       height: 1,
-      slab: { outline: outset(mumty, 0.375), thickness: SLAB },
+      slab: { outline: outset(mumty, 0.375), thickness: SLAB, material: "plaster-charcoal" },
     },
   ]),
   site: {
     boundary: {
-      // The house stands on the plot line on both sides
+      // A low sand base: everything above it is panels in `boundary`, because its finish changes along the front
       sides: ["front", "rear"],
-      height: 5,
-      material: "plaster-white",
-      gates: [{ id: "car-gate", side: "front", offset: 0.75, width: 9.375, kind: "vehicle", material: "wood-panel" }],
+      height: BOUNDARY_BASE,
+      material: "plaster-sand",
+      // The openings run pier to pier, so the sand base stops at each pier's outer face instead of showing at its foot.
+      // The black leaf's ends, 8" in from each end, are hidden in the piers; the timber is drawn over it
+      gates: [
+        { id: "car-gate", side: "front", offset: 0, width: 11, kind: "vehicle", height: TOP, posts: false },
+        { id: "end-pier-gap", side: "front", offset: 23.7, width: 1.3, kind: "pedestrian", open: true, height: TOP, posts: false },
+      ],
     },
     porches: [{ id: "porch", outline: rect([0.75, 0.75], [10.125, 18.75]) }],
     paving: [
@@ -244,14 +365,16 @@ export default defineDesign({
     ],
   },
   facade: [
-    // Timber ceiling over the car porch
-    { id: "porch-soffit", type: "box", level: "ground", role: "soffit", x: 0.75, y: 0.75, w: 9.375, d: 18, z: 10.4, h: 0.1, material: "wood-panel" },
-    // Carries the corner of the balcony's frame, which reaches forward past the drawing room
-    { id: "porch-pier", type: "box", level: "ground", role: "cladding", x: 10.125, y: 0.75, w: 0.75, d: 0.75, z: 0, h: 10.5, material: "plaster-white" },
+    // Timber ceiling over the car porch, with its downlights
+    ...withDots({ id: "porch-soffit", type: "box", level: "ground", role: "soffit", x: 0.75, y: 0.75, w: 9.375, d: 18, z: 10.4, h: 0.1, material: "wood-slat" }),
+    // Carries the corner of the balcony frame, which reaches forward past the drawing room
+    { id: "porch-pier", type: "box", level: "ground", role: "cladding", x: 10.125, y: 0.75, w: 0.75, d: 0.75, z: 0, h: 10.5, material: "plaster-sand" },
     // Metal jaali across the balcony opening: 3-inch bars on a grid of about a foot
     ...repeat("jaali-v", 10, [1.25, 1], [9.625, 1], { level: "first", role: "jaali", w: 0.25, d: 0.17, z: 0, h: 10.5, material: "metal-dark" }),
     ...Array.from({ length: 10 }, (_, i) => ({
       id: `jaali-h-${i + 1}`, type: "box" as const, level: "first", role: "jaali", x: 0.75, y: 0.915, w: 9.375, d: 0.17, z: 0.75 + i, h: 0.25, material: "metal-dark" as const,
     })),
+    ...house,
+    ...boundary,
   ],
 });

@@ -13,25 +13,25 @@
       "lens": 26, "sensor": 36, "verticals": true,
       "position": [-4.5, -12.0, 2.4], "target": [3.9, 3.0, 5.4],
       "timeOfDay": 0,
-      "light": { "sunAzimuth": 235, "duskAzimuth": 115 }
+      "light": { "sunAzimuth": 235, "duskAzimuth": 115, "exposureDay": 0.5, "look": "AgX - Base Contrast" }
     },
     "front-dusk": {
       "lens": 26, "sensor": 36, "verticals": true,
       "position": [12.0, -12.0, 2.4], "target": [3.6, 3.0, 5.4],
       "timeOfDay": 1,
-      "light": { "sunAzimuth": 235, "duskAzimuth": 115, "roomReach": 4.0 }
+      "light": { "sunAzimuth": 235, "duskAzimuth": 115, "roomReach": 4.0, "exposureDusk": 0.4, "backplateGlow": 0.3 }
     },
     "street": {
       "lens": 24, "sensor": 36, "verticals": true,
       "position": [9.0, -9.5, 1.65], "target": [3.2, 3.0, 5.6],
       "timeOfDay": 0,
-      "light": { "sunAzimuth": 230, "duskAzimuth": 115 }
+      "light": { "sunAzimuth": 230, "duskAzimuth": 115, "exposureDay": 0.5, "look": "AgX - Base Contrast" }
     },
     "aerial": {
       "lens": 30, "sensor": 36, "verticals": false,
       "position": [-5.0, -12.0, 21.0], "target": [3.8, 7.0, 2.0],
       "timeOfDay": 0,
-      "light": { "sunAzimuth": 235, "duskAzimuth": 115 }
+      "light": { "sunAzimuth": 235, "duskAzimuth": 115, "exposureDay": 0.5, "look": "AgX - Base Contrast", "haze": 0.002 }
     }
   }
 }

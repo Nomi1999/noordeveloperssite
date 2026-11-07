@@ -94,4 +94,19 @@ describe("finish helpers", () => {
     expect(slats.map((p) => p.role)).toEqual(expect.arrayContaining(["slat", "cladding", "wash"]));
     expect(kit.stoneWall("w", "front", 7, 26).some((p) => p.role === "reveal")).toBe(true);
   });
+
+  it("builds stone panels to 7 ft unless a design chooses a panel material and height", () => {
+    const edges = { front: [[0, 0], [25, 0]] } satisfies Record<"front", [[number, number], [number, number]]>;
+    const stone = boundaryKit<"front">(2, edges).stoneWall("w", "front", 0, 10);
+    expect(stone.filter((p) => p.role === "cladding").every((p) => p.material === "stone-tile-grey")).toBe(true);
+    expect(stone[0]).toMatchObject({ z: BOUNDARY_BASE - 2, h: 7 - BOUNDARY_BASE });
+
+    const sand = boundaryKit<"front">(2, edges, { panel: "plaster-sand", top: 5 });
+    const wall = sand.stoneWall("w", "front", 0, 10);
+    expect(wall.filter((p) => p.role === "cladding").every((p) => p.material === "plaster-sand")).toBe(true);
+    expect(wall[0]).toMatchObject({ z: BOUNDARY_BASE - 2, h: 5 - BOUNDARY_BASE });
+    // The slats stop 1.6 ft below the top, under the hood
+    const slats = sand.hoodedSlats("h", "front", 0, 7).find((p) => p.id === "h-hood-1")!;
+    expect(slats).toMatchObject({ z: 5 - 1.6 - 2, h: 1.6 });
+  });
 });

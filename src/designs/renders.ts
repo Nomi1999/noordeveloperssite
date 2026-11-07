@@ -89,19 +89,19 @@ export const renderRegistry: Record<string, DesignRenderEntry> = {
     share: "/og/5-marla.jpg",
     shots: {
       "front-day": {
-        alt: "The 5 Marla house concept by day: a narrow two-storey front with a terracotta brick bay beside a white plaster frame, a black metal jaali across the first-floor balcony, and a timber gate below.",
+        alt: "The 5 Marla house concept by day: a narrow two-storey front with a beige tile bay beside a sand plaster frame, a black metal jaali across the first-floor balcony, and a black gate with timber doors and a wicket below.",
         caption: "Front, day",
       },
       "front-dusk": {
-        alt: "The 5 Marla house concept at dusk, with warm light through the black jaali and the windows of the brick bay, and a soft glow under the porch ceiling.",
+        alt: "The 5 Marla house concept at dusk under a deep blue sky, with warm light through the black jaali and the windows of the beige tile bay, wall lights on the boundary wall, and a soft glow under the porch ceiling.",
         caption: "Front, dusk",
       },
       street: {
-        alt: "The 5 Marla house concept from the street: the brick bay with its tall window and wide ground-floor window, the jaali above the porch, and the timber gate in the boundary wall.",
+        alt: "The 5 Marla house concept from the street: the beige tile bay with its tall window and wide ground-floor window, the jaali beside timber slats above the porch, and the gate between grey stone piers in a solid tiled boundary wall.",
         caption: "Street, day",
       },
       aerial: {
-        alt: "The 5 Marla house concept from above, showing the flat roof with its stair room and two water tanks, the brick and white front, and the small paved porch behind the timber gate.",
+        alt: "The 5 Marla house concept from above, showing the flat roof with its stair room and two water tanks, the beige tile and sand plaster front, and the small paved porch behind the gate.",
         caption: "Aerial",
       },
     },

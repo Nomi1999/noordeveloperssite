@@ -34,6 +34,12 @@ Run from the repository root. `BLENDER_PATH` overrides the default `C:\Program F
 
 The maintainer approved the sources before any image call and the stills beside their sources before encoding. The runs cost about $0.86 in all.
 
+**5 Marla exterior refresh (2026-11-07).** The 5 Marla no longer has a brick bay (change `refine-5-marla-exterior`). Its street bay is large-format beige tile with thin charcoal reveals, the rest of the house is sand plaster with timber on the balcony's street-facing cheek and the porch ceiling, and the boundary is a solid beige tile wall with grey stone piers and a black gate with timber doors and a wicket. Its stills are EEVEE `preview` sources restyled with `bytedance-seed/seedream-5-0-flash` and `--attempts 5`, using `FIVE_MARLA` notes and a dusk override in `enhance-renders.mjs`. The shots take the 2 Kanal's day exposure and look.
+- The dusk source uses `exposureDusk` 0.4 and the renderer's default blue-hour tint. With the 2 Kanal's values (1.5 and a near-neutral tint) the render looked like a bright overcast evening, and the restyle kept that. The dusk note also insists on a dark blue-hour sky with no daylight.
+- The notes name the full-height jaali (the model drew a short railing in one `street` run), say the timber doors are plain (it drew a carved leaf in another), and say that all three gate piers are grey stone.
+- The porch pier under the balcony frame was changed from grey stone to sand plaster after the first generate run. The lead `front-day` still is the maintainer-chosen attempt 4 (`front-day.4.png`, kept beside it in `render/out/ai/5-marla/`), which shows it in sand, and the share image is cut from it. The other three stills were not regenerated and show it grey.
+- The four generate runs, including the street retries, cost about $0.20.
+
 **Fast path for new designs (2026-11-05).** A new design doesn't need Cycles: the model downscales its input to 2048px anyway, so an EEVEE preview gives the same geometry and framing for a fraction of the time, with no dedicated GPU.
 
 ```

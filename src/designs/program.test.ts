@@ -316,6 +316,98 @@ describe("5 Marla house", () => {
     const whole = getDesign("5-marla").design.levels.find((l) => l.id === "first")!.slab.outline;
     expect(first.coveredArea).toBeLessThan(polygonArea(whole));
   });
+
+  describe("exterior finishes", () => {
+    const materials = new Set(design.facade.map((f) => f.material));
+
+    it("has no brick and no white plaster on any exterior wall or parapet", () => {
+      const walls = design.levels.flatMap((l) => l.walls.filter((w) => w.kind === "exterior"));
+      const parapets = design.levels.flatMap((l) => l.parapets);
+      expect(walls.length).toBeGreaterThan(0);
+      for (const { id, material } of [...walls, ...parapets]) {
+        expect(["brick-cladding", "plaster-white"], id).not.toContain(material);
+      }
+      expect(design.levels.flatMap((l) => l.tanks).every((t) => t.material !== "brick-cladding")).toBe(true);
+      expect([...materials]).not.toContain("brick-cladding");
+    });
+
+    it("is beige tile, sand plaster, timber slats and grey stone, with the black jaali kept", () => {
+      for (const material of ["tile-beige", "wood-slat", "stone-tile-grey", "metal-dark"] as const) expect(materials.has(material), material).toBe(true);
+      expect(design.levels.some((l) => l.walls.some((w) => w.material === "plaster-sand"))).toBe(true);
+      expect(design.levels.some((l) => l.slab.material === "plaster-charcoal")).toBe(true);
+      // Ten uprights and ten rails, as before
+      expect(design.facade.filter((f) => f.id.startsWith("jaali-")).map((f) => f.material)).toEqual(Array(20).fill("metal-dark"));
+    });
+
+    it("has wall lights and downlights", () => {
+      const roles = new Set(design.facade.map((f) => (f.type === "panel" || f.type === "box" ? f.role : undefined)));
+      expect(roles.has("sconce")).toBe(true);
+      expect(roles.has("wash")).toBe(true);
+      expect(design.facade.some((f) => f.id.startsWith("porch-soffit-dot-"))).toBe(true);
+    });
+  });
+
+  describe("boundary", () => {
+    const front = design.facade.filter((f) => f.id.startsWith("boundary-front-"));
+
+    it("is a solid sand base, beige tile wall with a charcoal line under a charcoal cap, grey stone piers, and a black gate with timber doors", () => {
+      expect(design.site.boundary.material).toBe("plaster-sand");
+      expect(design.site.boundary.height).toBeCloseTo(1.1);
+      // Solid and with no timber on the wall: the only slats are on the gate
+      const wall = front.filter((f) => f.type === "panel" && f.id.startsWith("boundary-front-tile") && f.role === "cladding");
+      expect(wall.length).toBeGreaterThan(0);
+      expect(wall.every((p) => p.material === "tile-beige")).toBe(true);
+      expect(front.filter((f) => f.type === "panel" && f.role === "slat").every((f) => f.id.startsWith("boundary-front-gate"))).toBe(true);
+      expect(front.some((f) => f.id.startsWith("boundary-front-cap") && f.material === "plaster-charcoal")).toBe(true);
+      const piers = front.filter((f) => f.type === "box" && f.role === "pier");
+      expect(piers.filter((p) => p.material === "stone-tile-grey")).toHaveLength(3);
+      expect(piers.filter((p) => p.material === "plaster-charcoal")).toHaveLength(3);
+      expect(front.some((f) => f.type === "panel" && f.role === "sconce")).toBe(true);
+      const [gate] = design.site.boundary.gates;
+      expect(gate).toMatchObject({ kind: "vehicle", material: "metal-dark", height: 5, posts: false });
+    });
+
+    it("has a wicket door beside the car gate's main leaf, inside the same opening", () => {
+      const doors = ["boundary-front-gate-a", "boundary-front-gate-b"].map((id) => front.filter((f) => f.id.startsWith(`${id}-`) && f.material === "wood-slat"));
+      for (const slats of doors) expect(slats.length).toBeGreaterThan(0);
+      // The wicket's slats lie to the right of the main leaf's, and both are within the gate's opening
+      const x = (f: (typeof front)[number]) => (f.type === "panel" ? f.path[0][0] : -1);
+      expect(Math.min(...doors[1].map(x))).toBeGreaterThan(Math.max(...doors[0].map(x)));
+      const [gate] = design.site.boundary.gates;
+      for (const f of doors.flat()) expect(x(f)).toBeGreaterThan(gate.offset);
+      expect(Math.max(...doors.flat().map(x))).toBeLessThan(gate.offset + gate.width);
+      expect(front.some((f) => f.id === "boundary-front-gate-handle")).toBe(true);
+    });
+
+    it("keeps the planting strip and the shrubs in it", () => {
+      const planter = design.facade.find((f) => f.id === "front-planter")!;
+      expect(planter.type === "box" && planter.y).toBeGreaterThan(0.75);
+      expect(design.site.planting.filter((p) => p.kind === "shrub")).toHaveLength(3);
+      expect(design.site.paving.find((p) => p.id === "front-strip")!.outline).toEqual([[10.125, 0.75], [24.25, 0.75], [24.25, 2.875], [10.125, 2.875]]);
+    });
+
+    it("stands every facade element inside the plot", () => {
+      const eps = 0.02;
+      const [W, D] = [design.plot.width, design.plot.depth];
+      const inside = (x: number, y: number) => x >= -eps && x <= W + eps && y >= -eps && y <= D + eps;
+      for (const f of design.facade) {
+        if (f.type === "box") {
+          expect(inside(f.x, f.y) && inside(f.x + f.w, f.y + f.d), f.id).toBe(true);
+        } else if (f.type === "panel") {
+          // The thickness is across each segment, not along it
+          const half = f.thickness / 2;
+          f.path.slice(1).forEach(([x1, y1], i) => {
+            const [x0, y0] = f.path[i];
+            const len = Math.hypot(x1 - x0, y1 - y0);
+            const [nx, ny] = [((y1 - y0) / len) * half, (-(x1 - x0) / len) * half];
+            for (const [x, y] of [[x0, y0], [x1, y1]]) {
+              expect(inside(x + nx, y + ny) && inside(x - nx, y - ny), f.id).toBe(true);
+            }
+          });
+        }
+      }
+    });
+  });
 });
 
 describe("10 Marla house", () => {

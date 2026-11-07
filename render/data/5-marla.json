@@ -52,7 +52,7 @@
       "slab": {
         "top": 2,
         "bottom": 1.5,
-        "material": "exposed-concrete",
+        "material": "plaster-charcoal",
         "polygons": [
           {
             "outer": [
@@ -136,7 +136,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -154,7 +154,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 3,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -172,7 +172,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -190,7 +190,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -208,7 +208,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-1",
@@ -226,7 +226,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-2",
@@ -244,7 +244,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -262,7 +262,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -280,7 +280,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 3,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -298,7 +298,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-3",
@@ -316,7 +316,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-4",
@@ -334,7 +334,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -352,7 +352,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -370,7 +370,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -388,7 +388,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -406,7 +406,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -424,7 +424,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -442,7 +442,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -460,7 +460,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -478,7 +478,7 @@
           "thickness": 0.75,
           "bottom": 10,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-5",
@@ -496,7 +496,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "out-6",
@@ -514,7 +514,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "porch-side",
@@ -532,7 +532,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 12.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "front-cheek",
@@ -550,7 +550,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "yard-left",
@@ -568,7 +568,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "yard-right",
@@ -586,7 +586,7 @@
           "thickness": 0.75,
           "bottom": 2,
           "top": 5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "drawing-back",
@@ -1520,7 +1520,7 @@
       "slab": {
         "top": 13,
         "bottom": 12.5,
-        "material": "exposed-concrete",
+        "material": "plaster-charcoal",
         "polygons": [
           {
             "outer": [
@@ -1657,7 +1657,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-1",
@@ -1675,7 +1675,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-1",
@@ -1693,7 +1693,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-2",
@@ -1711,7 +1711,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-3",
@@ -1729,7 +1729,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-3",
@@ -1747,7 +1747,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 14,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-3",
@@ -1765,7 +1765,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-3",
@@ -1783,7 +1783,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-3",
@@ -1801,7 +1801,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 19,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-3",
@@ -1819,7 +1819,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-3",
@@ -1837,7 +1837,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "brick-cladding"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-4",
@@ -1855,7 +1855,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -1873,7 +1873,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -1891,7 +1891,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 16,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -1909,7 +1909,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -1927,7 +1927,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -1945,7 +1945,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 19,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -1963,7 +1963,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -1981,7 +1981,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -1999,7 +1999,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 16,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -2017,7 +2017,7 @@
           "thickness": 0.75,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-5",
@@ -2035,7 +2035,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "f-6",
@@ -2053,7 +2053,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "balcony-left",
@@ -2071,7 +2071,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "balcony-right",
@@ -2089,7 +2089,7 @@
           "thickness": 0.75,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "master-back",
@@ -2215,7 +2215,7 @@
           "thickness": 0.375,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "court-left",
@@ -2233,7 +2233,7 @@
           "thickness": 0.375,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "court-left",
@@ -2251,7 +2251,7 @@
           "thickness": 0.375,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "court-left",
@@ -2269,7 +2269,7 @@
           "thickness": 0.375,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "court-back",
@@ -2287,7 +2287,7 @@
           "thickness": 0.375,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "court-back",
@@ -2305,7 +2305,7 @@
           "thickness": 0.375,
           "bottom": 13,
           "top": 16,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "court-back",
@@ -2323,7 +2323,7 @@
           "thickness": 0.375,
           "bottom": 21,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "court-back",
@@ -2341,7 +2341,7 @@
           "thickness": 0.375,
           "bottom": 13,
           "top": 23.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "wall": "spine",
@@ -3348,7 +3348,7 @@
       "slab": {
         "top": 24,
         "bottom": 23.5,
-        "material": "exposed-concrete",
+        "material": "plaster-charcoal",
         "polygons": [
           {
             "outer": [
@@ -3482,7 +3482,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-sand"
         },
         {
           "wall": "mumty-2",
@@ -3500,7 +3500,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-sand"
         },
         {
           "wall": "mumty-3",
@@ -3518,7 +3518,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-sand"
         },
         {
           "wall": "mumty-4",
@@ -3536,7 +3536,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-sand"
         },
         {
           "wall": "mumty-4",
@@ -3554,7 +3554,7 @@
           "thickness": 0.75,
           "bottom": 32,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-sand"
         },
         {
           "wall": "mumty-4",
@@ -3572,7 +3572,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 32.5,
-          "material": "plaster-warm-grey"
+          "material": "plaster-sand"
         }
       ],
       "openings": [
@@ -3651,7 +3651,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "parapet": "parapet",
@@ -3666,7 +3666,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "parapet": "parapet",
@@ -3681,7 +3681,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "parapet": "parapet",
@@ -3696,7 +3696,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "parapet": "parapet",
@@ -3711,7 +3711,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "parapet": "parapet-front",
@@ -3726,7 +3726,7 @@
           "thickness": 0.75,
           "bottom": 24,
           "top": 27.5,
-          "material": "brick-cladding"
+          "material": "tile-beige"
         },
         {
           "parapet": "court-parapet",
@@ -3741,7 +3741,7 @@
           "thickness": 0.375,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "parapet": "court-parapet",
@@ -3756,7 +3756,7 @@
           "thickness": 0.375,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "parapet": "court-parapet",
@@ -3771,7 +3771,7 @@
           "thickness": 0.375,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         },
         {
           "parapet": "court-parapet",
@@ -3786,7 +3786,7 @@
           "thickness": 0.375,
           "bottom": 24,
           "top": 27.5,
-          "material": "plaster-white"
+          "material": "plaster-sand"
         }
       ],
       "tanks": [
@@ -3798,7 +3798,7 @@
           "d": 4,
           "bottom": 24,
           "top": 28,
-          "material": "plaster-warm-grey"
+          "material": "plaster-sand"
         },
         {
           "id": "tank-2",
@@ -3808,7 +3808,7 @@
           "d": 4,
           "bottom": 24,
           "top": 28,
-          "material": "plaster-warm-grey"
+          "material": "plaster-sand"
         }
       ]
     },
@@ -3821,7 +3821,7 @@
       "slab": {
         "top": 33,
         "bottom": 32.5,
-        "material": "exposed-concrete",
+        "material": "plaster-charcoal",
         "polygons": [
           {
             "outer": [
@@ -3860,35 +3860,21 @@
   ],
   "site": {
     "boundary": {
-      "material": "plaster-white",
+      "material": "plaster-sand",
       "walls": [
         {
           "side": "front",
           "from": [
-            0,
+            11,
             0.375
           ],
           "to": [
-            0.75,
+            23.7,
             0.375
           ],
           "thickness": 0.75,
           "bottom": 0,
-          "top": 5
-        },
-        {
-          "side": "front",
-          "from": [
-            10.125,
-            0.375
-          ],
-          "to": [
-            25,
-            0.375
-          ],
-          "thickness": 0.75,
-          "bottom": 0,
-          "top": 5
+          "top": 1.1
         },
         {
           "side": "rear",
@@ -3902,7 +3888,7 @@
           ],
           "thickness": 0.75,
           "bottom": 0,
-          "top": 5
+          "top": 1.1
         }
       ],
       "gates": [
@@ -3911,17 +3897,37 @@
           "side": "front",
           "kind": "vehicle",
           "from": [
-            0.75,
+            0,
             0.375
           ],
           "to": [
-            10.125,
+            11,
             0.375
           ],
           "thickness": 0.75,
           "bottom": 0,
           "top": 5,
-          "material": "wood-panel"
+          "material": "metal-dark",
+          "posts": false
+        },
+        {
+          "id": "end-pier-gap",
+          "side": "front",
+          "kind": "pedestrian",
+          "from": [
+            23.7,
+            0.375
+          ],
+          "to": [
+            25,
+            0.375
+          ],
+          "thickness": 0.75,
+          "bottom": 0,
+          "top": 5,
+          "material": "metal-dark",
+          "open": true,
+          "posts": false
         }
       ]
     },
@@ -4038,7 +4044,31 @@
       "d": 18,
       "bottom": 12.4,
       "top": 12.5,
-      "material": "wood-panel"
+      "material": "wood-slat"
+    },
+    {
+      "type": "box",
+      "id": "porch-soffit-dot-1",
+      "role": "led",
+      "x": 5.3175,
+      "y": 5.13,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
+    },
+    {
+      "type": "box",
+      "id": "porch-soffit-dot-2",
+      "role": "led",
+      "x": 5.3175,
+      "y": 14.13,
+      "w": 0.24,
+      "d": 0.24,
+      "bottom": 12.38,
+      "top": 12.4,
+      "material": "led-strip"
     },
     {
       "type": "box",
@@ -4050,7 +4080,7 @@
       "d": 0.75,
       "bottom": 2,
       "top": 12.5,
-      "material": "plaster-white"
+      "material": "plaster-sand"
     },
     {
       "type": "box",
@@ -4291,6 +4321,3054 @@
       "bottom": 22.75,
       "top": 23,
       "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.835
+          ],
+          "to": [
+            13.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.835
+          ],
+          "to": [
+            13.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 13,
+          "top": 23.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.835
+          ],
+          "to": [
+            13.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            13.5,
+            2.835
+          ],
+          "to": [
+            17.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-5",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            13.5,
+            2.835
+          ],
+          "to": [
+            17.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-6",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            13.5,
+            2.835
+          ],
+          "to": [
+            17.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 13,
+          "top": 14
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-7",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            13.5,
+            2.835
+          ],
+          "to": [
+            17.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 23.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-8",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            13.5,
+            2.835
+          ],
+          "to": [
+            17.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-9",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            17.5,
+            2.835
+          ],
+          "to": [
+            20.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-10",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            17.5,
+            2.835
+          ],
+          "to": [
+            20.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-11",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            17.5,
+            2.835
+          ],
+          "to": [
+            20.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 13,
+          "top": 23.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-12",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            17.5,
+            2.835
+          ],
+          "to": [
+            20.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-13",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            20.5,
+            2.835
+          ],
+          "to": [
+            21.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-14",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            20.5,
+            2.835
+          ],
+          "to": [
+            21.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-15",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            20.5,
+            2.835
+          ],
+          "to": [
+            21.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 13,
+          "top": 19
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-16",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            20.5,
+            2.835
+          ],
+          "to": [
+            21.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 23.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-17",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            20.5,
+            2.835
+          ],
+          "to": [
+            21.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-18",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.5,
+            2.835
+          ],
+          "to": [
+            22.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-19",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.5,
+            2.835
+          ],
+          "to": [
+            22.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 13,
+          "top": 19
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-20",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.5,
+            2.835
+          ],
+          "to": [
+            22.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 21,
+          "top": 23.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-21",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            21.5,
+            2.835
+          ],
+          "to": [
+            22.5,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-22",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            22.5,
+            2.835
+          ],
+          "to": [
+            25,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-23",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            22.5,
+            2.835
+          ],
+          "to": [
+            25,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 13,
+          "top": 23.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-tile-24",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            22.5,
+            2.835
+          ],
+          "to": [
+            25,
+            2.835
+          ],
+          "thickness": 0.08,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            13.805,
+            2.7875
+          ],
+          "to": [
+            13.845,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            13.805,
+            2.7875
+          ],
+          "to": [
+            13.845,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 10,
+          "top": 12.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-3",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            13.805,
+            2.7875
+          ],
+          "to": [
+            13.845,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 13,
+          "top": 14
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-4",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            13.805,
+            2.7875
+          ],
+          "to": [
+            13.845,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 21,
+          "top": 23.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-5",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            13.805,
+            2.7875
+          ],
+          "to": [
+            13.845,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-6",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            17.505,
+            2.7875
+          ],
+          "to": [
+            17.545,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-7",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            17.505,
+            2.7875
+          ],
+          "to": [
+            17.545,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 10,
+          "top": 12.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-8",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            17.505,
+            2.7875
+          ],
+          "to": [
+            17.545,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 13,
+          "top": 23.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-9",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            17.505,
+            2.7875
+          ],
+          "to": [
+            17.545,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-10",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.205,
+            2.7875
+          ],
+          "to": [
+            21.245,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-11",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.205,
+            2.7875
+          ],
+          "to": [
+            21.245,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 10,
+          "top": 12.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-12",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.205,
+            2.7875
+          ],
+          "to": [
+            21.245,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 13,
+          "top": 19
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-13",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.205,
+            2.7875
+          ],
+          "to": [
+            21.245,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 21,
+          "top": 23.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-14",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.205,
+            2.7875
+          ],
+          "to": [
+            21.245,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-15",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            24.905,
+            2.7875
+          ],
+          "to": [
+            24.945,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 12.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-16",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            24.905,
+            2.7875
+          ],
+          "to": [
+            24.945,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 13,
+          "top": 23.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-17",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            24.905,
+            2.7875
+          ],
+          "to": [
+            24.945,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 24,
+          "top": 27.5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-18",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.7875
+          ],
+          "to": [
+            25,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 2.98,
+          "top": 3.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-19",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.7875
+          ],
+          "to": [
+            13.5,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 5.98,
+          "top": 6.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-20",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5,
+            2.7875
+          ],
+          "to": [
+            25,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 5.98,
+          "top": 6.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-21",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.7875
+          ],
+          "to": [
+            13.5,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 8.98,
+          "top": 9.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-22",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            21.5,
+            2.7875
+          ],
+          "to": [
+            25,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 8.98,
+          "top": 9.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-23",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.7875
+          ],
+          "to": [
+            25,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 11.98,
+          "top": 12.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-24",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.7875
+          ],
+          "to": [
+            13.5,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 14.98,
+          "top": 15.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-25",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            17.5,
+            2.7875
+          ],
+          "to": [
+            25,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 14.98,
+          "top": 15.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-26",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.7875
+          ],
+          "to": [
+            13.5,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 17.98,
+          "top": 18.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-27",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            17.5,
+            2.7875
+          ],
+          "to": [
+            25,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 17.98,
+          "top": 18.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-28",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.7875
+          ],
+          "to": [
+            25,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 20.98,
+          "top": 21.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-29",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.7875
+          ],
+          "to": [
+            25,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 23.98,
+          "top": 24.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-joint-30",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            10.125,
+            2.7875
+          ],
+          "to": [
+            25,
+            2.7875
+          ],
+          "thickness": 0.015,
+          "bottom": 26.98,
+          "top": 27.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "bay-sconce-1",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            11.475,
+            2.645
+          ],
+          "to": [
+            12.175,
+            2.645
+          ],
+          "thickness": 0.3,
+          "bottom": 7.15,
+          "top": 7.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "bay-sconce-2",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            22.975,
+            2.645
+          ],
+          "to": [
+            23.675,
+            2.645
+          ],
+          "thickness": 0.3,
+          "bottom": 7.15,
+          "top": 7.85
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "roof-cap",
+      "role": "fascia",
+      "x": 10.125,
+      "y": 2.795,
+      "w": 14.875,
+      "d": 0.655,
+      "bottom": 27.5,
+      "top": 27.85,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "cheek-slat-backing",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            10.9,
+            0.75
+          ],
+          "to": [
+            10.9,
+            2.875
+          ],
+          "thickness": 0.05,
+          "bottom": 13,
+          "top": 24
+        }
+      ],
+      "material": "plaster-sand"
+    },
+    {
+      "type": "panel",
+      "id": "cheek-slat-1",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            11,
+            0.8475
+          ],
+          "to": [
+            11,
+            1.0975
+          ],
+          "thickness": 0.15,
+          "bottom": 13,
+          "top": 24
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "cheek-slat-2",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            11,
+            1.2675
+          ],
+          "to": [
+            11,
+            1.5175
+          ],
+          "thickness": 0.15,
+          "bottom": 13,
+          "top": 24
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "cheek-slat-3",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            11,
+            1.6875
+          ],
+          "to": [
+            11,
+            1.9375
+          ],
+          "thickness": 0.15,
+          "bottom": 13,
+          "top": 24
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "cheek-slat-4",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            11,
+            2.1075
+          ],
+          "to": [
+            11,
+            2.3575
+          ],
+          "thickness": 0.15,
+          "bottom": 13,
+          "top": 24
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "cheek-slat-5",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            11,
+            2.5275
+          ],
+          "to": [
+            11,
+            2.7775
+          ],
+          "thickness": 0.15,
+          "bottom": 13,
+          "top": 24
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            0,
+            18.71
+          ],
+          "to": [
+            1.375,
+            18.71
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-2",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            1.375,
+            18.71
+          ],
+          "to": [
+            5.875,
+            18.71
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-3",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            1.375,
+            18.71
+          ],
+          "to": [
+            5.875,
+            18.71
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.4
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-4",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            5.875,
+            18.71
+          ],
+          "to": [
+            6.375,
+            18.71
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-5",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            6.375,
+            18.71
+          ],
+          "to": [
+            9.875,
+            18.71
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 2
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-6",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            6.375,
+            18.71
+          ],
+          "to": [
+            9.875,
+            18.71
+          ],
+          "thickness": 0.08,
+          "bottom": 10,
+          "top": 12.4
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-7",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            9.875,
+            18.71
+          ],
+          "to": [
+            10.125,
+            18.71
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            3.38,
+            18.6625
+          ],
+          "to": [
+            3.42,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 3
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            3.38,
+            18.6625
+          ],
+          "to": [
+            3.42,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 10,
+          "top": 12.4
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-3",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            6.78,
+            18.6625
+          ],
+          "to": [
+            6.82,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 2
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-4",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            6.78,
+            18.6625
+          ],
+          "to": [
+            6.82,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 10,
+          "top": 12.4
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-5",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0,
+            18.6625
+          ],
+          "to": [
+            6.375,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 2.98,
+          "top": 3.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-6",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            9.875,
+            18.6625
+          ],
+          "to": [
+            10.125,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 2.98,
+          "top": 3.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-7",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0,
+            18.6625
+          ],
+          "to": [
+            1.375,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 5.98,
+          "top": 6.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-8",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            5.875,
+            18.6625
+          ],
+          "to": [
+            6.375,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 5.98,
+          "top": 6.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-9",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            9.875,
+            18.6625
+          ],
+          "to": [
+            10.125,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 5.98,
+          "top": 6.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-10",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0,
+            18.6625
+          ],
+          "to": [
+            1.375,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 8.98,
+          "top": 9.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-11",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            5.875,
+            18.6625
+          ],
+          "to": [
+            6.375,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 8.98,
+          "top": 9.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-12",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            9.875,
+            18.6625
+          ],
+          "to": [
+            10.125,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 8.98,
+          "top": 9.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-back-joint-13",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0,
+            18.6625
+          ],
+          "to": [
+            10.125,
+            18.6625
+          ],
+          "thickness": 0.015,
+          "bottom": 11.98,
+          "top": 12.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            0.79,
+            0.75
+          ],
+          "to": [
+            0.79,
+            18.75
+          ],
+          "thickness": 0.08,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0.8375,
+            4.63
+          ],
+          "to": [
+            0.8375,
+            4.67
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0.8375,
+            8.53
+          ],
+          "to": [
+            0.8375,
+            8.57
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-joint-3",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0.8375,
+            12.43
+          ],
+          "to": [
+            0.8375,
+            12.47
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-joint-4",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0.8375,
+            16.33
+          ],
+          "to": [
+            0.8375,
+            16.37
+          ],
+          "thickness": 0.015,
+          "bottom": 0,
+          "top": 12.4
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-joint-5",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0.8375,
+            0.75
+          ],
+          "to": [
+            0.8375,
+            18.75
+          ],
+          "thickness": 0.015,
+          "bottom": 2.98,
+          "top": 3.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-joint-6",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0.8375,
+            0.75
+          ],
+          "to": [
+            0.8375,
+            18.75
+          ],
+          "thickness": 0.015,
+          "bottom": 5.98,
+          "top": 6.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-joint-7",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0.8375,
+            0.75
+          ],
+          "to": [
+            0.8375,
+            18.75
+          ],
+          "thickness": 0.015,
+          "bottom": 8.98,
+          "top": 9.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-joint-8",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            0.8375,
+            0.75
+          ],
+          "to": [
+            0.8375,
+            18.75
+          ],
+          "thickness": 0.015,
+          "bottom": 11.98,
+          "top": 12.02
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-wash-1",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            1.1,
+            3.65
+          ],
+          "to": [
+            1.1,
+            3.85
+          ],
+          "thickness": 0.1,
+          "bottom": 12.25,
+          "top": 12.3
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-wash-2",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            1.1,
+            8.15
+          ],
+          "to": [
+            1.1,
+            8.35
+          ],
+          "thickness": 0.1,
+          "bottom": 12.25,
+          "top": 12.3
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-wash-3",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            1.1,
+            12.65
+          ],
+          "to": [
+            1.1,
+            12.85
+          ],
+          "thickness": 0.1,
+          "bottom": 12.25,
+          "top": 12.3
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "porch-side-wash-4",
+      "role": "wash",
+      "pieces": [
+        {
+          "from": [
+            1.1,
+            17.15
+          ],
+          "to": [
+            1.1,
+            17.35
+          ],
+          "thickness": 0.1,
+          "bottom": 12.25,
+          "top": 12.3
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-pier-a",
+      "role": "pier",
+      "x": 0,
+      "y": 0,
+      "w": 1.8,
+      "d": 1.3,
+      "bottom": 0,
+      "top": 5.4,
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-pier-a-cap",
+      "role": "pier",
+      "x": 0,
+      "y": 0,
+      "w": 1.9,
+      "d": 1.4,
+      "bottom": 5.4,
+      "top": 5.6,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-pier-b",
+      "role": "pier",
+      "x": 9.1,
+      "y": 0,
+      "w": 1.9,
+      "d": 1.3,
+      "bottom": 0,
+      "top": 5.4,
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-pier-b-cap",
+      "role": "pier",
+      "x": 9.1,
+      "y": 0,
+      "w": 2,
+      "d": 1.4,
+      "bottom": 5.4,
+      "top": 5.6,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-backing",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            2,
+            0.295
+          ],
+          "to": [
+            7,
+            0.295
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-1",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            2.055,
+            0.245
+          ],
+          "to": [
+            2.195,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-2",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            2.245,
+            0.245
+          ],
+          "to": [
+            2.385,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-3",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            2.435,
+            0.245
+          ],
+          "to": [
+            2.575,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-4",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            2.625,
+            0.245
+          ],
+          "to": [
+            2.765,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-5",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            2.815,
+            0.245
+          ],
+          "to": [
+            2.955,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-6",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            3.005,
+            0.245
+          ],
+          "to": [
+            3.145,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-7",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            3.195,
+            0.245
+          ],
+          "to": [
+            3.335,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-8",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            3.385,
+            0.245
+          ],
+          "to": [
+            3.525,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-9",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            3.575,
+            0.245
+          ],
+          "to": [
+            3.715,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-10",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            3.765,
+            0.245
+          ],
+          "to": [
+            3.905,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-11",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            3.955,
+            0.245
+          ],
+          "to": [
+            4.095,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-12",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            4.145,
+            0.245
+          ],
+          "to": [
+            4.285,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-13",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            4.335,
+            0.245
+          ],
+          "to": [
+            4.475,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-14",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            4.525,
+            0.245
+          ],
+          "to": [
+            4.665,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-15",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            4.715,
+            0.245
+          ],
+          "to": [
+            4.855,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-16",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            4.905,
+            0.245
+          ],
+          "to": [
+            5.045,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-17",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            5.095,
+            0.245
+          ],
+          "to": [
+            5.235,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-18",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            5.285,
+            0.245
+          ],
+          "to": [
+            5.425,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-19",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            5.475,
+            0.245
+          ],
+          "to": [
+            5.615,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-20",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            5.665,
+            0.245
+          ],
+          "to": [
+            5.805,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-21",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            5.855,
+            0.245
+          ],
+          "to": [
+            5.995,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-22",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            6.045,
+            0.245
+          ],
+          "to": [
+            6.185,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-23",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            6.235,
+            0.245
+          ],
+          "to": [
+            6.375,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-24",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            6.425,
+            0.245
+          ],
+          "to": [
+            6.565,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-25",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            6.615,
+            0.245
+          ],
+          "to": [
+            6.755,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-a-26",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            6.805,
+            0.245
+          ],
+          "to": [
+            6.945,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-b-backing",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            7.35,
+            0.295
+          ],
+          "to": [
+            8.9,
+            0.295
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-b-1",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            7.39,
+            0.245
+          ],
+          "to": [
+            7.53,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-b-2",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            7.58,
+            0.245
+          ],
+          "to": [
+            7.72,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-b-3",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            7.77,
+            0.245
+          ],
+          "to": [
+            7.91,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-b-4",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            7.96,
+            0.245
+          ],
+          "to": [
+            8.1,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-b-5",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            8.15,
+            0.245
+          ],
+          "to": [
+            8.29,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-b-6",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            8.34,
+            0.245
+          ],
+          "to": [
+            8.48,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-b-7",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            8.53,
+            0.245
+          ],
+          "to": [
+            8.67,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-gate-b-8",
+      "role": "slat",
+      "pieces": [
+        {
+          "from": [
+            8.72,
+            0.245
+          ],
+          "to": [
+            8.86,
+            0.245
+          ],
+          "thickness": 0.05,
+          "bottom": 0.5,
+          "top": 4.6
+        }
+      ],
+      "material": "wood-slat"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-gate-handle",
+      "role": "handle",
+      "x": 7.1,
+      "y": 0.02,
+      "w": 0.12,
+      "d": 0.08,
+      "bottom": 2.6,
+      "top": 3.6,
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-tile-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            11,
+            0.37
+          ],
+          "to": [
+            23.7,
+            0.37
+          ],
+          "thickness": 0.3,
+          "bottom": 1.1,
+          "top": 4.3
+        }
+      ],
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-tile-joint-1",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            14.68,
+            0.2125
+          ],
+          "to": [
+            14.72,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 1.1,
+          "top": 4.3
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-tile-joint-2",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            18.38,
+            0.2125
+          ],
+          "to": [
+            18.42,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 1.1,
+          "top": 4.3
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-tile-joint-3",
+      "role": "reveal",
+      "pieces": [
+        {
+          "from": [
+            22.08,
+            0.2125
+          ],
+          "to": [
+            22.12,
+            0.2125
+          ],
+          "thickness": 0.015,
+          "bottom": 1.1,
+          "top": 4.3
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-reveal-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            11,
+            0.52
+          ],
+          "to": [
+            23.7,
+            0.52
+          ],
+          "thickness": 0.1,
+          "bottom": 3.1,
+          "top": 3.25
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-cap-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            11,
+            0.37
+          ],
+          "to": [
+            23.7,
+            0.37
+          ],
+          "thickness": 0.3,
+          "bottom": 4.3,
+          "top": 5
+        }
+      ],
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-sconce-1",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            12.25,
+            0.17
+          ],
+          "to": [
+            12.95,
+            0.17
+          ],
+          "thickness": 0.3,
+          "bottom": 2.75,
+          "top": 3.45
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-front-sconce-2",
+      "role": "sconce",
+      "pieces": [
+        {
+          "from": [
+            18.65,
+            0.17
+          ],
+          "to": [
+            19.35,
+            0.17
+          ],
+          "thickness": 0.3,
+          "bottom": 2.75,
+          "top": 3.45
+        }
+      ],
+      "material": "metal-dark"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-pier-c",
+      "role": "pier",
+      "x": 23.7,
+      "y": 0,
+      "w": 1.2,
+      "d": 1.3,
+      "bottom": 0,
+      "top": 5.4,
+      "material": "stone-tile-grey"
+    },
+    {
+      "type": "box",
+      "id": "boundary-front-pier-c-cap",
+      "role": "pier",
+      "x": 23.7,
+      "y": 0,
+      "w": 1.3,
+      "d": 1.4,
+      "bottom": 5.4,
+      "top": 5.6,
+      "material": "plaster-charcoal"
+    },
+    {
+      "type": "box",
+      "id": "front-planter",
+      "role": "planter",
+      "x": 11.2,
+      "y": 1.2,
+      "w": 12.8,
+      "d": 1.3,
+      "bottom": 0,
+      "top": 1,
+      "material": "tile-beige"
+    },
+    {
+      "type": "panel",
+      "id": "boundary-rear-wall-1",
+      "role": "cladding",
+      "pieces": [
+        {
+          "from": [
+            25,
+            44.63
+          ],
+          "to": [
+            0,
+            44.63
+          ],
+          "thickness": 0.3,
+          "bottom": 1.1,
+          "top": 5
+        }
+      ],
+      "material": "plaster-sand"
     }
   ],
   "facts": {

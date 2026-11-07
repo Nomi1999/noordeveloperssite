@@ -31,7 +31,7 @@ describe("render export", () => {
         expect(gate.posts).toBe(declared.posts ? undefined : false);
       }
     }
-    const [plain] = exports.filter(({ design }) => design.slug === "5-marla");
+    const [plain] = exports.filter(({ design }) => design.slug === "10-marla");
     expect(plain.data.site.boundary.gates.every((g) => g.top === plain.design.site.boundary.height && !("posts" in g))).toBe(true);
     const [tall] = exports.filter(({ design }) => design.slug === "2-kanal");
     expect(tall.data.site.boundary.gates.every((g) => g.top === 7)).toBe(true);

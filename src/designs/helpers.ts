@@ -318,7 +318,13 @@ const BOUNDARY_PANEL = 0.3;
  * `edges` are the plot's edges in outline order, so each runs left to right as seen from the street.
  * Name each panel `boundary-<edge>-...`, so a shot can hide that edge.
  */
-export function boundaryKit<E extends string>(plinth: number, edges: Record<E, [Pt, Pt]>) {
+export function boundaryKit<E extends string>(
+  plinth: number,
+  edges: Record<E, [Pt, Pt]>,
+  /** `panel` is the finish of `stoneWall` (grey stone tile if omitted); `top` is the boundary's height (7 ft if omitted) and `hood` the height of the hood over its slats (1.6 ft if omitted) */
+  options: { panel?: Panel["material"]; top?: number; hood?: number } = {},
+) {
+  const { panel = "stone-tile-grey", top = BOUNDARY_TOP, hood: hoodHeight = 1.6 } = options;
   const { above, face } = finishKit(plinth);
   const run = (edge: E, s0: number, s1: number, z0: number, z1: number, inset = BOUNDARY_INSET): Face => {
     const line: Face = { level: "ground", from: edges[edge][0], to: edges[edge][1], z: 0, h: 1 };
@@ -328,24 +334,25 @@ export function boundaryKit<E extends string>(plinth: number, edges: Record<E, [
 
   /** Stone tile wall on one edge: `holes` are measured from the start of this stretch */
   const stoneWall = (id: string, edge: E, s0: number, s1: number, holes: Hole[] = []) => {
-    const f = run(edge, s0, s1, BOUNDARY_BASE, BOUNDARY_TOP);
-    return [...cladding(id, f, "stone-tile-grey", { ...inWall, holes }), ...tileJoints(`${id}-joint`, f, { width: 5.5, height: 2.95, holes, out: 0 })];
+    const f = run(edge, s0, s1, BOUNDARY_BASE, top);
+    return [...cladding(id, f, panel, { ...inWall, holes }), ...tileJoints(`${id}-joint`, f, { width: 5.5, height: 2.95, holes, out: 0 })];
   };
   /** A run of slats set back under a dark hood with hidden lights */
   const hoodedSlats = (id: string, edge: E, s0: number, s1: number) => {
-    const slats = run(edge, s0, s1, BOUNDARY_BASE, 5.4, SLAT_INSET);
+    const hood = top - hoodHeight;
+    const slats = run(edge, s0, s1, BOUNDARY_BASE, hood, SLAT_INSET);
     const count = Math.round((s1 - s0) / 1.8);
     const lights = Array.from({ length: count }, (_, i) => ((i + 0.5) * (s1 - s0)) / count);
     return [
       ...slatRun(id, slats, { out: -0.05 }),
-      ...cladding(`${id}-hood`, run(edge, s0, s1, 5.4, BOUNDARY_TOP, 0.02), "plaster-charcoal", { out: -SLAT_INSET, depth: SLAT_INSET }),
-      ...washLights(`${id}-wash`, slats, lights, above(5.35)),
+      ...cladding(`${id}-hood`, run(edge, s0, s1, hood, top, 0.02), "plaster-charcoal", { out: -SLAT_INSET, depth: SLAT_INSET }),
+      ...washLights(`${id}-wash`, slats, lights, above(hood - 0.05)),
     ];
   };
   const timberDoor = (id: string, f: Face) => slatRun(id, f, { width: 0.14, gap: 0.05, depth: 0.05, out: -0.1 });
   // The 90 only sets the direction of the line the lights are measured along
   const wallLights = (id: string, edge: E, at: number[]) =>
-    sconces(id, run(edge, 0, 90, BOUNDARY_BASE, BOUNDARY_TOP), at.map((s): [number, number] => [s, above(4.6)]), -0.1);
+    sconces(id, run(edge, 0, 90, BOUNDARY_BASE, top), at.map((s): [number, number] => [s, above(top - 2.4)]), -0.1);
 
   return { run, inWall, stoneWall, hoodedSlats, timberDoor, wallLights };
 }

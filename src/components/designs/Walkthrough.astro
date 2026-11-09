@@ -175,6 +175,8 @@ const config = {
   }
   // The widest view is the default: zooming in is the visitor's choice
   const WIDE = 120;
+  // Phones start zoomed in; desktop starts at the widest view
+  const START = matchMedia("(max-width: 40rem)").matches ? 85 : WIDE;
   // A little below the horizon, so the circles on the floor are in view
   const TILT = -8;
 
@@ -399,7 +401,7 @@ const config = {
       const swap = () => {
         current = id;
         arriving = true;
-        pano!.loadScene(sceneId(id), TILT, opening, reduced ? WIDE : 62);
+        pano!.loadScene(sceneId(id), TILT, opening, reduced ? START : 62);
         arrive();
         announce(target.label);
         window.setTimeout(() => settle(), 8000);
@@ -420,7 +422,7 @@ const config = {
       arriving = false;
       moving = false;
       stage.classList.remove("is-moving");
-      if (pano && !reduced) pano.setHfov(WIDE, 700);
+      if (pano && !reduced) pano.setHfov(START, 700);
       facing();
     }
 
@@ -444,7 +446,7 @@ const config = {
       }
       if (!pano) {
         pano = window.pannellum!.viewer(stage, {
-          default: { firstScene: sceneId(config.start), sceneFadeDuration: reduced ? 0 : 600, autoLoad: true, showControls: true, keyboardZoom: true, mouseZoom: false, hfov: WIDE, minHfov: 50, maxHfov: WIDE, compass: false, showFullscreenCtrl: false },
+          default: { firstScene: sceneId(config.start), sceneFadeDuration: reduced ? 0 : 600, autoLoad: true, showControls: true, keyboardZoom: true, mouseZoom: false, hfov: START, minHfov: 50, maxHfov: WIDE, compass: false, showFullscreenCtrl: false },
           scenes: scenes(),
         });
         pano.on("load", () => {

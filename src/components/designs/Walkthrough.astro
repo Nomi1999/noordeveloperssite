@@ -1,0 +1,852 @@
+---
+/**
+ * The interactive walkthrough of a design: 360° views of the finished, unfurnished rooms, with arrows to move
+ * between them and a floor-plan map that follows the visitor.
+ *
+ * Progressive enhancement: the server renders a poster with a start button and, for visitors without JavaScript,
+ * the stills of every room. Nothing of the viewer (Pannellum, the panoramas) is fetched until the visitor starts it.
+ * The tour (views, links, yaw, plan positions) is computed from the walkthrough data and the design, at build time.
+ */
+import { withBase } from "../../lib/paths.ts";
+import { getDesign } from "../../designs/index.ts";
+import { getWalkthrough } from "../../designs/walkthroughs.ts";
+import { planLevels, renderPlan } from "../../designs/plan.ts";
+import { walkthroughCopy as copy } from "../../content/walkthrough.ts";
+
+interface Props {
+  /** Design slug, e.g. "5-marla" */
+  design: string;
+}
+
+const { design: slug } = Astro.props;
+const found = getWalkthrough(slug);
+if (!found) throw new Error(`Design "${slug}" has no walkthrough`);
+const { tour } = found;
+const { design, facts } = getDesign(slug);
+
+const image = (id: string, thumb = false) => withBase(`/walkthroughs/${slug}/${id}${thumb ? "-thumb" : ""}.jpg`);
+const start = tour.views.find((v) => v.id === tour.start)!;
+
+// One plan per level of the tour, drawn for the dark viewer
+const plans = tour.levels.map((l) => {
+  const level = planLevels(design).find((p) => p.id === l.id)!;
+  const plan = renderPlan(design, level, facts, { theme: "dark", id: `wt-${slug}-${l.id}` });
+  return { ...l, plan };
+});
+
+const config = {
+  slug,
+  start: tour.start,
+  levels: tour.levels,
+  views: tour.views.map((v) => ({
+    id: v.id,
+    label: v.label,
+    level: v.level,
+    levelName: v.levelName,
+    room: v.room,
+    yaw: v.yaw,
+    point: v.point,
+    description: v.description,
+    image: image(v.id),
+    thumb: image(v.id, true),
+    links: v.links,
+  })),
+  plan: Object.fromEntries(plans.map((p) => [p.id, [p.plan.width, p.plan.height]])),
+  library: withBase("/vendor/pannellum/pannellum.js"),
+  style: withBase("/vendor/pannellum/pannellum.css"),
+  copy: {
+    loading: copy.loading,
+    failed: copy.failed,
+    retry: copy.retry,
+    goTo: "Go to",
+    goUpTo: "Go up to",
+    moveHere: "Move here",
+    goDownTo: "Go down to",
+    mapShow: copy.mapShow,
+    mapHide: copy.mapHide,
+  },
+};
+---
+
+<div class="wt" data-walkthrough data-config={JSON.stringify(config)}>
+  <div class="wt__poster" data-wt-poster>
+    <img
+      class="wt__poster-img"
+      src={image(start.id, true)}
+      alt={start.description}
+      width="800"
+      height="400"
+      loading="lazy"
+      decoding="async"
+    />
+    <div class="wt__poster-body">
+      <p class="label wt__tag">{copy.conceptTag}</p>
+      <button type="button" class="wt__start" data-wt-start hidden>{copy.start}</button>
+      <p class="wt__hint dim" data-wt-hint hidden>{copy.startHint}</p>
+    </div>
+  </div>
+
+  <div class="wt__viewer" data-wt-viewer hidden>
+    <div class="wt__stage" data-wt-stage></div>
+    <p class="wt__status" role="status" data-wt-status></p>
+    <div class="wt__bar">
+      <p class="wt__room label" data-wt-room></p>
+      <button type="button" class="wt__btn" data-wt-map-toggle aria-expanded="true">{copy.mapHide}</button>
+      <button type="button" class="wt__btn" data-wt-full hidden>{copy.fullscreen}</button>
+      <button type="button" class="wt__btn" data-wt-close>{copy.close}</button>
+    </div>
+    <aside class="wt__map" data-wt-map aria-label={copy.mapLabel}>
+      {
+        tour.levels.length > 1 && (
+          <div class="wt__levels" role="group" aria-label={copy.levelLabel}>
+            {tour.levels.map((l) => (
+              <button type="button" class="wt__level" data-wt-level={l.id} aria-pressed="false">
+                {l.name}
+              </button>
+            ))}
+          </div>
+        )
+      }
+      {
+        plans.map((p) => (
+          <div class="wt__plan" data-wt-plan={p.id} hidden>
+            <Fragment set:html={p.plan.svg} />
+            <span class="wt__you" data-wt-you aria-hidden="true"></span>
+            {tour.views
+              .filter((v) => v.level === p.id)
+              .map((v) => (
+                <button
+                  type="button"
+                  class="wt__spot"
+                  data-wt-spot={v.id}
+                  style={`left:${((v.point[0] / p.plan.width) * 100).toFixed(2)}%;top:${((v.point[1] / p.plan.height) * 100).toFixed(2)}%`}
+                  aria-label={copy.goTo(v.label)}
+                />
+              ))}
+          </div>
+        ))
+      }
+    </aside>
+    <p class="wt__keys dim">{copy.helpKeys}</p>
+  </div>
+
+  <noscript>
+    <section class="wt__stills" aria-labelledby={`wt-stills-${slug}`}>
+      <h3 class="label" id={`wt-stills-${slug}`}>{copy.stillsHeading}</h3>
+      <p class="dim">{copy.stillsIntro}</p>
+      <ul>
+        {
+          tour.views.map((v) => (
+            <li>
+              <figure>
+                <img src={image(v.id, true)} alt={v.description} width="800" height="400" loading="lazy" />
+                <figcaption>{copy.roomOf(v.label, v.levelName)}</figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </noscript>
+</div>
+
+<script>
+  interface Link {
+    to: string;
+    label: string;
+    yaw: number;
+    pitch: number;
+    distance: number;
+    climb: number;
+    stair: boolean;
+  }
+  interface View {
+    id: string;
+    label: string;
+    level: string;
+    levelName: string;
+    room: string | null;
+    yaw: number;
+    point: [number, number];
+    description: string;
+    image: string;
+    thumb: string;
+    links: Link[];
+  }
+  // The widest view is the default: zooming in is the visitor's choice
+  const WIDE = 120;
+  // A little below the horizon, so the circles on the floor are in view
+  const TILT = -8;
+
+  interface Config {
+    slug: string;
+    start: string;
+    levels: { id: string; name: string }[];
+    views: View[];
+    plan: Record<string, [number, number]>;
+    library: string;
+    style: string;
+    copy: Record<string, string>;
+  }
+
+  // Pannellum is a classic script that defines window.pannellum
+  declare global {
+    interface Window {
+      pannellum?: { viewer: (el: HTMLElement, config: unknown) => PannellumViewer };
+    }
+  }
+  interface PannellumViewer {
+    loadScene(id: string, pitch?: number, yaw?: number, hfov?: number): void;
+    getScene(): string;
+    getYaw(): number;
+    getHfov(): number;
+    getPitch(): number;
+    setHfov(hfov: number, animated?: number | boolean): void;
+    lookAt(pitch: number, yaw: number, hfov?: number, animated?: number | boolean, callback?: () => void): void;
+    on(type: string, fn: (...args: unknown[]) => void): void;
+    toggleFullscreen(): void;
+    destroy(): void;
+  }
+
+  const loadOnce = (() => {
+    let promise: Promise<void> | undefined;
+    return (config: Config) =>
+      (promise ??= new Promise<void>((resolve, reject) => {
+        const css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = config.style;
+        document.head.append(css);
+        const js = document.createElement("script");
+        js.src = config.library;
+        js.onload = () => resolve();
+        js.onerror = () => {
+          promise = undefined;
+          reject(new Error("Viewer failed to load"));
+        };
+        document.head.append(js);
+      }));
+  })();
+
+  function init(root: HTMLElement) {
+    const config = JSON.parse(root.dataset.config!) as Config;
+    const $ = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+    const poster = $("[data-wt-poster]");
+    const startButton = $<HTMLButtonElement>("[data-wt-start]");
+    const hint = $("[data-wt-hint]");
+    const viewer = $("[data-wt-viewer]");
+    const stage = $("[data-wt-stage]");
+    const status = $("[data-wt-status]");
+    const roomLabel = $("[data-wt-room]");
+    const mapToggle = $<HTMLButtonElement>("[data-wt-map-toggle]");
+    const map = $("[data-wt-map]");
+    const fullButton = $<HTMLButtonElement>("[data-wt-full]");
+    const closeButton = $<HTMLButtonElement>("[data-wt-close]");
+    const views = new Map(config.views.map((v) => [v.id, v]));
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // On a phone the map would cover the circles on the floor, so it starts folded away
+    if (matchMedia("(max-width: 40rem)").matches) {
+      map.hidden = true;
+      mapToggle.setAttribute("aria-expanded", "false");
+      mapToggle.textContent = config.copy.mapShow;
+    }
+    startButton.hidden = false;
+    hint.hidden = false;
+    if (document.fullscreenEnabled) fullButton.hidden = false;
+
+    let pano: PannellumViewer | undefined;
+    let current = config.start;
+    let opening = 0;
+    let moving = false;
+    let arriving = false;
+
+    const sceneId = (id: string) => id;
+    const verb = (from: View, l: Link) => {
+      const to = views.get(l.to)!;
+      const rank = (id: string) => config.levels.findIndex((x) => x.id === id);
+      const lead = to.level === from.level ? config.copy.goTo : rank(to.level) > rank(from.level) ? config.copy.goUpTo : config.copy.goDownTo;
+      const here = to.level === from.level && to.room === from.room;
+      return here ? `${config.copy.moveHere} in ${from.label}` : `${lead} ${l.label}`;
+    };
+
+    const say = (text: string, retry?: () => void) => {
+      status.replaceChildren(text);
+      if (retry) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "wt__btn";
+        b.textContent = config.copy.retry;
+        b.addEventListener("click", retry);
+        status.append(" ", b);
+      }
+      status.hidden = !text;
+    };
+
+    // Scenes are built once; each scene's markers come straight from the tour
+    const scenes = () => {
+      const out: Record<string, unknown> = {};
+      for (const v of config.views) {
+        out[sceneId(v.id)] = {
+          type: "equirectangular",
+          panorama: v.image,
+          preview: v.thumb,
+          yaw: v.yaw,
+          pitch: TILT,
+          hotSpots: v.links.map((l) => {
+            const target = views.get(l.to)!;
+            // Another spot in this room, or a way into the next one
+            const inRoom = target.level === v.level && target.room === v.room;
+            // A circle on the floor looks smaller the further away it is, and flatter the nearer the horizon
+            const size = Math.round(Math.max(34, Math.min(88, 260 / l.distance)));
+            const height = Math.round(size * Math.max(0.3, Math.sin((Math.abs(l.pitch) * Math.PI) / 180)));
+            const kind = l.climb > 0 ? "up" : l.climb < 0 ? "down" : inRoom ? "spot" : "door";
+            return {
+              type: "custom",
+              yaw: l.yaw,
+              pitch: l.pitch,
+              cssClass: `wt-marker wt-marker--${kind}`,
+              createTooltipFunc: (el: HTMLElement) => {
+                el.style.setProperty("--wt-w", `${size}px`);
+                el.style.setProperty("--wt-h", `${height}px`);
+                el.setAttribute("role", "button");
+                el.tabIndex = 0;
+                el.setAttribute("aria-label", verb(v, l));
+                const tip = document.createElement("span");
+                tip.textContent = l.label;
+                el.append(tip);
+                el.addEventListener("keydown", (e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    go(l.to);
+                  }
+                });
+              },
+              clickHandlerFunc: () => go(l.to),
+            };
+          }),
+        };
+      }
+      return out;
+    };
+
+    const levelButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-wt-level]")];
+    const plans = [...root.querySelectorAll<HTMLElement>("[data-wt-plan]")];
+    const showLevel = (id: string) => {
+      plans.forEach((p) => (p.hidden = p.dataset.wtPlan !== id));
+      levelButtons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.wtLevel === id)));
+    };
+    levelButtons.forEach((b) =>
+      b.addEventListener("click", () => {
+        showLevel(b.dataset.wtLevel!);
+        updateMap();
+      }),
+    );
+
+    const you = (level: string) => root.querySelector<HTMLElement>(`[data-wt-plan="${level}"] [data-wt-you]`);
+    const updateMap = () => {
+      const v = views.get(current)!;
+      const shown = plans.find((p) => !p.hidden)?.dataset.wtPlan;
+      root.querySelectorAll<HTMLElement>("[data-wt-you]").forEach((el) => (el.hidden = true));
+      root.querySelectorAll<HTMLElement>("[data-wt-spot]").forEach((el) => {
+        el.classList.toggle("is-current", el.dataset.wtSpot === current);
+        el.tabIndex = shown === views.get(el.dataset.wtSpot!)?.level ? 0 : -1;
+      });
+      if (shown !== v.level) return;
+      const dot = you(v.level);
+      const size = config.plan[v.level];
+      if (!dot || !size) return;
+      dot.hidden = false;
+      dot.style.left = `${(v.point[0] / size[0]) * 100}%`;
+      dot.style.top = `${(v.point[1] / size[1]) * 100}%`;
+      setBearing(dot, pano ? pano.getYaw() : opening);
+    };
+    // The plan has +y up and the image centre faces +y, so a viewer yaw is already the clockwise bearing on the plan
+    const setBearing = (dot: HTMLElement, yaw: number) => dot.style.setProperty("--wt-yaw", `${yaw.toFixed(0)}deg`);
+    const facing = () => {
+      if (!pano) return;
+      const yaw = pano.getYaw();
+      const dot = you(views.get(current)!.level);
+      if (dot) setBearing(dot, yaw);
+    };
+
+    root.querySelectorAll<HTMLElement>("[data-wt-spot]").forEach((el) =>
+      el.addEventListener("click", () => go(el.dataset.wtSpot!)),
+    );
+
+    const arrive = () => {
+      const v = views.get(current)!;
+      roomLabel.textContent = `${v.label} · ${v.levelName}`;
+      stage.setAttribute("aria-label", `${v.label}, ${v.levelName.toLowerCase()}. ${v.description}`);
+      showLevel(v.level);
+      updateMap();
+      facing();
+      // Warm the next views while the visitor looks around
+      for (const l of v.links) {
+        const t = views.get(l.to);
+        if (t) new Image().src = t.image;
+      }
+    };
+
+    // Moving: turn towards the door, zoom in with a little blur as if walking forward, swap the view, then ease back out
+    function go(id: string) {
+      const target = views.get(id);
+      if (!target || !pano || moving) return;
+      const from = views.get(current)!;
+      const link = from.links.find((l) => l.to === id);
+      // Through a door, keep going the way the visitor was heading; to another spot in the same room, face into the room
+      const inRoom = target.level === from.level && target.room === from.room;
+      opening = link && !inRoom ? link.yaw : target.yaw;
+      const swap = () => {
+        current = id;
+        arriving = true;
+        pano!.loadScene(sceneId(id), TILT, opening, reduced ? WIDE : 62);
+        arrive();
+        announce(target.label);
+        window.setTimeout(() => settle(), 8000);
+      };
+      if (reduced) {
+        swap();
+        return;
+      }
+      moving = true;
+      stage.classList.add("is-moving");
+      if (link) pano.lookAt(Math.max(-30, link.pitch / 2), link.yaw, 62, 700, swap);
+      else swap();
+    }
+
+    // The new view is in: ease the zoom back out and clear the blur
+    function settle() {
+      if (!arriving && !moving) return;
+      arriving = false;
+      moving = false;
+      stage.classList.remove("is-moving");
+      if (pano && !reduced) pano.setHfov(WIDE, 700);
+      facing();
+    }
+
+    const announce = (label: string) => {
+      status.hidden = false;
+      status.textContent = label;
+      window.setTimeout(() => {
+        if (status.textContent === label) status.textContent = "";
+      }, 1500);
+    };
+
+    const open = async () => {
+      say(config.copy.loading);
+      viewer.hidden = false;
+      poster.hidden = true;
+      try {
+        await loadOnce(config);
+      } catch {
+        say(config.copy.failed, () => void open());
+        return;
+      }
+      if (!pano) {
+        pano = window.pannellum!.viewer(stage, {
+          default: { firstScene: sceneId(config.start), sceneFadeDuration: reduced ? 0 : 600, autoLoad: true, showControls: true, keyboardZoom: true, mouseZoom: false, hfov: WIDE, minHfov: 50, maxHfov: WIDE, compass: false, showFullscreenCtrl: false },
+          scenes: scenes(),
+        });
+        pano.on("load", () => {
+          say("");
+          if (arriving) settle();
+        });
+        pano.on("error", () => say(config.copy.failed, () => void open()));
+        pano.on("animatefinished", facing);
+        pano.on("mouseup", facing);
+        pano.on("touchend", facing);
+        pano.on("scenechange", () => facing());
+        stage.addEventListener("keyup", facing);
+        current = config.start;
+        opening = views.get(config.start)!.yaw;
+      }
+      arrive();
+      (viewer.querySelector<HTMLElement>(".pnlm-container") ?? stage).focus?.();
+    };
+
+    startButton.addEventListener("click", () => void open());
+    viewer.addEventListener("keydown", (e) => {
+      // Escape leaves the walkthrough, unless the browser is using it to leave full screen
+      if (e.key === "Escape" && !document.fullscreenElement) closeButton.click();
+    });
+    closeButton.addEventListener("click", () => {
+      if (document.fullscreenElement) void document.exitFullscreen();
+      viewer.hidden = true;
+      poster.hidden = false;
+      startButton.focus();
+    });
+    mapToggle.addEventListener("click", () => {
+      const hidden = !map.hidden;
+      map.hidden = hidden;
+      mapToggle.setAttribute("aria-expanded", String(!hidden));
+      mapToggle.textContent = hidden ? config.copy.mapShow : config.copy.mapHide;
+    });
+    fullButton.addEventListener("click", () => {
+      if (document.fullscreenElement) void document.exitFullscreen();
+      else void viewer.requestFullscreen();
+    });
+    // The map's facing cone follows the view while the visitor drags
+    window.setInterval(() => {
+      if (!viewer.hidden && pano) facing();
+    }, 200);
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-walkthrough]").forEach(init);
+</script>
+
+<style>
+  .wt {
+    position: relative;
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .wt__poster {
+    position: relative;
+    display: grid;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .wt__poster-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    opacity: 0.55;
+  }
+
+  .wt__poster-body {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    text-align: center;
+  }
+
+  .wt__tag {
+    color: var(--concrete-300);
+  }
+
+  .wt__start,
+  .wt :global(.wt__btn) {
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-5);
+    border: var(--rule-thin) solid currentColor;
+    border-radius: var(--radius-1);
+    background: transparent;
+    color: inherit;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-mono-strong);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .wt__start {
+    border-color: var(--noor);
+    background: var(--noor);
+    color: var(--ink);
+  }
+
+  .wt__start:hover {
+    background: var(--paper);
+    border-color: var(--paper);
+  }
+
+  .wt__hint {
+    color: var(--concrete-300);
+    max-width: 32rem;
+  }
+
+  .wt__viewer {
+    position: relative;
+    display: grid;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .wt__viewer[hidden],
+  .wt__poster[hidden] {
+    display: none;
+  }
+
+  .wt__stage {
+    width: 100%;
+    height: min(78vh, 46rem);
+    min-height: 22rem;
+    background: var(--ink-2);
+  }
+
+  .wt__viewer:fullscreen .wt__stage {
+    height: 100vh;
+  }
+
+  .wt__status {
+    position: absolute;
+    top: var(--space-4);
+    left: 50%;
+    z-index: 5;
+    transform: translateX(-50%);
+    padding: var(--space-2) var(--space-4);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+
+  .wt__status:empty {
+    display: none;
+  }
+
+  .wt__bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 4;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-3) var(--space-3) 3.5rem;
+    background: linear-gradient(to bottom, rgb(0 0 0 / 0.65), transparent);
+    pointer-events: none;
+  }
+
+  .wt__bar > * {
+    pointer-events: auto;
+  }
+
+  .wt__room {
+    margin-right: auto;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-shadow: 0 1px 3px rgb(0 0 0 / 0.8);
+  }
+
+  .wt__bar .wt__btn {
+    background: rgb(18 18 18 / 0.75);
+    padding-inline: var(--space-4);
+    color: var(--paper);
+  }
+
+  .wt__map {
+    position: absolute;
+    left: var(--space-3);
+    bottom: calc(var(--space-3) + 2.75rem);
+    z-index: 4;
+    display: grid;
+    gap: var(--space-2);
+    width: min(11.5rem, 46%);
+    padding: var(--space-2);
+    background: rgb(18 18 18 / 0.88);
+    border: var(--rule-thin) solid var(--concrete-700);
+  }
+
+  .wt__map[hidden] {
+    display: none;
+  }
+
+  .wt__levels {
+    display: flex;
+    gap: var(--space-1);
+  }
+
+  .wt__level {
+    flex: 1;
+    min-height: 2.25rem;
+    border: var(--rule-thin) solid var(--concrete-500);
+    background: transparent;
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .wt__level[aria-pressed="true"] {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .wt__plan {
+    position: relative;
+  }
+
+  .wt__plan[hidden] {
+    display: none;
+  }
+
+  .wt__plan :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .wt__spot {
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: -0.75rem 0 0 -0.75rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .wt__spot::after {
+    content: "";
+    position: absolute;
+    inset: 0.5rem;
+    border-radius: 50%;
+    background: var(--concrete-300);
+    opacity: 0.7;
+  }
+
+  .wt__spot.is-current::after {
+    background: var(--noor);
+    opacity: 1;
+  }
+
+  .wt__you {
+    position: absolute;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin: -1.75rem 0 0 -1.75rem;
+    pointer-events: none;
+    background: conic-gradient(from calc(var(--wt-yaw, 0deg) - 40deg), var(--noor) 0deg 80deg, transparent 80deg);
+    border-radius: 50%;
+    opacity: 0.85;
+  }
+
+  .wt__stage {
+    transition: filter 400ms var(--ease-out);
+  }
+
+  .wt__stage.is-moving {
+    filter: blur(2px) brightness(1.1) saturate(0.9);
+  }
+
+  .wt__keys {
+    padding: var(--space-2) var(--space-4) var(--space-3);
+    color: var(--concrete-300);
+    font-size: var(--text-xs);
+  }
+
+  .wt button:focus-visible,
+  .wt :global(.wt-marker:focus-visible) {
+    outline: 3px solid var(--noor);
+    outline-offset: 2px;
+  }
+
+  .wt__stills ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .wt__stills img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* A marker is a white circle on the floor: flattened by how far down it is seen, smaller the further away */
+  .wt :global(.wt-marker) {
+    /* Pannellum positions the hotspot (position: absolute), which also anchors the circle's inner parts */
+    width: var(--wt-w, 56px);
+    height: var(--wt-h, 40px);
+    margin: calc(var(--wt-h, 40px) / -2) 0 0 calc(var(--wt-w, 56px) / -2);
+    border: 3px solid #fff;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.28);
+    box-shadow:
+      0 0 0 3px rgb(18 18 18 / 0.35),
+      0 3px 12px rgb(0 0 0 / 0.55);
+    cursor: pointer;
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .wt :global(.wt-marker::before) {
+    content: "";
+    position: absolute;
+    inset: 22%;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0.9;
+  }
+
+  /* Stairs: a chevron on the circle, up or down */
+  .wt :global(.wt-marker--up::after),
+  .wt :global(.wt-marker--down::after) {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 28%;
+    aspect-ratio: 1;
+    border-top: 3px solid var(--ink);
+    border-left: 3px solid var(--ink);
+    transform: translate(-50%, -30%) rotate(45deg);
+  }
+
+  .wt :global(.wt-marker--down::after) {
+    transform: translate(-50%, -70%) rotate(225deg);
+  }
+
+  .wt :global(.wt-marker:hover),
+  .wt :global(.wt-marker:focus-visible) {
+    transform: scale(1.18);
+    background: rgb(255 255 255 / 0.5);
+  }
+
+  /* The name of the room a circle leads to; circles within the room show theirs on hover */
+  .wt :global(.wt-marker span) {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.5rem);
+    transform: translateX(-50%);
+    padding: 0.2rem 0.6rem;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .wt :global(.wt-marker--spot span) {
+    display: none;
+  }
+
+  .wt :global(.wt-marker--spot:hover span),
+  .wt :global(.wt-marker--spot:focus-visible span) {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wt :global(.wt-marker) {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .wt__map {
+      width: min(8.5rem, 52%);
+    }
+
+
+    .wt__stage {
+      height: 70vh;
+    }
+  }
+</style>

@@ -46,6 +46,9 @@ TEXTURED = {
     "tile-bronze": T("beige_wall_002", 1.6, (0.98, 0.78, 0.5), sat=0.7, rough=(0.6, 0.0), bump=0.1),
     "granite-black": T("beige_wall_002", 0.8, (0.075, 0.075, 0.075), sat=0.1, rough=(0.5, 0.0), bump=0.3),
     "wood-slat": T("dark_wood", 1.2, (1.1, 0.84, 0.5), sat=0.5, rough=(0.8, 0.0), bump=0.1, grain_up=True),
+    # interior joinery: vertical-grain walnut (doors, cabinets) and pale fluted oak (wardrobes, feature walls)
+    "walnut": T("dark_wood", 1.3, (1.5, 1.05, 0.72), sat=0.55, rough=(0.6, 0.12), bump=0.08, grain_up=True),
+    "oak-fluted": T("oak_wood_planks", 1.0, (1.45, 1.2, 0.92), sat=0.8, rough=(0.8, 0.05), bump=0.12, grain_up=True),
     "plaster-sand": T("beige_wall_001", 2.6, (0.85, 0.8, 0.72), sat=0.6, bump=0.08),
     "grass": T("leafy_grass", 2.0, (0.5, 0.78, 0.36), sat=1.0, rough=(1.0, 0.05), bump=0.3),
     "planter-soil": T("farm_soil", 1.5, bump=0.4),
@@ -338,7 +341,7 @@ def textured(tag):
     nt.links.new(disp, b.inputs["Height"])
     nt.links.new(b.outputs["Normal"], bsdf.inputs["Normal"])
 
-    if tag == "wood-panel":
+    if tag in ("wood-panel", "walnut", "oak-fluted"):
         bsdf.inputs["Coat Weight"].default_value = 0.25
         bsdf.inputs["Coat Roughness"].default_value = 0.3
     if tag == "porcelain-paving":

@@ -176,6 +176,24 @@ export function auditDir(dir, rules = loadRules()) {
   return { pages: files.length, violations };
 }
 
+/**
+ * Scripts and stylesheets a page loads from another host (a CDN, an analytics tag). The site is self-contained, so
+ * there are none; the walkthrough viewer is vendored under /vendor/.
+ * @param {string} html
+ * @returns {string[]}
+ */
+export function externalResources(html) {
+  /** @type {string[]} */
+  const found = [];
+  for (const [tag, name] of html.replace(/<!--[\s\S]*?-->/g, " ").matchAll(TAG)) {
+    const attrs = attributes(tag);
+    const n = name.toLowerCase();
+    if (n === "script" && /^(https?:)?\/\//i.test(attrs.src ?? "")) found.push(attrs.src);
+    if (n === "link" && /stylesheet|preload|modulepreload/i.test(attrs.rel ?? "") && /^(https?:)?\/\//i.test(attrs.href ?? "")) found.push(attrs.href);
+  }
+  return found;
+}
+
 /** @param {Violation[]} violations */
 export function formatViolations(violations) {
   return violations
@@ -192,6 +210,13 @@ function main() {
   const { pages, violations } = auditDir(dir, loadRules(rulesFile));
   if (pages === 0) {
     console.error(`Content audit: no HTML pages found in ${dir}. Run astro build first.`);
+    process.exit(1);
+  }
+  const external = readdirSync(dir, { recursive: true, encoding: "utf8" })
+    .filter((f) => f.endsWith(".html"))
+    .flatMap((f) => externalResources(readFileSync(join(dir, f), "utf8")).map((url) => `${routeOf(f)} loads ${url}`));
+  if (external.length) {
+    console.error(`Content audit failed: pages load scripts or styles from other hosts\n\n  ${external.join("\n  ")}`);
     process.exit(1);
   }
   if (violations.length) {

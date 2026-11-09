@@ -49,6 +49,9 @@ const TRACKING = 0.06;
 
 const MARGIN = { left: 12, top: 12, right: 3, bottom: 17 };
 
+/** A point on the plot, in feet, as a point on a plan's viewBox (same units; y runs down with the street at the bottom) */
+export const planPoint = (design: Design, [x, y]: Pt): Pt => [x + MARGIN.left, design.plot.depth - y + MARGIN.top];
+
 export interface PlanOptions {
   theme: PlanTheme;
   /** Prefix for ids inside the SVG, unique on the page */

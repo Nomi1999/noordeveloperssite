@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { fileURLToPath } from "node:url";
-import { auditDir, compileRules, extractText, findViolations, loadRules } from "./audit-content.mjs";
+import { auditDir, compileRules, externalResources, extractText, findViolations, loadRules } from "./audit-content.mjs";
 
 const fixtures = fileURLToPath(new URL("./fixtures/audit/", import.meta.url));
 const rules = loadRules();
@@ -60,5 +60,18 @@ describe("content audit matching", () => {
   it("decodes entities in page text", () => {
     const [page] = extractText("<p>Starting&nbsp;from&#160;&#x50;KR</p>");
     expect(page.text).toBe("Starting from PKR");
+  });
+});
+
+describe("external resources", () => {
+  it("finds scripts and stylesheets loaded from another host", () => {
+    const html =
+      '<link rel="stylesheet" href="https://cdn.example.com/a.css"><script src="//cdn.example.com/a.js"></script>' +
+      '<script src="/vendor/pannellum/pannellum.js"></script><link rel="stylesheet" href="/_astro/x.css"><a href="https://example.com/">out</a>';
+    expect([...externalResources(html)].sort()).toEqual(["//cdn.example.com/a.js", "https://cdn.example.com/a.css"]);
+  });
+
+  it("accepts a self-contained page", () => {
+    expect(externalResources('<script src="/vendor/p.js"></script><link rel="stylesheet" href="/a.css">')).toEqual([]);
   });
 });

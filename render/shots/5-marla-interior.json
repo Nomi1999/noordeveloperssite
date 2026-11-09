@@ -1,0 +1,284 @@
+{
+  "levels": [
+    "ground",
+    "first"
+  ],
+  "palette": {
+    "wall": [
+      0.74,
+      0.68,
+      0.6
+    ],
+    "ceiling": [
+      0.96,
+      0.95,
+      0.92
+    ],
+    "trim": [
+      0.74,
+      0.68,
+      0.6
+    ],
+    "cove": [
+      1.0,
+      0.72,
+      0.45
+    ],
+    "coveGlow": 16.0,
+    "downlight": [
+      1.0,
+      0.78,
+      0.55
+    ],
+    "downlightGlow": 40.0,
+    "floors": {
+      "light": {
+        "a": [
+          0.4,
+          0.35,
+          0.29
+        ],
+        "b": [
+          0.44,
+          0.39,
+          0.33
+        ],
+        "grout": [
+          0.2,
+          0.18,
+          0.15
+        ],
+        "size": [
+          1.2,
+          1.2
+        ],
+        "rough": 0.16,
+        "vein": [
+          0.74,
+          0.68,
+          0.6
+        ],
+        "veinStrength": 0.5
+      },
+      "oak": {
+        "kind": "wood",
+        "a": [
+          0.36,
+          0.23,
+          0.13
+        ],
+        "b": [
+          0.42,
+          0.28,
+          0.17
+        ],
+        "size": [
+          2.0,
+          0.19
+        ],
+        "rough": 0.36
+      },
+      "bath": {
+        "a": [
+          0.17,
+          0.16,
+          0.15
+        ],
+        "b": [
+          0.2,
+          0.19,
+          0.17
+        ],
+        "grout": [
+          0.08,
+          0.075,
+          0.07
+        ],
+        "size": [
+          1.2,
+          0.6
+        ],
+        "rough": 0.2,
+        "vein": [
+          0.5,
+          0.44,
+          0.36
+        ],
+        "veinStrength": 0.35
+      }
+    },
+    "wash": 0.08,
+    "skirting": [
+      0.09,
+      0.08,
+      0.07
+    ],
+    "brass": [
+      0.86,
+      0.62,
+      0.3
+    ],
+    "base": [
+      0.055,
+      0.05,
+      0.046
+    ],
+    "marble": {
+      "base": [
+        0.84,
+        0.81,
+        0.76
+      ],
+      "vein": [
+        0.42,
+        0.37,
+        0.31
+      ]
+    },
+    "fabric": [
+      0.5,
+      0.43,
+      0.36
+    ],
+    "featureStone": [
+      0.64,
+      0.59,
+      0.52
+    ]
+  },
+  "lights": {
+    "cove": 8,
+    "spot": 12
+  },
+  "roomTypes": {
+    "default": {
+      "ceiling": "flat",
+      "floor": "light"
+    },
+    "drawing": {
+      "ceiling": "cove",
+      "floor": "light",
+      "featureWall": "east",
+      "featureKind": "fluted",
+      "panelling": true
+    },
+    "tv-lounge": {
+      "ceiling": "cove",
+      "floor": "light",
+      "featureWall": "auto",
+      "featureKind": "media",
+      "panelling": true
+    },
+    "family-lounge": {
+      "ceiling": "cove",
+      "floor": "oak",
+      "featureWall": "auto",
+      "featureKind": "media",
+      "panelling": true
+    },
+    "master-bedroom": {
+      "ceiling": "cove",
+      "floor": "oak",
+      "featureWall": "auto",
+      "featureKind": "headboard",
+      "panelling": true
+    },
+    "bedroom": {
+      "ceiling": "cove",
+      "floor": "oak",
+      "featureWall": "auto",
+      "featureKind": "headboard"
+    },
+    "bathroom": {
+      "ceiling": "flat",
+      "floor": "bath",
+      "downlightSpacing": 1.3,
+      "wallTile": 2.2,
+      "spotRadius": 0.14
+    },
+    "kitchen": {
+      "ceiling": "flat",
+      "floor": "light",
+      "wallTile": 1.5,
+      "wallTileKey": "kitchen",
+      "spotRadius": 0.14
+    },
+    "laundry": {
+      "ceiling": "flat",
+      "floor": "bath",
+      "downlightSpacing": 1.3,
+      "wallTile": 1.5,
+      "spotRadius": 0.14
+    },
+    "terrace": {
+      "finish": "exterior",
+      "ceiling": "none"
+    }
+  },
+  "rooms": {},
+  "sun": {
+    "azimuth": 250,
+    "elevation": 45,
+    "strength": 4.2
+  },
+  "skyFill": 0.45,
+  "wallTiles": {
+    "bath": {
+      "a": [
+        0.68,
+        0.62,
+        0.54
+      ],
+      "b": [
+        0.72,
+        0.66,
+        0.58
+      ],
+      "grout": [
+        0.5,
+        0.45,
+        0.4
+      ],
+      "size": [
+        1.2,
+        0.6
+      ],
+      "rough": 0.18,
+      "vein": [
+        0.4,
+        0.35,
+        0.29
+      ],
+      "veinStrength": 0.4
+    },
+    "kitchen": {
+      "a": [
+        0.8,
+        0.77,
+        0.72
+      ],
+      "b": [
+        0.83,
+        0.8,
+        0.75
+      ],
+      "grout": [
+        0.55,
+        0.52,
+        0.48
+      ],
+      "size": [
+        1.2,
+        0.6
+      ],
+      "rough": 0.14,
+      "vein": [
+        0.42,
+        0.37,
+        0.31
+      ],
+      "veinStrength": 0.6
+    }
+  },
+  "exposure": 1.2
+}

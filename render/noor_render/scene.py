@@ -52,6 +52,12 @@ class Scene:
         construction.assign(design)
         soffits = [f for f in design["facade"] if f["type"] == "box" and f["role"] in ("soffit", "canopy")]
         self.rig = lighting.Rig(shot, room_lights, soffits, root, design["facade"])
+        self.interior = None
+        if shot.get("interior"):
+            from . import interior
+            self.interior = interior.build(design, root, interior.load_config(slug))
+            interior.drop_backplates()
+            interior.split_world(shot.get("light", {}).get("skyFill", 0.15))
         self.camera = shots.camera(shot)
         if clay:
             materials.apply_clay(keep_glass=clay == "glass")

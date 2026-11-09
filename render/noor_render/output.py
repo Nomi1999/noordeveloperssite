@@ -11,6 +11,7 @@ PRESETS = {
     ("eevee", "high"): {"width": 3200, "samples": 128, "raytracing": True},
     ("eevee", "final"): {"width": 3200, "samples": 256, "raytracing": True},
     ("cycles", "preview"): {"width": 1280, "samples": 48, "threshold": 0.05},
+    ("cycles", "mid"): {"width": 1600, "samples": 128, "threshold": 0.03},
     ("cycles", "high"): {"width": 1920, "samples": 256, "threshold": 0.02},
     ("cycles", "final"): {"width": 3200, "samples": 512, "threshold": 0.01},
 }
@@ -33,7 +34,28 @@ def _blank(path):
         bpy.data.images.remove(img)
 
 
-def configure(engine, quality, aspect, width=None, crop=None):
+def use_gpu():
+    """Enable a Cycles GPU backend (CUDA, HIP, oneAPI). False if there is none.
+
+    OptiX is left out on purpose: on Colab's T4 its runtime is incomplete and the OptiX denoiser fails to start."""
+    prefs = bpy.context.preferences.addons["cycles"].preferences
+    for backend in ("CUDA", "HIP", "ONEAPI"):
+        try:
+            prefs.compute_device_type = backend
+            prefs.refresh_devices()
+        except (TypeError, AttributeError):
+            continue
+        gpus = [d for d in prefs.devices if d.type == backend]
+        if gpus:
+            for d in prefs.devices:
+                d.use = d.type == backend
+            print(f"cycles device: {backend} {[d.name for d in gpus]}", flush=True)
+            return backend
+    print("cycles device: no GPU found, using the CPU", flush=True)
+    return False
+
+
+def configure(engine, quality, aspect, width=None, crop=None, device="cpu"):
     scene = bpy.context.scene
     preset = PRESETS[(engine, quality)]
     r = scene.render
@@ -80,7 +102,8 @@ def configure(engine, quality, aspect, width=None, crop=None):
     else:
         r.engine = "CYCLES"
         c = scene.cycles
-        c.device = "CPU"
+        backend = use_gpu() if device == "gpu" else False
+        c.device = "GPU" if backend else "CPU"
         c.samples = preset["samples"]
         c.use_adaptive_sampling = True
         c.adaptive_threshold = preset["threshold"]

@@ -229,12 +229,15 @@ export default defineDesign({
         room("bed1", "Bedroom 1", "bedroom", rect([SPINE, COURT_BACK], [RIGHT, REAR])),
       ],
       fixtures: [
-        fixture("k-counter", "counter", [0.75, 33], [2, 7.625], "left"),
-        fixture("k-counter-rear", "counter", [2.75, 38.625], [1.5, 2], "rear"),
-        fixture("k-sink", "sink", [0.75, 37], [2, 3], "left"),
+        // The back door is in the rear wall's left end (x 1.1 to 4.1), so the counter stops short of it on the left wall
+        // and the sink sits under the rear window instead
+        fixture("k-counter", "counter", [0.75, 33], [2, 4.5], "left"),
+        fixture("k-counter-rear", "counter", [4.75, 38.625], [4.5, 2], "rear"),
+        fixture("k-sink", "sink", [5.75, 38.625], [2.5, 2], "rear"),
         fixture("k-hob", "hob", [0.75, 34], [2, 2.5], "left"),
         fixture("b1-wc", "wc", [22, 23.25], [2.25, 1.5], "front"),
-        fixture("b1-basin", "basin", [13.25, 23.25], [1.75, 1.5], "front"),
+        // Beside the WC, away from the shower cabin, so there is room to stand at the basin
+        fixture("b1-basin", "basin", [19.5, 23.25], [1.75, 1.5], "front"),
         fixture("b1-shower", "shower", [13.25, 25.1], [3, 3], "rear"),
         fixture("b1-wardrobe", "wardrobe", [13.25, 33], [2, 7.5], "left"),
       ],

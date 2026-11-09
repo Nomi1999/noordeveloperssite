@@ -21,7 +21,11 @@
     "render:frames": "node scripts/blender.mjs frames",
     "render:sequence": "node scripts/blender.mjs sequence",
     "render:sheet": "node render/contact_sheet.mjs",
-    "render:encode": "node scripts/encode-renders.mjs"
+    "render:panorama": "node scripts/blender.mjs panorama",
+    "render:panoramas": "node scripts/panoramas.mjs",
+    "render:overview": "node scripts/panorama-overview.mjs",
+    "render:encode": "node scripts/encode-renders.mjs",
+    "walkthroughs:encode": "node scripts/walkthroughs.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

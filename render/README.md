@@ -15,6 +15,9 @@ Run from the repository root. `BLENDER_PATH` overrides the default `C:\Program F
 | `npm run render:frames -- --design 1-kanal --shot front-day --frames 1-192 --build 0:6` | Render a frame range into `render/out/<design>/<name>/`, skipping frames that already exist |
 | `npm run render:sequence -- --config 1-kanal-hero-landscape` | Render a keyed sequence (`render/shots/<config>.json`) into `render/out/<design>/<config>-<engine>-<quality>/`, skipping frames that already exist (`--frames a-b`, `--every n`, `--width`, `--engine`, `--quality`, `--name`) |
 | `python render/camera_path.py [--svg out.svg]` | Camera continuity check for the hero sequences: per-frame displacement and rotation, and the values at each phase boundary (no Blender needed) |
+| `npm run render:panorama -- --design 5-marla --viewpoint drawing` | Render one walkthrough panorama into `render/out/<design>/panoramas/<viewpoint>-<engine>-<quality>.png` (`--engine cycles` default, `--quality`, `--width 4096`, `--method auto\|native\|faces`, `--only f0,up` for chosen faces, `--clay`, `--fill`/`--exposure` for EEVEE previews, `--perspective YAW` for a flat test view) |
+| `npm run render:panoramas -- --design 5-marla [--viewpoints a,b] [--max-minutes 480] [--force]` | Render every viewpoint of a design's walkthrough, one Blender run each. Skips finished images and keeps finished faces, so it is safe to stop (or to let `--max-minutes` stop it) and run again |
+| `npm run render:overview -- --design 5-marla` | One labelled image of every panorama (`overview-<engine>-<quality>.png`) for approving finishes and lighting |
 | `npm run render:sheet -- render/out/1-kanal/<folder>` | Write `sheet.png` (a labelled contact sheet) for a folder of rendered frames or stills |
 | `npm run render:encode -- stills` | Encode every shot's Cycles `final` still (`--engine`, `--quality`) into `src/assets/renders/<design>/<shot>.jpg` (JPEG q90 masters, at least 3200px wide). Not used for the site's stills, which all come from `enhance-renders.mjs encode` |
 | `npm run render:encode -- share --design 1-kanal --shot front-day --focus 0.5,0.55` | Crop a 1200×630 share image from a delivered still into `public/og/<design>.jpg` |
@@ -140,6 +143,14 @@ fetch_assets.py       downloads the locked assets (stdlib only)
 contact_sheet.mjs     contact sheets (Node + sharp)
 assets/  out/         gitignored
 ```
+
+## Walkthrough panoramas
+
+A walkthrough (`src/designs/walkthroughs/<slug>.json`) lists viewpoints; `render/noor_render/interior.py` builds the finished, unfurnished interior from the design data and `render/shots/<slug>-interior.json` (palette, ceiling type per room type, lights, sun). The finishes are placeholders until the maintainer approves them from the overview image.
+
+**Direction convention.** The centre of the equirectangular image faces the viewpoint's `facing` angle, a world angle measured from +x towards +y (so 90° looks along +y). Turning right is clockwise: towards +x when facing +y. In the viewer, yaw θ = 90° − world angle (wrapped to −180..180). The six-face stitch (`noor_render/panorama.py`) uses `ang = CENTRE − lon`; it was checked against Cycles' native equirectangular camera on the drawing room (same order of slats, window, beam and door from the same position), because an earlier prototype stitched it mirrored.
+
+**Capture.** `--method faces` renders four horizontal faces plus up and down at 90° and stitches them: about 2.7 min per 1024 px face on the maintainer's CPU, and each face is kept on disk, so an interrupted run loses at most one face. `--method native` renders in one pass (about 25 min at 4096 × 2048, nothing kept if stopped). `auto` uses faces. EEVEE cannot render a panoramic camera, so EEVEE runs are previews only (about 12 s a face) and their lighting is not representative of Cycles.
 
 ## Engine decision
 

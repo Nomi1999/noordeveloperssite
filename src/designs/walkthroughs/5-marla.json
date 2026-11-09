@@ -1,0 +1,413 @@
+{
+  "design": "5-marla",
+  "levels": [
+    "ground",
+    "first"
+  ],
+  "start": "drawing",
+  "viewpoints": [
+    {
+      "id": "porch",
+      "room": null,
+      "label": "Car porch",
+      "level": "ground",
+      "at": [
+        5.5,
+        10
+      ],
+      "facing": 75,
+      "description": "The covered car porch behind the gate, with a timber slat ceiling, a sand plaster pier and the front door at the back.",
+      "links": [
+        {
+          "to": "lounge",
+          "via": "main-door"
+        }
+      ]
+    },
+    {
+      "id": "drawing",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        17.6,
+        10.6
+      ],
+      "facing": 270,
+      "description": "The drawing room: a large window onto the street, a timber slat feature wall, a warm ceiling edge light and downlights.",
+      "links": [
+        {
+          "to": "stair-foot",
+          "via": "drawing-door"
+        },
+        {
+          "to": "drawing-front"
+        }
+      ]
+    },
+    {
+      "id": "lounge",
+      "room": "lounge",
+      "level": "ground",
+      "at": [
+        7,
+        25
+      ],
+      "facing": 70,
+      "description": "The TV lounge, open to the kitchen through a wide arch, with doors to the porch and to the first bedroom.",
+      "links": [
+        {
+          "to": "porch",
+          "via": "main-door"
+        },
+        {
+          "to": "kitchen",
+          "via": "kitchen-arch"
+        },
+        {
+          "to": "bed1",
+          "via": "bed1-door"
+        },
+        {
+          "to": "stair-foot"
+        },
+        {
+          "to": "lounge-back"
+        }
+      ]
+    },
+    {
+      "id": "stair-foot",
+      "room": "lounge",
+      "label": "Foot of the stair",
+      "level": "ground",
+      "at": [
+        11.5,
+        17.8
+      ],
+      "facing": 0,
+      "description": "The foot of the dog-leg stair at the front of the TV lounge, beside the door to the drawing room.",
+      "links": [
+        {
+          "to": "lounge"
+        },
+        {
+          "to": "drawing",
+          "via": "drawing-door"
+        },
+        {
+          "to": "stair-head",
+          "via": "stair"
+        }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "room": "kitchen",
+      "level": "ground",
+      "at": [
+        6.5,
+        37
+      ],
+      "facing": 90,
+      "description": "The kitchen: a counter with a hob and sink along one wall, a rear window and a door to the back yard.",
+      "links": [
+        {
+          "to": "lounge",
+          "via": "kitchen-arch"
+        }
+      ]
+    },
+    {
+      "id": "bed1",
+      "room": "bed1",
+      "level": "ground",
+      "at": [
+        19,
+        34.5
+      ],
+      "facing": 90,
+      "description": "Bedroom 1 on the ground floor, with a rear window, a built-in wardrobe and a door to its bath.",
+      "links": [
+        {
+          "to": "lounge",
+          "via": "bed1-door"
+        },
+        {
+          "to": "bath1",
+          "via": "bath1-door"
+        }
+      ]
+    },
+    {
+      "id": "bath1",
+      "room": "bath1",
+      "level": "ground",
+      "at": [
+        18.8,
+        25.6
+      ],
+      "facing": 90,
+      "description": "Bath 1: a shower, a basin and a toilet in a tiled bathroom attached to bedroom 1.",
+      "links": [
+        {
+          "to": "bed1",
+          "via": "bath1-door"
+        }
+      ]
+    },
+    {
+      "id": "balcony",
+      "room": "balcony",
+      "level": "first",
+      "at": [
+        5.4,
+        3.7
+      ],
+      "facing": 270,
+      "description": "The first-floor balcony over the car porch, behind a black metal jaali, looking down the street.",
+      "links": [
+        {
+          "to": "master",
+          "via": "balcony-door"
+        }
+      ]
+    },
+    {
+      "id": "master",
+      "room": "master",
+      "level": "first",
+      "at": [
+        9.5,
+        11
+      ],
+      "facing": 270,
+      "description": "The master bedroom: a window onto the street, sliding doors to the balcony, a wardrobe wall and a door to its bath.",
+      "links": [
+        {
+          "to": "balcony",
+          "via": "balcony-door"
+        },
+        {
+          "to": "master-bath",
+          "via": "master-bath-door"
+        },
+        {
+          "to": "family",
+          "via": "master-door"
+        },
+        {
+          "to": "master-end"
+        }
+      ]
+    },
+    {
+      "id": "master-bath",
+      "room": "master-bath",
+      "level": "first",
+      "at": [
+        21.4,
+        9.5
+      ],
+      "facing": 270,
+      "description": "The master bath: a toilet and basin at the front wall and a shower at the back, in a tiled room with a high window.",
+      "links": [
+        {
+          "to": "master",
+          "via": "master-bath-door"
+        }
+      ]
+    },
+    {
+      "id": "family",
+      "room": "family",
+      "level": "first",
+      "at": [
+        6,
+        24
+      ],
+      "facing": 0,
+      "description": "The family lounge on the first floor, lit from the sky court, with doors to the bedrooms, the master bedroom and the laundry.",
+      "links": [
+        {
+          "to": "master",
+          "via": "master-door"
+        },
+        {
+          "to": "court",
+          "via": "court-door"
+        },
+        {
+          "to": "bed2",
+          "via": "bed2-door"
+        },
+        {
+          "to": "laundry",
+          "via": "laundry-door"
+        },
+        {
+          "to": "stair-head"
+        },
+        {
+          "to": "family-back"
+        }
+      ]
+    },
+    {
+      "id": "stair-head",
+      "room": "family",
+      "label": "Top of the stair",
+      "level": "first",
+      "at": [
+        11.5,
+        18
+      ],
+      "facing": 0,
+      "description": "The top of the stair on the first floor, beside the family lounge, looking across the stairwell.",
+      "links": [
+        {
+          "to": "family"
+        },
+        {
+          "to": "stair-foot",
+          "via": "stair"
+        }
+      ]
+    },
+    {
+      "id": "court",
+      "room": "court",
+      "level": "first",
+      "at": [
+        18.8,
+        25.7
+      ],
+      "facing": 90,
+      "description": "The sky court: an open paved terrace in the middle of the first floor that brings daylight into the family lounge.",
+      "links": [
+        {
+          "to": "family",
+          "via": "court-door"
+        }
+      ]
+    },
+    {
+      "id": "bed2",
+      "room": "bed2",
+      "level": "first",
+      "at": [
+        19,
+        34.5
+      ],
+      "facing": 90,
+      "description": "Bedroom 2 on the first floor, with a rear window, a window onto the sky court and a wardrobe wall.",
+      "links": [
+        {
+          "to": "family",
+          "via": "bed2-door"
+        },
+        {
+          "to": "bath2",
+          "via": "bath2-door"
+        }
+      ]
+    },
+    {
+      "id": "bath2",
+      "room": "bath2",
+      "level": "first",
+      "at": [
+        10,
+        36.5
+      ],
+      "facing": 90,
+      "description": "Bath 2: a toilet, a basin and a shower in a tiled bathroom attached to bedroom 2.",
+      "links": [
+        {
+          "to": "bed2",
+          "via": "bath2-door"
+        }
+      ]
+    },
+    {
+      "id": "laundry",
+      "room": "laundry",
+      "level": "first",
+      "at": [
+        3.7,
+        36.5
+      ],
+      "facing": 90,
+      "description": "The laundry at the back of the first floor, with a long counter and a rear window.",
+      "links": [
+        {
+          "to": "family",
+          "via": "laundry-door"
+        }
+      ]
+    },
+    {
+      "id": "drawing-front",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        17.6,
+        5.6
+      ],
+      "facing": 90,
+      "description": "The drawing room seen from the front window, looking back across the room to its door.",
+      "links": [
+        {
+          "to": "drawing"
+        }
+      ]
+    },
+    {
+      "id": "lounge-back",
+      "room": "lounge",
+      "level": "ground",
+      "at": [
+        4.5,
+        29.5
+      ],
+      "facing": 20,
+      "description": "The TV lounge from its back corner by the kitchen arch, looking across the room towards the stair.",
+      "links": [
+        {
+          "to": "lounge"
+        }
+      ]
+    },
+    {
+      "id": "master-end",
+      "room": "master",
+      "level": "first",
+      "at": [
+        14.5,
+        8.5
+      ],
+      "facing": 180,
+      "description": "The master bedroom from the bathroom end, looking back along the room towards the balcony.",
+      "links": [
+        {
+          "to": "master"
+        }
+      ]
+    },
+    {
+      "id": "family-back",
+      "room": "family",
+      "level": "first",
+      "at": [
+        8,
+        29.5
+      ],
+      "facing": 0,
+      "description": "The family lounge from its back corner by the laundry, looking across the room towards the stair.",
+      "links": [
+        {
+          "to": "family"
+        }
+      ]
+    }
+  ]
+}

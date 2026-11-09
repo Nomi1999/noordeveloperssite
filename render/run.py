@@ -61,6 +61,21 @@ def parser():
             s.add_argument("--frames", type=_frames, required=True, help="first-last, e.g. 1-192")
         if name == "scene":
             s.add_argument("--save", required=True, help="path of the .blend to write")
+    s = sub.add_parser("panorama", help="render a 360-degree panorama from a walkthrough viewpoint")
+    s.add_argument("--design", required=True, help="design slug, e.g. 5-marla")
+    s.add_argument("--viewpoint", required=True, help="viewpoint id from src/designs/walkthroughs/<design>.json")
+    s.add_argument("--engine", choices=("eevee", "cycles"), default="cycles")
+    s.add_argument("--quality", choices=("preview", "mid", "high", "final"), default="preview", help="mid: Cycles only (128 samples)")
+    s.add_argument("--width", type=int, default=4096, help="width of the equirectangular image in pixels")
+    s.add_argument("--device", choices=("cpu", "gpu"), default="cpu", help="Cycles device: gpu uses OptiX/CUDA when present (Colab), else the CPU")
+    s.add_argument("--method", choices=("auto", "native", "faces"), default="auto",
+                   help="native: Cycles' panoramic camera; faces: six 90-degree views stitched (auto: native for Cycles)")
+    s.add_argument("--only", help="faces method: comma list of faces to render (f0-f3, up, down); no stitching")
+    s.add_argument("--clay", nargs="?", const="all", choices=("all", "glass"), help="single grey material (geometry checks)")
+    s.add_argument("--name", help="output name (default <viewpoint>)")
+    s.add_argument("--fill", type=float, help="sky light bounced into the rooms (default: the interior config's skyFill)")
+    s.add_argument("--exposure", type=float, help="exposure in stops (default: the interior config's)")
+    s.add_argument("--perspective", type=float, metavar="YAW", help="test: one 16:9 view from the viewpoint, looking along this world angle")
     s = sub.add_parser("sequence", help="render a keyed sequence (render/shots/<config>.json), skipping frames already written")
     s.add_argument("--config", required=True, help="sequence config name, e.g. 1-kanal-hero-landscape")
     s.add_argument("--engine", choices=("eevee", "cycles"), default="eevee")
@@ -108,10 +123,98 @@ def sequence(args):
         sys.exit(BLANK_EXIT)
 
 
+def panorama(args):
+    import math
+    import bpy
+    from mathutils import Vector
+    from noor_render import interior, output, panorama as pano, shots, walkthrough
+    from noor_render.assets import MissingAsset
+    from noor_render.loader import ExportError
+    from noor_render.scene import Scene
+
+    try:
+        wt = walkthrough.load(args.design)
+        vp = walkthrough.get(wt, args.viewpoint)
+        cfg = interior.load_config(args.design)
+    except (walkthrough.ViewpointError, interior.InteriorError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+    sun = dict(cfg.get("sun", {}), **cfg.get("viewpoints", {}).get(vp["id"], {}).get("sun", {}))
+    light = {"sunAzimuth": sun.get("azimuth", 250), "duskAzimuth": 115, "exposureDay": args.exposure if args.exposure is not None else cfg.get("exposure", 0.5),
+             "look": "AgX - Base Contrast", "skyFill": args.fill if args.fill is not None else cfg.get("skyFill", 0.15), "haze": cfg.get("haze", 0.0015)}
+    shot = {"lens": 18, "sensor": 36, "verticals": False, "position": [0, 0, 1], "target": [0, 1, 1], "timeOfDay": 0.0,
+            "interior": True, "light": light}
+    try:
+        sc = Scene(args.design, args.viewpoint, clay=args.clay, shot=shot)
+    except (ExportError, MissingAsset, shots.ShotError, interior.InteriorError) as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+    level = next(l for l in sc.design["levels"] if l["id"] == vp["level"])
+    pos = Vector((vp["at_m"][0], vp["at_m"][1], level["slab"]["top"] + interior.EYE))
+    sc.set_state(6.0, 0.0)
+    el = math.radians(sun.get("elevation", 45))
+    az = math.radians(sun.get("azimuth", 250))
+    d = Vector((math.cos(el) * math.cos(az), math.cos(el) * math.sin(az), math.sin(el)))
+    sc.rig.sun.rotation_euler = (-d).to_track_quat("-Z", "Y").to_euler()
+    sc.rig.sun.data.energy = sun.get("strength", 4.2)
+    sc.interior.make_lights(shadows=args.engine == "cycles")
+
+    name = args.name or vp["id"]
+    folder = os.path.join(OUT, args.design, "panoramas")
+    meta = {"design": args.design, "shot": vp["id"], "engine": args.engine, "quality": args.quality, "clay": args.clay}
+    try:
+        if args.perspective is not None:
+            output.configure(args.engine, args.quality, 16 / 9, args.width)
+            # debugging: NOOR_AT="x,y" (feet) moves the camera, NOOR_DZ raises it (metres), NOOR_PITCH tilts it (degrees)
+            cam_pos = Vector(pos)
+            if os.environ.get("NOOR_AT"):
+                ax, ay = (float(v) * 0.3048 for v in os.environ["NOOR_AT"].split(","))
+                cam_pos.x, cam_pos.y = ax, ay
+            cam_pos.z += float(os.environ.get("NOOR_DZ", "0"))
+            tilt = math.tan(math.radians(float(os.environ.get("NOOR_PITCH", "0"))))
+            shot2 = dict(shot, position=list(cam_pos), target=[cam_pos.x + math.cos(math.radians(args.perspective)),
+                                                               cam_pos.y + math.sin(math.radians(args.perspective)), cam_pos.z + tilt], lens=16)
+            shots.place(sc.camera, shot2)
+            for spec in filter(None, os.environ.get("NOOR_PROBE", "").split(";")):
+                # debugging: name what the pixel at (x, y) of the 1280 x 720 view shows, e.g. NOOR_PROBE="555,90;398,135"
+                px, py = (float(v) for v in spec.split(","))
+                nx, ny = (px - 640) / 640, (360 - py) / 360
+                bpy.context.view_layer.update()
+                local = Vector((nx * 18 / 16, ny * 18 / 16 * 9 / 16, -1.0))
+                direction = (sc.camera.matrix_world.to_3x3() @ local).normalized()
+                hit, loc, _, _, obj, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph, sc.camera.matrix_world.translation, direction)
+                mats = [m.name for m in obj.data.materials] if hit and hasattr(obj.data, "materials") else []
+                print(f"PROBE {spec}: {obj.name if hit else None} {mats} at {tuple(round(c, 3) for c in loc) if hit else ''}")
+            output.still(os.path.join(folder, f"{name}-persp.png"), dict(meta, method="perspective"))
+            return
+        method = args.method if args.method != "auto" else "faces"
+        if method == "native" and args.engine != "cycles":
+            print("ERROR: the native panoramic camera needs Cycles; use --method faces for EEVEE", file=sys.stderr)
+            sys.exit(1)
+        dest = os.path.join(folder, f"{name}-{args.engine}-{args.quality}.png")
+        if method == "native":
+            output.configure(args.engine, args.quality, 2.0, args.width, device=args.device)
+            pano.render_native(sc, pos, dest, meta)
+        else:
+            output.configure(args.engine, args.quality, 1.0, args.width // 4, device=args.device)
+            faces = os.path.join(folder, ".faces", f"{name}-{args.engine}-{args.quality}")
+            only = args.only.split(",") if args.only else None
+            output.clean_partials(faces)
+            pano.render_faces(sc, pos, faces, meta, only)
+            if not only:
+                pano.stitch(faces, dest)
+                print(f"wrote {dest}", flush=True)
+    except output.BlankRender as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(BLANK_EXIT)
+
+
 def main(argv):
     args = parser().parse_args(argv)
     if args.command == "sequence":
         return sequence(args)
+    if args.command == "panorama":
+        return panorama(args)
 
     import bpy
     from noor_render import output, shots

@@ -25,6 +25,6 @@ Restarting Blender with fresh GPU memory (${attempt}/${RESTARTS})
     cwd: root,
     stdio: "inherit",
   }).status;
-  if (status !== BLANK_EXIT || !["frames", "sequence"].includes(command)) break;
+  if (status !== BLANK_EXIT || !["frames", "sequence", "panorama"].includes(command)) break;
 }
 process.exit(status ?? 1);

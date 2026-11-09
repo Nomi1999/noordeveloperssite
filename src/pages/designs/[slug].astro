@@ -16,9 +16,12 @@ import RenderFigure from "../../components/RenderFigure.astro";
 import FactsList from "../../components/designs/FactsList.astro";
 import Gallery from "../../components/designs/Gallery.astro";
 import LevelSwitcher from "../../components/designs/LevelSwitcher.astro";
+import Walkthrough from "../../components/designs/Walkthrough.astro";
 import { designs, type DesignEntry } from "../../designs/index.ts";
 import { cardFacts, keyFacts, kindLabel } from "../../designs/display.ts";
 import { getRenders } from "../../designs/renders.ts";
+import { getWalkthrough } from "../../designs/walkthroughs.ts";
+import { walkthroughCopy } from "../../content/walkthrough.ts";
 import { plotDimensions } from "../../designs/units.ts";
 
 export const getStaticPaths = (() =>
@@ -38,7 +41,8 @@ const Blurb = blurbs[`../../content/designs/${design.slug}.md`]?.Content;
 const whatsappMessage = `Hello Noor Developers, I am interested in your ${design.name} design.`;
 const plot = `${facts.plot.size} plot (${plotDimensions(facts.plot)})`;
 const description = `${design.name}: a concept design by Noor Developers for a ${plot}. ${cardFacts(entry).join(", ")}. Built on your plot and delivered fully finished.`;
-const sections = renders.gallery.length ? 4 : 3;
+const hasTour = Boolean(getWalkthrough(design.slug));
+const sections = (renders.gallery.length ? 4 : 3) + (hasTour ? 1 : 0);
 const n = (i: number) => String(i).padStart(2, "0");
 const total = n(sections);
 ---
@@ -120,6 +124,27 @@ const total = n(sections);
     </div>
   </section>
 
+  {
+    hasTour && (
+      <section class="section section--dark" aria-labelledby="walkthrough-title">
+        <div class="container">
+          <SectionHeader
+            index={n(sections - 1)}
+            total={total}
+            label={walkthroughCopy.label}
+            heading={walkthroughCopy.heading}
+            id="walkthrough-title"
+            intro={walkthroughCopy.intro}
+          />
+          <div class="block-gap">
+            <Walkthrough design={design.slug} />
+            <p class="tour-note">{walkthroughCopy.note}</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   <FullyFinished index={n(sections)} total={total} heading={`Fully finished, like every Noor build`} />
 
   <CtaBand
@@ -182,6 +207,12 @@ const total = n(sections);
     border-bottom: var(--rule-thick) solid var(--ink);
     font-family: var(--font-mono);
     font-size: var(--text-sm);
+  }
+
+  .tour-note {
+    margin-top: var(--space-4);
+    max-width: 46rem;
+    color: var(--concrete-300);
   }
 
   .overview__note {

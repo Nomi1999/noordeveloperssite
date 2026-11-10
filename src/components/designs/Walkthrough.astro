@@ -176,7 +176,9 @@ const config = {
   // The widest view is the default: zooming in is the visitor's choice
   const WIDE = 120;
   // Phones start zoomed in; desktop starts at the widest view
-  const START = matchMedia("(max-width: 40rem)").matches ? 85 : WIDE;
+  const START = matchMedia("(max-width: 40rem)").matches ? 70 : WIDE;
+  // How far a step through a door zooms in: always tighter than the start, never past the closest zoom
+  const STEP = Math.min(62, START - 20);
   // A little below the horizon, so the circles on the floor are in view
   const TILT = -8;
 
@@ -401,7 +403,7 @@ const config = {
       const swap = () => {
         current = id;
         arriving = true;
-        pano!.loadScene(sceneId(id), TILT, opening, reduced ? START : 62);
+        pano!.loadScene(sceneId(id), TILT, opening, reduced ? START : STEP);
         arrive();
         announce(target.label);
         window.setTimeout(() => settle(), 8000);
@@ -412,7 +414,7 @@ const config = {
       }
       moving = true;
       stage.classList.add("is-moving");
-      if (link) pano.lookAt(Math.max(-30, link.pitch / 2), link.yaw, 62, 700, swap);
+      if (link) pano.lookAt(Math.max(-30, link.pitch / 2), link.yaw, STEP, 700, swap);
       else swap();
     }
 

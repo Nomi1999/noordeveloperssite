@@ -154,5 +154,8 @@
   "sun": { "azimuth": 250, "elevation": 45, "strength": 4.2 },
   "skyFill": 0.3,
   "exposure": 0.0,
-  "viewpoints": { "kitchenette": { "exposure": -0.6 } }
+  "viewpoints": {
+    "kitchenette": { "exposure": -0.6 },
+    "gate": { "outdoors": true, "exposure": 0.5, "haze": 0.006, "sun": { "azimuth": 235 } }
+  }
 }

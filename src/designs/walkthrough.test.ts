@@ -58,9 +58,9 @@ describe("the 1 Kanal walkthrough", () => {
     expect(walkthroughProblems(kanal, parseWalkthrough(source))).toEqual([]);
   });
 
-  it("has 40 views and leaves out only the two rooms with no way in", () => {
+  it("has 41 views and leaves out only the two rooms with no way in", () => {
     const wt = parseWalkthrough(source);
-    expect(wt.viewpoints).toHaveLength(40);
+    expect(wt.viewpoints).toHaveLength(41);
     expect(wt.excluded.map((x) => `${x.level}/${x.room}`).sort()).toEqual(["first/terrace-left", "ground/washroom"]);
     for (const level of kanal.levels.filter((l) => ["ground", "first"].includes(l.id))) {
       for (const room of level.rooms) {

@@ -4,8 +4,26 @@
     "ground",
     "first"
   ],
-  "start": "hall-entry",
+  "start": "gate",
   "viewpoints": [
+    {
+      "id": "gate",
+      "room": null,
+      "label": "Front gate",
+      "level": "ground",
+      "at": [
+        14,
+        1.5
+      ],
+      "facing": 62,
+      "description": "At the car entrance between the black granite piers: the drive and the car porch, the tall timber front door on its granite podium, and the stone and travertine front of the house above the boundary wall.",
+      "links": [
+        {
+          "to": "hall-entry",
+          "via": "main-door"
+        }
+      ]
+    },
     {
       "id": "hall-entry",
       "room": "lobby",
@@ -18,6 +36,10 @@
       "facing": 90,
       "description": "The double-height entrance hall: vein-cut travertine rising two storeys, a glass balustrade along the gallery above and a linear pendant hanging into the void.",
       "links": [
+        {
+          "to": "gate",
+          "via": "main-door"
+        },
         {
           "to": "stair-foot"
         },

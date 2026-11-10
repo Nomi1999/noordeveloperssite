@@ -146,7 +146,7 @@ assets/  out/         gitignored
 
 ## Walkthrough panoramas
 
-A walkthrough (`src/designs/walkthroughs/<slug>.json`) lists viewpoints; `render/noor_render/interior.py` builds the finished, unfurnished interior from the design data and `render/shots/<slug>-interior.json` (palette, ceiling type per room type, lights, sun). The finishes are placeholders until the maintainer approves them from the overview image.
+A walkthrough (`src/designs/walkthroughs/<slug>.json`) lists viewpoints; `render/noor_render/interior.py` builds the finished, unfurnished interior from the design data and `render/shots/<slug>-interior.json` (palette, ceiling type per room type, lights, sun; its `viewpoints` block sets `exposure`, `sun` and `haze` per view, and `"outdoors": true` for a view outside the house, such as the 1 Kanal's front gate, which then keeps the full daylight sky the exterior stills use and takes its eye height from the ground instead of the floor slab). The finishes are placeholders until the maintainer approves them from the overview image.
 
 **Direction convention.** The centre of the equirectangular image faces the viewpoint's `facing` angle, a world angle measured from +x towards +y (so 90° looks along +y). Turning right is clockwise: towards +x when facing +y. In the viewer, yaw θ = 90° − world angle (wrapped to −180..180). The six-face stitch (`noor_render/panorama.py`) uses `ang = CENTRE − lon`; it was checked against Cycles' native equirectangular camera on the drawing room (same order of slats, window, beam and door from the same position), because an earlier prototype stitched it mirrored.
 

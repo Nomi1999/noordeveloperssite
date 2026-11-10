@@ -140,11 +140,16 @@ def panorama(args):
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(1)
     own = cfg.get("viewpoints", {}).get(vp["id"], {})
+    # A view outside the house (the front gate) is lit like the exterior stills: the full sky, not the dimmed bounce
+    # that keeps the rooms lit by their own lights, and its eye height is taken from the ground, not the floor slab
+    outdoors = own.get("outdoors", False)
     sun = dict(cfg.get("sun", {}), **own.get("sun", {}))
     # exposure like a photographer's, per view where one is set (a dark bathroom wants more than a pale drawing room)
     exposure = args.exposure if args.exposure is not None else own.get("exposure", cfg.get("exposure", 0.5))
     light = {"sunAzimuth": sun.get("azimuth", 250), "duskAzimuth": 115, "exposureDay": exposure,
-             "look": cfg.get("look", "AgX - Base Contrast"), "skyFill": args.fill if args.fill is not None else cfg.get("skyFill", 0.15), "haze": cfg.get("haze", 0.0015)}
+             "look": cfg.get("look", "AgX - Base Contrast"),
+             "skyFill": None if outdoors else args.fill if args.fill is not None else cfg.get("skyFill", 0.15),
+             "haze": own.get("haze", cfg.get("haze", 0.0015))}
     shot = {"lens": 18, "sensor": 36, "verticals": False, "position": [0, 0, 1], "target": [0, 1, 1], "timeOfDay": 0.0,
             "interior": True, "light": light}
     try:
@@ -153,7 +158,8 @@ def panorama(args):
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(1)
     level = next(l for l in sc.design["levels"] if l["id"] == vp["level"])
-    pos = Vector((vp["at_m"][0], vp["at_m"][1], level["slab"]["top"] + interior.EYE))
+    from noor_render.geometry import GRADE
+    pos = Vector((vp["at_m"][0], vp["at_m"][1], (GRADE if outdoors else level["slab"]["top"]) + interior.EYE))
     sc.set_state(6.0, 0.0)
     el = math.radians(sun.get("elevation", 45))
     az = math.radians(sun.get("azimuth", 250))

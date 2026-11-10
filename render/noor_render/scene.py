@@ -61,7 +61,9 @@ class Scene:
             from . import interior
             self.interior = interior.build(design, root, interior.load_config(slug))
             interior.drop_backplates()
-            interior.split_world(shot.get("light", {}).get("skyFill", 0.15))
+            fill = shot.get("light", {}).get("skyFill", 0.15)
+            if fill is not None:  # None: a view outdoors keeps the full sky
+                interior.split_world(fill)
         self.camera = shots.camera(shot)
         if clay:
             materials.apply_clay(keep_glass=clay == "glass")

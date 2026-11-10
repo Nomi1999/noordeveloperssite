@@ -1,0 +1,158 @@
+{
+  "levels": ["ground", "first"],
+  "voids": true,
+  "mergeWallPieces": true,
+  "clearColumns": true,
+  "style": {
+    "doors": "flush",
+    "skirting": "shadow-gap",
+    "balustrade": "glass",
+    "stairRails": "both",
+    "cabinetry": "handleless",
+    "wc": "wall-hung",
+    "vanityStyle": "floating",
+    "shower": "rain"
+  },
+  "palette": {
+    "wall": [0.4, 0.37, 0.33],
+    "ceiling": [0.82, 0.81, 0.79],
+    "trim": [0.4, 0.37, 0.33],
+    "wash": 0.05,
+    "cove": [1.0, 0.86, 0.72],
+    "coveGlow": 10.0,
+    "downlight": [1.0, 0.88, 0.76],
+    "downlightGlow": 40.0,
+    "skirting": [0.05, 0.045, 0.04],
+    "metal": { "color": [0.085, 0.07, 0.055], "rough": 0.38 },
+    "base": [0.1, 0.092, 0.082],
+    "door": "oak",
+    "slat": "smoked-oak",
+    "upper": "oak",
+    "vanity": "oak",
+    "wardrobe": "oak",
+    "marble": { "base": [0.3, 0.285, 0.265], "vein": [0.12, 0.11, 0.1] },
+    "fabric": [0.5, 0.45, 0.39],
+    "featureStone": [0.66, 0.6, 0.52],
+    "woods": {
+      "oak": { "a": [0.2, 0.128, 0.068], "b": [0.25, 0.163, 0.088], "rough": 0.45, "coat": 0.08 },
+      "smoked-oak": { "a": [0.12, 0.085, 0.06], "b": [0.16, 0.115, 0.08], "rough": 0.42, "coat": 0.1 }
+    },
+    "stones": {
+      "travertine": { "kind": "travertine", "a": [0.2, 0.165, 0.115], "b": [0.42, 0.36, 0.26], "pore": [0.07, 0.055, 0.04], "rough": 0.45 },
+      "warm-slab": { "base": [0.26, 0.245, 0.225], "vein": [0.12, 0.11, 0.1], "rough": 0.2, "strength": 0.5 },
+      "dark-slab": { "base": [0.06, 0.055, 0.05], "vein": [0.42, 0.38, 0.33], "rough": 0.15, "strength": 0.7 }
+    },
+    "stairTread": {
+      "a": [0.085, 0.075, 0.064], "b": [0.1, 0.088, 0.075], "grout": [0.06, 0.054, 0.048], "size": [1.2, 0.3], "rough": 0.3,
+      "vein": [0.2, 0.18, 0.155], "veinStrength": 0.35
+    },
+    "floors": {
+      "stone": {
+        "a": [0.085, 0.075, 0.064], "b": [0.1, 0.088, 0.075], "grout": [0.06, 0.054, 0.048], "size": [1.2, 2.4], "rough": 0.3,
+        "vein": [0.2, 0.18, 0.155], "veinStrength": 0.35
+      },
+      "oak": { "kind": "wood", "a": [0.12, 0.075, 0.04], "b": [0.15, 0.095, 0.052], "size": [2.2, 0.24], "rough": 0.34 },
+      "bath-warm": {
+        "a": [0.1, 0.092, 0.084], "b": [0.11, 0.1, 0.092], "grout": [0.07, 0.064, 0.058], "size": [1.2, 0.6], "rough": 0.25,
+        "vein": [0.22, 0.2, 0.18], "veinStrength": 0.3
+      },
+      "bath-dark": {
+        "a": [0.07, 0.065, 0.06], "b": [0.085, 0.08, 0.075], "grout": [0.05, 0.047, 0.044], "size": [1.2, 0.6], "rough": 0.18,
+        "vein": [0.42, 0.38, 0.33], "veinStrength": 0.4
+      }
+    }
+  },
+  "wallTiles": {
+    "warm-slab": {
+      "a": [0.24, 0.225, 0.205], "b": [0.27, 0.25, 0.23], "grout": [0.18, 0.17, 0.155], "size": [1.2, 2.6], "rough": 0.2,
+      "vein": [0.12, 0.11, 0.1], "veinStrength": 0.35
+    },
+    "dark-slab": {
+      "a": [0.07, 0.065, 0.06], "b": [0.09, 0.085, 0.08], "grout": [0.05, 0.047, 0.044], "size": [1.2, 2.6], "rough": 0.15,
+      "vein": [0.5, 0.46, 0.4], "veinStrength": 0.5
+    }
+  },
+  "lights": {
+    "color": [1.0, 0.9, 0.8],
+    "coveColor": [1.0, 0.9, 0.8],
+    "cove": 8,
+    "spot": 10,
+    "edge": 6,
+    "slot": 14,
+    "wash": 12,
+    "pendant": 30,
+    "stair": 90
+  },
+  "roomTypes": {
+    "default": { "ceiling": "slots", "floor": "stone", "downlightSpacing": 2.4, "downlightRadius": 0.035 },
+    "stair-hall": { "ceiling": "slots", "floor": "stone", "downlightSpacing": 2.4, "downlightRadius": 0.035 },
+    "corridor": { "ceiling": "slots", "floor": "stone", "slotSpacing": 1.2, "downlightSpacing": 0 },
+    "drawing": {
+      "ceiling": "slots", "floor": "stone", "downlightSpacing": 2.4, "downlightRadius": 0.035,
+      "featureWall": "auto", "featureKind": "travertine", "featureAll": true
+    },
+    "dining": {
+      "ceiling": "slots", "floor": "stone", "downlightSpacing": 2.4, "downlightRadius": 0.035,
+      "featureWall": "auto", "featureKind": "travertine", "featureAll": true
+    },
+    "tv-lounge": {
+      "ceiling": "slots", "floor": "stone", "downlightSpacing": 2.4, "downlightRadius": 0.035,
+      "featureWall": "auto", "featureKind": "fluted-tight", "featureMaterial": "smoked-oak", "featureSpan": 3.6
+    },
+    "family-lounge": {
+      "ceiling": "slots", "floor": "stone", "downlightSpacing": 2.4, "downlightRadius": 0.035,
+      "featureWall": "auto", "featureKind": "fluted-tight", "featureMaterial": "smoked-oak", "featureSpan": 3.6,
+      "consoles": ["electronics-counter"]
+    },
+    "master-bedroom": {
+      "ceiling": "slots", "floor": "oak", "downlightSpacing": 2.4, "downlightRadius": 0.035,
+      "featureWall": "auto", "featureKind": "oak-panel", "featureAll": true
+    },
+    "bedroom": {
+      "ceiling": "slots", "floor": "oak", "downlightSpacing": 2.4, "downlightRadius": 0.035,
+      "featureWall": "auto", "featureKind": "oak-panel", "featureSpan": 3.2
+    },
+    "dressing": { "ceiling": "slots", "floor": "oak", "slotSpacing": 1.2, "downlightSpacing": 0 },
+    "study": {
+      "ceiling": "slots", "floor": "oak", "downlightSpacing": 2.4, "downlightRadius": 0.035,
+      "featureWall": "auto", "featureKind": "oak-panel", "featureAll": true, "lightLine": false
+    },
+    "kitchen": {
+      "ceiling": "slots", "floor": "stone", "downlightSpacing": 1.8, "downlightRadius": 0.035,
+      "uppers": ["k-counter-side"], "waterfall": true, "splashback": "slab", "door": "wall"
+    },
+    "back-kitchen": {
+      "ceiling": "slots", "floor": "stone", "slotSpacing": 1.4, "downlightSpacing": 0,
+      "uppers": [], "splashback": "slab", "splashHeight": 0.6, "door": "wall"
+    },
+    "bathroom": {
+      "ceiling": "slots", "floor": "bath-warm", "slotSpacing": 0, "downlightSpacing": 1.1, "downlightRadius": 0.035,
+      "spotRadius": 0.12, "wallTile": "full", "wallTileKey": "warm-slab", "door": "wall"
+    },
+    "powder-room": {
+      "ceiling": "slots", "floor": "bath-dark", "slotSpacing": 0, "downlightSpacing": 1.0, "downlightRadius": 0.035,
+      "spotRadius": 0.12, "wallTile": "full", "wallTileKey": "dark-slab", "backlitMirror": true
+    },
+    "other": { "ceiling": "slots", "floor": "stone", "downlightSpacing": 2.0, "downlightRadius": 0.035, "door": "wall" },
+    "terrace": { "finish": "exterior", "ceiling": "none" }
+  },
+  "rooms": {
+    "ground/lobby": { "featureWall": "auto", "featureKind": "travertine", "featureAll": true },
+    "first/kitchenette": {
+      "slotSpacing": 1.4, "downlightSpacing": 0, "uppers": ["kn-counter"], "splashback": "slab", "door": "oak"
+    },
+    "ground/electrical": { "ceiling": "slots", "slotSpacing": 0, "ceilingHeight": 1.82, "downlightSpacing": 1.2, "downlightRadius": 0.035 },
+    "ground/washroom": { "ceilingHeight": 1.82 },
+    "first/master-bath": { "floor": "bath-dark", "wallTileKey": "dark-slab", "backlitMirror": true }
+  },
+  "voidCeiling": { "edgeGlow": true, "slotSpacing": 0 },
+  "pendant": { "length": 2.4, "height": 3.2 },
+  "outdoorStairs": {
+    "roof-stair": { "tread": "paving-stone", "side": "plaster-sand" },
+    "spiral": {}
+  },
+  "sun": { "azimuth": 250, "elevation": 45, "strength": 4.2 },
+  "skyFill": 0.3,
+  "exposure": 0.0,
+  "viewpoints": { "kitchenette": { "exposure": -0.6 } }
+}

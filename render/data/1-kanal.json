@@ -2488,11 +2488,19 @@
               22.05
             ],
             [
-              34.675,
+              35.05,
               22.05
             ],
             [
-              34.675,
+              35.05,
+              37.05
+            ],
+            [
+              46.4,
+              37.05
+            ],
+            [
+              46.4,
               45.75
             ],
             [
@@ -2500,7 +2508,7 @@
               45.75
             ]
           ],
-          "area": 318.8039,
+          "area": 410.531,
           "attachedTo": null,
           "floor": "porcelain-paving"
         },
@@ -5138,26 +5146,8 @@
         {
           "wall": "lounge-side",
           "kind": "exterior",
-          "part": "sill",
-          "opening": "lounge-window",
-          "from": [
-            40.45,
-            48
-          ],
-          "to": [
-            40.45,
-            62.1
-          ],
-          "thickness": 0.75,
-          "bottom": 13.5,
-          "top": 14.5,
-          "material": "travertine"
-        },
-        {
-          "wall": "lounge-side",
-          "kind": "exterior",
           "part": "lintel",
-          "opening": "lounge-window",
+          "opening": "lounge-terrace-door",
           "from": [
             40.45,
             48
@@ -6493,9 +6483,9 @@
           "material": null
         },
         {
-          "id": "lounge-window",
+          "id": "lounge-terrace-door",
           "wall": "lounge-side",
-          "type": "window",
+          "type": "sliding-door",
           "from": [
             40.45,
             48
@@ -6505,7 +6495,7 @@
             62.1
           ],
           "thickness": 0.75,
-          "bottom": 14.5,
+          "bottom": 13.5,
           "top": 21.5,
           "hinge": "start",
           "opensTo": "left",

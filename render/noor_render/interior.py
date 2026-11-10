@@ -21,12 +21,13 @@ Units are metres, plot coordinates, z up from the road, as the rest of the pipel
 import json
 import math
 import os
+from types import SimpleNamespace
 
 import bmesh
 import bpy
 from mathutils import Matrix, Vector
 
-from . import geometry, materials
+from . import geometry, materials, style
 from .util import add_bevel, boxes_mesh, collection, mesh_object, offset_polygon, point_in_polygon, prism_object
 
 SHOTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "shots")
@@ -424,6 +425,100 @@ def wall_tile_material(name, a, b, grout, size, rough=0.2, vein=None, vein_stren
     return mat
 
 
+def veneer_material(name, a, b, rough=0.42, coat=0.12):
+    """Flush timber veneer for doors, panelling and joinery: a long vertical grain, a slow drift between two tones and
+    a satin finish."""
+    mat, nt, bsdf = materials._new(name)
+    coord = nt.nodes.new("ShaderNodeTexCoord")
+    stretch = nt.nodes.new("ShaderNodeMapping")
+    stretch.inputs["Scale"].default_value = (60.0, 60.0, 1.4)  # grain runs up the panel (z)
+    nt.links.new(coord.outputs["Object"], stretch.inputs["Vector"])
+    grain = nt.nodes.new("ShaderNodeTexNoise")
+    grain.inputs["Scale"].default_value = 1.0
+    grain.inputs["Detail"].default_value = 7.0
+    grain.inputs["Distortion"].default_value = 0.5
+    nt.links.new(stretch.outputs[0], grain.inputs["Vector"])
+    drift = nt.nodes.new("ShaderNodeTexNoise")
+    drift.inputs["Scale"].default_value = 0.7
+    drift.inputs["Detail"].default_value = 2.0
+    nt.links.new(coord.outputs["Object"], drift.inputs["Vector"])
+    tone = nt.nodes.new("ShaderNodeMix")
+    tone.data_type = "RGBA"
+    nt.links.new(drift.outputs["Fac"], tone.inputs["Factor"])
+    tone.inputs["A"].default_value = (*a, 1)
+    tone.inputs["B"].default_value = (*b, 1)
+    shaded = _scale_colour(nt, tone.outputs["Result"], grain.outputs["Fac"], 0.3, 0.7, 0.8, 1.08)
+    nt.links.new(shaded, bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = rough
+    bsdf.inputs["Specular IOR Level"].default_value = 0.45
+    bsdf.inputs["Coat Weight"].default_value = coat
+    bsdf.inputs["Coat Roughness"].default_value = 0.3
+    bump = nt.nodes.new("ShaderNodeBump")
+    bump.inputs["Strength"].default_value, bump.inputs["Distance"].default_value = 0.08, 0.001
+    nt.links.new(grain.outputs["Fac"], bump.inputs["Height"])
+    nt.links.new(bump.outputs["Normal"], bsdf.inputs["Normal"])
+    return mat
+
+
+def travertine_material(name, a, b, pore, rough=0.42):
+    """Vein-cut travertine: soft horizontal strata in two warm tones, and small dark pores stretched along them."""
+    mat, nt, bsdf = materials._new(name)
+    coord = nt.nodes.new("ShaderNodeTexCoord")
+    # irregular strata: noise stretched hard along the bed, so bands vary in width and fade in and out (a wave
+    # texture repeats at one pitch and reads as fluting); a broader, softer layer drifts the tone between cuts
+    def streaks(stretch, scale, detail):
+        m = nt.nodes.new("ShaderNodeMapping")
+        m.inputs["Scale"].default_value = stretch
+        nt.links.new(coord.outputs["Object"], m.inputs["Vector"])
+        n = nt.nodes.new("ShaderNodeTexNoise")
+        n.inputs["Scale"].default_value = scale
+        n.inputs["Detail"].default_value = detail
+        n.inputs["Roughness"].default_value = 0.62
+        nt.links.new(m.outputs[0], n.inputs["Vector"])
+        return n
+    strata = streaks((0.06, 0.06, 7.0), 3.0, 10.0)
+    fine = streaks((0.2, 0.2, 2.0), 1.4, 4.0)
+    both = nt.nodes.new("ShaderNodeMix")
+    both.data_type = "FLOAT"
+    both.inputs["Factor"].default_value = 0.35
+    nt.links.new(strata.outputs["Fac"], both.inputs["A"])
+    nt.links.new(fine.outputs["Fac"], both.inputs["B"])
+    # noise sits around 0.5: stretch it so both tones actually show
+    contrast = nt.nodes.new("ShaderNodeMapRange")
+    contrast.inputs["From Min"].default_value, contrast.inputs["From Max"].default_value = 0.36, 0.64
+    nt.links.new(both.outputs["Result"], contrast.inputs["Value"])
+    tone = nt.nodes.new("ShaderNodeMix")
+    tone.data_type = "RGBA"
+    nt.links.new(contrast.outputs["Result"], tone.inputs["Factor"])
+    tone.inputs["A"].default_value = (*a, 1)
+    tone.inputs["B"].default_value = (*b, 1)
+    # pores: small cells, flattened so they run with the strata
+    squash = nt.nodes.new("ShaderNodeMapping")
+    squash.inputs["Scale"].default_value = (1.0, 1.0, 4.0)
+    nt.links.new(coord.outputs["Object"], squash.inputs["Vector"])
+    cells = nt.nodes.new("ShaderNodeTexVoronoi")
+    cells.inputs["Scale"].default_value = 26.0
+    nt.links.new(squash.outputs[0], cells.inputs["Vector"])
+    holes = nt.nodes.new("ShaderNodeMapRange")
+    holes.inputs["From Min"].default_value, holes.inputs["From Max"].default_value = 0.0, 0.07
+    holes.inputs["To Min"].default_value, holes.inputs["To Max"].default_value = 0.7, 0.0
+    nt.links.new(cells.outputs["Distance"], holes.inputs["Value"])
+    dark = nt.nodes.new("ShaderNodeMix")
+    dark.data_type = "RGBA"
+    nt.links.new(holes.outputs["Result"], dark.inputs["Factor"])
+    nt.links.new(tone.outputs["Result"], dark.inputs["A"])
+    dark.inputs["B"].default_value = (*pore, 1)
+    nt.links.new(dark.outputs["Result"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = rough
+    bsdf.inputs["Specular IOR Level"].default_value = 0.5
+    bump = nt.nodes.new("ShaderNodeBump")
+    bump.inputs["Strength"].default_value, bump.inputs["Distance"].default_value = 0.25, 0.002
+    bump.invert = True
+    nt.links.new(holes.outputs["Result"], bump.inputs["Height"])
+    nt.links.new(bump.outputs["Normal"], bsdf.inputs["Normal"])
+    return mat
+
+
 class Palette:
     """The materials a finished room uses, made once per run from the config's palette."""
 
@@ -436,18 +531,23 @@ class Palette:
         self.trim = plain("paint-trim", p["trim"], 0.4, spec=0.5)
         # a slim dark skirting reads as a shadow line at the foot of the wall
         self.skirt = plain("skirting", p.get("skirting", [0.1, 0.09, 0.08]), 0.45, spec=0.4)
-        self.brass = plain("brass", p.get("brass", [0.86, 0.62, 0.3]), 0.26, spec=0.8, metal=1.0)
+        self._named = {}
+        metal = p.get("metal")  # one metal for every handle, rail, tap and trim; brass unless the palette names another
+        if metal:
+            self.brass = plain("metal-finish", metal["color"], metal.get("rough", 0.35), spec=0.6, metal=1.0)
+        else:
+            self.brass = plain("brass", p.get("brass", [0.86, 0.62, 0.3]), 0.26, spec=0.8, metal=1.0)
         self.led = plain("ceiling-led", (1, 0.7, 0.4), 0.5, emission=(tuple(p["cove"]), p.get("coveGlow", 10.0)))
         self.downlight = plain("downlight", (1, 0.9, 0.8), 0.4, emission=(tuple(p["downlight"]), p.get("downlightGlow", 40.0)))
         self.dark = plain("backer-dark", (0.06, 0.055, 0.05), 0.7)
         self.metal = self.brass  # door levers
-        self.door = materials.get("walnut")
+        self.door = self.named(p.get("door", "walnut"))
         self.stone = materials.get("travertine")
-        self.slat = materials.get("walnut")
+        self.slat = self.named(p.get("slat", "walnut"))
         self.base = plain("cabinet-base", p.get("base", [0.055, 0.05, 0.046]), 0.42, spec=0.5)  # matte charcoal-bronze
-        self.upper = materials.get("walnut")
-        self.vanity = materials.get("walnut")
-        self.wardrobe = materials.get("oak-fluted")
+        self.upper = self.named(p.get("upper", "walnut"))
+        self.vanity = self.named(p.get("vanity", "walnut"))
+        self.wardrobe = self.named(p.get("wardrobe", "oak-fluted"))
         m = p.get("marble", {})
         self.counter = marble_material("counter-marble", m.get("base", [0.84, 0.81, 0.76]), m.get("vein", [0.42, 0.37, 0.31]))
         self.ceramic = plain("ceramic", [0.9, 0.9, 0.88], 0.12, spec=0.6, coat=0.4)
@@ -458,10 +558,31 @@ class Palette:
                                              rough=0.2, strength=0.6)
         self.mirror = plain("mirror", [0.8, 0.8, 0.8], 0.02, spec=1.0, metal=1.0)
         self.glass = materials.get("glass-clear")
-        self.stair_tread = tile_material("stair-tread", [0.56, 0.5, 0.43], [0.6, 0.54, 0.47], [0.25, 0.22, 0.19], [1.2, 0.3], 0.2,
-                                         vein=[0.4, 0.35, 0.29], vein_strength=0.4)
+        t = p.get("stairTread")
+        if t:
+            self.stair_tread = tile_material("stair-tread", t["a"], t["b"], t["grout"], t["size"], t.get("rough", 0.2),
+                                             vein=t.get("vein"), vein_strength=t.get("veinStrength", 0.4))
+        else:
+            self.stair_tread = tile_material("stair-tread", [0.56, 0.5, 0.43], [0.6, 0.54, 0.47], [0.25, 0.22, 0.19], [1.2, 0.3], 0.2,
+                                             vein=[0.4, 0.35, 0.29], vein_strength=0.4)
         self._floors = {}
         self._wall_tiles = {}
+
+    def named(self, key):
+        """A material by name: a veneer or stone defined in the palette (`woods`, `stones`), else a texture tag."""
+        if key not in self._named:
+            wood = self.cfg.get("woods", {}).get(key)
+            stone = self.cfg.get("stones", {}).get(key)
+            if wood:
+                self._named[key] = veneer_material(f"veneer-{key}", wood["a"], wood["b"], wood.get("rough", 0.42), wood.get("coat", 0.12))
+            elif stone and stone.get("kind") == "travertine":
+                self._named[key] = travertine_material(f"stone-{key}", stone["a"], stone["b"], stone["pore"], stone.get("rough", 0.42))
+            elif stone:
+                self._named[key] = marble_material(f"stone-{key}", stone["base"], stone["vein"], stone.get("rough", 0.2),
+                                                   stone.get("strength", 0.6))
+            else:
+                self._named[key] = materials.get(key)
+        return self._named[key]
 
     def wall_tile(self, key):
         if key not in self._wall_tiles:
@@ -512,8 +633,11 @@ class Room:
         self.design, self.li, self.data, self.id = design, li, room, room["id"]
         self.level = design["levels"][li]
         self.type = room["type"]
+        if self.type not in cfg["roomTypes"]:
+            print(f"interior: room {room['id']} ({self.type}) has no roomTypes entry and falls back to default")
         spec = dict(cfg["roomTypes"].get(self.type, cfg["roomTypes"]["default"]))
         spec.update(cfg.get("rooms", {}).get(self.id, {}))
+        spec.update(cfg.get("rooms", {}).get(f"{self.level['id']}/{self.id}", {}))  # ids can repeat across levels
         self.spec = spec
         self.exterior = spec.get("finish") == "exterior"
         self.floor_z = self.level["slab"]["top"]
@@ -526,6 +650,11 @@ class Room:
         beams = geometry.beams(self.level, above) if above else []
         if beams and not cfg.get("exposeBeams"):
             self.ceil_z = min(self.ceil_z, min(b["bottom"] for b in beams) - SKIN - 0.006)
+            self.flush = True
+        # a room tucked under a stair landing has its ceiling where its walls stop, below the flight
+        self.low = bool(spec.get("ceilingHeight"))
+        if self.low:
+            self.ceil_z = self.floor_z + spec["ceilingHeight"]
             self.flush = True
         pts = [v2(p) for p in ccw(room["outline"])]
         self.edges = [Edge(pts[i], pts[(i + 1) % len(pts)], self.level["walls"]) for i in range(len(pts))]
@@ -551,7 +680,7 @@ class Room:
 
     def ceiling_holes(self):
         """Holes in the slab above that fall in this room: the stairwell and the sky court"""
-        if not self.above:
+        if not self.above or self.low:
             return []
         return [hole for poly in self.above["slab"]["polygons"] for hole in poly["holes"] if self.overlaps(hole)]
 
@@ -577,6 +706,15 @@ class Interior:
         for li, level in enumerate(design["levels"]):
             if level["id"] in cfg["levels"]:
                 self.stairs(li, level)
+        if cfg.get("voids"):
+            for li, level in enumerate(design["levels"]):
+                if level["id"] in cfg["levels"] and li + 1 < len(design["levels"]):
+                    self.voids(li, level)
+
+    def opt(self, room, key):
+        """A style choice: the room type's (or the room's) own, else the design's `style` block, else the default in
+        style.py. Every default is what the 5 Marla was built with, so a config that names none is unchanged."""
+        return style.choice(self.cfg, room.spec, key)
 
     # ---- one room
     def build_room(self, room):
@@ -609,31 +747,48 @@ class Interior:
         if holes:
             cut(obj, holes, room.floor_z - 0.1, room.floor_z + 0.1)
 
+    def _unique_runs(self, e, z_lo, z_hi):
+        """Each wall piece along edge e as (s0, s1, z0, z1, piece), clipped to z_lo..z_hi. With `mergeWallPieces` set,
+        minus the stretches an earlier piece already covers at the same height: two exported walls can overlap where
+        they meet (a thin and a thick wall, or a wall running past a column), and two coincident panels there render
+        black in Cycles, each one's shadow rays hitting the other. Off by default, which keeps the 5 Marla as built."""
+        merge = self.cfg.get("mergeWallPieces", False)
+        done, out = [], []
+        for w in e.pieces:
+            a, b = v2(w["from"]), v2(w["to"])
+            s0, s1 = sorted(((a - e.A).dot(e.u), (b - e.A).dot(e.u)))
+            s0, s1 = max(s0, 0.0), min(s1, e.length)
+            z0, z1 = max(w["bottom"], z_lo), min(w["top"], z_hi)
+            if s1 - s0 < 0.01 or z1 - z0 < 0.01:
+                continue
+            runs = [(s0, s1)]
+            for d0, d1, dz0, dz1 in (done if merge else []):
+                if min(z1, dz1) - max(z0, dz0) < 0.01:
+                    continue
+                runs = [r for r0, r1 in runs for r in ((r0, min(r1, d0)), (max(r0, d1), r1)) if r[1] - r[0] >= 0.01]
+            done.append((s0, s1, z0, z1))
+            out += [(r0, r1, z0, z1, w) for r0, r1 in runs]
+        return out
+
     def walls(self, room, col):
         panels, skirts = [], []
+        shadow_gap = self.opt(room, "skirting") == "shadow-gap"
         for e in room.edges:
-            for w in e.pieces:
-                a, b = v2(w["from"]), v2(w["to"])
-                s0, s1 = sorted(((a - e.A).dot(e.u), (b - e.A).dot(e.u)))
-                s0, s1 = max(s0, 0.0), min(s1, e.length)
-                if s1 - s0 < 0.01:
-                    continue
-                z0, z1 = max(w["bottom"], room.floor_z), min(w["top"], room.ceil_z)
-                if z1 - z0 < 0.01:
-                    continue
+            for s0, s1, z0, z1, w in self._unique_runs(e, room.floor_z, room.ceil_z):
                 panels.append(fbox(e.A, e.u, e.n, s0, s1, -0.003, 0.004, z0, z1))
                 if w["bottom"] <= room.floor_z + 0.01:
-                    skirts.append(fbox(e.A, e.u, e.n, s0, s1, 0.0, 0.016, room.floor_z + FLOOR_T, room.floor_z + SKIRT_H + FLOOR_T))
+                    if shadow_gap:  # a flush dark reveal at the foot of the wall instead of a board
+                        skirts.append(fbox(e.A, e.u, e.n, s0, s1, -0.003, 0.0045, room.floor_z + FLOOR_T, room.floor_z + FLOOR_T + 0.014))
+                    else:
+                        skirts.append(fbox(e.A, e.u, e.n, s0, s1, 0.0, 0.016, room.floor_z + FLOOR_T, room.floor_z + SKIRT_H + FLOOR_T))
         pal = self.palette
         tile_h = room.spec.get("wallTile")
+        if tile_h == "full":  # slabs floor to ceiling
+            tile_h = room.ceil_z - room.floor_z
         if tile_h:
             tiles = []
             for e in room.edges:
-                for w in e.pieces:
-                    a, b = v2(w["from"]), v2(w["to"])
-                    s0, s1 = sorted(((a - e.A).dot(e.u), (b - e.A).dot(e.u)))
-                    s0, s1 = max(s0, 0.0), min(s1, e.length)
-                    z0, z1 = max(w["bottom"], room.floor_z), min(w["top"], room.floor_z + tile_h)
+                for s0, s1, z0, z1, _ in self._unique_runs(e, room.floor_z, room.floor_z + tile_h):
                     if s1 - s0 > 0.01 and z1 - z0 > 0.01:
                         tiles.append(fbox(e.A, e.u, e.n, s0, s1, 0.004, 0.011, z0, z1))
             if tiles:
@@ -641,14 +796,16 @@ class Interior:
         if panels:
             solid(f"paint-{room.id}", panels, pal.wall, col, role="interior")
         if skirts:
-            solid(f"skirting-{room.id}", skirts, pal.skirt, col, bevel=0.002, role="interior")
+            solid(f"skirting-{room.id}", skirts, pal.dark if shadow_gap else pal.skirt, col, bevel=0.0 if shadow_gap else 0.002,
+                  role="interior")
 
     # ---- windows and doors
     def trim(self, room, col):
         pal = self.palette
         level = room.level
         kinds = {w["wall"]: w["kind"] for w in level["walls"]}
-        reveals, stools, casings, leaves, handles, thresholds = [], [], [], [], [], []
+        reveals, stools, casings, leaves, handles, thresholds, overs = [], [], [], [], [], [], []
+        flush = self.opt(room, "doors") == "flush"
         for op in level["openings"]:
             a, b = v2(op["from"]), v2(op["to"])
             mid = (a + b) / 2
@@ -675,6 +832,11 @@ class Interior:
             reveals.append(fbox(a, u, n, SKIN, W - SKIN, o_f, face, z1 - SKIN - 0.003, z1 - SKIN + 0.002))
             if op["type"] == "window":
                 stools.append(fbox(a, u, n, -0.01, W + 0.01, o_f, face + 0.04, z0 + SKIN - 0.002, z0 + SKIN + 0.03))
+            elif flush:
+                # no casing: the plaster returns into the reveal. An inside door gets a panel in its leaf's timber from the
+                # head to the ceiling, flush with the wall, so it reads as one full-height door.
+                if op["type"] in ("door", "double-door") and not exterior_wall and room.ceil_z - z1 > 0.05:
+                    overs.append(fbox(a, u, n, SKIN, W - SKIN, face - 0.002, face + 0.006, z1 - SKIN + 0.004, room.ceil_z - 0.004))
             else:
                 cw = 0.075
                 casings.append(fbox(a, u, n, -cw, SKIN, face, face + 0.014, z0, z1 - SKIN))
@@ -714,8 +876,12 @@ class Interior:
             solid(f"stools-{room.id}", stools, pal.stone, col, bevel=0.004, role="interior")
         if casings:
             solid(f"casings-{room.id}", casings, pal.wall, col, bevel=0.002, role="interior")  # flush, painted the wall's colour
+        # a room may name its own door finish: a timber or stone from the palette, or "wall" for doors painted to vanish
+        door = pal.door if "door" not in room.spec else pal.wall if room.spec["door"] == "wall" else pal.named(room.spec["door"])
         if leaves:
-            solid(f"leaves-{room.id}", leaves, pal.door, col, bevel=0.004, role="interior")
+            solid(f"leaves-{room.id}", leaves, door, col, bevel=0.004, role="interior")
+        if overs:
+            solid(f"overpanels-{room.id}", overs, door, col, bevel=0.002, role="interior")
         if handles:
             solid(f"handles-{room.id}", handles, pal.metal, col, bevel=0.002, role="interior")
         if thresholds:
@@ -775,10 +941,17 @@ class Interior:
         # the ceiling stops 20 mm short of the walls; a dark strip set 6 mm higher reads as a shadow-gap edge
         inner = offset_polygon(poly, -0.02)
         obj = prism_object(f"ceiling-{room.id}", inner, [], z - 0.004, z + 0.02, pal.ceiling, col, bevel=False, role="interior")
-        prism_object(f"ceiling-gap-{room.id}", poly, [inner], z + 0.002, z + 0.02, pal.dark, col, bevel=False, role="interior")
+        gap = prism_object(f"ceiling-gap-{room.id}", poly, [inner], z + 0.002, z + 0.02, pal.dark, col, bevel=False, role="interior")
         if holes:
             cut(obj, holes, z - 0.1, z + 0.1)
-            mode = "flat"  # a stairwell runs through it: a plain ceiling around the hole
+            if self.cfg.get("voids"):  # the dark edge strip must not run on across a void as a line on its walls
+                cut(gap, holes, z - 0.1, z + 0.1)
+            if mode != "slots":
+                mode = "flat"  # a stairwell runs through it: a plain ceiling around the hole
+        if mode == "slots":
+            self.slots(room, poly, z, holes, col)
+            self.downlights(room, offset_polygon(poly, -0.45), col)
+            return
         drop, band, gap = spec.get("drop", 0.14), spec.get("band", 0.36), 0.035
         inset = poly
         if mode == "cove" and min(e.length for e in room.edges) > 2 * (band + gap) + 0.6:
@@ -795,6 +968,54 @@ class Interior:
             inset = led_out
         self.downlights(room, inset, col)
 
+    def slots(self, room, poly, z, holes, col):
+        """A floating ceiling: a lit groove just inside the shadow gap all round, washing the walls, and trimless linear
+        light slots across the room along its long side."""
+        pal, spec = self.palette, room.spec
+        if spec.get("edgeGlow", True):
+            out = offset_polygon(poly, -0.03)
+            inn = offset_polygon(poly, -0.05)
+            prism_object(f"ceiling-edge-{room.id}", out, [inn], z - 0.0055, z - 0.0035, pal.led, col, bevel=False, role="interior")
+            self.cove_lights(room, offset_polygon(poly, -0.04), kind="edge")
+        spacing = spec.get("slotSpacing", 1.5)
+        if spacing <= 0:
+            return
+        x0, x1, y0, y1 = room.bounds
+        along_x = (x1 - x0) >= (y1 - y0)
+        lo, hi = (y0, y1) if along_x else (x0, x1)
+        a0, a1 = (x0, x1) if along_x else (y0, y1)
+        margin = spec.get("slotMargin", 0.7)
+        count = max(1, round((hi - lo - 2 * margin) / spacing) + 1)
+        ring = [Vector(p) for p in offset_polygon(poly, -0.35)]
+        strips = []
+        for k in range(count):
+            c = (lo + hi) / 2 if count == 1 else lo + margin + k * (hi - lo - 2 * margin) / (count - 1)
+            # walk the line and keep the runs that stay inside the room and clear of holes in the ceiling
+            run, t, step = None, a0, 0.05
+            while t <= a1 + step:
+                pt = Vector((t, c)) if along_x else Vector((c, t))
+                ok = t <= a1 and inside(pt, ring) and not any(point_in_polygon((pt.x, pt.y), h) for h in holes)
+                if ok and run is None:
+                    run = t
+                elif not ok and run is not None:
+                    if t - step - run > 0.6:
+                        strips.append((run, t - step, c))
+                    run = None
+                t += step
+        boxes = []
+        for s0, s1, c in strips:
+            if along_x:
+                boxes.append([(s0, c - 0.018, z - 0.0048), (s1, c - 0.018, z - 0.0048), (s1, c + 0.018, z - 0.0048), (s0, c + 0.018, z - 0.0048),
+                              (s0, c - 0.018, z - 0.003), (s1, c - 0.018, z - 0.003), (s1, c + 0.018, z - 0.003), (s0, c + 0.018, z - 0.003)])
+                mid, angle = (((s0 + s1) / 2, c)), 0.0
+            else:
+                boxes.append([(c - 0.018, s0, z - 0.0048), (c + 0.018, s0, z - 0.0048), (c + 0.018, s1, z - 0.0048), (c - 0.018, s1, z - 0.0048),
+                              (c - 0.018, s0, z - 0.003), (c + 0.018, s0, z - 0.003), (c + 0.018, s1, z - 0.003), (c - 0.018, s1, z - 0.003)])
+                mid, angle = ((c, (s0 + s1) / 2)), math.pi / 2
+            self.lights.append({"kind": "slot", "room": room.id, "at": (mid[0], mid[1], z - 0.02), "length": s1 - s0, "angle": angle})
+        if boxes:
+            solid(f"ceiling-slots-{room.id}", boxes, pal.led, col, role="interior")
+
     def downlights(self, room, inset, col):
         """Small bright discs on a grid inside the ceiling, keeping clear of beams and holes."""
         pal = self.palette
@@ -802,7 +1023,8 @@ class Interior:
         if spacing <= 0:
             return
         x0, x1, y0, y1 = room.bounds
-        beams = [(v2(b["from"]), v2(b["to"])) for b in geometry.beams(room.level, room.above)] if room.above else []
+        # a lowered ceiling hides the beams above it, so they do not push the lights away
+        beams = [(v2(b["from"]), v2(b["to"])) for b in geometry.beams(room.level, room.above)] if room.above and not room.low else []
         holes = room.ceiling_holes()
         ring = [Vector(p) for p in inset]
         spots = []
@@ -821,8 +1043,9 @@ class Interior:
         if not spots:
             return
         bm = bmesh.new()
+        r = room.spec.get("downlightRadius", 0.055)
         for pt in spots:
-            bmesh.ops.create_cone(bm, cap_ends=True, segments=24, radius1=0.055, radius2=0.055, depth=0.01,
+            bmesh.ops.create_cone(bm, cap_ends=True, segments=24, radius1=r, radius2=r, depth=0.01,
                                   matrix=Matrix.Translation((pt.x, pt.y, room.ceil_z - 0.006)))
         me = bpy.data.meshes.new(f"downlights-{room.id}")
         bm.to_mesh(me)
@@ -833,14 +1056,14 @@ class Interior:
         self.spot_lights(room, spots)
 
     # ---- lights (kept as plain data until the scene asks for them: engines want different shadow settings)
-    def cove_lights(self, room, ring):
+    def cove_lights(self, room, ring, kind="cove"):
         for i, p in enumerate(ring):
             q = ring[(i + 1) % len(ring)]
             a, b = Vector(p), Vector(q)
             if (b - a).length < 0.5:
                 continue
             mid = (a + b) / 2
-            self.lights.append({"kind": "cove", "room": room.id, "at": (mid.x, mid.y, room.ceil_z - 0.01),
+            self.lights.append({"kind": kind, "room": room.id, "at": (mid.x, mid.y, room.ceil_z - 0.01),
                                 "length": (b - a).length, "angle": math.atan2((b - a).y, (b - a).x)})
 
     def spot_lights(self, room, spots):
@@ -852,25 +1075,34 @@ class Interior:
 
     def make_lights(self, shadows):
         cfg = self.cfg["lights"]
+        warm = tuple(cfg.get("color", (1.0, 0.86, 0.7)))  # downlights, the stair and every new fitting
         for i, l in enumerate(self.lights):
             if l["kind"] == "cove":
                 d = bpy.data.lights.new(f"cove-{l['room']}-{i}", "AREA")
                 d.shape = "RECTANGLE"
                 d.size, d.size_y = l["length"], 0.1
                 d.energy = cfg["cove"] * max(0.4, min(2.0, l["length"] / 3.0))
-                d.color = (1.0, 0.82, 0.62)
+                d.color = tuple(cfg.get("coveColor", (1.0, 0.82, 0.62)))
                 rot = (math.pi, 0, l["angle"])
+            elif l["kind"] in ("edge", "slot", "wash", "pendant"):
+                # linear fittings shining down: the floating edge's groove, ceiling slots, wall washers, the hall pendant
+                d = bpy.data.lights.new(f"{l['kind']}-{l['room']}-{i}", "AREA")
+                d.shape = "RECTANGLE"
+                d.size, d.size_y = l["length"], 0.06
+                d.energy = cfg.get(l["kind"], 10) * l["length"]
+                d.color = warm
+                rot = (0, 0, l["angle"])
             elif l["kind"] == "stair":
                 d = bpy.data.lights.new(f"stair-{l['room']}-{i}", "AREA")
                 d.shape, d.size, d.size_y = "RECTANGLE", 1.8, 1.8
                 d.energy = cfg.get("stair", 90)
-                d.color = (1.0, 0.86, 0.7)
+                d.color = warm
                 rot = (0, 0, 0)
             else:
                 d = bpy.data.lights.new(f"spot-{l['room']}-{i}", "SPOT")
                 d.spot_size, d.spot_blend, d.shadow_soft_size = math.radians(100), 0.8, l.get("radius", 0.05)
                 d.energy = cfg["spot"]
-                d.color = (1.0, 0.86, 0.7)
+                d.color = warm
                 rot = (0, 0, 0)
             d.use_shadow = shadows
             o = bpy.data.objects.new(d.name, d)
@@ -881,8 +1113,14 @@ class Interior:
     def fixtures(self, room, col):
         pal = self.palette
         parts = {"base": [], "upper": [], "vanity": [], "wardrobe": [], "basin": [], "top": [], "ceramic": [], "seat": [], "tray": [], "steel": [],
-                 "mirror": [], "glass": [], "dark": []}
+                 "mirror": [], "glass": [], "dark": [], "ledge": [], "glow": [], "console": [], "cistern": []}
         z = room.floor_z + FLOOR_T
+        handleless = self.opt(room, "cabinetry") == "handleless"
+        hung = self.opt(room, "wc") == "wall-hung"
+        floating = self.opt(room, "vanityStyle") == "floating"
+        rain = self.opt(room, "shower") == "rain"
+        uppers = room.spec.get("uppers")  # counters that carry wall units; by default the 5 Marla kitchen's long run
+        consoles = room.spec.get("consoles", [])
         for fx in room.level["fixtures"]:
             if not room.contains(Vector((fx["x"] + fx["w"] / 2, fx["y"] + fx["d"] / 2))):
                 continue
@@ -906,7 +1144,15 @@ class Interior:
                 parts[key].append(fbox(origin, u, n, s0, s1, o0, o1, z0, z1))
 
             kind = fx["type"]
-            if kind == "counter":
+            if kind == "counter" and fx["id"] in consoles:
+                # a low floating media console in timber, lit underneath
+                cd = min(depth, 0.42)
+                box("console", 0, length, 0, cd, z + 0.3, z + 0.6)
+                box("glow", 0.04, length - 0.04, 0.03, cd - 0.04, z + 0.288, z + 0.296)
+            elif kind == "counter" and handleless:
+                self._modern_counter(room, fx, box, origin, u, n, length, depth, z,
+                                     uppers is not None and fx["id"] in uppers)
+            elif kind == "counter":
                 # base cabinets with a stone top, and a wall cabinet above the long run in the kitchen
                 front = depth - 0.02
                 box("dark", 0.0, length, 0.04, depth - 0.07, z, z + 0.09)  # recessed toe-kick
@@ -928,7 +1174,7 @@ class Interior:
                         box("base", s0, s1, front - 0.018, front, z + 0.092, z + 0.858)
                         edge = s1 - 0.045 if i % 2 else s0 + 0.045
                         box("steel", edge - 0.008, edge + 0.008, front, front + 0.02, z + 0.62, z + 0.83)
-                if room.type == "kitchen" and fx["id"] == "k-counter":
+                if (fx["id"] in uppers) if uppers is not None else (room.type == "kitchen" and fx["id"] == "k-counter"):
                     box("dark", 0, length, 0, 0.33 - 0.018, z + 1.45, z + 2.25)
                     ups = max(1, round(length / 0.5))
                     uw = length / ups
@@ -943,6 +1189,47 @@ class Interior:
                 box("steel", length / 2 - 0.015, length / 2 + 0.015, 0.03, 0.2, z + 1.13, z + 1.15)
             elif kind == "hob":
                 box("dark", 0.05, length - 0.05, 0.05, depth - 0.05, z + 0.9, z + 0.91)
+            elif kind == "wc" and hung:
+                # a wall-hung pan clear of the floor, in front of a box that hides the cistern: clad in the vanity's
+                # timber with a stone shelf on top, so it reads as a fitting against the stone walls, not part of them
+                cx = length / 2
+                box("cistern", 0, length, 0, 0.17, z, z + 1.02)
+                box("top", 0, length, 0, 0.19, z + 1.02, z + 1.05)
+                box("ceramic", cx - 0.18, cx + 0.18, 0.18, 0.72, z + 0.28, z + 0.42)
+                box("seat", cx - 0.185, cx + 0.185, 0.2, 0.74, z + 0.42, z + 0.44)
+                box("steel", cx - 0.11, cx + 0.11, 0.17, 0.18, z + 0.82, z + 0.97)  # flush plate
+            elif kind in ("basin", "vanity") and floating:
+                # a wall-hung vanity with handleless drawers, lit underneath, a vessel basin, a wall spout and a mirror
+                cx = length / 2
+                d0 = min(depth - 0.02, 0.5)
+                box("dark", 0.01, length - 0.01, 0, d0 - 0.02, z + 0.45, z + 0.8)
+                for z0v, z1v in ((z + 0.452, z + 0.616), (z + 0.634, z + 0.79)):
+                    box("vanity", 0.012, length - 0.012, d0 - 0.02, d0, z0v, z1v)
+                box("top", 0, length, 0, d0 + 0.01, z + 0.8, z + 0.83)
+                box("glow", 0.04, length - 0.04, 0.03, d0 - 0.04, z + 0.438, z + 0.446)
+                bw = min(0.5, length - 0.15)
+                box("ceramic", cx - bw / 2, cx + bw / 2, 0.07, min(d0 - 0.04, 0.42), z + 0.83, z + 0.95)
+                box("steel", cx - 0.012, cx + 0.012, 0.0, 0.2, z + 1.03, z + 1.05)
+                if room.spec.get("backlitMirror"):
+                    box("glow", 0.08, length - 0.08, 0.0, 0.012, z + 1.12, z + 2.08)
+                    box("mirror", 0.1, length - 0.1, 0.02, 0.032, z + 1.14, z + 2.06)
+                else:
+                    box("mirror", 0.1, length - 0.1, 0.0, 0.015, z + 1.2, z + 2.05)
+            elif kind == "shower" and rain:
+                # a flush tray, a rain head on an arm from the wall, a valve plate, frameless glass, and a lit niche
+                box("tray", 0, length, 0, depth, z - 0.004, z + 0.008)
+                box("steel", length / 2 - 0.012, length / 2 + 0.012, 0.0, 0.32, z + 2.12, z + 2.14)
+                box("steel", length / 2 - 0.13, length / 2 + 0.13, 0.19, 0.45, z + 2.1, z + 2.112)
+                box("steel", length / 2 - 0.06, length / 2 + 0.06, 0.0, 0.01, z + 1.0, z + 1.12)
+                box("glass", 0, 0.01, 0, depth, z + 0.008, z + 2.0)
+                box("glass", 0, length, depth - 0.01, depth, z + 0.008, z + 2.0)
+                if room.spec.get("niche", True) and length > 1.0:
+                    nw, nd, n0, n1 = 0.6, 0.07, z + 1.05, z + 1.45
+                    s0 = length - nw - 0.15
+                    for b in ((s0, s0 + nw, 0, nd, n0, n0 + 0.015), (s0, s0 + nw, 0, nd, n1 - 0.015, n1),
+                              (s0, s0 + 0.015, 0, nd, n0, n1), (s0 + nw - 0.015, s0 + nw, 0, nd, n0, n1), (s0, s0 + nw, 0, 0.004, n0, n1)):
+                        box("ledge", *b)
+                    box("glow", s0 + 0.02, s0 + nw - 0.02, 0.01, nd - 0.01, n1 - 0.022, n1 - 0.015)
             elif kind == "wc":
                 cx, hw = length / 2, 0.19
                 box("ceramic", cx - hw, cx + hw, 0.0, 0.2, z + 0.35, z + 0.85)  # cistern
@@ -979,17 +1266,93 @@ class Interior:
                 for i in range(doors):
                     s0, s1 = i * step + 0.002, (i + 1) * step - 0.002
                     box("wardrobe", s0, s1, front - 0.02, front, z + 0.06, top - 0.003)
+                    if handleless:  # push-to-open: the doors meet in hairline gaps, nothing on their faces
+                        continue
                     # a slim vertical brass pull on the edge beside the gap between each pair of doors
                     edge = s1 - 0.035 if i % 2 == 0 else s0 + 0.035
                     box("steel", edge - 0.007, edge + 0.007, front, front + 0.022, z + 0.8, z + 1.45)
         for key, mat in (("base", pal.base), ("upper", pal.upper), ("vanity", pal.vanity), ("wardrobe", pal.wardrobe),
                          ("basin", pal.basin), ("top", pal.counter), ("ceramic", pal.ceramic), ("seat", pal.ceramic),
                          ("tray", pal.ceramic), ("steel", pal.steel),
-                         ("mirror", pal.mirror), ("glass", pal.glass), ("dark", pal.dark)):
+                         ("mirror", pal.mirror), ("glass", pal.glass), ("dark", pal.dark),
+                         # a shower niche is lined in the room's own wall slab, if it has one
+                         ("ledge", pal.wall_tile(room.spec.get("wallTileKey", "bath")) if room.spec.get("wallTile") else pal.counter),
+                         ("glow", pal.led), ("console", pal.vanity), ("cistern", pal.vanity)):
             if parts[key]:
                 solid(f"fixtures-{key}-{room.id}", parts[key], mat, col,
-                      bevel={"ceramic": 0.03, "seat": 0.012, "tray": 0.002}.get(key, 0.003 if key in ("base", "upper", "vanity", "wardrobe", "top") else 0.0),
+                      bevel={"ceramic": 0.03, "seat": 0.012, "tray": 0.002}.get(key, 0.003 if key in ("base", "upper", "vanity", "wardrobe", "top", "cistern") else 0.0),
                       role="interior")
+
+    def _modern_counter(self, room, fx, box, origin, u, n, length, depth, z, upper):
+        """A handleless counter: flat fronts opened from a recessed groove under a thin stone top, the top running down
+        a free end as a waterfall, a stone slab splashback, and wall units to the ceiling with a light line beneath."""
+        spec = room.spec
+        front = depth - 0.02
+        box("dark", 0.0, length, 0.06, depth - 0.07, z, z + 0.1)  # recessed plinth
+        box("dark", 0, length, 0, front - 0.018, z + 0.1, z + 0.87)  # the carcass, seen in the gaps and the groove
+        mods = max(1, round(length / 0.6))
+        w = length / mods
+        for i in range(mods):
+            s0, s1 = i * w + 0.0015, (i + 1) * w - 0.0015
+            if i % 3 == 0 and w <= 0.9:  # a pair of deep drawers, the upper one opened from the groove under the top
+                for z0, z1 in ((z + 0.102, z + 0.43), (z + 0.462, z + 0.82)):
+                    box("base", s0, s1, front - 0.018, front, z0, z1)
+            else:
+                box("base", s0, s1, front - 0.018, front, z + 0.102, z + 0.82)
+        top1 = z + 0.9
+        box("top", 0, length, 0, depth, z + 0.87, top1)
+        if spec.get("waterfall"):
+            for end in (0.0, length):
+                out = -0.25 if end == 0.0 else 0.25
+                probe = origin + u * (end + out) + n * (depth / 2)
+                taken = any(o is not fx and o["x"] - 0.05 <= probe.x <= o["x"] + o["w"] + 0.05 and o["y"] - 0.05 <= probe.y <= o["y"] + o["d"] + 0.05
+                            for o in room.level["fixtures"])
+                if room.contains(probe) and not taken:
+                    a0, a1 = (-0.03, 0.0) if end == 0.0 else (length, length + 0.03)
+                    box("top", a0, a1, 0, depth, z, top1)
+        # windows and doors in the wall behind the counter: (s0, s1, bottom, top)
+        behind = []
+        for op in room.level["openings"]:
+            a, b = v2(op["from"]), v2(op["to"])
+            d = b - a
+            if d.length < 1e-6 or abs(d.x * u.y - d.y * u.x) / d.length > 1e-3:
+                continue
+            if dist_to_line(a, origin, u) > op["thickness"] / 2 + SKIN + 0.06:
+                continue
+            o0, o1 = sorted(((a - origin).dot(u), (b - origin).dot(u)))
+            if o1 > 0 and o0 < length:
+                behind.append((o0, o1, op["bottom"], op["top"]))
+        if spec.get("splashback") == "slab":
+            high = z + 1.45 if upper else top1 + spec.get("splashHeight", 0.55)
+            # stop under any window in the wall behind
+            spans = [(0.0, length, high)]
+            for o0, o1, bottom, _ in behind:
+                if bottom >= high:
+                    continue
+                nxt = []
+                for s0, s1, h in spans:
+                    if o1 <= s0 or o0 >= s1:
+                        nxt.append((s0, s1, h))
+                        continue
+                    nxt += [(s0, o0, h), (o0, o1, min(h, bottom - 0.01)), (o1, s1, h)]
+                spans = [(max(s0, 0.0), min(s1, length), h) for s0, s1, h in nxt]
+            for s0, s1, h in spans:
+                if s1 - s0 > 0.01 and h - top1 > 0.02:
+                    box("top", s0, s1, 0, 0.012, top1, h)
+        if upper:
+            # wall units to the ceiling, either side of any window or door they would cover
+            zb, zt = z + 1.45, room.ceil_z - 0.005
+            for s0, s1 in self._gaps(length, [(o0 - 0.05, o1 + 0.05) for o0, o1, _, top in behind if top > zb], least=0.3):
+                run = s1 - s0
+                box("dark", s0, s1, 0, 0.33 - 0.018, zb, zt)
+                ups = max(1, round(run / 0.5))
+                uw = run / ups
+                for i in range(ups):
+                    box("upper", s0 + i * uw + 0.0015, s0 + (i + 1) * uw - 0.0015, 0.33 - 0.018, 0.33, zb + 0.002, zt - 0.002)
+                box("glow", s0 + 0.03, s1 - 0.03, 0.27, 0.3, zb - 0.005, zb)
+                at = origin + u * ((s0 + s1) / 2) + n * 0.28
+                self.lights.append({"kind": "wash", "room": room.id, "at": (at.x, at.y, zb - 0.02), "length": max(0.3, run - 0.1),
+                                    "angle": math.atan2(u.y, u.x)})
 
     # ---- the stair: finished treads and painted risers and sides over the structural concrete
     def stairs(self, li, level):
@@ -998,9 +1361,15 @@ class Interior:
         pal = self.palette
         col = collection(f"interior-stair-{level['id']}", self.root)
         paint, treads = [], []
+        outdoor = self.cfg.get("outdoorStairs", {})  # stairs out on a terrace: paving treads and rendered sides
+        glassy = self.cfg.get("style", {}).get("balustrade") == "glass"
+        both_axes = self.cfg.get("style", {}).get("stairRails") == "both"
         for st in level["stairs"]:
             if st.get("outdoor") or not st.get("steps"):
                 continue
+            out = outdoor.get(st["id"])
+            if out is not None:
+                o_paint, o_treads = [], []
             old = bpy.data.objects.get(f"stair-{level['id']}-{st['id']}")
             if old:
                 bpy.data.objects.remove(old, do_unlink=True)
@@ -1034,7 +1403,8 @@ class Interior:
                 top = step["top"]
                 lo = max(step["bottom"], top - riser - slab)
                 hi = max(step["bottom"], top - slab)
-                for grow, ztop, bucket in ((0.012, top, paint), (0.02, top + 0.025, treads)):
+                for grow, ztop, bucket in ((0.012, top, paint if out is None else o_paint),
+                                           (0.02, top + 0.025, treads if out is None else o_treads)):
                     g = grow
                     x0, y0, x1, y1 = step["x"] - g, step["y"] - g, step["x"] + step["w"] + g, step["y"] + step["d"] + g
                     # the underside: lower at the near end of the step, higher at the far end, so the soffit is one slope
@@ -1045,7 +1415,7 @@ class Interior:
                     elif axis == "y":
                         near, far = ("y0", "y1") if sign > 0 else ("y1", "y0")
                         z[near], z[far] = lo, hi
-                    if bucket is treads:
+                    if grow == 0.02:  # a tread
                         bz = [ztop - 0.025] * 4
                     else:
                         bz = [min(z["x0"], z["y0"]) - g, min(z["x1"], z["y0"]) - g, min(z["x1"], z["y1"]) - g, min(z["x0"], z["y1"]) - g]
@@ -1055,33 +1425,287 @@ class Interior:
                             bz = [z["y0"] - g, z["y0"] - g, z["y1"] - g, z["y1"] - g]
                     bucket.append([(x0, y0, bz[0]), (x1, y0, bz[1]), (x1, y1, bz[2]), (x0, y1, bz[3]),
                                    (x0, y0, ztop), (x1, y0, ztop), (x1, y1, ztop), (x0, y1, ztop)])
-            rails, posts = [], []
+            rails, posts, panes = [], [], []
+            pane = glassy and out is None
             prev = None
             for i, step in enumerate(steps):
                 axis, sign = run(i)
-                if axis != "x" or step["w"] > 2 or i == len(steps) - 1:
+                if axis == "y" and both_axes and step["d"] <= 2 and i < len(steps) - 1:
+                    # a flight rising along y: the same rail, built in swapped coordinates
+                    inner = step["x"] + step["w"] - 0.035 if step["x"] < st["x"] + st["w"] / 2 else step["x"] + 0.035
+                    pz0, along = step["top"] + 0.025, step["y"] + step["d"] / 2
+
+                    def xy(a, c):
+                        return (c, a)
+                elif axis != "x" or step["w"] > 2 or i == len(steps) - 1:
                     prev = None
                     continue
-                inner = step["y"] + step["d"] - 0.035 if step["y"] < st["y"] + st["d"] / 2 else step["y"] + 0.035
-                z0 = step["top"] + 0.025
-                px = step["x"] + step["w"] / 2
-                posts.append([(px - 0.015, inner - 0.015, z0), (px + 0.015, inner - 0.015, z0), (px + 0.015, inner + 0.015, z0),
-                              (px - 0.015, inner + 0.015, z0), (px - 0.015, inner - 0.015, z0 + 0.9), (px + 0.015, inner - 0.015, z0 + 0.9),
-                              (px + 0.015, inner + 0.015, z0 + 0.9), (px - 0.015, inner + 0.015, z0 + 0.9)])
+                else:
+                    inner = step["y"] + step["d"] - 0.035 if step["y"] < st["y"] + st["d"] / 2 else step["y"] + 0.035
+                    pz0, along = step["top"] + 0.025, step["x"] + step["w"] / 2
+
+                    def xy(a, c):
+                        return (a, c)
+                z0, px = pz0, along
+                if prev and prev[3] != axis:
+                    prev = None
+                if not pane:
+                    posts.append([(*xy(px - 0.015, inner - 0.015), z0), (*xy(px + 0.015, inner - 0.015), z0),
+                                  (*xy(px + 0.015, inner + 0.015), z0), (*xy(px - 0.015, inner + 0.015), z0),
+                                  (*xy(px - 0.015, inner - 0.015), z0 + 0.9), (*xy(px + 0.015, inner - 0.015), z0 + 0.9),
+                                  (*xy(px + 0.015, inner + 0.015), z0 + 0.9), (*xy(px - 0.015, inner + 0.015), z0 + 0.9)])
                 if prev and abs(prev[1] - inner) < 1e-3:
-                    for h in (0.9, 0.45):
-                        t = 0.022 if h == 0.9 else 0.012
-                        pz, cz = prev[2] + h, z0 + h
-                        rails.append([(prev[0], inner - t, pz - t), (px, inner - t, cz - t), (px, inner + t, cz - t), (prev[0], inner + t, pz - t),
-                                      (prev[0], inner - t, pz + t), (px, inner - t, cz + t), (px, inner + t, cz + t), (prev[0], inner + t, pz + t)])
-                prev = (px, inner, z0)
-            if posts:
-                solid(f"stair-rail-{level['id']}-{st['id']}", posts + rails, pal.brass, col, bevel=0.002, role="interior")
+                    # glass: one sloping pane per step under a slim cap rail; otherwise a handrail and a mid rail
+                    levels = ((0.9, 0.022, rails), (0.45, 0.012, rails)) if not pane else ((0.92, 0.011, rails), (0.46, 0.006, panes))
+                    for h, t, bucket in levels:
+                        if bucket is panes:  # the pane: from just above the treads to under the cap rail
+                            p0, p1, c0, c1 = prev[2] + 0.06, prev[2] + 0.905, z0 + 0.06, z0 + 0.905
+                        else:
+                            p0, p1, c0, c1 = prev[2] + h - t, prev[2] + h + t, z0 + h - t, z0 + h + t
+                        bucket.append([(*xy(prev[0], inner - t), p0), (*xy(px, inner - t), c0), (*xy(px, inner + t), c0),
+                                       (*xy(prev[0], inner + t), p0), (*xy(prev[0], inner - t), p1), (*xy(px, inner - t), c1),
+                                       (*xy(px, inner + t), c1), (*xy(prev[0], inner + t), p1)])
+                prev = (px, inner, z0, axis)
+            if posts or rails:
+                solid(f"stair-rail-{level['id']}-{st['id']}", posts + rails, pal.brass, col, bevel=0.002 if posts else 0.0, role="interior")
+            if panes:
+                solid(f"stair-glass-{level['id']}-{st['id']}", panes, pal.glass, col, role="interior")
+            if out is not None:
+                solid(f"stair-sides-{level['id']}-{st['id']}", o_paint, materials.get(out.get("side", "plaster-sand")), col, role="interior")
+                solid(f"stair-treads-{level['id']}-{st['id']}", o_treads, materials.get(out.get("tread", "paving-stone")), col,
+                      bevel=0.003, role="interior")
+                continue
             cx, cy = st["x"] + st["w"] / 2, st["y"] + st["d"] / 2
             self.lights.append({"kind": "stair", "room": f"stair-{level['id']}", "at": (cx, cy, level["slab"]["top"] + 2.3)})
         if paint:
             solid(f"stair-paint-{level['id']}", paint, pal.wall, col, role="interior")
             solid(f"stair-treads-{level['id']}", treads, pal.stair_tread, col, bevel=0.003, role="interior")
+
+    # ---- holes in the slab above a level: a double-height hall and the stairwell
+    @staticmethod
+    def _along(p, u, length, items, tol=0.06):
+        """The stretches (s0, s1, item) of walls or openings that run along the line from p in direction u."""
+        out = []
+        for w in items:
+            a, b = v2(w["from"]), v2(w["to"])
+            d = b - a
+            if d.length < 1e-6 or abs(d.x * u.y - d.y * u.x) / d.length > 1e-3:
+                continue
+            if dist_to_line(a, p, u) > w["thickness"] / 2 + tol:
+                continue
+            s0, s1 = sorted(((a - p).dot(u), (b - p).dot(u)))
+            s0, s1 = max(s0, 0.0), min(s1, length)
+            if s1 - s0 > 0.02:
+                out.append((s0, s1, w))
+        return out
+
+    @staticmethod
+    def _union(intervals):
+        """Overlapping or touching intervals joined."""
+        out = []
+        for a, b in sorted(intervals):
+            if out and a <= out[-1][1] + 1e-4:
+                out[-1] = (out[-1][0], max(out[-1][1], b))
+            else:
+                out.append((a, b))
+        return out
+
+    @staticmethod
+    def _gaps(length, covered, least=0.1):
+        """The parts of 0..length that no interval in `covered` reaches."""
+        out, t = [], 0.0
+        for s0, s1 in sorted(covered):
+            if s0 - t > least:
+                out.append((t, s0))
+            t = max(t, s1)
+        if length - t > least:
+            out.append((t, length))
+        return out
+
+    def voids(self, li, level):
+        """Finish the holes in the slab over this level. A double-height void becomes part of the room below it: its
+        ceiling is the next slab up, its walls are finished up both storeys (with reveals for the windows in them), and
+        the slab edges left open get a fascia and a frameless glass balustrade. A stairwell gets the same edges, minus
+        the balustrade where the flight arrives; the rooms above finish their own walls."""
+        from .util import ccw
+        design, pal = self.design, self.palette
+        upper = design["levels"][li + 1]
+        roof = design["levels"][li + 2] if li + 2 < len(design["levels"]) else None
+        col = collection(f"interior-voids-{level['id']}", self.root)
+        uz = upper["slab"]["top"]
+        zf = uz + FLOOR_T
+        below = [r for (lid, _), r in self.rooms.items() if lid == level["id"]]
+        panels, fascia, glass, metal, reveals, stools = [], [], [], [], [], []
+        for v in upper["slab"].get("voids", []):
+            ring = [v2(p) for p in ccw(v["outline"])]
+            under = [r for r in below if r.overlaps(v["outline"])]
+            if not under:
+                continue
+            double = v["kind"] == "double-height"
+            if double:
+                top = roof["slab"]["bottom"] if roof else upper["elevation"] + upper["height"]
+                beams = geometry.beams(upper, roof) if roof else []
+                if beams and not self.cfg.get("exposeBeams"):  # the same flush ceiling as the rooms beside it
+                    top = min(top, min(b["bottom"] for b in beams) - SKIN - 0.006)
+            else:
+                top = uz
+            arrive = self._arrival(level, ring) if not double else None
+            offsets = []
+            for i, p in enumerate(ring):
+                q = ring[(i + 1) % len(ring)]
+                u = (q - p).normalized()
+                n = Vector((-u.y, u.x))  # into the void
+                L = (q - p).length
+                prev_u = (p - ring[i - 1]).normalized()
+                next_u = (ring[(i + 2) % len(ring)] - q).normalized()
+                convex0 = prev_u.x * u.y - prev_u.y * u.x > 0
+                convex1 = u.x * next_u.y - u.y * next_u.x > 0
+                pieces = self._along(p, u, L, upper["walls"])
+                holes = self._along(p, u, L, upper["openings"])
+                covered = [(s0, s1) for s0, s1, _ in pieces + holes]
+                offsets.append(SKIN if covered else 0.0)
+                # where the rooms below finish this face, and how high: the band above them is finished here
+                lows = []
+                for r in under:
+                    for e in r.edges:
+                        if e.open or abs(e.u.dot(u)) < 0.999 or dist_to_line(e.A, p, u) > SKIN + 0.05:
+                            continue
+                        a0, a1 = sorted(((e.A - p).dot(u), (e.B - p).dot(u)))
+                        lows.append((max(a0, 0.0), min(a1, L), r.ceil_z))
+                cuts = sorted({0.0, L, *[c for s0, s1, _ in lows for c in (s0, s1)], *[c for s0, s1 in covered for c in (s0, s1)]})
+                for a0, a1 in zip(cuts, cuts[1:]):
+                    if a1 - a0 < 0.005:
+                        continue
+                    mid = (a0 + a1) / 2
+                    if not any(s0 <= mid <= s1 for s0, s1 in covered):
+                        continue
+                    z_lo = min((z for s0, s1, z in lows if s0 <= mid <= s1), default=level["slab"]["top"])
+                    if top > z_lo:
+                        panels.append(fbox(p, u, n, a0, a1, SKIN - 0.003, SKIN + 0.004, z_lo, min(uz, top)))
+                    if double:  # the upper storey's wall pieces, broken by its windows; overlapping pieces painted once
+                        heights = sorted((max(w["bottom"], uz), min(w["top"], top)) for s0, s1, w in pieces if s0 <= mid <= s1)
+                        for z0, z1 in self._union(heights):
+                            if z1 - z0 > 0.01:
+                                panels.append(fbox(p, u, n, a0, a1, SKIN - 0.003, SKIN + 0.004, z0, z1))
+                if double:
+                    for s0, s1, op in holes:
+                        self._void_reveals(op, n, upper, reveals, stools)
+                def ext(s, d, at_end, L=L, convex0=convex0, convex1=convex1):
+                    """How far a run ending at a corner of the hole reaches past it: on, round an outside corner; back
+                    from an inside one, so runs on the two sides meet without crossing."""
+                    if abs(s - (L if at_end else 0.0)) > 0.02:
+                        return 0.0
+                    return d if (convex1 if at_end else convex0) else -d
+
+                # from the ceiling of the rooms that look up into the hole: a room tucked under the landing has its own
+                # low ceiling, and measuring from that would hang a deep white band over the flight
+                z_lo = min((r.ceil_z for r in under if not r.low), default=min(r.ceil_z for r in under)) - 0.004
+                for g0, g1 in self._gaps(L, covered):
+                    # the slab's cut edge, finished from the ceiling below to the floor above, and glass along it
+                    fascia.append(fbox(p, u, n, g0 - ext(g0, 0.012, False), g1 + ext(g1, 0.012, True), 0.0, 0.012, z_lo, zf))
+                    runs = [(g0, g1)]
+                    if arrive and arrive[0] == i:
+                        runs = [(g0, min(g1, arrive[1])), (max(g0, arrive[2]), g1)]
+                    for b0, b1 in runs:
+                        if b1 - b0 > 0.15:
+                            self._balustrade(p, u, n, b0 - ext(b0, 0.075, False), b1 + ext(b1, 0.075, True), zf, glass, metal)
+            if double:
+                self._void_ceiling(v, ring, offsets, top, col, level["slab"]["top"] + FLOOR_T)
+        if panels:
+            solid(f"void-paint-{level['id']}", panels, pal.wall, col, role="interior")
+        if reveals:
+            solid(f"void-reveals-{level['id']}", reveals, pal.wall, col, role="interior")
+        if stools:
+            solid(f"void-stools-{level['id']}", stools, pal.stone, col, bevel=0.004, role="interior")
+        if fascia:
+            solid(f"void-fascia-{level['id']}", fascia, pal.wall, col, role="interior")
+        if glass:
+            solid(f"balustrade-glass-{level['id']}", glass, pal.glass, col, role="interior")
+        if metal:
+            solid(f"balustrade-rail-{level['id']}", metal, pal.brass, col, bevel=0.002, role="interior")
+
+    def _arrival(self, level, ring):
+        """(edge index, s0, s1): where a stair from this level arrives at the hole's edge, which stays open."""
+        for st in level["stairs"]:
+            steps = st.get("steps") or []
+            if len(steps) < 2:
+                continue
+            a, b = steps[-2], steps[-1]
+            run = Vector((b["x"] - a["x"], b["y"] - a["y"]))
+            if run.length < 1e-6:
+                continue
+            run.normalize()
+            c = Vector((b["x"] + b["w"] / 2, b["y"] + b["d"] / 2))
+            for i, p in enumerate(ring):
+                q = ring[(i + 1) % len(ring)]
+                u = (q - p).normalized()
+                n = Vector((-u.y, u.x))
+                if n.dot(run) > -0.99 or dist_to_line(c, p, u) > max(b["w"], b["d"]) * 1.5:
+                    continue  # the flight must run out of the hole across this edge, and end at it
+                ends = [(Vector((b["x"] + dx, b["y"] + dy)) - p).dot(u) for dx in (0, b["w"]) for dy in (0, b["d"])]
+                return i, min(ends) - 0.05, max(ends) + 0.05
+        return None
+
+    def _balustrade(self, p, u, n, s0, s1, zf, glass, metal):
+        """Frameless glass about a metre high in a slim base shoe, with a thin metal cap rail, just off the slab edge."""
+        if s1 - s0 < 0.1:
+            return
+        glass.append(fbox(p, u, n, s0, s1, -0.061, -0.049, zf + 0.03, zf + 0.985))
+        metal.append(fbox(p, u, n, s0, s1, -0.08, -0.03, zf, zf + 0.09))
+        metal.append(fbox(p, u, n, s0, s1, -0.068, -0.042, zf + 0.985, zf + 1.01))
+
+    def _void_reveals(self, op, n, level, reveals, stools):
+        """Reveals and a stone sill for a window in a wall that rises through the void (as trim() does for a room)."""
+        a, b = v2(op["from"]), v2(op["to"])
+        u = (b - a).normalized()
+        W, t = (b - a).length, op["thickness"]
+        face = t / 2 + SKIN
+        exterior = any(w["wall"] == op["wall"] and w["kind"] == "exterior" for w in level["walls"])
+        o_f = -(t / 2 - FRAME_SETBACK - FRAME_DEPTH) if exterior and op["type"] != "opening" else 0.0
+        z0, z1 = op["bottom"], op["top"]
+        reveals.append(fbox(a, u, n, SKIN - 0.002, SKIN + 0.003, o_f, face, z0, z1))
+        reveals.append(fbox(a, u, n, W - SKIN - 0.003, W - SKIN + 0.002, o_f, face, z0, z1))
+        reveals.append(fbox(a, u, n, SKIN, W - SKIN, o_f, face, z1 - SKIN - 0.003, z1 - SKIN + 0.002))
+        if op["type"] == "window":
+            stools.append(fbox(a, u, n, -0.01, W + 0.01, o_f, face + 0.04, z0 + SKIN - 0.002, z0 + SKIN + 0.03))
+
+    def _void_ceiling(self, v, ring, offsets, top, col, floor_z):
+        """The ceiling over a double-height void, floating like the rooms' own, with a lit edge and the hall pendant."""
+        pal = self.palette
+        lines = [(ring[i] + Vector((-(ring[(i + 1) % len(ring)] - ring[i]).normalized().y,
+                                    (ring[(i + 1) % len(ring)] - ring[i]).normalized().x)) * offsets[i],
+                  (ring[(i + 1) % len(ring)] - ring[i]).normalized()) for i in range(len(ring))]
+        poly = [tuple(line_hit(lines[i - 1][0], lines[i - 1][1], lines[i][0], lines[i][1])) for i in range(len(lines))]
+        inner = offset_polygon(poly, -0.02)
+        prism_object(f"ceiling-{v['id']}", inner, [], top - 0.004, top + 0.02, pal.ceiling, col, bevel=False, role="interior")
+        prism_object(f"ceiling-gap-{v['id']}", poly, [inner], top + 0.002, top + 0.02, pal.dark, col, bevel=False, role="interior")
+        xs, ys = [q[0] for q in poly], [q[1] for q in poly]
+        spec = dict(self.cfg.get("voidCeiling", {"edgeGlow": True, "slotSpacing": 0}))
+        ns = SimpleNamespace(id=v["id"], spec=spec, bounds=(min(xs), max(xs), min(ys), max(ys)), ceil_z=top)
+        self.slots(ns, poly, top, [], col)
+        pd = self.cfg.get("pendant")
+        if not pd:
+            return
+        # a long linear pendant on two fine cables, centred on the void and running along its longer side
+        area = sum(poly[i][0] * poly[i - 1][1] - poly[i - 1][0] * poly[i][1] for i in range(len(poly))) / -2
+        cx = sum((poly[i][0] + poly[i - 1][0]) * (poly[i - 1][0] * poly[i][1] - poly[i][0] * poly[i - 1][1]) for i in range(len(poly))) / (6 * area)
+        cy = sum((poly[i][1] + poly[i - 1][1]) * (poly[i - 1][0] * poly[i][1] - poly[i][0] * poly[i - 1][1]) for i in range(len(poly))) / (6 * area)
+        if "at" in pd:
+            cx, cy = pd["at"]
+        along_x = (max(xs) - min(xs)) >= (max(ys) - min(ys))
+        u = Vector((1, 0)) if along_x else Vector((0, 1))
+        n = Vector((-u.y, u.x))
+        L = pd.get("length", 2.4)
+        origin = Vector((cx, cy)) - u * (L / 2)
+        zp = floor_z + pd.get("height", 3.2)  # the bar's underside above the hall floor
+        body = [fbox(origin, u, n, 0, L, -0.022, 0.022, zp, zp + 0.045)]
+        body += [fbox(origin, u, n, s - 0.0015, s + 0.0015, -0.0015, 0.0015, zp + 0.045, top - 0.004) for s in (0.25, L - 0.25)]
+        body += [fbox(origin, u, n, s - 0.03, s + 0.03, -0.03, 0.03, top - 0.012, top - 0.004) for s in (0.25, L - 0.25)]  # canopies
+        solid(f"pendant-{v['id']}", body, pal.brass, col, bevel=0.002, role="interior")
+        solid(f"pendant-glow-{v['id']}", [fbox(origin, u, n, 0.02, L - 0.02, -0.014, 0.014, zp - 0.003, zp + 0.001)], pal.led, col,
+              role="interior")
+        self.lights.append({"kind": "pendant", "room": v["id"], "at": (cx, cy, zp - 0.02), "length": L - 0.04,
+                            "angle": math.atan2(u.y, u.x)})
 
     # ---- feature walls: fluted timber, a stone media wall, a fabric headboard wall; and tone-on-tone panelling
     def _clear_of_fixtures(self, room, e, s0, s1, depth=0.15):
@@ -1125,6 +1749,9 @@ class Interior:
         if best is None:
             return
         e, s0, s1 = best
+        if kind in ("travertine", "fluted-tight", "oak-panel"):
+            self._modern_feature(room, e, s0, s1, kind, col)
+            return
         want_span = room.spec.get("featureSpan", {"fluted": 2.5, "media": 3.2, "headboard": 2.6}.get(kind, 2.5))
         span = min(want_span, s1 - s0 - 0.5)
         if span < 0.8:
@@ -1173,6 +1800,65 @@ class Interior:
             put("glow", [fbox(e.A, e.u, e.n, lo, hi, 0.0, 0.03, zb1, zb1 + 0.02)], pal.led, 0.0)
             put("brass", [fbox(e.A, e.u, e.n, lo - 0.012, lo, 0.0, 0.052, zb0, zb1), fbox(e.A, e.u, e.n, hi, hi + 0.012, 0.0, 0.052, zb0, zb1)],
                 pal.brass)
+
+    def _modern_feature(self, room, e, s0, s1, kind, col):
+        """Floor-to-ceiling feature walls, washed by a light slot in the ceiling just off the wall:
+            travertine    vein-cut stone slabs with fine joints
+            fluted-tight  close timber flutes on a dark ground
+            oak-panel     oak veneer boards, with a lit reveal at headboard height unless `lightLine` is false
+        `featureAll` covers every solid stretch of the chosen wall; otherwise one stretch of `featureSpan`."""
+        pal, spec = self.palette, room.spec
+        self.featured[room.id] = e
+        if spec.get("featureAll"):
+            spans = [(a, b) for a, b in self._union(self._solid_spans(e)) if b - a > 0.3]
+        else:
+            span = min(spec.get("featureSpan", s1 - s0), s1 - s0)
+            mid = (s0 + s1) / 2
+            spans = [(mid - span / 2, mid + span / 2)]
+        z0, z1 = room.floor_z + FLOOR_T, room.ceil_z - 0.003
+        mat = pal.named(spec.get("featureMaterial", {"travertine": "travertine", "fluted-tight": "oak", "oak-panel": "oak"}[kind]))
+        backer, faces, glow, joints = [], [], [], []
+        for lo, hi in spans:
+            if kind == "travertine":
+                # slabs about 1.2 m wide, set in two courses with a hairline joint between them
+                count = max(1, round((hi - lo) / 1.2))
+                w = (hi - lo) / count
+                split = z0 + (z1 - z0) * 0.5
+                for k in range(count):
+                    a0, a1 = lo + k * w + 0.0012, lo + (k + 1) * w - 0.0012
+                    faces.append(fbox(e.A, e.u, e.n, a0, a1, 0.0, 0.022, z0, split - 0.0012))
+                    faces.append(fbox(e.A, e.u, e.n, a0, a1, 0.0, 0.022, split + 0.0012, z1))
+                joints.append(fbox(e.A, e.u, e.n, lo, hi, 0.0, 0.016, z0, z1))
+            elif kind == "fluted-tight":
+                backer.append(fbox(e.A, e.u, e.n, lo, hi, 0.0, 0.01, z0, z1))
+                pitch, fw = 0.032, 0.022
+                count = int((hi - lo) / pitch)
+                start = lo + ((hi - lo) - count * pitch) / 2 + (pitch - fw) / 2
+                faces += [fbox(e.A, e.u, e.n, start + k * pitch, start + k * pitch + fw, 0.008, 0.03, z0, z1) for k in range(count)]
+            else:
+                line = spec.get("lightLine", True)
+                zl = room.floor_z + spec.get("lightLineHeight", 1.15)
+                count = max(1, round((hi - lo) / 0.6))
+                w = (hi - lo) / count
+                for k in range(count):
+                    a0, a1 = lo + k * w + 0.001, lo + (k + 1) * w - 0.001
+                    if line:
+                        faces.append(fbox(e.A, e.u, e.n, a0, a1, 0.0, 0.026, z0, zl - 0.012))
+                        faces.append(fbox(e.A, e.u, e.n, a0, a1, 0.0, 0.026, zl + 0.012, z1))
+                    else:
+                        faces.append(fbox(e.A, e.u, e.n, a0, a1, 0.0, 0.026, z0, z1))
+                backer.append(fbox(e.A, e.u, e.n, lo, hi, 0.0, 0.014, z0, z1))
+                if line:  # the strip glows on its own; the slot above does the lighting
+                    glow.append(fbox(e.A, e.u, e.n, lo, hi, 0.0, 0.016, zl - 0.006, zl + 0.006))
+            if spec.get("featureWash", True):
+                # a slot in the ceiling just off the wall grazes light down its face
+                glow.append(fbox(e.A, e.u, e.n, lo + 0.05, hi - 0.05, 0.09, 0.12, room.ceil_z - 0.005, room.ceil_z - 0.003))
+                a = e.A + e.u * ((lo + hi) / 2) + e.n * 0.12
+                self.lights.append({"kind": "wash", "room": room.id, "at": (a.x, a.y, room.ceil_z - 0.02), "length": max(0.3, hi - lo - 0.1),
+                                    "angle": math.atan2(e.u.y, e.u.x)})
+        for name, boxes, m in (("backer", backer, pal.dark), ("joints", joints, pal.dark), ("face", faces, mat), ("glow", glow, pal.led)):
+            if boxes:
+                solid(f"feature-{name}-{room.id}", boxes, m, col, bevel=0.0015 if name == "face" else 0.0, role="interior")
 
     def panelling(self, room, col):
         """Slim raised picture-frame mouldings, painted the wall's own colour, on the plain stretches of the walls."""

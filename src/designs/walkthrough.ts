@@ -14,16 +14,28 @@
  */
 import { z } from "zod";
 import { alongWall, asRegion, distToSegment, pointInRegion, wallFrames } from "./geometry.ts";
-import type { Design, Level, Opening, Pt, Stair } from "./model.ts";
+import type { Design, Level, Opening, Pt, Room, Stair } from "./model.ts";
 import { planPoint } from "./plan.ts";
-import fiveMarla from "./walkthroughs/5-marla.json" with { type: "json" };
 
 const Id = z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "ids are lowercase letters, digits and dashes");
 
+/** `via` for two rooms that meet with no wall between them (a lounge and its kitchenette) */
+export const OPEN = "open";
+
 export const Link = z.object({
   to: Id,
-  /** The door, opening or stair the visitor goes through. Absent: both views are in one open room. */
+  /**
+   * The door, opening or stair the visitor goes through, or "open" where two rooms on one storey meet with no wall.
+   * Absent: both views are in one room.
+   */
   via: Id.optional(),
+});
+
+/** A room the tour leaves out on purpose, with the reason; every other room must have a viewpoint */
+export const Excluded = z.object({
+  level: Id,
+  room: Id,
+  reason: z.string().min(1),
 });
 
 export const Viewpoint = z.object({
@@ -49,6 +61,8 @@ export const Walkthrough = z.object({
   /** The viewpoint the tour opens on */
   start: Id,
   viewpoints: z.array(Viewpoint).min(1),
+  /** Rooms with no viewpoint, by the maintainer's choice (e.g. a room only reachable from outside) */
+  excluded: z.array(Excluded).default([]),
 });
 
 export type Link = z.output<typeof Link>;
@@ -58,8 +72,14 @@ export type Walkthrough = z.output<typeof Walkthrough>;
 /** How close a door must be to a room's outline for the room to count as having it */
 const ON_OUTLINE = 0.6;
 
-/** Every walkthrough, as authored. Add a design's file here to give it a walkthrough. */
-export const walkthroughSources: unknown[] = [fiveMarla];
+/**
+ * Every walkthrough, as authored: each JSON file in ./walkthroughs gives its design a tour, with no code change.
+ * (import.meta.glob is resolved by Vite, which builds the site and runs the tests.)
+ */
+const files = import.meta.glob<{ default: unknown }>("./walkthroughs/*.json", { eager: true });
+export const walkthroughSources: unknown[] = Object.keys(files)
+  .sort()
+  .map((path) => files[path].default);
 
 // ---- directions ----
 
@@ -88,10 +108,62 @@ function openingMid(level: Level, opening: Opening): Pt | undefined {
 
 const stairCentre = (s: Stair): Pt => [s.x + s.w / 2, s.y + s.d / 2];
 
-/** Where a link passes through, on the plan: the middle of its door or the middle of its stair */
+/** The shortest open stretch that counts as a way through: about a narrow doorway */
+export const OPEN_MIN = 2;
+/** How far apart two outline edges (or an edge and a wall's face) may be and still count as the same line */
+const SAME_LINE = 0.45;
+
+/**
+ * Where two rooms on one storey meet with no wall: the longest stretch of their shared outline that no wall covers,
+ * with its middle point. Undefined when they share none of at least OPEN_MIN feet.
+ */
+export function openStretch(level: Level, a: Room, b: Room): { mid: Pt; length: number } | undefined {
+  let best: { mid: Pt; length: number } | undefined;
+  const edges = (r: Room) => r.outline.map((p, i) => [p, r.outline[(i + 1) % r.outline.length]] as const);
+  for (const [p, q] of edges(a)) {
+    const len = Math.hypot(q[0] - p[0], q[1] - p[1]);
+    if (len < 1e-6) continue;
+    const u: Pt = [(q[0] - p[0]) / len, (q[1] - p[1]) / len];
+    const off = (c: Pt) => Math.abs((c[0] - p[0]) * u[1] - (c[1] - p[1]) * u[0]);
+    const along = (c: Pt) => (c[0] - p[0]) * u[0] + (c[1] - p[1]) * u[1];
+    for (const [r, s] of edges(b)) {
+      if (off(r) > SAME_LINE || off(s) > SAME_LINE) continue;
+      const lo = Math.max(0, Math.min(along(r), along(s)));
+      const hi = Math.min(len, Math.max(along(r), along(s)));
+      if (hi - lo < OPEN_MIN) continue;
+      // take away every stretch a wall stands on, door or not: a doorway is a door link, not an open boundary
+      let free: [number, number][] = [[lo, hi]];
+      for (const w of level.walls) {
+        const reach = w.thickness / 2 + 0.05;
+        if (off(w.a) > reach || off(w.b) > reach) continue;
+        const w0 = Math.min(along(w.a), along(w.b));
+        const w1 = Math.max(along(w.a), along(w.b));
+        free = free.flatMap(([f0, f1]): [number, number][] =>
+          w1 <= f0 || w0 >= f1 ? [[f0, f1]] : [...(w0 > f0 ? [[f0, w0] as [number, number]] : []), ...(w1 < f1 ? [[w1, f1] as [number, number]] : [])],
+        );
+      }
+      for (const [f0, f1] of free) {
+        if (f1 - f0 < OPEN_MIN || (best && best.length >= f1 - f0)) continue;
+        const m = (f0 + f1) / 2;
+        best = { mid: [p[0] + u[0] * m, p[1] + u[1] * m], length: f1 - f0 };
+      }
+    }
+  }
+  return best;
+}
+
+const roomOf = (level: Level | undefined, vp: Viewpoint): Room | undefined =>
+  vp.room === null ? undefined : level?.rooms.find((r) => r.id === vp.room);
+
+/** Where a link passes through, on the plan: the middle of its door, open stretch or stair */
 export function linkPoint(design: Design, from: Viewpoint, link: Link, to: Viewpoint): Pt | undefined {
   if (!link.via) return to.at;
   const level = levelOf(design, from.level);
+  if (link.via === OPEN) {
+    const a = roomOf(level, from);
+    const b = roomOf(level, to);
+    return level && a && b ? openStretch(level, a, b)?.mid : undefined;
+  }
   const opening = level?.openings.find((o) => o.id === link.via);
   if (level && opening) return openingMid(level, opening);
   const stair = level?.stairs.find((s) => s.id === link.via);
@@ -221,9 +293,15 @@ export function walkthroughProblems(design: Design, wt: Walkthrough): string[] {
     else if (!pointInRegion(vp.at, asRegion(room.outline))) say(`viewpoint "${vp.id}" is outside its room "${room.id}"`);
   }
 
-  // every room has a viewpoint
+  // every room has a viewpoint, except those left out on purpose
+  const left = (level: string, room: string) => wt.excluded.some((x) => x.level === level && x.room === room);
+  for (const x of wt.excluded) {
+    if (!levelOf(design, x.level)?.rooms.some((r) => r.id === x.room)) say(`excludes room "${x.room}", which is not on level "${x.level}"`);
+    else if (wt.viewpoints.some((v) => v.level === x.level && v.room === x.room)) say(`excludes room "${x.room}" but has a viewpoint in it`);
+  }
   for (const id of wt.levels) {
     for (const room of levelOf(design, id)?.rooms ?? []) {
+      if (left(id, room.id)) continue;
       if (!wt.viewpoints.some((v) => v.level === id && v.room === room.id)) say(`room "${room.id}" has no viewpoint`);
     }
   }
@@ -244,6 +322,14 @@ export function walkthroughProblems(design: Design, wt: Walkthrough): string[] {
         continue;
       }
       const upper = levelOf(design, vp.level);
+      if (link.via === OPEN) {
+        const a = roomOf(upper, vp);
+        const b = roomOf(upper, to);
+        if (vp.level !== to.level || !upper || !a || !b) say(`${name}: an open link joins two rooms on one level`);
+        else if (a.id === b.id) say(`${name}: both views are in "${a.id}", so the link needs no "via"`);
+        else if (!openStretch(upper, a, b)) say(`${name}: "${a.id}" and "${b.id}" do not meet without a wall`);
+        continue;
+      }
       const stair = upper?.stairs.find((s) => s.id === link.via);
       const lower = levelOf(design, to.level);
       const stairBetween = (a: Level | undefined, b: Level | undefined) => a?.stairs.find((s) => s.id === link.via && s.to === b?.id);

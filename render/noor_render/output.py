@@ -34,12 +34,20 @@ def _blank(path):
         bpy.data.images.remove(img)
 
 
-def use_gpu():
-    """Enable a Cycles GPU backend (CUDA, HIP, oneAPI). False if there is none.
+GPU_BACKENDS = ("OPTIX", "CUDA", "HIP", "ONEAPI")
 
-    OptiX is left out on purpose: on Colab's T4 its runtime is incomplete and the OptiX denoiser fails to start."""
+
+def use_gpu():
+    """Enable the fastest Cycles GPU backend the machine has: OptiX, then CUDA, HIP, oneAPI. False if there is none.
+
+    NOOR_GPU_BACKEND=CUDA (or any one of the above) forces that backend alone. CUDA renders are pixel-identical across
+    NVIDIA GPUs, so regression renders force it; OptiX output differs from CUDA by noise only. The denoiser is always
+    OpenImageDenoise, never OptiX's (it failed to start on Colab's T4)."""
     prefs = bpy.context.preferences.addons["cycles"].preferences
-    for backend in ("CUDA", "HIP", "ONEAPI"):
+    forced = os.environ.get("NOOR_GPU_BACKEND", "").strip().upper()
+    if forced and forced not in GPU_BACKENDS:
+        raise ValueError(f"NOOR_GPU_BACKEND={forced!r}: use one of {', '.join(GPU_BACKENDS)}")
+    for backend in (forced,) if forced else GPU_BACKENDS:
         try:
             prefs.compute_device_type = backend
             prefs.refresh_devices()

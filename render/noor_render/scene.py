@@ -40,6 +40,10 @@ class Scene:
         config = shots.load(slug)
         shot = shot or shots.get(config, shot_name)
         hide_boundary(design, shot.get("hideBoundary", []))
+        if shot.get("interior"):
+            from . import fixups, interior
+            if interior.load_config(slug).get("clearColumns"):
+                print(f"walkthrough: windows trimmed clear of columns: {fixups.clear_columns(design)}")
         assets.check_all()
         clear()
         root = collection("noor")

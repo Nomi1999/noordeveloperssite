@@ -48,10 +48,15 @@ describe("1 Kanal house", () => {
   /** The clear size at a point inside a room, measured from wall face to wall face along each axis, and stopping at the room's outline where no wall stands */
   function clearSize(levelId: string, [x, y]: [number, number]) {
     const { walls, rooms } = level(levelId);
+    // the room whose outline holds the point (outlines need not be rectangles: the 1 Kanal lobby is an L)
     const inRoom = rooms.filter((r) => {
-      const xs = r.outline.map((p) => p[0]);
-      const ys = r.outline.map((p) => p[1]);
-      return x > Math.min(...xs) && x < Math.max(...xs) && y > Math.min(...ys) && y < Math.max(...ys);
+      let hit = false;
+      for (let i = 0, j = r.outline.length - 1; i < r.outline.length; j = i++) {
+        const [xi, yi] = r.outline[i];
+        const [xj, yj] = r.outline[j];
+        if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) hit = !hit;
+      }
+      return hit;
     });
     expect(inRoom.length, `a room at ${x}, ${y}`).toBeGreaterThan(0);
     const xs = inRoom[0].outline.map((p) => p[0]);

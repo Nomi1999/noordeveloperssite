@@ -348,7 +348,8 @@ export default defineDesign({
         door("electrical-door", "under-stair", 5.85, { width: 2, height: 6, opensTo: "left" }),
       ],
       rooms: [
-        room("lobby", "Stair lobby", "stair-hall", rect([20.5, 22.05], [34.675, 45.75])),
+        // L-shaped: the main stair climbs from the back of the lobby, up to the wall under its landing
+        room("lobby", "Stair lobby", "stair-hall", [[20.5, 22.05], [35.05, 22.05], [35.05, 37.05], [46.4, 37.05], [46.4, 45.75], [20.5, 45.75]]),
         room("drawing", "Drawing room", "drawing", rect([35.05, 17.35], [51.75, 37.05])),
         room("powder", "Powder", "powder-room", rect([29.25, 15.4], [35.05, 22.05])),
         room("dining", "Dining room", "dining", rect([3.75, 29.35], [20.5, 41.85])),
@@ -460,7 +461,7 @@ export default defineDesign({
         win("bed4-side", "left-b", 10.9, 10, tall),
         win("master-rear", "rear", 23.85, 8),
         win("master-bath-vent", "rear-side", 4.35, 2, { sill: 5, height: 3.5 }),
-        win("lounge-window", "lounge-side", 2.25, 14.1, tall),
+        door("lounge-terrace-door", "lounge-side", 2.25, { type: "sliding-door", width: 14.1 }),
         win("study-side-glass", "study-side", 0.4, 10, full),
         win("passage-glass", "study-front", 0.45, 3.2, full),
         win("study-glass", "study-front", 4.55, 9.2, full),

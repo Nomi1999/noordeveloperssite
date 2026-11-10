@@ -3,8 +3,10 @@ import { getDesign } from "./index.ts";
 import { planPoint } from "./plan.ts";
 import {
   buildTour,
+  linkPoint,
   markerYaw,
   normaliseAngle,
+  openStretch,
   parseWalkthrough,
   viewerYaw,
   walkthroughProblems,
@@ -14,7 +16,8 @@ import {
 import { getWalkthrough } from "./walkthroughs.ts";
 
 const { design } = getDesign("5-marla");
-const source = () => structuredClone(walkthroughSources[0]) as ReturnType<typeof parseWalkthrough>;
+const fiveMarla = walkthroughSources.find((s) => (s as { design: string }).design === "5-marla");
+const source = () => structuredClone(fiveMarla) as ReturnType<typeof parseWalkthrough>;
 const check = (edit: (w: ReturnType<typeof source>) => void) => {
   const w = source();
   edit(w);
@@ -38,7 +41,89 @@ describe("the 5 Marla walkthrough", () => {
   });
 
   it("has no tour for a design without one", () => {
-    expect(getWalkthrough("1-kanal")).toBeUndefined();
+    expect(getWalkthrough("2-kanal")).toBeUndefined();
+  });
+});
+
+describe("the 1 Kanal walkthrough", () => {
+  const kanal = getDesign("1-kanal").design;
+  const source = walkthroughSources.find((s) => (s as { design: string }).design === "1-kanal");
+
+  it("is found beside the 5 Marla's", () => {
+    expect(walkthroughSources.map((s) => (s as { design: string }).design).sort()).toEqual(["1-kanal", "5-marla"]);
+    expect(getWalkthrough("1-kanal")).toBeDefined();
+  });
+
+  it("is sound", () => {
+    expect(walkthroughProblems(kanal, parseWalkthrough(source))).toEqual([]);
+  });
+
+  it("has 40 views and leaves out only the two rooms with no way in", () => {
+    const wt = parseWalkthrough(source);
+    expect(wt.viewpoints).toHaveLength(40);
+    expect(wt.excluded.map((x) => `${x.level}/${x.room}`).sort()).toEqual(["first/terrace-left", "ground/washroom"]);
+    for (const level of kanal.levels.filter((l) => ["ground", "first"].includes(l.id))) {
+      for (const room of level.rooms) {
+        const seen = wt.viewpoints.some((v) => v.level === level.id && v.room === room.id);
+        const out = wt.excluded.some((x) => x.level === level.id && x.room === room.id);
+        expect(seen !== out, `${level.id}/${room.id}`).toBe(true);
+      }
+    }
+  });
+});
+
+describe("open boundaries and rooms left out", () => {
+  const kanal = getDesign("1-kanal").design;
+  const first = kanal.levels.find((l) => l.id === "first")!;
+  const room = (id: string) => first.rooms.find((r) => r.id === id)!;
+  // a two-view tour of the 1 Kanal first floor: the lounge and the kitchenette it opens onto, every other room left out
+  const tour = () => ({
+    design: "1-kanal",
+    levels: ["first"],
+    start: "lounge",
+    viewpoints: [
+      { id: "lounge", room: "lounge", level: "first", at: [30, 55], facing: 90, description: "The lounge.", links: [{ to: "kitchenette", via: "open" }] },
+      { id: "kitchenette", room: "kitchenette", level: "first", at: [15, 48], facing: 0, description: "The kitchenette.", links: [{ to: "lounge", via: "open" }] },
+    ],
+    excluded: first.rooms.filter((r) => !["lounge", "kitchenette"].includes(r.id)).map((r) => ({ level: "first", room: r.id, reason: "test" })),
+  });
+  const problems = (edit: (w: ReturnType<typeof tour>) => void = () => {}) => {
+    const w = tour();
+    edit(w);
+    return walkthroughProblems(kanal, parseWalkthrough(w)).join("\n");
+  };
+
+  it("finds where two rooms meet with no wall, and nowhere a wall stands", () => {
+    const open = openStretch(first, room("lounge"), room("kitchenette"))!;
+    // the longer of the two open sides: along y 52, from x 10.8 to 21.3
+    expect(open.length).toBeCloseTo(10.5, 1);
+    expect(open.mid[0]).toBeCloseTo(16.05, 2);
+    expect(open.mid[1]).toBeCloseTo(52, 2);
+    expect(openStretch(first, room("lounge"), room("master"))).toBeUndefined();
+  });
+
+  it("accepts an open link and puts its marker in the middle of the open stretch", () => {
+    expect(problems()).toBe("");
+    const w = parseWalkthrough(tour());
+    expect(linkPoint(kanal, w.viewpoints[0], w.viewpoints[0].links[0], w.viewpoints[1])).toEqual([16.05, 52]);
+  });
+
+  it("rejects an open link through a wall", () => {
+    const found = problems((w) => {
+      w.viewpoints[1] = { ...w.viewpoints[1], id: "master", room: "master", at: [30, 75] };
+      w.viewpoints[0].links = [{ to: "master", via: "open" }];
+      w.viewpoints[1].links = [{ to: "lounge", via: "open" }];
+      w.excluded = w.excluded.filter((x) => x.room !== "master").concat({ level: "first", room: "kitchenette", reason: "test" });
+    });
+    expect(found).toMatch(/"lounge" and "master" do not meet without a wall/);
+  });
+
+  it("wants every room it does not leave out", () => {
+    expect(problems((w) => (w.excluded = w.excluded.filter((x) => x.room !== "study")))).toMatch(/room "study" has no viewpoint/);
+  });
+
+  it("names a room it leaves out that is not there", () => {
+    expect(problems((w) => w.excluded.push({ level: "first", room: "cellar", reason: "test" }))).toMatch(/excludes room "cellar"/);
   });
 });
 

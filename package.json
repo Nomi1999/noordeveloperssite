@@ -25,7 +25,9 @@
     "render:panoramas": "node scripts/panoramas.mjs",
     "render:overview": "node scripts/panorama-overview.mjs",
     "render:encode": "node scripts/encode-renders.mjs",
-    "walkthroughs:encode": "node scripts/walkthroughs.mjs"
+    "walkthroughs:encode": "node scripts/walkthroughs.mjs",
+    "test:render": "python -m unittest discover -s render/tests",
+    "render:colab": "node scripts/colab/panoramas.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

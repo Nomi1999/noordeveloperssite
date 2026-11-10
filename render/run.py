@@ -139,9 +139,12 @@ def panorama(args):
     except (walkthrough.ViewpointError, interior.InteriorError) as e:
         print(f"ERROR: {e}", file=sys.stderr)
         sys.exit(1)
-    sun = dict(cfg.get("sun", {}), **cfg.get("viewpoints", {}).get(vp["id"], {}).get("sun", {}))
-    light = {"sunAzimuth": sun.get("azimuth", 250), "duskAzimuth": 115, "exposureDay": args.exposure if args.exposure is not None else cfg.get("exposure", 0.5),
-             "look": "AgX - Base Contrast", "skyFill": args.fill if args.fill is not None else cfg.get("skyFill", 0.15), "haze": cfg.get("haze", 0.0015)}
+    own = cfg.get("viewpoints", {}).get(vp["id"], {})
+    sun = dict(cfg.get("sun", {}), **own.get("sun", {}))
+    # exposure like a photographer's, per view where one is set (a dark bathroom wants more than a pale drawing room)
+    exposure = args.exposure if args.exposure is not None else own.get("exposure", cfg.get("exposure", 0.5))
+    light = {"sunAzimuth": sun.get("azimuth", 250), "duskAzimuth": 115, "exposureDay": exposure,
+             "look": cfg.get("look", "AgX - Base Contrast"), "skyFill": args.fill if args.fill is not None else cfg.get("skyFill", 0.15), "haze": cfg.get("haze", 0.0015)}
     shot = {"lens": 18, "sensor": 36, "verticals": False, "position": [0, 0, 1], "target": [0, 1, 1], "timeOfDay": 0.0,
             "interior": True, "light": light}
     try:

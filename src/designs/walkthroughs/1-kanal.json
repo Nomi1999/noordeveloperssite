@@ -1,0 +1,867 @@
+{
+  "design": "1-kanal",
+  "levels": [
+    "ground",
+    "first"
+  ],
+  "start": "hall-entry",
+  "viewpoints": [
+    {
+      "id": "hall-entry",
+      "room": "lobby",
+      "label": "Entrance hall",
+      "level": "ground",
+      "at": [
+        24.5,
+        25.5
+      ],
+      "facing": 90,
+      "description": "The double-height entrance hall: vein-cut travertine rising two storeys, a glass balustrade along the gallery above and a linear pendant hanging into the void.",
+      "links": [
+        {
+          "to": "stair-foot"
+        },
+        {
+          "to": "drawing",
+          "via": "drawing-door"
+        },
+        {
+          "to": "dining",
+          "via": "dining-door"
+        },
+        {
+          "to": "powder",
+          "via": "powder-door"
+        }
+      ]
+    },
+    {
+      "id": "stair-foot",
+      "room": "lobby",
+      "label": "Foot of the stair",
+      "level": "ground",
+      "at": [
+        32.5,
+        39.2
+      ],
+      "facing": 0,
+      "description": "The back of the hall at the foot of the stone stair, with its glass balustrade, under the open gallery of the first floor.",
+      "links": [
+        {
+          "to": "hall-entry"
+        },
+        {
+          "to": "lounge",
+          "via": "lounge-door"
+        },
+        {
+          "to": "electrical",
+          "via": "electrical-door"
+        },
+        {
+          "to": "stair-head",
+          "via": "stair"
+        }
+      ]
+    },
+    {
+      "id": "drawing",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        42.5,
+        28.5
+      ],
+      "facing": 0,
+      "description": "The drawing room: a travertine feature wall, linear light slots in a floating ceiling, and pale honed stone underfoot.",
+      "links": [
+        {
+          "to": "hall-entry",
+          "via": "drawing-door"
+        },
+        {
+          "to": "drawing-window"
+        }
+      ]
+    },
+    {
+      "id": "drawing-window",
+      "room": "drawing",
+      "label": "Drawing room, by the window",
+      "level": "ground",
+      "at": [
+        45.5,
+        21.5
+      ],
+      "facing": 90,
+      "description": "The front of the drawing room by its tall window onto the street.",
+      "links": [
+        {
+          "to": "drawing"
+        }
+      ]
+    },
+    {
+      "id": "powder",
+      "room": "powder",
+      "level": "ground",
+      "at": [
+        32.2,
+        19.2
+      ],
+      "facing": 270,
+      "description": "The powder room in dark veined stone slabs, with a floating oak vanity, a vessel basin and a backlit mirror.",
+      "links": [
+        {
+          "to": "hall-entry",
+          "via": "powder-door"
+        }
+      ]
+    },
+    {
+      "id": "dining",
+      "room": "dining",
+      "level": "ground",
+      "at": [
+        12,
+        35.5
+      ],
+      "facing": 0,
+      "description": "The dining room off the hall, with a travertine wall and slot lighting over the table's place.",
+      "links": [
+        {
+          "to": "hall-entry",
+          "via": "dining-door"
+        },
+        {
+          "to": "kitchen-entry",
+          "via": "kitchen-door"
+        }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "room": "kitchen",
+      "level": "ground",
+      "at": [
+        11,
+        47.5
+      ],
+      "facing": 180,
+      "description": "The kitchen: handleless greige and oak cabinetry, a stone counter with a waterfall end and a full-height slab splashback.",
+      "links": [
+        {
+          "to": "kitchen-entry",
+          "via": "open"
+        },
+        {
+          "to": "raw",
+          "via": "raw-inner-door"
+        },
+        {
+          "to": "lounge",
+          "via": "kitchen-lounge-door"
+        }
+      ]
+    },
+    {
+      "id": "kitchen-entry",
+      "room": "kitchen-entry",
+      "label": "Kitchen lobby",
+      "level": "ground",
+      "at": [
+        18.9,
+        43.9
+      ],
+      "facing": 180,
+      "description": "The lobby between the dining room and the kitchen.",
+      "links": [
+        {
+          "to": "dining",
+          "via": "kitchen-door"
+        },
+        {
+          "to": "kitchen",
+          "via": "open"
+        }
+      ]
+    },
+    {
+      "id": "lounge",
+      "room": "lounge",
+      "level": "ground",
+      "at": [
+        30,
+        55
+      ],
+      "facing": 90,
+      "description": "The TV lounge, with a wall of tight-fluted smoked oak and doors to the kitchen and the bedroom wing.",
+      "links": [
+        {
+          "to": "stair-foot",
+          "via": "lounge-door"
+        },
+        {
+          "to": "kitchen",
+          "via": "kitchen-lounge-door"
+        },
+        {
+          "to": "lounge-back"
+        },
+        {
+          "to": "lounge-lobby",
+          "via": "open"
+        }
+      ]
+    },
+    {
+      "id": "lounge-back",
+      "room": "lounge",
+      "label": "TV lounge, far end",
+      "level": "ground",
+      "at": [
+        40,
+        50
+      ],
+      "facing": 180,
+      "description": "The far end of the TV lounge, looking back toward the hall and the kitchen.",
+      "links": [
+        {
+          "to": "lounge"
+        }
+      ]
+    },
+    {
+      "id": "lounge-lobby",
+      "room": "lounge-lobby",
+      "label": "Bedroom lobby",
+      "level": "ground",
+      "at": [
+        20.7,
+        66.8
+      ],
+      "facing": 270,
+      "description": "The small lobby off the TV lounge that leads to the two ground-floor bedrooms.",
+      "links": [
+        {
+          "to": "lounge",
+          "via": "open"
+        },
+        {
+          "to": "bed1",
+          "via": "bed1-door"
+        },
+        {
+          "to": "bed2",
+          "via": "bed2-door"
+        }
+      ]
+    },
+    {
+      "id": "raw",
+      "room": "raw",
+      "level": "ground",
+      "at": [
+        10.5,
+        57.4
+      ],
+      "facing": 270,
+      "description": "The back kitchen for everyday cooking: plain handleless units and a stone splashback.",
+      "links": [
+        {
+          "to": "kitchen",
+          "via": "raw-inner-door"
+        }
+      ]
+    },
+    {
+      "id": "bed1",
+      "room": "bed1",
+      "level": "ground",
+      "at": [
+        13.5,
+        77
+      ],
+      "facing": 90,
+      "description": "Bedroom 1, with an oak-panelled headboard wall and a concealed light line.",
+      "links": [
+        {
+          "to": "lounge-lobby",
+          "via": "bed1-door"
+        },
+        {
+          "to": "bath1",
+          "via": "bath-door"
+        }
+      ]
+    },
+    {
+      "id": "bath1",
+      "room": "bath1",
+      "level": "ground",
+      "at": [
+        12.5,
+        65.2
+      ],
+      "facing": 180,
+      "description": "Bedroom 1's bath in warm grey stone slabs floor to ceiling, with a wall-hung WC, a rain shower and a lit niche.",
+      "links": [
+        {
+          "to": "bed1",
+          "via": "bath-door"
+        }
+      ]
+    },
+    {
+      "id": "bed2",
+      "room": "bed2",
+      "level": "ground",
+      "at": [
+        31.5,
+        75
+      ],
+      "facing": 90,
+      "description": "Bedroom 2, with an oak headboard wall and wide oak floorboards.",
+      "links": [
+        {
+          "to": "lounge-lobby",
+          "via": "bed2-door"
+        },
+        {
+          "to": "dress2",
+          "via": "dress-door"
+        }
+      ]
+    },
+    {
+      "id": "dress2",
+      "room": "dress2",
+      "label": "Dressing room 2",
+      "level": "ground",
+      "at": [
+        43.5,
+        69
+      ],
+      "facing": 0,
+      "description": "Bedroom 2's dressing room, lined with handleless oak wardrobes.",
+      "links": [
+        {
+          "to": "bed2",
+          "via": "dress-door"
+        },
+        {
+          "to": "bath2",
+          "via": "open"
+        }
+      ]
+    },
+    {
+      "id": "bath2",
+      "room": "bath2",
+      "level": "ground",
+      "at": [
+        43,
+        78.5
+      ],
+      "facing": 90,
+      "description": "Bedroom 2's bath, opening off the dressing room.",
+      "links": [
+        {
+          "to": "dress2",
+          "via": "open"
+        }
+      ]
+    },
+    {
+      "id": "electrical",
+      "room": "electrical",
+      "level": "ground",
+      "at": [
+        48.5,
+        43.7
+      ],
+      "facing": 0,
+      "description": "The electrical room under the stair landing.",
+      "links": [
+        {
+          "to": "stair-foot",
+          "via": "electrical-door"
+        }
+      ]
+    },
+    {
+      "id": "stair-head",
+      "room": "stair-hall",
+      "label": "Top of the stair",
+      "level": "first",
+      "at": [
+        36.6,
+        43.4
+      ],
+      "facing": 270,
+      "description": "The top of the stair, looking along the gallery over the double-height hall.",
+      "links": [
+        {
+          "to": "stair-foot",
+          "via": "stair"
+        },
+        {
+          "to": "passage",
+          "via": "open"
+        },
+        {
+          "to": "passage-side",
+          "via": "open"
+        }
+      ]
+    },
+    {
+      "id": "passage",
+      "room": "passage",
+      "label": "Gallery passage",
+      "level": "first",
+      "at": [
+        27.5,
+        43.1
+      ],
+      "facing": 270,
+      "description": "The gallery passage beside the void, with the glass balustrade and the pendant hanging below.",
+      "links": [
+        {
+          "to": "stair-head",
+          "via": "open"
+        },
+        {
+          "to": "bed3",
+          "via": "bed3-door"
+        },
+        {
+          "to": "family",
+          "via": "lounge-door"
+        }
+      ]
+    },
+    {
+      "id": "passage-side",
+      "room": "passage-side",
+      "label": "Side gallery",
+      "level": "first",
+      "at": [
+        37,
+        30
+      ],
+      "facing": 270,
+      "description": "The side gallery along the void, with the study and the bridge to the pier beyond.",
+      "links": [
+        {
+          "to": "stair-head",
+          "via": "open"
+        },
+        {
+          "to": "study",
+          "via": "study-door"
+        },
+        {
+          "to": "link",
+          "via": "open"
+        }
+      ]
+    },
+    {
+      "id": "link",
+      "room": "pier-link",
+      "label": "Bridge to the pier",
+      "level": "first",
+      "at": [
+        33.4,
+        23.6
+      ],
+      "facing": 270,
+      "description": "The short bridge from the gallery into the hollow stone pier on the front of the house.",
+      "links": [
+        {
+          "to": "passage-side",
+          "via": "open"
+        },
+        {
+          "to": "pier",
+          "via": "pier-opening"
+        }
+      ]
+    },
+    {
+      "id": "pier",
+      "room": "pier",
+      "label": "Inside the pier",
+      "level": "first",
+      "at": [
+        32.2,
+        18.7
+      ],
+      "facing": 270,
+      "description": "Inside the hollow stone pier on the facade, with its door out to the front terrace.",
+      "links": [
+        {
+          "to": "link",
+          "via": "pier-opening"
+        },
+        {
+          "to": "terrace-right",
+          "via": "terrace-door"
+        }
+      ]
+    },
+    {
+      "id": "first-lobby",
+      "room": "lobby",
+      "label": "Bedroom lobby",
+      "level": "first",
+      "at": [
+        20.7,
+        66.8
+      ],
+      "facing": 270,
+      "description": "The lobby off the family lounge that leads to the master suite and Bedroom 4.",
+      "links": [
+        {
+          "to": "family",
+          "via": "open"
+        },
+        {
+          "to": "master",
+          "via": "master-door"
+        },
+        {
+          "to": "bed4",
+          "via": "bed4-door"
+        }
+      ]
+    },
+    {
+      "id": "family",
+      "room": "lounge",
+      "level": "first",
+      "at": [
+        31,
+        55
+      ],
+      "facing": 90,
+      "description": "The family lounge: a fluted smoked-oak wall, a floating media console, and a wide sliding door to the side terrace.",
+      "links": [
+        {
+          "to": "passage",
+          "via": "lounge-door"
+        },
+        {
+          "to": "family-back"
+        },
+        {
+          "to": "first-lobby",
+          "via": "open"
+        },
+        {
+          "to": "terrace-side",
+          "via": "lounge-terrace-door"
+        }
+      ]
+    },
+    {
+      "id": "family-back",
+      "room": "lounge",
+      "label": "Family lounge, far end",
+      "level": "first",
+      "at": [
+        15,
+        56.5
+      ],
+      "facing": 0,
+      "description": "The far end of the family lounge, beside the kitchenette and the sliding door to the stair terrace.",
+      "links": [
+        {
+          "to": "family"
+        },
+        {
+          "to": "kitchenette",
+          "via": "open"
+        },
+        {
+          "to": "terrace-stair",
+          "via": "stair-terrace-door"
+        }
+      ]
+    },
+    {
+      "id": "kitchenette",
+      "room": "kitchenette",
+      "level": "first",
+      "at": [
+        16,
+        48.6
+      ],
+      "facing": 270,
+      "description": "The kitchenette open to the family lounge, in the same handleless joinery as the kitchen.",
+      "links": [
+        {
+          "to": "family-back",
+          "via": "open"
+        }
+      ]
+    },
+    {
+      "id": "study",
+      "room": "study",
+      "level": "first",
+      "at": [
+        44,
+        29
+      ],
+      "facing": 0,
+      "description": "The study, panelled wall to wall in natural oak.",
+      "links": [
+        {
+          "to": "passage-side",
+          "via": "study-door"
+        }
+      ]
+    },
+    {
+      "id": "master",
+      "room": "master",
+      "level": "first",
+      "at": [
+        31.5,
+        72
+      ],
+      "facing": 90,
+      "description": "The master bedroom, with an oak-panelled wall and a concealed light line.",
+      "links": [
+        {
+          "to": "first-lobby",
+          "via": "master-door"
+        },
+        {
+          "to": "master-end"
+        },
+        {
+          "to": "master-bath",
+          "via": "master-dress-door"
+        }
+      ]
+    },
+    {
+      "id": "master-end",
+      "room": "master",
+      "label": "Master bedroom, window end",
+      "level": "first",
+      "at": [
+        31.5,
+        80
+      ],
+      "facing": 270,
+      "description": "The window end of the master bedroom.",
+      "links": [
+        {
+          "to": "master"
+        }
+      ]
+    },
+    {
+      "id": "master-bath",
+      "room": "master-bath",
+      "level": "first",
+      "at": [
+        43.5,
+        75.5
+      ],
+      "facing": 90,
+      "description": "The master bath in dark veined stone, with a long rain shower, a floating vanity and wall-hung fittings.",
+      "links": [
+        {
+          "to": "master",
+          "via": "master-dress-door"
+        }
+      ]
+    },
+    {
+      "id": "bed3",
+      "room": "bed3",
+      "level": "first",
+      "at": [
+        12,
+        38.5
+      ],
+      "facing": 0,
+      "description": "Bedroom 3, with an oak headboard wall.",
+      "links": [
+        {
+          "to": "passage",
+          "via": "bed3-door"
+        },
+        {
+          "to": "dress3",
+          "via": "dress-gap"
+        }
+      ]
+    },
+    {
+      "id": "dress3",
+      "room": "dress3",
+      "label": "Dressing room 3",
+      "level": "first",
+      "at": [
+        15.8,
+        27.2
+      ],
+      "facing": 180,
+      "description": "Bedroom 3's dressing room.",
+      "links": [
+        {
+          "to": "bed3",
+          "via": "dress-gap"
+        },
+        {
+          "to": "bath5",
+          "via": "bath5-door"
+        }
+      ]
+    },
+    {
+      "id": "bath5",
+      "room": "bath5",
+      "level": "first",
+      "at": [
+        6,
+        27
+      ],
+      "facing": 0,
+      "description": "Bedroom 3's bath, through the dressing room.",
+      "links": [
+        {
+          "to": "dress3",
+          "via": "bath5-door"
+        }
+      ]
+    },
+    {
+      "id": "bed4",
+      "room": "bed4",
+      "level": "first",
+      "at": [
+        13.5,
+        77
+      ],
+      "facing": 90,
+      "description": "Bedroom 4, with an oak headboard wall.",
+      "links": [
+        {
+          "to": "first-lobby",
+          "via": "bed4-door"
+        },
+        {
+          "to": "bath3-vanity",
+          "via": "bath3-door"
+        }
+      ]
+    },
+    {
+      "id": "bath3",
+      "room": "bath3",
+      "level": "first",
+      "at": [
+        8,
+        62.4
+      ],
+      "facing": 115,
+      "description": "Bedroom 4's bath, with the glass shower beside the WC and the vanity beyond.",
+      "links": [
+        {
+          "to": "bath3-vanity"
+        }
+      ]
+    },
+    {
+      "id": "bath3-vanity",
+      "room": "bath3",
+      "label": "Bath 4, by the vanity",
+      "level": "first",
+      "at": [
+        11.5,
+        65.2
+      ],
+      "facing": 180,
+      "description": "Bedroom 4's bath from the door end, with the floating vanity, the WC and the oak wardrobe.",
+      "links": [
+        {
+          "to": "bed4",
+          "via": "bath3-door"
+        },
+        {
+          "to": "bath3"
+        }
+      ]
+    },
+    {
+      "id": "terrace-right",
+      "room": "terrace-right",
+      "level": "first",
+      "at": [
+        42,
+        19.5
+      ],
+      "facing": 0,
+      "description": "The front terrace off the pier, over the drawing room, looking out over the street.",
+      "links": [
+        {
+          "to": "pier",
+          "via": "terrace-door"
+        }
+      ]
+    },
+    {
+      "id": "terrace-stair",
+      "room": "terrace-stair",
+      "level": "first",
+      "at": [
+        6,
+        57.8
+      ],
+      "facing": 270,
+      "description": "The terrace off the family lounge where the outdoor stair climbs to the roof.",
+      "links": [
+        {
+          "to": "family-back",
+          "via": "stair-terrace-door"
+        }
+      ]
+    },
+    {
+      "id": "terrace-side",
+      "room": "terrace-side",
+      "level": "first",
+      "at": [
+        44,
+        49
+      ],
+      "facing": 90,
+      "description": "The side terrace beyond the family lounge's sliding door.",
+      "links": [
+        {
+          "to": "family",
+          "via": "lounge-terrace-door"
+        }
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "level": "first",
+      "room": "terrace-left",
+      "reason": "The front terrace over the porch has no door from inside the house."
+    },
+    {
+      "level": "ground",
+      "room": "washroom",
+      "reason": "Its only door opens to the outside side lane."
+    }
+  ]
+}

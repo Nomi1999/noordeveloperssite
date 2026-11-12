@@ -1,0 +1,1214 @@
+{
+  "design": "10-marla",
+  "levels": [
+    "ground",
+    "first"
+  ],
+  "start": "gate",
+  "viewpoints": [
+    {
+      "id": "gate",
+      "room": null,
+      "label": "Front gate",
+      "level": "ground",
+      "at": [
+        23,
+        1.5
+      ],
+      "facing": 90,
+      "description": "At the car gate between the charcoal boundary walls: the deep car porch with its concrete ceiling, the double front door, and the charcoal box of the master suite above on its concrete frame.",
+      "links": [
+        {
+          "to": "lounge",
+          "via": "main-door"
+        }
+      ]
+    },
+    {
+      "id": "lounge",
+      "room": "lounge",
+      "level": "ground",
+      "at": [
+        25,
+        24
+      ],
+      "facing": 100,
+      "description": "The TV lounge, just inside the double front door: ink-green walls, a fluted smoked-walnut media wall, a warm cove light round the ceiling and a satin brass line at every edge.",
+      "links": [
+        {
+          "to": "gate",
+          "via": "main-door"
+        },
+        {
+          "to": "foyer",
+          "via": "foyer-arch"
+        },
+        {
+          "to": "dining",
+          "via": "dining-arch"
+        },
+        {
+          "to": "lounge-back"
+        }
+      ]
+    },
+    {
+      "id": "lounge-back",
+      "room": "lounge",
+      "label": "TV lounge, back",
+      "level": "ground",
+      "at": [
+        19.5,
+        41
+      ],
+      "facing": 280,
+      "description": "The back of the TV lounge, looking toward the front door: the stone floor runs through to the arch into the dining room.",
+      "links": [
+        {
+          "to": "lounge"
+        }
+      ]
+    },
+    {
+      "id": "foyer",
+      "room": "foyer",
+      "level": "ground",
+      "at": [
+        12,
+        25
+      ],
+      "facing": 0,
+      "description": "The foyer between the drawing room and the lounge: deep green walls, downlights in brass rings and a wide arch through to the lounge.",
+      "links": [
+        {
+          "to": "lounge",
+          "via": "foyer-arch"
+        },
+        {
+          "to": "drawing",
+          "via": "drawing-door"
+        },
+        {
+          "to": "powder",
+          "via": "powder-door"
+        }
+      ]
+    },
+    {
+      "id": "drawing",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        8,
+        9
+      ],
+      "facing": 90,
+      "description": "The drawing room, papered in ivory and champagne art-deco fans above a panelled dado, with a warm cove round the ceiling and a tall window onto the street.",
+      "links": [
+        {
+          "to": "foyer",
+          "via": "drawing-door"
+        },
+        {
+          "to": "drawing-window"
+        }
+      ]
+    },
+    {
+      "id": "drawing-window",
+      "room": "drawing",
+      "label": "Drawing room, window",
+      "level": "ground",
+      "at": [
+        11,
+        18
+      ],
+      "facing": 270,
+      "description": "The drawing room from the door, looking at the street window: the fan paper on every wall and a brass-lipped cove overhead.",
+      "links": [
+        {
+          "to": "drawing"
+        }
+      ]
+    },
+    {
+      "id": "dining",
+      "room": "dining",
+      "level": "ground",
+      "at": [
+        10,
+        40
+      ],
+      "facing": 200,
+      "description": "The dining room: dark woven grasscloth on the walls, tone-on-tone panelling, a warm cove and a wide arch to the lounge.",
+      "links": [
+        {
+          "to": "lounge",
+          "via": "dining-arch"
+        },
+        {
+          "to": "kitchen",
+          "via": "kitchen-door"
+        },
+        {
+          "to": "bed1",
+          "via": "bed1-door"
+        },
+        {
+          "to": "stair-foot"
+        }
+      ]
+    },
+    {
+      "id": "stair-foot",
+      "room": "dining",
+      "label": "Foot of the stair",
+      "level": "ground",
+      "at": [
+        2.6,
+        38.6
+      ],
+      "facing": 270,
+      "description": "The foot of the dog-leg stair, seen head on: the first flight rises ahead of you between plain walls, and the dining room opens behind and beside you.",
+      "links": [
+        {
+          "to": "dining"
+        },
+        {
+          "to": "stair-landing",
+          "via": "stair"
+        }
+      ]
+    },
+    {
+      "id": "stair-landing",
+      "room": "stair-hall",
+      "label": "Stair landing",
+      "level": "ground",
+      "at": [
+        2.6,
+        24.2
+      ],
+      "rise": 5.79,
+      "facing": 45,
+      "description": "The half landing of the dog-leg stair, where the first flight ends and the stair turns back on itself; the second flight rises to the right.",
+      "links": [
+        {
+          "to": "stair-foot",
+          "via": "stair"
+        },
+        {
+          "to": "stair-turn"
+        }
+      ]
+    },
+    {
+      "id": "stair-turn",
+      "room": "stair-hall",
+      "label": "Foot of the second flight",
+      "level": "ground",
+      "at": [
+        6.4,
+        24.4
+      ],
+      "rise": 5.79,
+      "facing": 90,
+      "description": "The foot of the second flight, seen head on: it climbs between plain walls to the first floor.",
+      "links": [
+        {
+          "to": "stair-landing"
+        },
+        {
+          "to": "stair-head",
+          "via": "stair"
+        }
+      ]
+    },
+    {
+      "id": "bed1",
+      "room": "bed1",
+      "label": "Bedroom 1",
+      "level": "ground",
+      "at": [
+        24,
+        58
+      ],
+      "facing": 270,
+      "description": "The ground-floor bedroom: ivory walls, a smoked-walnut headboard wall, a walnut floor and a walnut wardrobe wall.",
+      "links": [
+        {
+          "to": "dining",
+          "via": "bed1-door"
+        },
+        {
+          "to": "bath1",
+          "via": "bath1-door"
+        }
+      ]
+    },
+    {
+      "id": "stair-head",
+      "room": "family",
+      "label": "Top of the stair",
+      "level": "first",
+      "at": [
+        4.5,
+        37.4
+      ],
+      "facing": 261,
+      "description": "The top of the stair, opening onto the family lounge.",
+      "links": [
+        {
+          "to": "family"
+        },
+        {
+          "to": "stair-turn",
+          "via": "stair"
+        }
+      ]
+    },
+    {
+      "id": "family",
+      "room": "family",
+      "level": "first",
+      "at": [
+        13,
+        34
+      ],
+      "facing": 270,
+      "description": "The family lounge: greige walls, a fluted smoked-walnut media wall, a walnut floor and a sliding glass door to the terrace.",
+      "links": [
+        {
+          "to": "stair-head"
+        },
+        {
+          "to": "family-back"
+        },
+        {
+          "to": "terrace",
+          "via": "terrace-door"
+        },
+        {
+          "to": "master",
+          "via": "master-door"
+        },
+        {
+          "to": "laundry",
+          "via": "laundry-door"
+        },
+        {
+          "to": "corridor",
+          "via": "open"
+        }
+      ]
+    },
+    {
+      "id": "family-back",
+      "room": "family",
+      "label": "Family lounge, front",
+      "level": "first",
+      "at": [
+        14,
+        24
+      ],
+      "facing": 85,
+      "description": "The family lounge from the terrace door side, looking back toward the corridor and the bedrooms.",
+      "links": [
+        {
+          "to": "family"
+        }
+      ]
+    },
+    {
+      "id": "terrace",
+      "room": "terrace",
+      "level": "first",
+      "at": [
+        8,
+        10
+      ],
+      "facing": 90,
+      "description": "The terrace over the drawing room, with a concrete upstand, a dark steel pergola and the charcoal wall of the master suite beside it.",
+      "links": [
+        {
+          "to": "family",
+          "via": "terrace-door"
+        }
+      ]
+    },
+    {
+      "id": "master",
+      "room": "master",
+      "label": "Master bedroom",
+      "level": "first",
+      "at": [
+        20,
+        16
+      ],
+      "facing": 316,
+      "description": "The master bedroom in the box over the porch: greige walls, a champagne ribbed headboard wall, a walnut floor and a tall corner window.",
+      "links": [
+        {
+          "to": "family",
+          "via": "master-door"
+        },
+        {
+          "to": "dressing",
+          "via": "dressing-door"
+        },
+        {
+          "to": "master-end"
+        }
+      ]
+    },
+    {
+      "id": "master-end",
+      "room": "master",
+      "label": "Master bedroom, window",
+      "level": "first",
+      "at": [
+        29,
+        6
+      ],
+      "facing": 150,
+      "description": "The master bedroom from the corner window, looking back toward the doors and the wardrobe wall.",
+      "links": [
+        {
+          "to": "master"
+        }
+      ]
+    },
+    {
+      "id": "dressing",
+      "room": "dressing",
+      "level": "first",
+      "at": [
+        25,
+        22.5
+      ],
+      "facing": 0,
+      "description": "The dressing room: walnut wardrobes with brass pulls, ivory walls and a walnut floor, between the master bedroom and its bath.",
+      "links": [
+        {
+          "to": "master",
+          "via": "dressing-door"
+        },
+        {
+          "to": "master-bath",
+          "via": "master-bath-door"
+        }
+      ]
+    },
+    {
+      "id": "master-bath",
+      "room": "master-bath",
+      "level": "first",
+      "at": [
+        25.7,
+        28.5
+      ],
+      "facing": 90,
+      "description": "The master bath: dark veined stone slabs floor to ceiling, brass fittings, a floating vanity, a wall-hung WC and a rain shower.",
+      "links": [
+        {
+          "to": "dressing",
+          "via": "master-bath-door"
+        }
+      ]
+    },
+    {
+      "id": "laundry",
+      "room": "laundry",
+      "level": "first",
+      "at": [
+        25.7,
+        35.5
+      ],
+      "facing": 0,
+      "description": "The laundry: ivory walls, a stone counter and a quiet stone floor.",
+      "links": [
+        {
+          "to": "family",
+          "via": "laundry-door"
+        }
+      ]
+    },
+    {
+      "id": "corridor",
+      "room": "corridor",
+      "level": "first",
+      "at": [
+        17.3,
+        40.2
+      ],
+      "facing": 90,
+      "description": "The corridor to the bedrooms, open to the family lounge: ink walls, a stone floor and downlights in brass rings.",
+      "links": [
+        {
+          "to": "family",
+          "via": "open"
+        },
+        {
+          "to": "bed2",
+          "via": "bed2-door"
+        },
+        {
+          "to": "bed3",
+          "via": "bed3-door"
+        }
+      ]
+    },
+    {
+      "id": "closet",
+      "room": "closet",
+      "level": "first",
+      "at": [
+        3.2,
+        41
+      ],
+      "facing": 90,
+      "description": "The closet beside bedroom 2: ivory walls and a stone floor.",
+      "links": [
+        {
+          "to": "bed2",
+          "via": "closet-door"
+        }
+      ]
+    },
+    {
+      "id": "bed2",
+      "room": "bed2",
+      "label": "Bedroom 2",
+      "level": "first",
+      "at": [
+        13.5,
+        57.5
+      ],
+      "facing": 200,
+      "description": "Bedroom 2: sage-grey walls, a smoked-walnut headboard wall, a walnut floor and a wardrobe wall.",
+      "links": [
+        {
+          "to": "corridor",
+          "via": "bed2-door"
+        },
+        {
+          "to": "closet",
+          "via": "closet-door"
+        },
+        {
+          "to": "bath2",
+          "via": "bath2-door"
+        }
+      ]
+    },
+    {
+      "id": "bath2",
+      "room": "bath2",
+      "label": "Bath 2",
+      "level": "first",
+      "at": [
+        9.7,
+        44.5
+      ],
+      "facing": 270,
+      "description": "Bath 2: ivory stone slabs, a floating vanity, a wall-hung WC and a rain shower.",
+      "links": [
+        {
+          "to": "bed2",
+          "via": "bath2-door"
+        }
+      ]
+    },
+    {
+      "id": "bed3",
+      "room": "bed3",
+      "label": "Bedroom 3",
+      "level": "first",
+      "at": [
+        21.5,
+        49.5
+      ],
+      "facing": 51,
+      "description": "Bedroom 3: a soft clay-blush tonal stripe, a champagne headboard wall with brass inlays and a walnut floor.",
+      "links": [
+        {
+          "to": "corridor",
+          "via": "bed3-door"
+        },
+        {
+          "to": "bath3",
+          "via": "bath3-door"
+        }
+      ]
+    },
+    {
+      "id": "bath3",
+      "room": "bath3",
+      "label": "Bath 3",
+      "level": "first",
+      "at": [
+        25.7,
+        39.5
+      ],
+      "facing": 90,
+      "description": "Bath 3: ivory stone slabs, a floating vanity, a wall-hung WC and a rain shower.",
+      "links": [
+        {
+          "to": "bed3",
+          "via": "bath3-door"
+        }
+      ]
+    },
+    {
+      "id": "porch",
+      "room": null,
+      "label": "Car porch",
+      "level": "ground",
+      "at": [
+        22,
+        10
+      ],
+      "facing": 90,
+      "description": "The car porch under the box above, with the main door ahead.",
+      "links": []
+    },
+    {
+      "id": "lounge-mid",
+      "room": "lounge",
+      "label": "TV lounge, middle",
+      "level": "ground",
+      "at": [
+        20.5,
+        31
+      ],
+      "facing": 90,
+      "description": "The middle of the TV lounge, between the foyer arch and the dining arch.",
+      "links": []
+    },
+    {
+      "id": "powder",
+      "room": "powder",
+      "level": "ground",
+      "at": [
+        12,
+        29.2
+      ],
+      "facing": 90,
+      "description": "The guest bath: a geometric paper above a dark veined stone dado, a backlit mirror and brass taps over a floating basin.",
+      "links": [
+        {
+          "to": "foyer",
+          "via": "powder-door"
+        }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "room": "kitchen",
+      "level": "ground",
+      "at": [
+        9,
+        51.5
+      ],
+      "facing": 160,
+      "description": "The kitchen: ink lower cabinets, smoked-walnut wall units with brass handles, a marble counter and a full-height marble splashback.",
+      "links": [
+        {
+          "to": "dining",
+          "via": "kitchen-door"
+        },
+        {
+          "to": "store",
+          "via": "store-door"
+        }
+      ]
+    },
+    {
+      "id": "store",
+      "room": "store",
+      "level": "ground",
+      "at": [
+        12.9,
+        56
+      ],
+      "facing": 270,
+      "description": "The store in the kitchen's far corner, finished in ivory with a stone floor.",
+      "links": [
+        {
+          "to": "kitchen",
+          "via": "store-door"
+        }
+      ]
+    },
+    {
+      "id": "bath1",
+      "room": "bath1",
+      "level": "ground",
+      "at": [
+        26.5,
+        44.5
+      ],
+      "facing": 270,
+      "description": "Bath 1: ivory stone slabs floor to ceiling, a floating vanity, a wall-hung WC and a rain shower behind glass.",
+      "links": [
+        {
+          "to": "bed1",
+          "via": "bath1-door"
+        }
+      ]
+    },
+    {
+      "id": "d-drawing-door",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        10.88,
+        21.5
+      ],
+      "facing": 270,
+      "description": "The doorway of the drawing room, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-foyer-arch",
+      "room": "lounge",
+      "level": "ground",
+      "at": [
+        16.25,
+        24.88
+      ],
+      "facing": 0,
+      "description": "The doorway of the tv lounge, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-powder-door",
+      "room": "foyer",
+      "level": "ground",
+      "at": [
+        10.44,
+        27.5
+      ],
+      "facing": 270,
+      "description": "The doorway of the foyer, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-dining-arch",
+      "room": "dining",
+      "level": "ground",
+      "at": [
+        15.25,
+        41.0
+      ],
+      "facing": 180,
+      "description": "The doorway of the dining, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-bed1-door",
+      "room": "dining",
+      "level": "ground",
+      "at": [
+        15.25,
+        47.58
+      ],
+      "facing": 180,
+      "description": "The doorway of the dining, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-bath1-door",
+      "room": "bed1",
+      "level": "ground",
+      "at": [
+        25.0,
+        46.5
+      ],
+      "facing": 90,
+      "description": "The doorway of the bedroom 1, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-kitchen-door",
+      "room": "kitchen",
+      "level": "ground",
+      "at": [
+        9.07,
+        49.75
+      ],
+      "facing": 90,
+      "description": "The doorway of the kitchen, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-store-door",
+      "room": "store",
+      "level": "ground",
+      "at": [
+        13.25,
+        53.5
+      ],
+      "facing": 90,
+      "description": "The doorway of the store, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-master-door",
+      "room": "family",
+      "level": "first",
+      "at": [
+        18.5,
+        19.62
+      ],
+      "facing": 90,
+      "description": "The doorway of the family lounge, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-dressing-door",
+      "room": "master",
+      "level": "first",
+      "at": [
+        24.5,
+        18.62
+      ],
+      "facing": 270,
+      "description": "The doorway of the master bedroom, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-master-bath-door",
+      "room": "master-bath",
+      "level": "first",
+      "at": [
+        22.88,
+        25.5
+      ],
+      "facing": 90,
+      "description": "The doorway of the master bath, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-laundry-door",
+      "room": "family",
+      "level": "first",
+      "at": [
+        20.5,
+        35.88
+      ],
+      "facing": 180,
+      "description": "The doorway of the family lounge, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-closet-door",
+      "room": "bed2",
+      "level": "first",
+      "at": [
+        4.22,
+        46.5
+      ],
+      "facing": 90,
+      "description": "The doorway of the bedroom 2, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-bath2-door",
+      "room": "bed2",
+      "level": "first",
+      "at": [
+        7.88,
+        46.5
+      ],
+      "facing": 90,
+      "description": "The doorway of the bedroom 2, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-bed2-door",
+      "room": "corridor",
+      "level": "first",
+      "at": [
+        15.48,
+        45.5
+      ],
+      "facing": 270,
+      "description": "The doorway of the corridor, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-bed3-door",
+      "room": "corridor",
+      "level": "first",
+      "at": [
+        18.98,
+        45.5
+      ],
+      "facing": 270,
+      "description": "The doorway of the corridor, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "d-bath3-door",
+      "room": "bed3",
+      "level": "first",
+      "at": [
+        24.12,
+        46.5
+      ],
+      "facing": 90,
+      "description": "The doorway of the bedroom 3, looking into the room.",
+      "links": []
+    },
+    {
+      "id": "w-drawing-1",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        2.58,
+        7.2
+      ],
+      "facing": 345,
+      "description": "A view of the drawing room.",
+      "links": []
+    },
+    {
+      "id": "w-drawing-2",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        13.55,
+        7.2
+      ],
+      "facing": 210,
+      "description": "A view of the drawing room.",
+      "links": []
+    },
+    {
+      "id": "w-drawing-3",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        2.58,
+        13.5
+      ],
+      "facing": 45,
+      "description": "A view of the drawing room.",
+      "links": []
+    },
+    {
+      "id": "w-drawing-4",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        8.06,
+        13.5
+      ],
+      "facing": 255,
+      "description": "A view of the drawing room.",
+      "links": []
+    },
+    {
+      "id": "w-drawing-5",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        13.55,
+        13.5
+      ],
+      "facing": 225,
+      "description": "A view of the drawing room.",
+      "links": []
+    },
+    {
+      "id": "w-drawing-6",
+      "room": "drawing",
+      "level": "ground",
+      "at": [
+        2.58,
+        19.8
+      ],
+      "facing": 15,
+      "description": "A view of the drawing room.",
+      "links": []
+    },
+    {
+      "id": "w-lounge-1",
+      "room": "lounge",
+      "level": "ground",
+      "at": [
+        28.18,
+        32.56
+      ],
+      "facing": 150,
+      "description": "A view of the tv lounge.",
+      "links": []
+    },
+    {
+      "id": "w-dining-1",
+      "room": "dining",
+      "level": "ground",
+      "at": [
+        2.58,
+        47.05
+      ],
+      "facing": 330,
+      "description": "A view of the dining.",
+      "links": []
+    },
+    {
+      "id": "w-bed1-1",
+      "room": "bed1",
+      "level": "ground",
+      "at": [
+        23.06,
+        53.0
+      ],
+      "facing": 90,
+      "description": "A view of the bedroom 1.",
+      "links": []
+    },
+    {
+      "id": "w-bed1-2",
+      "room": "bed1",
+      "level": "ground",
+      "at": [
+        28.18,
+        53.0
+      ],
+      "facing": 105,
+      "description": "A view of the bedroom 1.",
+      "links": []
+    },
+    {
+      "id": "w-terrace-1",
+      "room": "terrace",
+      "level": "first",
+      "at": [
+        2.58,
+        7.2
+      ],
+      "facing": 105,
+      "description": "A view of the terrace.",
+      "links": []
+    },
+    {
+      "id": "w-terrace-2",
+      "room": "terrace",
+      "level": "first",
+      "at": [
+        13.55,
+        7.2
+      ],
+      "facing": 90,
+      "description": "A view of the terrace.",
+      "links": []
+    },
+    {
+      "id": "w-terrace-3",
+      "room": "terrace",
+      "level": "first",
+      "at": [
+        2.58,
+        13.41
+      ],
+      "facing": 120,
+      "description": "A view of the terrace.",
+      "links": []
+    },
+    {
+      "id": "w-terrace-4",
+      "room": "terrace",
+      "level": "first",
+      "at": [
+        13.55,
+        13.41
+      ],
+      "facing": 30,
+      "description": "A view of the terrace.",
+      "links": []
+    },
+    {
+      "id": "w-terrace-5",
+      "room": "terrace",
+      "level": "first",
+      "at": [
+        2.58,
+        19.61
+      ],
+      "facing": 150,
+      "description": "A view of the terrace.",
+      "links": []
+    },
+    {
+      "id": "w-terrace-6",
+      "room": "terrace",
+      "level": "first",
+      "at": [
+        8.06,
+        19.61
+      ],
+      "facing": 180,
+      "description": "A view of the terrace.",
+      "links": []
+    },
+    {
+      "id": "w-master-1",
+      "room": "master",
+      "level": "first",
+      "at": [
+        24.38,
+        5.7
+      ],
+      "facing": 30,
+      "description": "A view of the master bedroom.",
+      "links": []
+    },
+    {
+      "id": "w-master-2",
+      "room": "master",
+      "level": "first",
+      "at": [
+        17.95,
+        11.31
+      ],
+      "facing": 90,
+      "description": "A view of the master bedroom.",
+      "links": []
+    },
+    {
+      "id": "w-master-3",
+      "room": "master",
+      "level": "first",
+      "at": [
+        24.38,
+        11.31
+      ],
+      "facing": 120,
+      "description": "A view of the master bedroom.",
+      "links": []
+    },
+    {
+      "id": "w-master-4",
+      "room": "master",
+      "level": "first",
+      "at": [
+        30.8,
+        11.31
+      ],
+      "facing": 0,
+      "description": "A view of the master bedroom.",
+      "links": []
+    },
+    {
+      "id": "w-master-5",
+      "room": "master",
+      "level": "first",
+      "at": [
+        30.8,
+        16.93
+      ],
+      "facing": 195,
+      "description": "A view of the master bedroom.",
+      "links": []
+    },
+    {
+      "id": "w-family-1",
+      "room": "family",
+      "level": "first",
+      "at": [
+        18.8,
+        31.31
+      ],
+      "facing": 105,
+      "description": "A view of the family lounge.",
+      "links": []
+    },
+    {
+      "id": "w-bed2-1",
+      "room": "bed2",
+      "level": "first",
+      "at": [
+        8.81,
+        53.0
+      ],
+      "facing": 90,
+      "description": "A view of the bedroom 2.",
+      "links": []
+    },
+    {
+      "id": "w-bed2-2",
+      "room": "bed2",
+      "level": "first",
+      "at": [
+        15.05,
+        53.0
+      ],
+      "facing": 105,
+      "description": "A view of the bedroom 2.",
+      "links": []
+    },
+    {
+      "id": "w-bed2-3",
+      "room": "bed2",
+      "level": "first",
+      "at": [
+        2.58,
+        57.8
+      ],
+      "facing": 30,
+      "description": "A view of the bedroom 2.",
+      "links": []
+    },
+    {
+      "id": "w-bed2-4",
+      "room": "bed2",
+      "level": "first",
+      "at": [
+        8.81,
+        57.8
+      ],
+      "facing": 90,
+      "description": "A view of the bedroom 2.",
+      "links": []
+    },
+    {
+      "id": "w-bed3-1",
+      "room": "bed3",
+      "level": "first",
+      "at": [
+        28.18,
+        53.0
+      ],
+      "facing": 105,
+      "description": "A view of the bedroom 3.",
+      "links": []
+    },
+    {
+      "id": "w-bed3-2",
+      "room": "bed3",
+      "level": "first",
+      "at": [
+        23.81,
+        57.8
+      ],
+      "facing": 90,
+      "description": "A view of the bedroom 3.",
+      "links": []
+    }
+  ],
+  "excluded": [
+    {
+      "level": "first",
+      "room": "stair-tower",
+      "reason": "The stair shaft has no floor to stand on; it is seen from the foot and the top of the stair."
+    },
+    {
+      "level": "roof",
+      "room": "stair-room",
+      "reason": "The roof is not part of the tour."
+    }
+  ],
+  "walking": true
+}

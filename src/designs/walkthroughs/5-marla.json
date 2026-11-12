@@ -4,19 +4,19 @@
     "ground",
     "first"
   ],
-  "start": "drawing",
+  "start": "gate",
   "viewpoints": [
     {
-      "id": "porch",
+      "id": "gate",
       "room": null,
-      "label": "Car porch",
+      "label": "Front gate",
       "level": "ground",
       "at": [
         5.5,
-        10
+        1.5
       ],
-      "facing": 75,
-      "description": "The covered car porch behind the gate, with a timber slat ceiling, a sand plaster pier and the front door at the back.",
+      "facing": 82,
+      "description": "At the car gate in the front boundary: the covered car porch with its timber slat ceiling and sand plaster pier, the front door at the back, and the beige tile front of the house above the wall.",
       "links": [
         {
           "to": "lounge",
@@ -56,7 +56,7 @@
       "description": "The TV lounge, open to the kitchen through a wide arch, with doors to the porch and to the first bedroom.",
       "links": [
         {
-          "to": "porch",
+          "to": "gate",
           "via": "main-door"
         },
         {

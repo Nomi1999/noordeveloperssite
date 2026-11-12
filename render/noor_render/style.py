@@ -12,6 +12,7 @@ STYLE = {
     "wc": "floor",  # or "wall-hung"
     "vanityStyle": "standing",  # or "floating"
     "shower": "rail",  # or "rain": rain head, valve plate, lit niche
+    "openDoors": False,  # or True: inside door leaves stand open, swung against the wall, so a doorway is an opening to walk through
 }
 
 # design-wide switches read from the top of the config
@@ -30,10 +31,10 @@ GLOBAL_STYLE = {
 
 # room-type keys that switch on new elements; absent means off
 ROOM_OFF = ("uppers", "consoles", "waterfall", "splashback", "backlitMirror", "featureAll", "featureMaterial", "lightLine",
-            "ceilingHeight", "door", "edgeGlow", "slotSpacing", "downlightRadius")
+            "ceilingHeight", "door", "edgeGlow", "slotSpacing", "downlightRadius", "wall", "featurePaper")
 NEW_CEILINGS = ("slots",)
-NEW_FEATURES = ("travertine", "fluted-tight", "oak-panel")
-PALETTE_OFF = ("metal", "door", "slat", "upper", "vanity", "wardrobe", "stairTread", "woods", "stones")
+NEW_FEATURES = ("travertine", "fluted-tight", "oak-panel", "paper")
+PALETTE_OFF = ("metal", "door", "slat", "upper", "vanity", "wardrobe", "stairTread", "woods", "stones", "papers")
 LIGHTS_OFF = ("color", "coveColor", "edge", "slot", "wash", "pendant")
 
 

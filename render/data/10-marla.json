@@ -1733,6 +1733,32 @@
           "floor": "porcelain-paving"
         },
         {
+          "id": "stair-hall",
+          "name": "Stair hall",
+          "type": "stair-hall",
+          "outline": [
+            [
+              0.375,
+              22
+            ],
+            [
+              8.4375,
+              22
+            ],
+            [
+              8.4375,
+              36.1875
+            ],
+            [
+              0.375,
+              36.1875
+            ]
+          ],
+          "area": 105,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
           "id": "dining",
           "name": "Dining",
           "type": "dining",
@@ -1885,7 +1911,7 @@
         {
           "id": "k-counter-rear",
           "type": "counter",
-          "x": 2.75,
+          "x": 6.125,
           "y": 57.625,
           "w": 2,
           "d": 2,
@@ -4146,6 +4172,32 @@
           "floor": "porcelain-paving"
         },
         {
+          "id": "stair-tower",
+          "name": "Stair tower",
+          "type": "stair-hall",
+          "outline": [
+            [
+              0.375,
+              21.8125
+            ],
+            [
+              8.625,
+              21.8125
+            ],
+            [
+              8.625,
+              36.1875
+            ],
+            [
+              0.375,
+              36.1875
+            ]
+          ],
+          "area": 107.632,
+          "attachedTo": null,
+          "floor": "porcelain-paving"
+        },
+        {
           "id": "family",
           "name": "Family lounge",
           "type": "family-lounge",
@@ -4216,7 +4268,7 @@
         {
           "id": "closet",
           "name": "Closet",
-          "type": "store",
+          "type": "dressing",
           "outline": [
             [
               0.375,
@@ -4474,6 +4526,26 @@
           "d": 6,
           "bottom": 13,
           "back": "left"
+        },
+        {
+          "id": "cl-wardrobe-w",
+          "type": "wardrobe",
+          "x": 0.75,
+          "y": 40.9,
+          "w": 2,
+          "d": 5.1,
+          "bottom": 13,
+          "back": "left"
+        },
+        {
+          "id": "cl-wardrobe-n",
+          "type": "wardrobe",
+          "x": 2.75,
+          "y": 38.9,
+          "w": 2.9,
+          "d": 2,
+          "bottom": 13,
+          "back": "front"
         },
         {
           "id": "b3-wardrobe",
@@ -5943,14 +6015,15 @@
       "tv-lounge": 1,
       "foyer": 1,
       "powder-room": 1,
+      "stair-hall": 2,
       "dining": 1,
       "kitchen": 1,
-      "store": 2,
+      "store": 1,
       "bathroom": 4,
       "bedroom": 3,
       "terrace": 1,
       "master-bedroom": 1,
-      "dressing": 1,
+      "dressing": 2,
       "laundry": 1,
       "family-lounge": 1,
       "corridor": 1,

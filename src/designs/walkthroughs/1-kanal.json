@@ -872,6 +872,266 @@
           "via": "lounge-terrace-door"
         }
       ]
+    },
+    {
+      "id": "forecourt",
+      "room": null,
+      "label": "Entrance forecourt",
+      "level": "ground",
+      "at": [
+        20,
+        12
+      ],
+      "facing": 62,
+      "description": "The forecourt between the gate and the main door, the front of the house ahead.",
+      "links": []
+    },
+    {
+      "id": "drawing-door",
+      "room": "drawing",
+      "label": "Drawing room doorway",
+      "level": "ground",
+      "at": [
+        36.4,
+        31.3
+      ],
+      "facing": 0,
+      "description": "Just inside the double doors of the drawing room from the entrance hall.",
+      "links": []
+    },
+    {
+      "id": "dining-door",
+      "room": "dining",
+      "label": "Dining room doorway",
+      "level": "ground",
+      "at": [
+        19.3,
+        32.6
+      ],
+      "facing": 180,
+      "description": "Just inside the double doors of the dining room from the entrance hall.",
+      "links": []
+    },
+    {
+      "id": "lounge-door",
+      "room": "lounge",
+      "label": "Lounge doorway",
+      "level": "ground",
+      "at": [
+        24.1,
+        47.0
+      ],
+      "facing": 90,
+      "description": "Just inside the double doors of the lounge from the stair lobby.",
+      "links": []
+    },
+    {
+      "id": "kitchen-lounge-door",
+      "room": "lounge",
+      "label": "Kitchen doorway",
+      "level": "ground",
+      "at": [
+        18.9,
+        50.1
+      ],
+      "facing": 180,
+      "description": "On the lounge side of the double doors into the kitchen.",
+      "links": []
+    },
+    {
+      "id": "bed1-door",
+      "room": "bed1",
+      "label": "Bedroom 1 doorway",
+      "level": "ground",
+      "at": [
+        21.3,
+        70.7
+      ],
+      "facing": 90,
+      "description": "Just inside the door of bedroom 1 from the lobby.",
+      "links": []
+    },
+    {
+      "id": "bed2-door",
+      "room": "bed2",
+      "label": "Bedroom 2 doorway",
+      "level": "ground",
+      "at": [
+        25.1,
+        66.8
+      ],
+      "facing": 0,
+      "description": "Just inside the door of bedroom 2 from the lobby.",
+      "links": []
+    },
+    {
+      "id": "bath1-door",
+      "room": "bed1",
+      "label": "Bath 1 doorway",
+      "level": "ground",
+      "at": [
+        13.5,
+        70.6
+      ],
+      "facing": 270,
+      "description": "At the door of the bath that serves bedroom 1.",
+      "links": []
+    },
+    {
+      "id": "dress-door",
+      "room": "bed2",
+      "label": "Dressing doorway",
+      "level": "ground",
+      "at": [
+        38,
+        68.7
+      ],
+      "facing": 0,
+      "description": "At the door from bedroom 2 into its dressing room.",
+      "links": []
+    },
+    {
+      "id": "study-door",
+      "room": "passage-side",
+      "label": "Study doorway",
+      "level": "first",
+      "at": [
+        37.8,
+        34.9
+      ],
+      "facing": 0,
+      "description": "At the door of the study, off the passage by the stair.",
+      "links": []
+    },
+    {
+      "id": "bed3-door",
+      "room": "bed3",
+      "label": "Bedroom 3 doorway",
+      "level": "first",
+      "at": [
+        19.3,
+        43.4
+      ],
+      "facing": 180,
+      "description": "Just inside the door of bedroom 3 from the passage.",
+      "links": []
+    },
+    {
+      "id": "dress-gap",
+      "room": "bed3",
+      "label": "Dressing opening",
+      "level": "first",
+      "at": [
+        16.4,
+        32.1
+      ],
+      "facing": 270,
+      "description": "At the opening from bedroom 3 into its dressing room.",
+      "links": []
+    },
+    {
+      "id": "bath5-door",
+      "room": "dress3",
+      "label": "Bath doorway",
+      "level": "first",
+      "at": [
+        12.2,
+        29.0
+      ],
+      "facing": 180,
+      "description": "At the door from the dressing room into the bath.",
+      "links": []
+    },
+    {
+      "id": "family-door",
+      "room": "lounge",
+      "label": "Family lounge doorway",
+      "level": "first",
+      "at": [
+        24.3,
+        47.0
+      ],
+      "facing": 90,
+      "description": "Just inside the double doors of the family lounge from the passage.",
+      "links": []
+    },
+    {
+      "id": "terrace-door",
+      "room": "terrace-right",
+      "label": "Terrace doorway",
+      "level": "first",
+      "at": [
+        36.3,
+        19.6
+      ],
+      "facing": 0,
+      "description": "Just outside the door onto the right-hand terrace.",
+      "links": []
+    },
+    {
+      "id": "master-door",
+      "room": "master",
+      "label": "Master bedroom doorway",
+      "level": "first",
+      "at": [
+        25.1,
+        66.8
+      ],
+      "facing": 0,
+      "description": "Just inside the door of the master bedroom from the lobby.",
+      "links": []
+    },
+    {
+      "id": "master-bath-door",
+      "room": "master",
+      "label": "Master bath doorway",
+      "level": "first",
+      "at": [
+        38,
+        68.7
+      ],
+      "facing": 0,
+      "description": "At the door from the master bedroom to its bath.",
+      "links": []
+    },
+    {
+      "id": "bed4-door",
+      "room": "bed4",
+      "label": "Bedroom 4 doorway",
+      "level": "first",
+      "at": [
+        21.3,
+        70.7
+      ],
+      "facing": 90,
+      "description": "Just inside the door of bedroom 4 from the lobby.",
+      "links": []
+    },
+    {
+      "id": "bath3-door",
+      "room": "bed4",
+      "label": "Bath 3 doorway",
+      "level": "first",
+      "at": [
+        13.5,
+        70.6
+      ],
+      "facing": 270,
+      "description": "At the door of the bath that serves bedroom 4.",
+      "links": []
+    },
+    {
+      "id": "terrace-side-door",
+      "room": "terrace-side",
+      "label": "Side terrace doorway",
+      "level": "first",
+      "at": [
+        41.8,
+        55.0
+      ],
+      "facing": 0,
+      "description": "Just outside the wide sliding door onto the side terrace.",
+      "links": []
     }
   ],
   "excluded": [
@@ -885,5 +1145,6 @@
       "room": "washroom",
       "reason": "Its only door opens to the outside side lane."
     }
-  ]
+  ],
+  "walking": true
 }

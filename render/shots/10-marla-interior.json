@@ -1,0 +1,575 @@
+{
+  "levels": [
+    "ground",
+    "first"
+  ],
+  "mergeWallPieces": true,
+  "clearColumns": true,
+  "style": {
+    "wc": "wall-hung",
+    "vanityStyle": "floating",
+    "shower": "rain",
+    "balustrade": "glass",
+    "stairRails": "both",
+    "openDoors": true
+  },
+  "palette": {
+    "wall": [
+      0.36,
+      0.33,
+      0.29
+    ],
+    "ceiling": [
+      0.8,
+      0.77,
+      0.72
+    ],
+    "trim": [
+      0.36,
+      0.33,
+      0.29
+    ],
+    "cove": [
+      1.0,
+      0.78,
+      0.52
+    ],
+    "coveGlow": 20.0,
+    "downlight": [
+      1.0,
+      0.82,
+      0.62
+    ],
+    "downlightGlow": 55.0,
+    "wash": 0.06,
+    "skirting": [
+      0.03,
+      0.034,
+      0.034
+    ],
+    "metal": {
+      "color": [
+        0.62,
+        0.47,
+        0.27
+      ],
+      "rough": 0.32
+    },
+    "base": [
+      0.05,
+      0.055,
+      0.06
+    ],
+    "door": "smoked-walnut",
+    "slat": "smoked-walnut",
+    "upper": "smoked-walnut",
+    "vanity": "smoked-walnut",
+    "wardrobe": "smoked-walnut",
+    "marble": {
+      "base": [
+        0.78,
+        0.75,
+        0.7
+      ],
+      "vein": [
+        0.22,
+        0.2,
+        0.18
+      ]
+    },
+    "fabric": [
+      0.36,
+      0.3,
+      0.23
+    ],
+    "featureStone": [
+      0.4,
+      0.36,
+      0.3
+    ],
+    "woods": {
+      "smoked-walnut": {
+        "a": [
+          0.085,
+          0.052,
+          0.032
+        ],
+        "b": [
+          0.115,
+          0.072,
+          0.046
+        ],
+        "rough": 0.4,
+        "coat": 0.1
+      }
+    },
+    "papers": {
+      "fan": {
+        "kind": "fan",
+        "ground": [
+          0.5,
+          0.45,
+          0.36
+        ],
+        "line": [
+          0.36,
+          0.22,
+          0.08
+        ],
+        "repeat": 0.42
+      },
+      "grasscloth": {
+        "kind": "grasscloth",
+        "ground": [
+          0.06,
+          0.08,
+          0.13
+        ],
+        "repeat": 0.3
+      },
+      "geo": {
+        "kind": "geo",
+        "ground": [
+          0.05,
+          0.06,
+          0.06
+        ],
+        "line": [
+          0.24,
+          0.2,
+          0.13
+        ],
+        "repeat": 0.22
+      },
+      "ribbed": {
+        "kind": "ribbed",
+        "ground": [
+          0.5,
+          0.43,
+          0.31
+        ],
+        "line": [
+          0.62,
+          0.54,
+          0.4
+        ],
+        "repeat": 0.045
+      },
+      "stripe": {
+        "kind": "stripe",
+        "ground": [
+          0.36,
+          0.29,
+          0.28
+        ],
+        "line": [
+          0.42,
+          0.34,
+          0.32
+        ],
+        "repeat": 0.14
+      }
+    },
+    "floors": {
+      "marble": {
+        "a": [
+          0.42,
+          0.4,
+          0.36
+        ],
+        "b": [
+          0.5,
+          0.47,
+          0.42
+        ],
+        "grout": [
+          0.3,
+          0.28,
+          0.25
+        ],
+        "size": [
+          1.2,
+          1.2
+        ],
+        "rough": 0.16,
+        "vein": [
+          0.16,
+          0.15,
+          0.13
+        ],
+        "veinStrength": 0.7
+      },
+      "walnut": {
+        "kind": "herringbone",
+        "a": [
+          0.07,
+          0.043,
+          0.027
+        ],
+        "b": [
+          0.15,
+          0.095,
+          0.06
+        ],
+        "plank": 0.09,
+        "rough": 0.36
+      },
+      "bath-ivory": {
+        "a": [
+          0.4,
+          0.37,
+          0.33
+        ],
+        "b": [
+          0.44,
+          0.41,
+          0.36
+        ],
+        "grout": [
+          0.28,
+          0.26,
+          0.23
+        ],
+        "size": [
+          1.2,
+          0.6
+        ],
+        "rough": 0.2,
+        "vein": [
+          0.2,
+          0.18,
+          0.16
+        ],
+        "veinStrength": 0.35
+      },
+      "bath-dark": {
+        "a": [
+          0.07,
+          0.065,
+          0.06
+        ],
+        "b": [
+          0.085,
+          0.08,
+          0.075
+        ],
+        "grout": [
+          0.05,
+          0.047,
+          0.044
+        ],
+        "size": [
+          1.2,
+          0.6
+        ],
+        "rough": 0.18,
+        "vein": [
+          0.42,
+          0.38,
+          0.33
+        ],
+        "veinStrength": 0.4
+      }
+    }
+  },
+  "wallTiles": {
+    "ivory-slab": {
+      "a": [
+        0.42,
+        0.39,
+        0.35
+      ],
+      "b": [
+        0.45,
+        0.42,
+        0.38
+      ],
+      "grout": [
+        0.3,
+        0.28,
+        0.25
+      ],
+      "size": [
+        1.2,
+        2.6
+      ],
+      "rough": 0.2,
+      "vein": [
+        0.2,
+        0.18,
+        0.16
+      ],
+      "veinStrength": 0.35
+    },
+    "dark-slab": {
+      "a": [
+        0.07,
+        0.065,
+        0.06
+      ],
+      "b": [
+        0.09,
+        0.085,
+        0.08
+      ],
+      "grout": [
+        0.05,
+        0.047,
+        0.044
+      ],
+      "size": [
+        1.2,
+        2.6
+      ],
+      "rough": 0.15,
+      "vein": [
+        0.5,
+        0.46,
+        0.4
+      ],
+      "veinStrength": 0.5
+    }
+  },
+  "lights": {
+    "cove": 11,
+    "spot": 20
+  },
+  "roomTypes": {
+    "default": {
+      "ceiling": "flat",
+      "floor": "marble",
+      "downlightSpacing": 2.2
+    },
+    "foyer": {
+      "ceiling": "flat",
+      "floor": "marble",
+      "downlightSpacing": 1.0,
+      "wall": [
+        0.12,
+        0.17,
+        0.14
+      ]
+    },
+    "drawing": {
+      "ceiling": "cove",
+      "floor": "marble",
+      "wall": {
+        "paper": "fan"
+      },
+      "panelling": true
+    },
+    "tv-lounge": {
+      "ceiling": "cove",
+      "floor": "marble",
+      "wall": [
+        0.075,
+        0.08,
+        0.09
+      ],
+      "featureWall": "auto",
+      "featureKind": "fluted-tight",
+      "featureMaterial": "smoked-walnut",
+      "featureSpan": 3.6
+    },
+    "dining": {
+      "ceiling": "cove",
+      "floor": "marble",
+      "wall": {
+        "paper": "grasscloth"
+      },
+      "panelling": true
+    },
+    "kitchen": {
+      "ceiling": "flat",
+      "floor": "marble",
+      "downlightSpacing": 1.8,
+      "wall": [
+        0.6,
+        0.57,
+        0.5
+      ],
+      "uppers": [
+        "k-counter"
+      ],
+      "waterfall": true,
+      "splashback": "slab"
+    },
+    "store": {
+      "ceiling": "flat",
+      "floor": "marble",
+      "downlightSpacing": 1.8,
+      "wall": [
+        0.6,
+        0.57,
+        0.5
+      ]
+    },
+    "powder-room": {
+      "ceiling": "flat",
+      "floor": "bath-dark",
+      "downlightSpacing": 1.0,
+      "spotRadius": 0.12,
+      "wall": {
+        "paper": "geo"
+      },
+      "wallTile": 1.1,
+      "wallTileKey": "dark-slab",
+      "backlitMirror": true
+    },
+    "bathroom": {
+      "ceiling": "flat",
+      "floor": "bath-ivory",
+      "downlightSpacing": 1.1,
+      "spotRadius": 0.12,
+      "wallTile": "full",
+      "wallTileKey": "ivory-slab"
+    },
+    "bedroom": {
+      "ceiling": "cove",
+      "floor": "walnut",
+      "wall": [
+        0.6,
+        0.57,
+        0.5
+      ],
+      "featureWall": "auto",
+      "featureKind": "oak-panel",
+      "featureMaterial": "smoked-walnut",
+      "featureSpan": 3.2
+    },
+    "master-bedroom": {
+      "ceiling": "cove",
+      "floor": "walnut",
+      "wall": [
+        0.36,
+        0.33,
+        0.29
+      ],
+      "featureWall": "auto",
+      "featureKind": "paper",
+      "featurePaper": "ribbed",
+      "featureSpan": 3.2
+    },
+    "dressing": {
+      "ceiling": "flat",
+      "floor": "walnut",
+      "downlightSpacing": 1.4,
+      "wall": [
+        0.6,
+        0.57,
+        0.5
+      ]
+    },
+    "laundry": {
+      "ceiling": "flat",
+      "floor": "bath-ivory",
+      "downlightSpacing": 1.4,
+      "wall": [
+        0.6,
+        0.57,
+        0.5
+      ]
+    },
+    "family-lounge": {
+      "ceiling": "cove",
+      "floor": "walnut",
+      "wall": [
+        0.36,
+        0.33,
+        0.29
+      ],
+      "featureWall": "auto",
+      "featureKind": "fluted-tight",
+      "featureMaterial": "smoked-walnut",
+      "featureSpan": 3.6
+    },
+    "corridor": {
+      "ceiling": "flat",
+      "floor": "marble",
+      "downlightSpacing": 1.6,
+      "wall": [
+        0.075,
+        0.08,
+        0.09
+      ]
+    },
+    "stair-room": {
+      "ceiling": "flat",
+      "floor": "marble"
+    },
+    "terrace": {
+      "finish": "exterior",
+      "ceiling": "none"
+    },
+    "stair-hall": {
+      "ceiling": "flat",
+      "floor": "marble",
+      "downlightSpacing": 1.8,
+      "wall": [
+        0.36,
+        0.33,
+        0.29
+      ]
+    }
+  },
+  "rooms": {
+    "ground/bed1": {
+      "wall": [
+        0.6,
+        0.57,
+        0.5
+      ]
+    },
+    "first/bed2": {
+      "wall": [
+        0.2,
+        0.24,
+        0.21
+      ]
+    },
+    "first/bed3": {
+      "wall": {
+        "paper": "stripe"
+      },
+      "featureKind": "headboard"
+    },
+    "first/master-bath": {
+      "floor": "bath-dark",
+      "wallTileKey": "dark-slab",
+      "backlitMirror": true
+    },
+    "first/laundry": {
+      "downlightSpacing": 0.8,
+      "spotRadius": 0.12
+    },
+    "ground/kitchen": {
+      "downlightSpacing": 1.2
+    }
+  },
+  "sun": {
+    "azimuth": 250,
+    "elevation": 45,
+    "strength": 4.2
+  },
+  "skyFill": 0.4,
+  "exposure": 1.0,
+  "viewpoints": {
+    "gate": {
+      "outdoors": true,
+      "exposure": 0.5,
+      "haze": 0.006,
+      "sun": {
+        "azimuth": 235
+      }
+    },
+    "porch": {
+      "outdoors": true,
+      "exposure": 0.5,
+      "haze": 0.006,
+      "sun": {
+        "azimuth": 235
+      }
+    }
+  },
+  "voids": false
+}

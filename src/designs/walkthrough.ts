@@ -47,6 +47,8 @@ export const Viewpoint = z.object({
   level: Id,
   /** Eye position on the plan, feet */
   at: z.tuple([z.number(), z.number()]),
+  /** Feet the eye stands above the level's floor, for a spot on a stair landing */
+  rise: z.number().default(0),
   /** World angle (degrees, counter-clockwise from +x) the view opens on */
   facing: z.number(),
   /** What the view shows, for people who cannot see it */
@@ -61,6 +63,11 @@ export const Walkthrough = z.object({
   /** The viewpoint the tour opens on */
   start: Id,
   viewpoints: z.array(Viewpoint).min(1),
+  /**
+   * Offer every spot a visitor can see as a place to walk to (a tour in the manner of a 3D scan), not only the doors
+   * authored in `links`. Off for the small houses, whose few spots are all in sight of their doors.
+   */
+  walking: z.boolean().default(false),
   /** Rooms with no viewpoint, by the maintainer's choice (e.g. a room only reachable from outside) */
   excluded: z.array(Excluded).default([]),
 });
@@ -177,7 +184,82 @@ export function markerYaw(design: Design, from: Viewpoint, link: Link, to: Viewp
 }
 
 /** Eye height of a panorama, in feet (1.55 m) */
-const EYE_FT = 1.55 / 0.3048;
+const M_PER_FT = 0.3048;
+const EYE_FT = 1.55 / M_PER_FT;
+
+// ---- walking links: every spot you can see from where you stand ----
+
+/** How far a spot can be and still be offered as a place to walk to, in feet */
+export const SIGHT_MAX = 30;
+/** Two spots seen within this many degrees of each other: only the nearer is offered, the far one is reached through it */
+export const SIGHT_SPREAD = 10;
+/** Slack allowed at the edge of a doorway, so a spot standing in one still sees through it */
+const DOOR_SLACK = 0.25;
+
+/** Whether one point on a level can see another: walls stop the line unless it passes through a door, an arch or a sliding door */
+export function canSee(level: Level, a: Pt, b: Pt): boolean {
+  const frames = wallFrames(level);
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  for (const wall of level.walls) {
+    const ex = wall.b[0] - wall.a[0];
+    const ey = wall.b[1] - wall.a[1];
+    const det = dx * ey - dy * ex;
+    if (Math.abs(det) < 1e-9) continue; // parallel: a line along a wall is not stopped by it
+    const wx = wall.a[0] - a[0];
+    const wy = wall.a[1] - a[1];
+    const t = (wx * ey - wy * ex) / det; // along the line of sight
+    const u = (wx * dy - wy * dx) / det; // along the wall, 0 to 1
+    if (t < -1e-6 || t > 1 + 1e-6 || u < -1e-6 || u > 1 + 1e-6) continue;
+    const s = u * Math.hypot(ex, ey);
+    const frame = frames.get(wall.id);
+    const through = level.openings.some((o) => o.wall === wall.id && o.type !== "window" && s >= o.offset - DOOR_SLACK && s <= o.offset + o.width + DOOR_SLACK);
+    if (!through && frame) return false;
+  }
+  return true;
+}
+
+/**
+ * The spots a visitor can walk to from one spot: every other spot on the same level that it can see through open
+ * floor, doors and arches, within SIGHT_MAX, nearest first; a spot standing almost behind a nearer one is left out,
+ * since the visitor gets to it by walking to the nearer one first. Seeing is mutual, so links come in pairs.
+ */
+export function sightLinks(design: Design, wt: Walkthrough, from: Viewpoint): Viewpoint[] {
+  const level = levelOf(design, from.level);
+  if (!level) return [];
+  const seen = wt.viewpoints
+    .filter((v) => v.id !== from.id && v.level === from.level)
+    .map((v) => ({ v, d: Math.hypot(v.at[0] - from.at[0], v.at[1] - from.at[1]) }))
+    .filter(({ v, d }) => d <= SIGHT_MAX && d > 0.01 && canSee(level, from.at, v.at))
+    .sort((p, q) => p.d - q.d);
+  const kept: { v: Viewpoint; yaw: number }[] = [];
+  for (const { v } of seen) {
+    const yaw = viewerYaw(worldAngle(from.at, v.at));
+    if (kept.some((k) => Math.abs(normaliseAngle(k.yaw - yaw)) < SIGHT_SPREAD)) continue;
+    kept.push({ v, yaw });
+  }
+  return kept.map((k) => k.v);
+}
+
+/**
+ * The links the tour offers from a spot: those it can see (each marked where the next spot is), plus the authored
+ * links it cannot see (a stair, or a door it has no line through), marked at the door or stair.
+ */
+export function walkLinks(design: Design, wt: Walkthrough, vp: Viewpoint): { link: Link; sighted: boolean }[] {
+  if (!wt.walking) return vp.links.map((link) => ({ link, sighted: false }));
+  const sighted = sightLinks(design, wt, vp);
+  const byId = new Map(wt.viewpoints.map((v) => [v.id, v]));
+  const out: { link: Link; sighted: boolean }[] = sighted.map((v) => ({ link: { to: v.id }, sighted: true }));
+  for (const l of vp.links) {
+    const to = byId.get(l.to);
+    if (!to || out.some((o) => o.link.to === l.to)) continue;
+    const level = levelOf(design, vp.level);
+    // An authored link on one level that the visitor can see along is left to the sight rule (it was dropped there as hidden behind a nearer spot)
+    if (to.level === vp.level && level && canSee(level, vp.at, to.at) && Math.hypot(to.at[0] - vp.at[0], to.at[1] - vp.at[1]) <= SIGHT_MAX) continue;
+    out.push({ link: l, sighted: false });
+  }
+  return out;
+}
 
 // ---- the tour as the page and the encoder use it ----
 
@@ -208,12 +290,16 @@ export interface TourView {
   yaw: number;
   /** On the plan's viewBox, in feet */
   point: Pt;
+  /** The eye in metres: x and y on the plan, z above the road (the 3D viewer moves the camera between these) */
+  pos: [number, number, number];
   description: string;
   links: TourLink[];
 }
 
 export interface Tour {
   slug: string;
+  /** Offers every spot in sight as a place to walk to; the viewer keeps the visitor's heading */
+  walking: boolean;
   start: string;
   levels: { id: string; name: string }[];
   views: TourView[];
@@ -229,6 +315,7 @@ export function buildTour(design: Design, wt: Walkthrough): Tour {
   const by = new Map(wt.viewpoints.map((v) => [v.id, v]));
   return {
     slug: design.slug,
+    walking: wt.walking,
     start: wt.start,
     levels: wt.levels.map((id) => ({ id, name: levelOf(design, id)?.name ?? id })),
     views: wt.viewpoints.map((vp) => ({
@@ -239,22 +326,23 @@ export function buildTour(design: Design, wt: Walkthrough): Tour {
       room: vp.room ?? null,
       yaw: viewerYaw(vp.facing),
       point: planPoint(design, vp.at),
+      pos: [vp.at[0] * M_PER_FT, vp.at[1] * M_PER_FT, ((levelOf(design, vp.level)?.elevation ?? 0) + vp.rise + EYE_FT) * M_PER_FT],
       description: vp.description,
-      links: vp.links.map((l) => {
+      links: walkLinks(design, wt, vp).map(({ link: l, sighted }) => {
         const to = by.get(l.to)!;
-        const point = linkPoint(design, vp, l, to) ?? to.at;
+        const point = (sighted ? to.at : linkPoint(design, vp, l, to)) ?? to.at;
         const distance = Math.max(1, Math.hypot(point[0] - vp.at[0], point[1] - vp.at[1]));
         const rank = (id: string) => wt.levels.indexOf(id);
         return {
           to: l.to,
           label: roomName(design, to),
-          yaw: markerYaw(design, vp, l, to),
-          // The floor spot as seen from eye height, kept within what a wide view shows
-          pitch: Math.round(Math.max(-62, Math.min(-8, -deg(Math.atan2(EYE_FT, distance)))) * 10) / 10,
+          yaw: sighted ? viewerYaw(worldAngle(vp.at, to.at)) : markerYaw(design, vp, l, to),
+          // The floor spot as seen from eye height, kept where a visitor looking ahead can see it
+          pitch: Math.round(Math.max(wt.walking ? -28 : -62, Math.min(-8, -deg(Math.atan2(EYE_FT, distance)))) * 10) / 10,
           distance: Math.round(distance * 10) / 10,
-          climb: Math.sign(rank(to.level) - rank(vp.level)) as -1 | 0 | 1,
+          climb: (Math.sign(rank(to.level) - rank(vp.level)) || Math.sign(to.rise - vp.rise)) as -1 | 0 | 1,
           ...(l.via ? { via: l.via } : {}),
-          stair: to.level !== vp.level,
+          stair: to.level !== vp.level || to.rise !== vp.rise,
         };
       }),
     })),
@@ -330,6 +418,8 @@ export function walkthroughProblems(design: Design, wt: Walkthrough): string[] {
         else if (!openStretch(upper, a, b)) say(`${name}: "${a.id}" and "${b.id}" do not meet without a wall`);
         continue;
       }
+      // A hop up or down part of a flight: both spots are on one level, one of them standing above its floor
+      if (vp.level === to.level && vp.rise !== to.rise && upper?.stairs.some((s) => s.id === link.via)) continue;
       const stair = upper?.stairs.find((s) => s.id === link.via);
       const lower = levelOf(design, to.level);
       const stairBetween = (a: Level | undefined, b: Level | undefined) => a?.stairs.find((s) => s.id === link.via && s.to === b?.id);
@@ -364,7 +454,7 @@ export function walkthroughProblems(design: Design, wt: Walkthrough): string[] {
     const id = queue.pop()!;
     if (seen.has(id) || !by.has(id)) continue;
     seen.add(id);
-    for (const l of by.get(id)!.links) queue.push(l.to);
+    for (const { link } of walkLinks(design, wt, by.get(id)!)) queue.push(link.to);
   }
   for (const vp of wt.viewpoints) if (!seen.has(vp.id)) say(`viewpoint "${vp.id}" cannot be reached from "${wt.start}"`);
 

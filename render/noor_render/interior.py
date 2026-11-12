@@ -27,7 +27,7 @@ import bmesh
 import bpy
 from mathutils import Matrix, Vector
 
-from . import geometry, materials, style
+from . import geometry, materials, style, wallpaper
 from .util import add_bevel, boxes_mesh, collection, mesh_object, offset_polygon, point_in_polygon, prism_object
 
 SHOTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "shots")
@@ -567,6 +567,8 @@ class Palette:
                                              vein=[0.4, 0.35, 0.29], vein_strength=0.4)
         self._floors = {}
         self._wall_tiles = {}
+        self._paints = {}
+        self._papers = {}
 
     def named(self, key):
         """A material by name: a veneer or stone defined in the palette (`woods`, `stones`), else a texture tag."""
@@ -584,6 +586,30 @@ class Palette:
                 self._named[key] = materials.get(key)
         return self._named[key]
 
+    def wall_for(self, room):
+        """The finish of a room's walls as (panels, plain): `plain` paints the reveals, casings, returns and panelling, which
+        a pattern must not wrap round. With no `wall` in the room's spec both are the palette's one wall colour, as before.
+        `wall` is a paint colour (linear RGB), or {"paper": key} for a wallpaper from the palette's `papers`."""
+        w = room.spec.get("wall")
+        if w is None:
+            return self.wall, self.wall
+        if isinstance(w, dict):
+            cfg = self.cfg["papers"][w["paper"]]
+            key = f"{room.level['id']}/{room.id}"
+            if key not in self._papers:
+                axes = [(abs(e.u.x) < 1e-6) or (abs(e.u.y) < 1e-6) for e in room.edges]
+                if not all(axes):
+                    raise ValueError(f"interior: room {room.id} has a wallpaper but walls that are not on an axis")
+                origin = (min(e.A.x for e in room.edges), min(e.A.y for e in room.edges))
+                plain_mat = self._paints.setdefault(("paper", w["paper"]), plain(f"paint-{w['paper']}", cfg["ground"], 0.88, bump=0.05,
+                                                                                spec=0.3, wash=self.cfg.get("wash", 0.07)))
+                self._papers[key] = (wallpaper.material(f"paper-{room.level['id']}-{room.id}", cfg, origin, room.floor_z), plain_mat)
+            return self._papers[key]
+        key = tuple(w)
+        if key not in self._paints:
+            self._paints[key] = plain("paint-room", list(w), 0.88, bump=0.05, spec=0.3, wash=self.cfg.get("wash", 0.07))
+        return self._paints[key], self._paints[key]
+
     def wall_tile(self, key):
         if key not in self._wall_tiles:
             f = self.wall_tiles_cfg[key]
@@ -594,7 +620,9 @@ class Palette:
     def floor(self, key):
         if key not in self._floors:
             f = self.cfg["floors"][key]
-            if f.get("kind") == "wood":
+            if f.get("kind") == "herringbone":  # laid from the plan origin, so every room's floor is one continuous pattern
+                self._floors[key] = wallpaper.material(f"floor-{key}", f, (0.0, 0.0), 0.0, floor=True)
+            elif f.get("kind") == "wood":
                 self._floors[key] = wood_floor_material(f"floor-{key}", f["a"], f["b"], f.get("rough", 0.38), tuple(f.get("size", (2.0, 0.19))))
             else:
                 self._floors[key] = tile_material(f"floor-{key}", f["a"], f["b"], f["grout"], f["size"], f.get("rough", 0.14),
@@ -696,6 +724,7 @@ class Interior:
         self.rooms = {}
         self.lights = []
         self._leaves, self._pulls, self._sills = set(), set(), set()
+        self._leaves_open = set()  # doors built standing open (openDoors)
         self.featured = {}  # room id -> the wall edge carrying its feature wall
         for li, level in enumerate(design["levels"]):
             for room in level["rooms"]:
@@ -794,7 +823,7 @@ class Interior:
             if tiles:
                 solid(f"walltile-{room.id}", tiles, pal.wall_tile(room.spec.get("wallTileKey", "bath")), col, role="interior")
         if panels:
-            solid(f"paint-{room.id}", panels, pal.wall, col, role="interior")
+            solid(f"paint-{room.id}", panels, pal.wall_for(room)[0], col, role="interior")
         if skirts:
             solid(f"skirting-{room.id}", skirts, pal.dark if shadow_gap else pal.skirt, col, bevel=0.0 if shadow_gap else 0.002,
                   role="interior")
@@ -846,12 +875,25 @@ class Interior:
                 self._leaves.add(op["id"])
                 count = 2 if op["type"] == "double-door" else 1
                 lw = (W - 2 * SKIN - 0.008) / count
-                for i in range(count):
+                if self.opt(room, "openDoors"):
+                    # standing open: each leaf swung 90 degrees on its hinge into the room the plan opens it to (opensTo is
+                    # the side of the wall's a-to-b direction, as in plan.ts), edge-on to a visitor walking through
+                    nl = Vector((-u.y, u.x))
+                    side = 1 if op.get("opensTo") == "left" else -1
+                    for i in range(count):
+                        at_start = (op.get("hinge") == "start") if count == 1 else (i == 0)
+                        hs = SKIN + 0.004 if at_start else W - SKIN - 0.004
+                        s_lo, s_hi = (hs, hs + 0.04) if at_start else (hs - 0.04, hs)
+                        o_lo, o_hi = (0.02, 0.02 + lw) if side > 0 else (-0.02 - lw, -0.02)
+                        leaves.append(fbox(a, u, nl, s_lo, s_hi, o_lo, o_hi, z0 + 0.012, z1 - SKIN - 0.004))
+                    self._leaves_open.add(op["id"])
+                else:
+                  for i in range(count):
                     s0 = SKIN + 0.004 + i * lw
                     leaves.append(fbox(a, u, n, s0, s0 + lw - (0.003 if count > 1 else 0), -0.02, 0.02, z0 + 0.012, z1 - SKIN - 0.004))
                 latch = W - SKIN - 0.08 if op.get("hinge") == "start" else SKIN + 0.08
                 reach = (-0.15, 0.0) if op.get("hinge") == "start" else (0.0, 0.15)
-                for side in (1, -1):  # a lever on both faces, so the door reads as a door from either room
+                for side in (() if op["id"] in self._leaves_open else (1, -1)):  # a lever on both faces, so the door reads as a door from either room
                     def o(d, side=side):
                         return sorted((side * d[0], side * d[1]))
                     plate, post, arm = o((0.02, 0.028)), o((0.028, 0.062)), o((0.052, 0.07))
@@ -871,13 +913,13 @@ class Interior:
                 self._sills.add(op["id"])
                 thresholds.append(fbox(a, u, n, SKIN, W - SKIN, -t / 2, t / 2, z0 - 0.001, z0 + FLOOR_T + 0.002))
         if reveals:
-            solid(f"reveals-{room.id}", reveals, pal.wall, col, role="interior")
+            solid(f"reveals-{room.id}", reveals, pal.wall_for(room)[1], col, role="interior")
         if stools:
             solid(f"stools-{room.id}", stools, pal.stone, col, bevel=0.004, role="interior")
         if casings:
-            solid(f"casings-{room.id}", casings, pal.wall, col, bevel=0.002, role="interior")  # flush, painted the wall's colour
+            solid(f"casings-{room.id}", casings, pal.wall_for(room)[1], col, bevel=0.002, role="interior")  # flush, painted the wall's colour
         # a room may name its own door finish: a timber or stone from the palette, or "wall" for doors painted to vanish
-        door = pal.door if "door" not in room.spec else pal.wall if room.spec["door"] == "wall" else pal.named(room.spec["door"])
+        door = pal.door if "door" not in room.spec else pal.wall_for(room)[1] if room.spec["door"] == "wall" else pal.named(room.spec["door"])
         if leaves:
             solid(f"leaves-{room.id}", leaves, door, col, bevel=0.004, role="interior")
         if overs:
@@ -1379,10 +1421,12 @@ class Interior:
             # has cut away, leaving a gap. Add that tread, flush with the floor finish.
             if len(steps) > 1 and st.get("risers"):
                 a, b = steps[-2], steps[-1]
-                if abs(a["y"] - b["y"]) < 1e-3 and abs(a["x"] - b["x"]) > 1e-3:
-                    top_z = st["bottom"] + st["risers"] * riser
-                    if top_z - b["top"] < riser * 1.5 and b["top"] < top_z - 0.01:
+                top_z = st["bottom"] + st["risers"] * riser
+                if top_z - b["top"] < riser * 1.5 and b["top"] < top_z - 0.01:
+                    if abs(a["y"] - b["y"]) < 1e-3 and abs(a["x"] - b["x"]) > 1e-3:
                         steps.append(dict(b, x=2 * b["x"] - a["x"], top=top_z - 0.013))
+                    elif abs(a["x"] - b["x"]) < 1e-3 and abs(a["y"] - b["y"]) > 1e-3:  # a flight rising along y
+                        steps.append(dict(b, y=2 * b["y"] - a["y"], top=top_z - 0.013))
 
             def run(i):
                 """The axis a step rises along and its direction, from its neighbours in the same flight"""
@@ -1794,6 +1838,19 @@ class Interior:
             put("brass", brass(*[lo + span * (k + 1) / (n_in + 1) for k in range(n_in)]) +
                 [fbox(e.A, e.u, e.n, lo - 0.012, lo, 0.0, 0.034, zb0, zb1), fbox(e.A, e.u, e.n, hi, hi + 0.012, 0.0, 0.034, zb0, zb1)], pal.brass)
             put("glow", [fbox(e.A, e.u, e.n, lo, hi, 0.0, 0.05, zb1, zb1 + 0.02)], pal.led, 0.0)
+        elif kind == "paper":
+            # a wallpapered panel framed in brass, with a concealed light line above it: a headboard wall in paper
+            cfg = pal.cfg["papers"][room.spec["featurePaper"]]
+            if not (abs(e.u.x) < 1e-6 or abs(e.u.y) < 1e-6):
+                raise ValueError(f"interior: the paper feature wall of {room.id} is not on an axis")
+            p0, p1 = e.A + e.u * lo, e.A + e.u * hi
+            origin = (min(p0.x, p1.x), min(p0.y, p1.y))
+            paper = wallpaper.material(f"paper-feature-{room.id}", cfg, origin, room.floor_z)
+            put("backer", [fbox(e.A, e.u, e.n, lo - 0.03, hi + 0.03, 0.0, 0.012, zb0, zb1)], pal.dark, 0.002)
+            put("paper", [fbox(e.A, e.u, e.n, lo, hi, 0.0, 0.028, zb0, zb1)], paper, 0.0)
+            put("brass", [fbox(e.A, e.u, e.n, lo - 0.012, lo, 0.0, 0.034, zb0, zb1), fbox(e.A, e.u, e.n, hi, hi + 0.012, 0.0, 0.034, zb0, zb1)],
+                pal.brass)
+            put("glow", [fbox(e.A, e.u, e.n, lo, hi, 0.0, 0.05, zb1, zb1 + 0.02)], pal.led, 0.0)
         else:
             put("backer", [fbox(e.A, e.u, e.n, lo, hi, 0.0, 0.012, zb0, zb1)], pal.dark, 0.002)
             put("slats", timber(lo, hi), pal.slat, 0.002)
@@ -1881,7 +1938,7 @@ class Interior:
                     for (p0, p1, q0, q1) in ((a0, a1, z0, z0 + f), (a0, a1, z1 - f, z1), (a0, a0 + f, z0 + f, z1 - f), (a1 - f, a1, z0 + f, z1 - f)):
                         frames.append(fbox(e.A, e.u, e.n, p0, p1, 0.004, 0.018, q0, q1))
         if frames:
-            solid(f"panelling-{room.id}", frames, pal.wall, col, bevel=0.002, role="interior")
+            solid(f"panelling-{room.id}", frames, pal.wall_for(room)[1], col, bevel=0.002, role="interior")
 
 
 def seg_dist(pt, a, b):

@@ -119,3 +119,114 @@ def stitch(folder, dest):
     bpy.data.images.remove(pano)
     os.replace(tmp, dest)
     return dest
+
+
+# ---- depth: how far the nearest surface is along every ray of a panorama, for the viewer's parallax
+
+DEPTH_MAX = 100.0  # metres: sky and anything farther are stored as this
+DEPTH_WIDTH = 512  # an equirectangular depth image is 512 x 256: one mesh vertex per pixel in the viewer
+
+
+def render_depth(sc, pos, dest, device="cpu"):
+    """Write dest, an 8-bit PNG of the distance from `pos` to the first surface along each panorama ray.
+
+    The distance (metres, 0 to DEPTH_MAX) is packed into 16 bits: red is the high byte and green the low byte, so
+    metres = (red * 256 + green) / 65535 * DEPTH_MAX. It is drawn as an emission shader over the whole scene (no light
+    transport, no haze, glass left out so a window shows the world beyond it), through the 'Raw' view transform, so the
+    bytes in the PNG are the bytes the shader made. One sample with a pinhole filter keeps every pixel a single ray."""
+    import numpy as np  # noqa: F401  (kept: the packing below is in the shader, but a failure here should be loud)
+
+    scene = bpy.context.scene
+    native(sc.camera, pos)
+    output.configure("cycles", "preview", 2.0, DEPTH_WIDTH, device=device)
+    c = scene.cycles
+    c.samples = 1
+    c.use_adaptive_sampling = False
+    c.use_denoising = False
+    c.max_bounces = 0
+    c.filter_width = 0.01
+    r = scene.render
+    r.use_persistent_data = False
+    r.image_settings.color_depth = "8"
+    r.image_settings.color_mode = "RGB"
+    r.image_settings.compression = 15
+    r.dither_intensity = 0.0
+    scene.view_settings.view_transform = "Raw"
+    scene.view_settings.look = "None"
+    scene.view_settings.exposure = 0.0
+    scene.view_settings.gamma = 1.0
+    scene.display_settings.display_device = "sRGB"
+
+    # glass is left out: a ray through a window goes on to what is outside it
+    for ob in bpy.data.objects:
+        mats = [m.name for m in getattr(ob.data, "materials", []) if m] if ob.type == "MESH" else []
+        if mats and all(n.startswith("glass-") for n in mats):
+            ob.hide_render = True
+
+    def packed(nt, position):
+        """Nodes turning the distance from `position` into the red and green bytes; returns an RGB colour output"""
+        geo = nt.nodes.new("ShaderNodeNewGeometry")
+        sub = nt.nodes.new("ShaderNodeVectorMath")
+        sub.operation = "SUBTRACT"
+        sub.inputs[1].default_value = tuple(position)
+        nt.links.new(geo.outputs["Position"], sub.inputs[0])
+        length = nt.nodes.new("ShaderNodeVectorMath")
+        length.operation = "LENGTH"
+        nt.links.new(sub.outputs[0], length.inputs[0])
+
+        def math(op, a=None, b=None, clamp=False):
+            n = nt.nodes.new("ShaderNodeMath")
+            n.operation = op
+            n.use_clamp = clamp
+            for i, v in enumerate((a, b)):
+                if isinstance(v, (int, float)):
+                    n.inputs[i].default_value = v
+                elif v is not None:
+                    nt.links.new(v, n.inputs[i])
+            return n.outputs[0]
+
+        v = math("MULTIPLY", length.outputs["Value"], 65535.0 / DEPTH_MAX)
+        v = math("MINIMUM", v, 65535.0)
+        v = math("ROUND", v)
+        hi = math("FLOOR", math("DIVIDE", v, 256.0))
+        lo = math("SUBTRACT", v, math("MULTIPLY", hi, 256.0))
+        comb = nt.nodes.new("ShaderNodeCombineColor")
+        nt.links.new(math("DIVIDE", hi, 255.0), comb.inputs[0])
+        nt.links.new(math("DIVIDE", lo, 255.0), comb.inputs[1])
+        comb.inputs[2].default_value = 0.0
+        return comb.outputs[0]
+
+    mat = bpy.data.materials.new("depth-override")
+    mat.use_nodes = True
+    nt = mat.node_tree
+    nt.nodes.clear()
+    emit = nt.nodes.new("ShaderNodeEmission")
+    emit.inputs["Strength"].default_value = 1.0
+    nt.links.new(packed(nt, pos), emit.inputs["Color"])
+    out = nt.nodes.new("ShaderNodeOutputMaterial")
+    nt.links.new(emit.outputs[0], out.inputs["Surface"])
+    bpy.context.view_layer.material_override = mat
+
+    # the sky and the haze are replaced by a flat 'far away' colour: red and green full, so 65535, DEPTH_MAX
+    world = bpy.data.worlds.new("depth-world")
+    world.use_nodes = True
+    wn = world.node_tree
+    wn.nodes.clear()
+    bg = wn.nodes.new("ShaderNodeBackground")
+    bg.inputs["Color"].default_value = (1.0, 1.0, 0.0, 1.0)
+    bg.inputs["Strength"].default_value = 1.0
+    wo = wn.nodes.new("ShaderNodeOutputWorld")
+    wn.links.new(bg.outputs[0], wo.inputs["Surface"])
+    scene.world = world
+    # no object in the scene may add light, fog or a volume of its own to the bytes
+    for ob in bpy.data.objects:
+        if ob.type == "LIGHT":
+            ob.hide_render = True
+
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
+    tmp = dest[:-4] + ".tmp.png"
+    bpy.ops.render.render()
+    bpy.data.images["Render Result"].save_render(filepath=tmp)
+    os.replace(tmp, dest)
+    print(f"wrote {dest}", flush=True)
+    return dest

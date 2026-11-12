@@ -7,6 +7,8 @@
  * the stills of every room. Nothing of the viewer (Pannellum, the panoramas) is fetched until the visitor starts it.
  * The tour (views, links, yaw, plan positions) is computed from the walkthrough data and the design, at build time.
  */
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { withBase } from "../../lib/paths.ts";
 import { getDesign } from "../../designs/index.ts";
 import { getWalkthrough } from "../../designs/walkthroughs.ts";
@@ -25,7 +27,11 @@ const { tour } = found;
 const { design, facts } = getDesign(slug);
 
 const image = (id: string, thumb = false) => withBase(`/walkthroughs/${slug}/${id}${thumb ? "-thumb" : ""}.jpg`);
+const depthImage = (id: string) => withBase(`/walkthroughs/${slug}/${id}-depth.png`);
 const start = tour.views.find((v) => v.id === tour.start)!;
+// A walking tour moves through the house with depth: every view needs its depth image, or the flat viewer is used
+const publicDir = fileURLToPath(new URL("../../../public/", import.meta.url));
+const hasDepth = tour.walking && tour.views.every((v) => existsSync(`${publicDir}walkthroughs/${slug}/${v.id}-depth.png`));
 
 // One plan per level of the tour, drawn for the dark viewer
 const plans = tour.levels.map((l) => {
@@ -37,6 +43,8 @@ const plans = tour.levels.map((l) => {
 const config = {
   slug,
   start: tour.start,
+  walking: tour.walking,
+  depth: hasDepth,
   levels: tour.levels,
   views: tour.views.map((v) => ({
     id: v.id,
@@ -49,6 +57,8 @@ const config = {
     description: v.description,
     image: image(v.id),
     thumb: image(v.id, true),
+    depth: hasDepth ? depthImage(v.id) : "",
+    pos: v.pos,
     links: v.links,
   })),
   plan: Object.fromEntries(plans.map((p) => [p.id, [p.plan.width, p.plan.height]])),
@@ -151,6 +161,8 @@ const config = {
 </div>
 
 <script>
+  import { DepthViewer, type DepthScene, type Marker } from "./depth-viewer.ts";
+
   interface Link {
     to: string;
     label: string;
@@ -171,6 +183,9 @@ const config = {
     description: string;
     image: string;
     thumb: string;
+    /** The depth image and the eye in metres, for a walking tour */
+    depth: string;
+    pos: [number, number, number];
     links: Link[];
   }
   // The widest view is the default: zooming in is the visitor's choice
@@ -183,6 +198,10 @@ const config = {
   const TILT = -8;
 
   interface Config {
+    /** A tour of walking links: keep the visitor's heading when they move, even within a room */
+    walking: boolean;
+    /** Every view has a depth image: move through the house in 3D rather than swapping flat views */
+    depth: boolean;
     slug: string;
     start: string;
     levels: { id: string; name: string }[];
@@ -259,6 +278,9 @@ const config = {
     if (document.fullscreenEnabled) fullButton.hidden = false;
 
     let pano: PannellumViewer | undefined;
+    let dv: DepthViewer | undefined;
+    // set when the 3D viewer cannot run here: the flat viewer takes over
+    let flat = !config.depth || !DepthViewer.supported();
     let current = config.start;
     let opening = 0;
     let moving = false;
@@ -362,15 +384,15 @@ const config = {
       dot.hidden = false;
       dot.style.left = `${(v.point[0] / size[0]) * 100}%`;
       dot.style.top = `${(v.point[1] / size[1]) * 100}%`;
-      setBearing(dot, pano ? pano.getYaw() : opening);
+      setBearing(dot, lookYaw());
     };
     // The plan has +y up and the image centre faces +y, so a viewer yaw is already the clockwise bearing on the plan
     const setBearing = (dot: HTMLElement, yaw: number) => dot.style.setProperty("--wt-yaw", `${yaw.toFixed(0)}deg`);
+    const lookYaw = () => (dv ? dv.yaw : pano ? pano.getYaw() : opening);
     const facing = () => {
-      if (!pano) return;
-      const yaw = pano.getYaw();
+      if (!pano && !dv) return;
       const dot = you(views.get(current)!.level);
-      if (dot) setBearing(dot, yaw);
+      if (dot) setBearing(dot, lookYaw());
     };
 
     root.querySelectorAll<HTMLElement>("[data-wt-spot]").forEach((el) =>
@@ -384,6 +406,11 @@ const config = {
       showLevel(v.level);
       updateMap();
       facing();
+      if (dv) {
+        dv.setMarkers(markersFor(v));
+        dv.prefetch(v.links.map((l) => l.to));
+        return;
+      }
       // Warm the next views while the visitor looks around
       for (const l of v.links) {
         const t = views.get(l.to);
@@ -391,15 +418,44 @@ const config = {
       }
     };
 
-    // Moving: turn towards the door, zoom in with a little blur as if walking forward, swap the view, then ease back out
+    // The 3D viewer's markers: the same circles as the flat viewer's, placed on the floor under each next spot
+    const markersFor = (v: View): Marker[] =>
+      v.links.map((l) => {
+        const target = views.get(l.to)!;
+        const inRoom = target.level === v.level && target.room === v.room;
+        const kind = l.climb > 0 ? "up" : l.climb < 0 ? "down" : inRoom ? "spot" : "door";
+        const el = document.createElement("div");
+        el.className = `wt-marker wt-marker--${kind}`;
+        el.setAttribute("role", "button");
+        // spots on this floor are chosen with the pointer or the arrow keys; only stairs are tab stops
+        el.tabIndex = l.climb ? 0 : -1;
+        el.setAttribute("aria-label", verb(v, l));
+        const tip = document.createElement("span");
+        tip.textContent = l.label;
+        el.append(tip);
+        el.addEventListener("click", () => go(l.to));
+        el.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            go(l.to);
+          }
+        });
+        return { to: l.to, el, target: dv!.floor(l.to) };
+      });
+
+    // Moving: (flat viewer) turn towards the door, zoom in with a little blur as if walking forward, swap the view, then ease back out
     function go(id: string) {
+      if (dv) {
+        void walk(id);
+        return;
+      }
       const target = views.get(id);
       if (!target || !pano || moving) return;
       const from = views.get(current)!;
       const link = from.links.find((l) => l.to === id);
       // Through a door, keep going the way the visitor was heading; to another spot in the same room, face into the room
       const inRoom = target.level === from.level && target.room === from.room;
-      opening = link && !inRoom ? link.yaw : target.yaw;
+      opening = link && (config.walking || !inRoom) ? link.yaw : target.yaw;
       const swap = () => {
         current = id;
         arriving = true;
@@ -416,6 +472,31 @@ const config = {
       stage.classList.add("is-moving");
       if (link) pano.lookAt(Math.max(-30, link.pitch / 2), link.yaw, STEP, 700, swap);
       else swap();
+    }
+
+    // Walking in 3D: glide to the next spot with the two views blended, without turning the visitor. A choice made
+    // while a glide is under way is kept (the latest wins) and carried out from the spot they arrive at.
+    async function walk(id: string) {
+      const target = views.get(id);
+      if (!target || !dv) return;
+      if (moving) {
+        dv.request({ kind: "id", id });
+        return;
+      }
+      if (id === current) return;
+      const from = views.get(current)!;
+      const link = from.links.find((l) => l.to === id);
+      moving = true;
+      // From the map, to a spot not in sight: cut to it, facing as the spot was set up to face
+      if (!link) await dv.cut(id, target.yaw);
+      else await dv.travel(id);
+      if (dv && dv.sceneId === id) {
+        current = id;
+        arrive();
+        announce(target.label);
+      }
+      moving = false;
+      dv?.flush();
     }
 
     // The new view is in: ease the zoom back out and clear the blur
@@ -440,6 +521,46 @@ const config = {
       say(config.copy.loading);
       viewer.hidden = false;
       poster.hidden = true;
+      if (!flat && !dv) {
+        try {
+          const scenesById = new Map<string, DepthScene>(
+            config.views.map((v) => [v.id, { id: v.id, image: v.image, thumb: v.thumb, depth: v.depth, pos: v.pos }]),
+          );
+          dv = new DepthViewer(
+            stage,
+            scenesById,
+            {
+              minHfov: 50,
+              maxHfov: WIDE,
+              onLook: facing,
+              onPick: (id) => go(id),
+              onFail: () => {
+                // The 3D viewer cannot show this tour here (a lost graphics context, a missing depth image): use the flat one
+                dv?.destroy();
+                dv = undefined;
+                flat = true;
+                void open();
+              },
+            },
+            reduced,
+          );
+          current = config.start;
+          opening = views.get(config.start)!.yaw;
+          await dv.start(config.start, opening, TILT, START);
+          if (dv) {
+            addZoom();
+            say("");
+            arrive();
+            stage.focus();
+            return;
+          }
+        } catch {
+          dv?.destroy();
+          dv = undefined;
+          flat = true;
+        }
+      }
+      if (dv) return;
       try {
         await loadOnce(config);
       } catch {
@@ -468,6 +589,22 @@ const config = {
       (viewer.querySelector<HTMLElement>(".pnlm-container") ?? stage).focus?.();
     };
 
+    // the plus and minus buttons the flat viewer draws itself
+    const addZoom = () => {
+      const box = document.createElement("div");
+      box.className = "wt-zoom";
+      const buttons: [string, string, number][] = [["Zoom in", "+", -12], ["Zoom out", "\u2212", 12]];
+      for (const [label, text, delta] of buttons) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = text;
+        b.setAttribute("aria-label", label);
+        b.addEventListener("click", () => dv?.setHfov(dv.hfov + delta, 250));
+        box.append(b);
+      }
+      stage.append(box);
+    };
+
     startButton.addEventListener("click", () => void open());
     viewer.addEventListener("keydown", (e) => {
       // Escape leaves the walkthrough, unless the browser is using it to leave full screen
@@ -491,7 +628,7 @@ const config = {
     });
     // The map's facing cone follows the view while the visitor drags
     window.setInterval(() => {
-      if (!viewer.hidden && pano) facing();
+      if (!viewer.hidden && (pano || dv)) facing();
     }, 200);
   }
 
@@ -737,6 +874,123 @@ const config = {
     filter: blur(2px) brightness(1.1) saturate(0.9);
   }
 
+  /* The 3D viewer: a canvas, the circles over it, and its zoom buttons */
+  .wt :global(.wt-depth) {
+    position: relative;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+    outline: none;
+  }
+
+  .wt :global(.wt-depth:active) {
+    cursor: grabbing;
+  }
+
+  .wt :global(.wt-gl) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .wt :global(.wt-markers) {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .wt :global(.wt-markers .wt-marker) {
+    position: absolute;
+    pointer-events: auto;
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .wt :global(.wt-markers.is-hidden .wt-marker) {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* The reticle: a ring that follows the mouse over the scene, smaller the further the surface under it, flat on the floor */
+  .wt :global(.wt-reticle) {
+    position: absolute;
+    z-index: 1;
+    width: var(--wt-w, 40px);
+    height: var(--wt-h, 40px);
+    margin: calc(var(--wt-h, 40px) / -2) 0 0 calc(var(--wt-w, 40px) / -2);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.12);
+    box-shadow:
+      0 0 0 2px rgb(18 18 18 / 0.3),
+      0 2px 8px rgb(0 0 0 / 0.45);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .wt :global(.wt-reticle.is-on) {
+    opacity: 0.95;
+  }
+
+  /* No spot lies that way: the ring stays, but quieter, so the visitor sees a click would do nothing */
+  .wt :global(.wt-reticle.is-on.is-idle) {
+    opacity: 0.4;
+  }
+
+  /* A spot on this floor: a small faint dot, and the whole ring once the pointer is over the floor beside it */
+  .wt :global(.wt-markers .wt-marker.is-dot) {
+    transform: scale(0.5);
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .wt :global(.wt-markers .wt-marker.is-dot.is-target) {
+    transform: scale(1);
+    opacity: 1;
+    background: rgb(255 255 255 / 0.5);
+  }
+
+  /* The stairs, when a click would take the visitor up or down them */
+  .wt :global(.wt-markers .wt-marker:not(.is-dot).is-target) {
+    transform: scale(1.18);
+    background: rgb(255 255 255 / 0.5);
+  }
+
+  .wt :global(.wt-markers .wt-marker.is-dot span) {
+    display: none;
+  }
+
+  .wt :global(.wt-markers .wt-marker.is-dot.is-target span) {
+    display: block;
+  }
+
+  .wt :global(.wt-zoom) {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+    display: grid;
+    gap: 2px;
+    z-index: 3;
+  }
+
+  .wt :global(.wt-zoom button) {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    background: rgb(18 18 18 / 0.7);
+    color: #fff;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .wt :global(.wt-zoom button:hover) {
+    background: rgb(18 18 18 / 0.9);
+  }
+
   .wt__keys {
     padding: var(--space-2) var(--space-4) var(--space-3);
     color: var(--concrete-300);
@@ -840,6 +1094,12 @@ const config = {
   @media (prefers-reduced-motion: reduce) {
     .wt :global(.wt-marker) {
       transition: none;
+    }
+  }
+
+  @media (pointer: coarse) {
+    .wt :global(.wt-reticle) {
+      display: none;
     }
   }
 

@@ -76,6 +76,7 @@ def parser():
     s.add_argument("--fill", type=float, help="sky light bounced into the rooms (default: the interior config's skyFill)")
     s.add_argument("--exposure", type=float, help="exposure in stops (default: the interior config's)")
     s.add_argument("--perspective", type=float, metavar="YAW", help="test: one 16:9 view from the viewpoint, looking along this world angle")
+    s.add_argument("--depth", action="store_true", help="write the view's depth image (512 x 256, metres packed into red and green) to render/out/<design>/depth/<name>-depth.png")
     s = sub.add_parser("sequence", help="render a keyed sequence (render/shots/<config>.json), skipping frames already written")
     s.add_argument("--config", required=True, help="sequence config name, e.g. 1-kanal-hero-landscape")
     s.add_argument("--engine", choices=("eevee", "cycles"), default="eevee")
@@ -159,7 +160,7 @@ def panorama(args):
         sys.exit(1)
     level = next(l for l in sc.design["levels"] if l["id"] == vp["level"])
     from noor_render.geometry import GRADE
-    pos = Vector((vp["at_m"][0], vp["at_m"][1], (GRADE if outdoors else level["slab"]["top"]) + interior.EYE))
+    pos = Vector((vp["at_m"][0], vp["at_m"][1], (GRADE if outdoors else level["slab"]["top"]) + vp.get("rise_m", 0) + interior.EYE))
     sc.set_state(6.0, 0.0)
     el = math.radians(sun.get("elevation", 45))
     az = math.radians(sun.get("azimuth", 250))
@@ -195,6 +196,9 @@ def panorama(args):
                 mats = [m.name for m in obj.data.materials] if hit and hasattr(obj.data, "materials") else []
                 print(f"PROBE {spec}: {obj.name if hit else None} {mats} at {tuple(round(c, 3) for c in loc) if hit else ''}")
             output.still(os.path.join(folder, f"{name}-persp.png"), dict(meta, method="perspective"))
+            return
+        if args.depth:
+            pano.render_depth(sc, pos, os.path.join(OUT, args.design, "depth", f"{name}-depth.png"), device=args.device)
             return
         method = args.method if args.method != "auto" else "faces"
         if method == "native" and args.engine != "cycles":

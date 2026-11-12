@@ -129,6 +129,8 @@ export default defineDesign({
         room("lounge", "TV lounge", "tv-lounge", [[SPINE, PORCH_BACK], [RIGHT, PORCH_BACK], [RIGHT, LOUNGE_BACK], [NOOK, LOUNGE_BACK], [NOOK, BED_FRONT], [SPINE, BED_FRONT]]),
         room("foyer", "Foyer", "foyer", rect([8.4375, 22], [SPINE, 28])),
         room("powder", "Guest bath", "powder-room", rect([8.4375, 28], [SPINE, 36.1875])),
+        // The stair's hall, open to the dining room along its rear edge. Unlabelled: the plan already draws the stair.
+        room("stair-hall", "Stair hall", "stair-hall", rect([LEFT, 22], [8.4375, 36.1875]), { unlabelled: true }),
         room("dining", "Dining", "dining", rect([LEFT, 36.1875], [SPINE, KITCHEN_FRONT])),
         room("kitchen", "Kitchen", "kitchen", [[LEFT, KITCHEN_FRONT], [SPINE, KITCHEN_FRONT], [SPINE, STORE_FRONT], [STORE_SIDE, STORE_FRONT], [STORE_SIDE, REAR], [LEFT, REAR]]),
         room("store", "Store", "store", rect([STORE_SIDE, STORE_FRONT], [SPINE, REAR])),
@@ -137,7 +139,8 @@ export default defineDesign({
       ],
       fixtures: [
         fixture("k-counter", "counter", [0.75, 49.625], [2, 8], "left"),
-        fixture("k-counter-rear", "counter", [2.75, 57.625], [2, 2], "rear"),
+        // Under the rear window (x 4.9 to 9.4), clear of the back door beside it
+        fixture("k-counter-rear", "counter", [6.125, 57.625], [2, 2], "rear"),
         fixture("k-sink", "sink", [0.75, 54], [2, 3], "left"),
         fixture("k-hob", "hob", [0.75, 50.5], [2, 2.5], "left"),
         fixture("p-wc", "wc", [13.3, 34.45], [2.25, 1.5], "rear"),
@@ -210,9 +213,11 @@ export default defineDesign({
         room("dressing", "Dressing", "dressing", rect([SERVICE, PORCH_BACK], [RIGHT, 25]), { attachedTo: "master" }),
         room("master-bath", "Master bath", "bathroom", rect([SERVICE, 25], [RIGHT, 32.5]), { attachedTo: "dressing" }),
         room("laundry", "Laundry", "laundry", rect([SERVICE, 32.5], [RIGHT, 38])),
+        // The stair's shaft: no floor to stand on, but its walls are finished like any room's. Unlabelled: the plan draws the stair.
+        room("stair-tower", "Stair tower", "stair-hall", rect([LEFT, TOWER_FRONT], [TOWER_SIDE, 36.1875]), { unlabelled: true }),
         room("family", "Family lounge", "family-lounge", [[TOWER_SIDE, TOWER_FRONT], [SPINE, TOWER_FRONT], [SPINE, PORCH_BACK], [SERVICE, PORCH_BACK], [SERVICE, 38.5], [LEFT, 38.5], [LEFT, 36.1875], [TOWER_SIDE, 36.1875]]),
         room("corridor", "Corridor", "corridor", rect([13.5, 38.5], [SERVICE, BED_FRONT])),
-        room("closet", "Closet", "store", rect([LEFT, 38.5], [6, BED_FRONT])),
+        room("closet", "Closet", "dressing", rect([LEFT, 38.5], [6, BED_FRONT])),
         room("bath2", "Bath 2", "bathroom", rect([6, 38.5], [13.5, BED_FRONT]), { attachedTo: "bed2" }),
         room("bath3", "Bath 3", "bathroom", rect([SERVICE, 38], [RIGHT, BED_FRONT]), { attachedTo: "bed3" }),
         room("bed2", "Bedroom 2", "bedroom", rect([LEFT, BED_FRONT], [17.25, REAR])),
@@ -232,6 +237,9 @@ export default defineDesign({
         fixture("b3b-basin", "basin", [21.3, 38.4], [1.75, 1.5], "front"),
         fixture("b3b-shower", "shower", [27, 43], [3, 2.75], "rear"),
         fixture("b2-wardrobe", "wardrobe", [0.75, 49], [2, 6], "left"),
+        // The closet: fitted wardrobes along its west wall and its far (north) wall
+        fixture("cl-wardrobe-w", "wardrobe", [0.75, 40.9], [2, 5.1], "left"),
+        fixture("cl-wardrobe-n", "wardrobe", [2.75, 38.9], [2.9, 2], "front"),
         fixture("b3-wardrobe", "wardrobe", [17.65, 50], [2, 8], "left"),
       ],
       stairs: [{ id: "stair", ...stair, to: "roof" }],

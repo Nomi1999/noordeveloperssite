@@ -26,6 +26,7 @@ def load(slug):
         wt = json.load(f)
     for vp in wt["viewpoints"]:
         vp["at_m"] = [vp["at"][0] * FT, vp["at"][1] * FT]
+        vp["rise_m"] = vp.get("rise", 0) * FT
     return wt
 
 

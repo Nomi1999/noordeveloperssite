@@ -50,7 +50,7 @@ describe("the 1 Kanal walkthrough", () => {
   const source = walkthroughSources.find((s) => (s as { design: string }).design === "1-kanal");
 
   it("is found beside the 5 Marla's", () => {
-    expect(walkthroughSources.map((s) => (s as { design: string }).design).sort()).toEqual(["1-kanal", "5-marla"]);
+    expect(walkthroughSources.map((s) => (s as { design: string }).design).sort()).toEqual(["1-kanal", "10-marla", "5-marla"]);
     expect(getWalkthrough("1-kanal")).toBeDefined();
   });
 
@@ -58,9 +58,9 @@ describe("the 1 Kanal walkthrough", () => {
     expect(walkthroughProblems(kanal, parseWalkthrough(source))).toEqual([]);
   });
 
-  it("has 41 views and leaves out only the two rooms with no way in", () => {
+  it("has 61 views and leaves out only the two rooms with no way in", () => {
     const wt = parseWalkthrough(source);
-    expect(wt.viewpoints).toHaveLength(41);
+    expect(wt.viewpoints).toHaveLength(61);
     expect(wt.excluded.map((x) => `${x.level}/${x.room}`).sort()).toEqual(["first/terrace-left", "ground/washroom"]);
     for (const level of kanal.levels.filter((l) => ["ground", "first"].includes(l.id))) {
       for (const room of level.rooms) {
@@ -69,6 +69,41 @@ describe("the 1 Kanal walkthrough", () => {
         expect(seen !== out, `${level.id}/${room.id}`).toBe(true);
       }
     }
+  });
+});
+
+describe("the 10 Marla walkthrough", () => {
+  const house = getDesign("10-marla").design;
+  const source = walkthroughSources.find((s) => (s as { design: string }).design === "10-marla");
+
+  it("is found and sound", () => {
+    expect(walkthroughProblems(house, parseWalkthrough(source))).toEqual([]);
+    expect(getWalkthrough("10-marla")).toBeDefined();
+  });
+
+  it("opens outside at the car gate and enters the TV lounge through the main door", () => {
+    const wt = parseWalkthrough(source);
+    expect(wt.start).toBe("gate");
+    const gate = wt.viewpoints.find((v) => v.id === "gate")!;
+    expect(gate.room).toBeNull();
+    expect(gate.links).toEqual([{ to: "lounge", via: "main-door" }]);
+  });
+
+  it("covers every ground and first floor room and leaves out only the stair's own rooms and the roof's stair room", () => {
+    const wt = parseWalkthrough(source);
+    expect(wt.excluded.map((x) => `${x.level}/${x.room}`)).toEqual(["first/stair-tower", "roof/stair-room"]);
+    for (const level of house.levels.filter((l) => ["ground", "first"].includes(l.id))) {
+      for (const room of level.rooms) {
+        if (wt.excluded.some((x) => x.level === level.id && x.room === room.id)) continue;
+        expect(wt.viewpoints.some((v) => v.level === level.id && v.room === room.id), `${level.id}/${room.id}`).toBe(true);
+      }
+    }
+  });
+
+  it("joins the corridor to the family lounge through an open boundary", () => {
+    const wt = parseWalkthrough(source);
+    const corridor = wt.viewpoints.find((v) => v.id === "corridor")!;
+    expect(corridor.links).toContainEqual({ to: "family", via: "open" });
   });
 });
 
@@ -190,7 +225,7 @@ describe("what is wrong with a walkthrough", () => {
   });
 
   it("wants a label for a space with no room", () => {
-    expect(check((w) => delete (view(w, "porch") as { label?: string }).label).join("\n")).toMatch(/"porch" has no room, so it needs a label/);
+    expect(check((w) => delete (view(w, "gate") as { label?: string }).label).join("\n")).toMatch(/"gate" has no room, so it needs a label/);
   });
 });
 
@@ -239,7 +274,7 @@ describe("the tour", () => {
   it("lists the levels and views", () => {
     expect(tour.levels.map((l) => l.name)).toEqual(["Ground floor", "First floor"]);
     expect(tour.views).toHaveLength(20);
-    expect(tour.start).toBe("drawing");
+    expect(tour.start).toBe("gate");
   });
 
   it("names views from rooms, with overrides", () => {
@@ -247,7 +282,7 @@ describe("the tour", () => {
     expect(byId.drawing).toBe("Drawing room");
     expect(byId.lounge).toBe("TV lounge");
     expect(byId["stair-head"]).toBe("Top of the stair");
-    expect(byId.porch).toBe("Car porch");
+    expect(byId.gate).toBe("Front gate");
   });
 
   it("marks level changes", () => {

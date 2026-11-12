@@ -280,5 +280,8 @@
       "veinStrength": 0.6
     }
   },
-  "exposure": 1.2
+  "exposure": 1.2,
+  "viewpoints": {
+    "gate": { "outdoors": true, "exposure": 0.5, "haze": 0.006, "sun": { "azimuth": 235 } }
+  }
 }

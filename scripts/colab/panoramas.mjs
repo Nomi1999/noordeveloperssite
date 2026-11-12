@@ -1,8 +1,8 @@
 // Renders walkthrough panoramas on a Google Colab GPU through the Colab CLI, one blocking exec per viewpoint.
 //
 //   node scripts/colab/panoramas.mjs --design 1-kanal [--views hall-entry,drawing | all] [--quality mid]
-//        [--gpus G4,L4] [--backend CUDA] [--ref HEAD] [--out render/out/<design>/panoramas] [--session noor]
-//        [--suffix -cuda] [--keep] [--engine eevee] [--extra "--perspective 0 --width 1280"]
+//        [--gpus G4,L4,T4] [--backend CUDA] [--ref HEAD] [--out render/out/<design>/panoramas] [--session noor]
+//        [--suffix -cuda] [--keep] [--depth] [--engine eevee] [--extra "--perspective 0 --width 1280"]
 //
 // Quick tests run here too, never on the laptop (it has no GPU): --engine eevee for EEVEE faces, --extra for more
 // run.py panorama arguments (a flat --perspective view, a small --width), with --quality preview and a --suffix.
@@ -34,19 +34,21 @@ const opt = (name, fallback) => {
 
 const design = opt("design");
 if (!design) {
-  console.error("usage: node scripts/colab/panoramas.mjs --design <slug> [--views a,b|all] [--quality mid] [--gpus G4,L4] [--backend CUDA] [--ref HEAD] [--out dir] [--suffix s]");
+  console.error("usage: node scripts/colab/panoramas.mjs --design <slug> [--views a,b|all] [--quality mid] [--gpus G4,L4,T4] [--backend CUDA] [--ref HEAD] [--out dir] [--suffix s]");
   process.exit(1);
 }
 const quality = opt("quality", "mid");
-const gpus = opt("gpus", "G4,L4").split(",");
+// best first: the G4 (RTX PRO 6000 Blackwell, ray-tracing cores: ~45 s a view) beats the L4 (~3 min); the T4 is the last resort
+const gpus = opt("gpus", "G4,L4,T4").split(",");
 const backend = opt("backend", ""); // empty: OptiX, then CUDA (render/noor_render/output.py)
 const ref = opt("ref", "");
 const suffix = opt("suffix", "");
 const engine = opt("engine", "cycles");
 const extra = opt("extra", "");
-const imageName = (name) => (extra.includes("--perspective") ? `${name}-persp.png` : `${name}-${engine}-${quality}.png`);
+const depth = argv.includes("--depth"); // render each view's depth image (for the viewer's parallax) instead of its colour
+const imageName = (name) => (depth ? `${name}-depth.png` : extra.includes("--perspective") ? `${name}-persp.png` : `${name}-${engine}-${quality}.png`);
 const session = opt("session", "noor");
-const outDir = resolve(root, opt("out", join("render", "out", design, "panoramas")));
+const outDir = resolve(root, opt("out", join("render", "out", design, depth ? "depth" : "panoramas")));
 const tour = JSON.parse(readFileSync(join(root, "src", "designs", "walkthroughs", `${design}.json`), "utf8"));
 const wanted = opt("views", "all");
 const views = wanted === "all" ? tour.viewpoints.map((v) => v.id) : wanted.split(",");
@@ -139,8 +141,9 @@ async function setup(tgz) {
     up = await colab(["upload", "-s", session, vmPath(tgz), "/content/noor-bundle.tgz"], 120);
   }
   if (!up.ok) throw new Error(`upload failed: ${up.text}`);
-  // about a minute when it works; a dropped connection once hung here for 51 minutes, so cap it and try once more
-  const run = () => colab(["exec", "-s", session, "-f", vmPath(join(root, "scripts", "colab", "remote_setup.py")), "--timeout", "900"], 900);
+  // about a minute when it works; a dropped connection has hung here for 14 to 51 minutes with no output, so cap it at
+  // five minutes and try once more
+  const run = () => colab(["exec", "-s", session, "-f", vmPath(join(root, "scripts", "colab", "remote_setup.py")), "--timeout", "300"], 300);
   let r = await run();
   if (!/SETUP OK/.test(r.text)) {
     log(`setup gave no SETUP OK, running it again: ${r.text.split("\n").slice(-1)[0]}`);
@@ -150,23 +153,35 @@ async function setup(tgz) {
   if (!/SETUP OK/.test(r.text)) throw new Error("setup on the VM failed; see the lines above");
 }
 
+/** A one-line exec with a short limit: does the session still answer? */
+async function healthy() {
+  const r = await colab(["exec", "-s", session, "-f", vmPath(join(root, "scripts", "colab", "ping.py")), "--timeout", "40"], 40);
+  return r.ok && /PONG/.test(r.text);
+}
+
+/** Throw the session away and start another on the first GPU that is granted (the new one needs its setup again) */
+async function reopen(tgz) {
+  await colab(["stop", "-s", session]);
+  return openSession(tgz);
+}
+
 async function alive() {
   const r = await colab(["sessions"]);
   return r.ok && new RegExp(`(^|[^\w-])${session}([^\w-]|$)`, "m").test(r.text); // "noor" must not match "noor-b"
 }
 
 // A dropped connection can leave `colab exec` waiting with nothing running (once 46 minutes for a 3.5-minute render),
-// so after the first good render a view gets four times the longest so far (at least 10 minutes), not the 45-minute cap.
+// so after the first good render a view gets three times the longest so far (at least 4 minutes), not the 45-minute cap.
 let longest = 0;
-const viewTimeout = () => (longest ? Math.max(600, Math.round(longest * 4)) : 2700);
+const viewTimeout = () => (longest ? Math.max(240, Math.round(longest * 3)) : 2700);
 
 async function renderOne(view) {
   const name = `${view}${suffix}`;
   const local = join(outDir, imageName(name));
-  const remote = `/content/noor/render/out/${design}/panoramas/${imageName(name)}`;
+  const remote = `/content/noor/render/out/${design}/${depth ? "depth" : "panoramas"}/${imageName(name)}`;
   // every variable, every time: values set by an earlier exec stay in the kernel
   const env = [`DESIGN=${design}`, `VIEW=${view}`, `QUALITY=${quality}`, `NAME=${name}`, `NOOR_GPU_BACKEND=${backend}`,
-    `ENGINE=${engine}`, `EXTRA=${extra}`].flatMap((e) => ["--env", e]);
+    `ENGINE=${engine}`, `EXTRA=${extra}`, `DEPTH=${depth ? 1 : 0}`].flatMap((e) => ["--env", e]);
   const limit = viewTimeout();
   const r = await colab(["exec", "-s", session, "-f", vmPath(join(root, "scripts", "colab", "remote_render.py")), "--timeout", String(limit), ...env], limit);
   const took = /RESULT [^:]+: exit 0, (\d+)s/.exec(r.text);
@@ -175,7 +190,7 @@ async function renderOne(view) {
   // download to a temporary name, then rename: a broken transfer never looks like a finished image
   const part = `${local}.part`;
   await colab(["download", "-s", session, remote, vmPath(part)], 600);
-  if (existsSync(part) && statSync(part).size > 20_000) {
+  if (existsSync(part) && statSync(part).size > (depth ? 2_000 : 20_000)) {
     renameSync(part, local);
     log(`${name}: saved (${(statSync(local).size / 1e6).toFixed(1)} MB)`);
     return true;
@@ -184,6 +199,7 @@ async function renderOne(view) {
   return false;
 }
 
+const MAX_SESSION_MIN = Number(opt("max-session", 25));
 const keep = argv.includes("--keep"); // leave the session running for another run straight after this one
 let tgz;
 let open = false;
@@ -210,13 +226,26 @@ try {
     tgz = bundle();
     open = true;
     let gpu = await openSession(tgz);
+    let sessionStart = Date.now();
     for (const view of todo) {
-      if (await renderOne(view)) continue;
-      if (!await alive()) {
-        log(`session lost; opening a new one`);
-        gpu = await openSession(tgz);
+      // Three connections died between 30 and 45 minutes into a session, each costing a quarter of an hour; a session
+      // is retired after MAX_SESSION_MIN and a fresh one (about 5 minutes of setup) takes over.
+      if (Date.now() - sessionStart > MAX_SESSION_MIN * 60_000) {
+        log(`${view}: session is ${MAX_SESSION_MIN} minutes old; opening a new one`);
+        gpu = await reopen(tgz);
+        sessionStart = Date.now();
       }
-      log(`${view}: retrying once`);
+      // Colab's connection sometimes dies while the session still shows on the server (twice in one afternoon, after about
+      // half an hour); the next exec then waits for most of a quarter of an hour. A one-line exec first tells at once.
+      if (!await healthy()) {
+        log(`${view}: no answer from the session; opening a new one`);
+        gpu = await reopen(tgz);
+        sessionStart = Date.now();
+      }
+      if (await renderOne(view)) continue;
+      log(`${view}: failed; opening a new session and retrying once`);
+      gpu = await reopen(tgz);
+      sessionStart = Date.now();
       if (!await renderOne(view)) log(`${view}: FAILED after a retry`);
     }
     log(`done on ${gpu} in ${((Date.now() - started) / 60000).toFixed(1)} min`);

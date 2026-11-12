@@ -156,6 +156,7 @@
   "exposure": 0.0,
   "viewpoints": {
     "kitchenette": { "exposure": -0.6 },
-    "gate": { "outdoors": true, "exposure": 0.5, "haze": 0.006, "sun": { "azimuth": 235 } }
+    "gate": { "outdoors": true, "exposure": 0.5, "haze": 0.006, "sun": { "azimuth": 235 } },
+    "forecourt": { "outdoors": true, "exposure": 0.5, "haze": 0.006, "sun": { "azimuth": 235 } }
   }
 }

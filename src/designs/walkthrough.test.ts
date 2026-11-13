@@ -3,6 +3,8 @@ import { getDesign } from "./index.ts";
 import { planPoint } from "./plan.ts";
 import {
   buildTour,
+  canSee,
+  sightLinks,
   linkPoint,
   markerYaw,
   normaliseAngle,
@@ -58,9 +60,9 @@ describe("the 1 Kanal walkthrough", () => {
     expect(walkthroughProblems(kanal, parseWalkthrough(source))).toEqual([]);
   });
 
-  it("has 61 views and leaves out only the two rooms with no way in", () => {
+  it("has 115 views and leaves out only the two rooms with no way in", () => {
     const wt = parseWalkthrough(source);
-    expect(wt.viewpoints).toHaveLength(61);
+    expect(wt.viewpoints).toHaveLength(115);
     expect(wt.excluded.map((x) => `${x.level}/${x.room}`).sort()).toEqual(["first/terrace-left", "ground/washroom"]);
     for (const level of kanal.levels.filter((l) => ["ground", "first"].includes(l.id))) {
       for (const room of level.rooms) {
@@ -316,5 +318,61 @@ describe("the tour", () => {
     // x moves right by the plan's left margin; y runs down from the rear
     expect(drawing.point[0]).toBeCloseTo(17.6 + 12, 5);
     expect(drawing.point[1]).toBeCloseTo(design.plot.depth - 10.6 + 12, 5);
+  });
+});
+
+describe("the walking rules", () => {
+  const kanalDesign = getDesign("1-kanal").design;
+  const kanalTour = parseWalkthrough(walkthroughSources.find((s) => (s as { design: string }).design === "1-kanal"));
+  const at = (id: string) => kanalTour.viewpoints.find((v) => v.id === id)!;
+  const seen = (id: string) => sightLinks(kanalDesign, kanalTour, at(id)).map((v) => v.id);
+
+  it("links only spots at the same height", () => {
+    const landing = at("stair-turn");
+    expect(landing.rise).toBeGreaterThan(0);
+    for (const v of sightLinks(kanalDesign, kanalTour, landing)) expect(v.rise).toBe(landing.rise);
+    expect(seen("stair-turn")).not.toContain("d-electrical-door");
+    expect(seen("d-electrical-door")).not.toContain("stair-turn");
+  });
+
+  it("does not see through a closed door in an exterior wall", () => {
+    const tenMarla = getDesign("10-marla").design;
+    const tour = parseWalkthrough(walkthroughSources.find((s) => (s as { design: string }).design === "10-marla"));
+    const exterior = tenMarla.levels.flatMap((l) => l.walls.filter((w) => w.kind === "exterior").map((w) => ({ l, w })));
+    const door = exterior.flatMap(({ l, w }) => l.openings.filter((o) => o.wall === w.id && o.type !== "window" && o.type !== "opening").map((o) => ({ l, o })))[0];
+    expect(door).toBeDefined();
+    // no sight link crosses such a door, though the authored link through it stays
+    for (const v of tour.viewpoints) for (const to of sightLinks(tenMarla, tour, v)) {
+      const level = tenMarla.levels.find((l) => l.id === v.level)!;
+      expect(canSee(level, v.at, to.at)).toBe(true);
+    }
+    const noDoors = (l: (typeof tenMarla.levels)[number]) => ({ ...l, openings: l.openings.filter((o) => !(o.id === door.o.id)) });
+    const wall = door.l.walls.find((w) => w.id === door.o.wall)!;
+    const mid: [number, number] = [(wall.a[0] + wall.b[0]) / 2, (wall.a[1] + wall.b[1]) / 2];
+    const nx = -(wall.b[1] - wall.a[1]);
+    const ny = wall.b[0] - wall.a[0];
+    const len = Math.hypot(nx, ny);
+    const near = (k: number): [number, number] => [mid[0] + (nx / len) * k, mid[1] + (ny / len) * k];
+    expect(canSee(door.l, near(3), near(-3))).toBe(false);
+    expect(canSee(noDoors(door.l), near(3), near(-3))).toBe(false);
+    const archWall = { ...door.l, walls: door.l.walls.map((w) => (w.id === wall.id ? { ...w, kind: "interior" as const } : w)) };
+    expect(canSee(archWall, near(3), near(-3))).toBe(true);
+  });
+
+  it("does not see across a hole in the floor, but along its edge", () => {
+    const first = kanalDesign.levels.find((l) => l.id === "first")!;
+    const lobby = first.slab.voids.find((v) => v.id === "lobby-void")!;
+    const xs = lobby.outline.map((p) => p[0]);
+    const ys = lobby.outline.map((p) => p[1]);
+    const mid: [number, number] = [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2];
+    const bare = { ...first, walls: [], openings: [] };
+    const across: [[number, number], [number, number]] = [[mid[0], Math.min(...ys) - 1], [mid[0], Math.max(...ys) + 1]];
+    expect(canSee({ ...bare, slab: { ...first.slab, voids: [] } }, ...across)).toBe(true);
+    expect(canSee(bare, ...across)).toBe(false);
+    const x = Math.min(...xs) + 0.1;
+    expect(canSee(bare, [x, Math.min(...ys) + 2], [x, Math.max(...ys) - 2])).toBe(true);
+    // g1 and passage, both on the gallery south of the void, still see each other
+    expect(seen("g1")).toContain("passage");
+    expect(seen("g1")).not.toContain("passage-side");
   });
 });

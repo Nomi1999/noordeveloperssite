@@ -196,8 +196,48 @@ export const SIGHT_SPREAD = 10;
 /** Slack allowed at the edge of a doorway, so a spot standing in one still sees through it */
 const DOOR_SLACK = 0.25;
 
-/** Whether one point on a level can see another: walls stop the line unless it passes through a door, an arch or a sliding door */
+/** How far inside a void's edge a line of sight must run to count as crossing it, in feet */
+const VOID_EDGE = 0.3;
+
+/** Whether the straight line from one point to another crosses the inside of a hole in the level's floor (a stairwell, a double-height void) */
+function crossesVoid(level: Level, a: Pt, b: Pt): boolean {
+  for (const v of level.slab.voids) {
+    const ring = v.outline;
+    const region = asRegion(ring);
+    const dx = b[0] - a[0];
+    const dy = b[1] - a[1];
+    // where the line meets the outline, then test points between the meetings: a stretch inside and clear of the edge crosses the void
+    const ts = [0, 1];
+    for (let i = 0; i < ring.length; i++) {
+      const p = ring[i];
+      const q = ring[(i + 1) % ring.length];
+      const ex = q[0] - p[0];
+      const ey = q[1] - p[1];
+      const det = dx * ey - dy * ex;
+      if (Math.abs(det) < 1e-9) continue;
+      const t = ((p[0] - a[0]) * ey - (p[1] - a[1]) * ex) / det;
+      const u = ((p[0] - a[0]) * dy - (p[1] - a[1]) * dx) / det;
+      if (t > 0 && t < 1 && u >= 0 && u <= 1) ts.push(t);
+    }
+    ts.sort((x, y) => x - y);
+    for (let i = 0; i + 1 < ts.length; i++) {
+      for (const f of [0.25, 0.5, 0.75]) {
+        const t = ts[i] + (ts[i + 1] - ts[i]) * f;
+        const pt: Pt = [a[0] + dx * t, a[1] + dy * t];
+        if (!pointInRegion(pt, region)) continue;
+        if (ring.every((p, k) => distToSegment(pt, p, ring[(k + 1) % ring.length]) > VOID_EDGE)) return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * Whether one point on a level can see another: walls stop the line unless it passes through a door, an arch or a
+ * sliding door, except a door in an exterior wall, which stays shut; and a hole in the floor stops it too
+ */
 export function canSee(level: Level, a: Pt, b: Pt): boolean {
+  if (crossesVoid(level, a, b)) return false;
   const frames = wallFrames(level);
   const dx = b[0] - a[0];
   const dy = b[1] - a[1];
@@ -213,14 +253,14 @@ export function canSee(level: Level, a: Pt, b: Pt): boolean {
     if (t < -1e-6 || t > 1 + 1e-6 || u < -1e-6 || u > 1 + 1e-6) continue;
     const s = u * Math.hypot(ex, ey);
     const frame = frames.get(wall.id);
-    const through = level.openings.some((o) => o.wall === wall.id && o.type !== "window" && s >= o.offset - DOOR_SLACK && s <= o.offset + o.width + DOOR_SLACK);
+    const through = level.openings.some((o) => o.wall === wall.id && o.type !== "window" && !(wall.kind === "exterior" && o.type !== "opening") && s >= o.offset - DOOR_SLACK && s <= o.offset + o.width + DOOR_SLACK);
     if (!through && frame) return false;
   }
   return true;
 }
 
 /**
- * The spots a visitor can walk to from one spot: every other spot on the same level that it can see through open
+ * The spots a visitor can walk to from one spot: every other spot on the same level and height that it can see through open
  * floor, doors and arches, within SIGHT_MAX, nearest first; a spot standing almost behind a nearer one is left out,
  * since the visitor gets to it by walking to the nearer one first. Seeing is mutual, so links come in pairs.
  */
@@ -228,7 +268,7 @@ export function sightLinks(design: Design, wt: Walkthrough, from: Viewpoint): Vi
   const level = levelOf(design, from.level);
   if (!level) return [];
   const seen = wt.viewpoints
-    .filter((v) => v.id !== from.id && v.level === from.level)
+    .filter((v) => v.id !== from.id && v.level === from.level && v.rise === from.rise)
     .map((v) => ({ v, d: Math.hypot(v.at[0] - from.at[0], v.at[1] - from.at[1]) }))
     .filter(({ v, d }) => d <= SIGHT_MAX && d > 0.01 && canSee(level, from.at, v.at))
     .sort((p, q) => p.d - q.d);
@@ -255,7 +295,7 @@ export function walkLinks(design: Design, wt: Walkthrough, vp: Viewpoint): { lin
     if (!to || out.some((o) => o.link.to === l.to)) continue;
     const level = levelOf(design, vp.level);
     // An authored link on one level that the visitor can see along is left to the sight rule (it was dropped there as hidden behind a nearer spot)
-    if (to.level === vp.level && level && canSee(level, vp.at, to.at) && Math.hypot(to.at[0] - vp.at[0], to.at[1] - vp.at[1]) <= SIGHT_MAX) continue;
+    if (to.level === vp.level && to.rise === vp.rise && level && canSee(level, vp.at, to.at) && Math.hypot(to.at[0] - vp.at[0], to.at[1] - vp.at[1]) <= SIGHT_MAX) continue;
     out.push({ link: l, sighted: false });
   }
   return out;

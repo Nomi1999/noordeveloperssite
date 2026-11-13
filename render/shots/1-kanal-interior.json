@@ -11,7 +11,8 @@
     "cabinetry": "handleless",
     "wc": "wall-hung",
     "vanityStyle": "floating",
-    "shower": "rain"
+    "shower": "rain",
+    "openDoors": true
   },
   "palette": {
     "wall": [0.4, 0.37, 0.33],

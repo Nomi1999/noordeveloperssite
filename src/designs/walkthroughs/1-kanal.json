@@ -733,12 +733,12 @@
       "label": "Stair landing",
       "level": "ground",
       "at": [
-        46.37,
+        48.25,
         39.35
       ],
       "rise": 6.86,
-      "facing": 90,
-      "description": "The half landing of the dog-leg stair, where the first flight arrives; the second flight turns back above and beside it.",
+      "facing": 135,
+      "description": "The half landing of the dog-leg stair, where the first flight arrives from the west; the second flight leaves the same edge a few feet along and climbs back west toward the first floor.",
       "links": [
         {
           "to": "stair-foot",
@@ -755,12 +755,12 @@
       "label": "Foot of the second flight",
       "level": "ground",
       "at": [
-        46.37,
+        48.25,
         43.45
       ],
       "rise": 6.86,
       "facing": 180,
-      "description": "The foot of the second flight, seen head on: it climbs back toward the first floor along the hall.",
+      "description": "The foot of the second flight, seen head on from the middle of the landing: it climbs back west toward the first floor along the hall.",
       "links": [
         {
           "to": "stair-head",

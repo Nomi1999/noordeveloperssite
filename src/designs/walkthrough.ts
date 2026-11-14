@@ -418,7 +418,8 @@ export function walkthroughProblems(design: Design, wt: Walkthrough): string[] {
     }
     const room = level.rooms.find((r) => r.id === vp.room);
     if (!room) say(`viewpoint "${vp.id}" is in room "${vp.room}", which is not on the ${level.name.toLowerCase()}`);
-    else if (!pointInRegion(vp.at, asRegion(room.outline))) say(`viewpoint "${vp.id}" is outside its room "${room.id}"`);
+    // a viewpoint with a rise stands on a stair, above the rooms, so it need not be inside the room outline
+    else if (vp.rise <= 0 && !pointInRegion(vp.at, asRegion(room.outline))) say(`viewpoint "${vp.id}" is outside its room "${room.id}"`);
   }
 
   // every room has a viewpoint, except those left out on purpose

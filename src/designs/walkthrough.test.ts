@@ -202,6 +202,10 @@ describe("what is wrong with a walkthrough", () => {
     expect(check((w) => (view(w, "kitchen").at = [20, 5])).join("\n")).toMatch(/viewpoint "kitchen" is outside its room/);
   });
 
+  it("lets a viewpoint on a stair stand outside its room", () => {
+    expect(check((w) => Object.assign(view(w, "kitchen"), { at: [20, 5], rise: 3 })).join("\n")).not.toMatch(/viewpoint "kitchen" is outside its room/);
+  });
+
   it("only joins levels with a stair", () => {
     const found = check((w) => {
       view(w, "stair-foot").links.find((l) => l.to === "stair-head")!.via = "drawing-door";

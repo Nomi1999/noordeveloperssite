@@ -26,7 +26,7 @@ GLOBAL = {
 }
 GLOBAL_STYLE = {
     "balustrade": "rail",  # or "glass" for the main stair
-    "stairRails": "x",  # or "both": rails on flights rising along y too
+    "stairRails": "x",  # or "both": rails on flights rising along y too, or "all": rails on every exposed side of every flight and landing (1 Kanal)
 }
 
 # room-type keys that switch on new elements; absent means off

@@ -7,7 +7,7 @@
     "doors": "flush",
     "skirting": "shadow-gap",
     "balustrade": "glass",
-    "stairRails": "both",
+    "stairRails": "all",
     "cabinetry": "handleless",
     "wc": "wall-hung",
     "vanityStyle": "floating",

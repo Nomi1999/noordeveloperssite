@@ -627,7 +627,8 @@ export default defineDesign({
     { id: "rail-left", type: "railing", level: "first", role: "balustrade", path: [[0.2, 23.2], [0.2, 15.225], [20.675, 15.225], [20.675, 21.675]], z: 0, h: 3.5, material: "glass-tinted" },
     { id: "rail-right", type: "railing", level: "first", role: "balustrade", path: [[35.425, 17.175], [51.925, 17.175], [51.925, 36.5]], z: 0, h: 3.5, material: "glass-tinted" },
     { id: "rail-side", type: "railing", level: "first", role: "balustrade", path: [[47.6, 46.125], [47.6, 64.075]], z: 0, h: 3.5, material: "glass-tinted" },
-    { id: "rail-stair", type: "railing", level: "first", role: "balustrade", path: [[0.2, 54.4], [0.2, 61.2], [3.375, 61.2]], z: 0, h: 3.5, material: "glass-tinted" },
+    // The stair terrace: the whole open edge, beside and behind the foot of the stair, up to the house walls
+    { id: "rail-stair", type: "railing", level: "first", role: "balustrade", path: [[3.375, 45.5], [0.2, 45.5], [0.2, 61.2], [3.375, 61.2]], z: 0, h: 3.5, material: "glass-tinted" },
     ...house,
     ...boundary,
   ],

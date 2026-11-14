@@ -40,6 +40,10 @@
           "via": "main-door"
         },
         {
+          "to": "porch",
+          "via": "main-door"
+        },
+        {
           "to": "foyer",
           "via": "foyer-arch"
         },
@@ -570,7 +574,12 @@
       ],
       "facing": 90,
       "description": "The car porch under the box above, with the main door ahead.",
-      "links": []
+      "links": [
+        {
+          "to": "lounge",
+          "via": "main-door"
+        }
+      ]
     },
     {
       "id": "lounge-mid",

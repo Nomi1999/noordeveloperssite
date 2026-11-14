@@ -339,11 +339,20 @@ describe("the walking rules", () => {
     expect(seen("d-electrical-door")).not.toContain("stair-turn");
   });
 
+  it("sees through a glass sliding door out to a terrace", () => {
+    const tenMarla = getDesign("10-marla").design;
+    const tour = parseWalkthrough(walkthroughSources.find((s) => (s as { design: string }).design === "10-marla"));
+    const at = (id: string) => tour.viewpoints.find((v) => v.id === id)!;
+    // the spot just inside the terrace door and the terrace itself see each other through the glass, both ways
+    expect(sightLinks(tenMarla, tour, at("family-back")).map((v) => v.id)).toContain("terrace");
+    expect(sightLinks(tenMarla, tour, at("terrace")).map((v) => v.id)).toContain("family-back");
+  });
+
   it("does not see through a closed door in an exterior wall", () => {
     const tenMarla = getDesign("10-marla").design;
     const tour = parseWalkthrough(walkthroughSources.find((s) => (s as { design: string }).design === "10-marla"));
     const exterior = tenMarla.levels.flatMap((l) => l.walls.filter((w) => w.kind === "exterior").map((w) => ({ l, w })));
-    const door = exterior.flatMap(({ l, w }) => l.openings.filter((o) => o.wall === w.id && o.type !== "window" && o.type !== "opening").map((o) => ({ l, o })))[0];
+    const door = exterior.flatMap(({ l, w }) => l.openings.filter((o) => o.wall === w.id && o.type !== "window" && o.type !== "opening" && o.type !== "sliding-door").map((o) => ({ l, o })))[0];
     expect(door).toBeDefined();
     // no sight link crosses such a door, though the authored link through it stays
     for (const v of tour.viewpoints) for (const to of sightLinks(tenMarla, tour, v)) {

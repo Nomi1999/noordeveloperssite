@@ -234,7 +234,8 @@ function crossesVoid(level: Level, a: Pt, b: Pt): boolean {
 
 /**
  * Whether one point on a level can see another: walls stop the line unless it passes through a door, an arch or a
- * sliding door, except a door in an exterior wall, which stays shut; and a hole in the floor stops it too
+ * sliding door, except a solid door in an exterior wall, which stays shut (a glass sliding door out to a terrace is seen
+ * through); and a hole in the floor stops it too
  */
 export function canSee(level: Level, a: Pt, b: Pt): boolean {
   if (crossesVoid(level, a, b)) return false;
@@ -253,7 +254,7 @@ export function canSee(level: Level, a: Pt, b: Pt): boolean {
     if (t < -1e-6 || t > 1 + 1e-6 || u < -1e-6 || u > 1 + 1e-6) continue;
     const s = u * Math.hypot(ex, ey);
     const frame = frames.get(wall.id);
-    const through = level.openings.some((o) => o.wall === wall.id && o.type !== "window" && !(wall.kind === "exterior" && o.type !== "opening") && s >= o.offset - DOOR_SLACK && s <= o.offset + o.width + DOOR_SLACK);
+    const through = level.openings.some((o) => o.wall === wall.id && o.type !== "window" && !(wall.kind === "exterior" && o.type !== "opening" && o.type !== "sliding-door") && s >= o.offset - DOOR_SLACK && s <= o.offset + o.width + DOOR_SLACK);
     if (!through && frame) return false;
   }
   return true;

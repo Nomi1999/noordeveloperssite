@@ -172,6 +172,8 @@ export class DepthViewer {
   private depthCpu = new Map<string, Float32Array>();
   // the spots next to the current one: never evicted, so a click is never waiting on a load
   private neighbours = new Set<string>();
+  private urgent = "";
+  private uploaded = 0;
   private queued?: Request;
   private reticle = document.createElement("div");
   // where the mouse is over the view, if it is
@@ -293,11 +295,16 @@ export class DepthViewer {
   }
 
   private async fetchImage(url: string, data: boolean): Promise<ImageBitmap | HTMLImageElement> {
-    if (data && "createImageBitmap" in window) {
+    if ("createImageBitmap" in window) {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`${url}: ${res.status}`);
-      // the bytes are numbers, not a picture: no colour management, no premultiplying
-      return createImageBitmap(await res.blob(), { colorSpaceConversion: "none", premultiplyAlpha: "none", imageOrientation: "none" });
+      // Decoded off the main thread, so a panorama arriving never stalls a frame (an <img> is decoded on the main
+      // thread the moment it is handed to the graphics card). A depth image's bytes are numbers, not a picture: no
+      // colour management, no premultiplying
+      const blob = await res.blob();
+      return data
+        ? createImageBitmap(blob, { colorSpaceConversion: "none", premultiplyAlpha: "none", imageOrientation: "none" })
+        : createImageBitmap(blob, { premultiplyAlpha: "none", imageOrientation: "none" });
     }
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -338,6 +345,7 @@ export class DepthViewer {
   private async read(id: string): Promise<Loaded> {
     const s = this.scenes.get(id)!;
     const [depthImg, colorImg] = await Promise.all([this.fetchImage(s.depth, true), this.fetchImage(s.image, false)]);
+    await this.calm(id);
     if (this.dead) throw new Error("closed");
     if (!this.depthCpu.has(id)) this.depthCpu.set(id, this.decode(depthImg));
     const old = this.loaded.get(id);
@@ -355,6 +363,18 @@ export class DepthViewer {
     this.evict();
     this.want();
     return entry;
+  }
+
+  /**
+   * Wait for a quiet moment to hand a panorama to the graphics card: the upload takes a frame or two, so one that is
+   * only being fetched ahead waits until the visitor is neither turning nor walking, and they go up one at a time.
+   * The spot on screen and the one being walked to never wait.
+   */
+  private async calm(id: string): Promise<void> {
+    const needed = () => id === this.current || id === this.urgent || this.dead;
+    const moving = () => !!(this.drag || this.pinch.size || this.travelling || this.spin || this.velocity[0] || this.velocity[1]);
+    while (!needed() && (moving() || performance.now() - this.uploaded < 120)) await new Promise((r) => setTimeout(r, 60));
+    this.uploaded = performance.now();
   }
 
   /** A poster to show while the full image comes (its depth is the real one, so the poster is already a room) */
@@ -568,8 +588,7 @@ export class DepthViewer {
     const f = 1 / Math.tan((this.hfov * RAD) / 2);
     const size = clamp((0.3 * (this.host.clientWidth / 2) * f) / Math.max(info.t, 0.5), 16, 64);
     const height = info.floor ? size * clamp(info.down, 0.25, 1) : size;
-    r.style.left = `${p[0].toFixed(1)}px`;
-    r.style.top = `${p[1].toFixed(1)}px`;
+    r.style.translate = `${p[0].toFixed(1)}px ${p[1].toFixed(1)}px`;
     r.style.setProperty("--wt-w", `${size.toFixed(1)}px`);
     r.style.setProperty("--wt-h", `${height.toFixed(1)}px`);
     r.classList.add("is-on");
@@ -640,6 +659,7 @@ export class DepthViewer {
     const to = this.scenes.get(id)!;
     if (!to || this.busy || this.travelling) return;
     this.busy = true;
+    this.urgent = id;
     this.setMarkersVisible(false);
     this.track();
     try {
@@ -688,6 +708,7 @@ export class DepthViewer {
     const to = this.scenes.get(id)!;
     if (!to || this.busy || this.travelling) return;
     this.busy = true;
+    this.urgent = id;
     this.setMarkersVisible(false);
     try {
       await this.load(id);
@@ -873,10 +894,13 @@ export class DepthViewer {
       const size = Math.round(clamp(260 / Math.max(feet, 1), 34, 88) * clamp(100 / this.hfov, 0.8, 1.6));
       const height = Math.round(size * Math.max(0.3, Math.sin(down)));
       m.el.style.display = "";
-      m.el.style.left = `${px.toFixed(1)}px`;
-      m.el.style.top = `${py.toFixed(1)}px`;
-      m.el.style.setProperty("--wt-w", `${size}px`);
-      m.el.style.setProperty("--wt-h", `${height}px`);
+      m.el.style.translate = `${px.toFixed(1)}px ${py.toFixed(1)}px`;
+      const key = `${size}/${height}`;
+      if (m.el.dataset.wtSize !== key) {
+        m.el.dataset.wtSize = key;
+        m.el.style.setProperty("--wt-w", `${size}px`);
+        m.el.style.setProperty("--wt-h", `${height}px`);
+      }
     }
   }
 

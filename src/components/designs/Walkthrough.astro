@@ -902,6 +902,8 @@ const config = {
 
   .wt :global(.wt-markers .wt-marker) {
     position: absolute;
+    left: 0;
+    top: 0;
     pointer-events: auto;
     transition:
       opacity var(--duration-fast) var(--ease-out),
@@ -917,6 +919,8 @@ const config = {
   /* The reticle: a ring that follows the mouse over the scene, smaller the further the surface under it, flat on the floor */
   .wt :global(.wt-reticle) {
     position: absolute;
+    left: 0;
+    top: 0;
     z-index: 1;
     width: var(--wt-w, 40px);
     height: var(--wt-h, 40px);

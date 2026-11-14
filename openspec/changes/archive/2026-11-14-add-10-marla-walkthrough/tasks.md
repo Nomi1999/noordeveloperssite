@@ -22,12 +22,12 @@ Notes: wallpapers are numpy-drawn tiles (`render/noor_render/wallpaper.py`, test
 
 ## 4. Style gate
 
-- [ ] 4.1 Render `drawing`, `master-bath` and `kitchen` at `mid` on Colab (G4 if available, else L4 with OptiX) and show them to the maintainer in the local viewer next to the matching 1 Kanal views. Verify with the maintainer's approval of the look, and adjust the config until they approve. (Approval is deferred to the maintainer's review of the finished walkthrough on the local site.)
+- [x] 4.1 Render `drawing`, `master-bath` and `kitchen` at `mid` on Colab (G4 if available, else L4 with OptiX) and show them to the maintainer in the local viewer next to the matching 1 Kanal views. Verify with the maintainer's approval of the look, and adjust the config until they approve. (Approval is deferred to the maintainer's review of the finished walkthrough on the local site.)
 
 ## 5. Full render and review
 
 - [x] 5.1 Render all views at `mid` with the Colab driver (G4 first, then L4), re-rendering at `high` only the views that smudge after denoising. Verify that every PNG is present locally, `colab sessions` shows none active, and no view has black pixels or visible noise at full size.
-- [ ] 5.2 Make the overview contact sheet and review it with the maintainer in the local viewer. Re-render only the rooms affected by requested changes. Verify with the maintainer's approval recorded in this task.
+- [x] 5.2 Make the overview contact sheet and review it with the maintainer in the local viewer. Re-render only the rooms affected by requested changes. Verify with the maintainer's approval recorded in this task.
 
 Notes: all 28 views were rendered at `mid` (no view needed `high`); the colab driver recovered from several dropped connections and one hung session setup. 5.2 and 4.1 wait for the maintainer's review of the finished walkthrough on the local site.
 
@@ -44,4 +44,6 @@ Notes: all 28 views were rendered at `mid` (no view needed `high`); the colab dr
 - [x] 7.2 Fix from the review: the kitchen counter off the back door, the foot of the stair seen head on (and its stair room excluded), the missing top tread of a flight rising along y, a fitted closet in bedroom 2, and the links in the corridor.
 - [x] 7.3 Dense spots, generated: `scripts/gen-walk-spots.py` places a lattice of spots in every room and one in every inside doorway (10 Marla: 75 spots, up from 44). The inside doors are rendered open (`style.openDoors`, leaves swung against the wall); the front and back doors stay closed. Rendered at `mid` on Colab (G4, L4 fallback, three sessions at a time) with a depth image for every spot.
 - [x] 7.4 A 3D viewer (`src/components/designs/depth-viewer.ts`): each spot is a panorama draped over its depth, the camera glides between spots with the two blended; a ring on the floor under the cursor and click-to-nearest-spot, arrow keys to walk forward and back, flat Pannellum viewer as the fallback. Encoder copies the depth images. Verify in a browser: walked gate, porch, lounge, kitchen doorway and kitchen with the arrow keys; every one of the 225 image and depth files loads; `npm test` and `npm run build` pass; 5 Marla files unchanged.
-- [ ] 7.5 The maintainer's review of the feel on the local site, then the same for the 1 Kanal (generate its spots, render, encode).
+- [x] 7.5 The maintainer's review of the feel on the local site, then the same for the 1 Kanal (generate its spots, render, encode).
+
+Notes: 4.1, 5.2 and 7.5 closed on 2026-11-14 after the maintainer reviewed and deployed both walkthroughs. The 1 Kanal was re-planned on walking lines (115 spots), rendered and encoded; review fixes followed (stair landing spots, the terrace glass rail and roof-stair rails, wall finishes kept off the stair, glass sliding doors seen through, the car porch linked to the lounge, and smoother loading in the viewer).

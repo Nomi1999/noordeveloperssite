@@ -1,0 +1,548 @@
+{
+  "levels": [
+    "ground",
+    "first"
+  ],
+  "voids": true,
+  "mergeWallPieces": true,
+  "clearColumns": true,
+  "solidStairs": [
+    "ground/stair"
+  ],
+  "openFlightFoot": true,
+  "style": {
+    "doors": "cased",
+    "skirting": "shadow-gap",
+    "balustrade": "glass",
+    "stairRails": "all",
+    "wc": "wall-hung",
+    "vanityStyle": "floating",
+    "shower": "rain",
+    "openDoors": true
+  },
+  "palette": {
+    "wall": [
+      0.3,
+      0.285,
+      0.255
+    ],
+    "ceiling": [
+      0.78,
+      0.77,
+      0.75
+    ],
+    "trim": [
+      0.3,
+      0.285,
+      0.255
+    ],
+    "wash": 0.08,
+    "cove": [
+      1.0,
+      0.85,
+      0.7
+    ],
+    "coveGlow": 12.0,
+    "downlight": [
+      1.0,
+      0.86,
+      0.72
+    ],
+    "downlightGlow": 60.0,
+    "skirting": [
+      0.02,
+      0.022,
+      0.024
+    ],
+    "metal": {
+      "color": [
+        0.03,
+        0.032,
+        0.034
+      ],
+      "rough": 0.45
+    },
+    "base": [
+      0.045,
+      0.048,
+      0.05
+    ],
+    "door": "pale-oak",
+    "slat": "pale-oak",
+    "upper": "graphite-slab",
+    "vanity": "pale-oak",
+    "wardrobe": "pale-oak",
+    "marble": {
+      "base": [
+        0.55,
+        0.51,
+        0.45
+      ],
+      "vein": [
+        0.3,
+        0.26,
+        0.21
+      ]
+    },
+    "fabric": [
+      0.35,
+      0.32,
+      0.28
+    ],
+    "featureStone": [
+      0.52,
+      0.47,
+      0.4
+    ],
+    "woods": {
+      "pale-oak": {
+        "a": [
+          0.26,
+          0.175,
+          0.095
+        ],
+        "b": [
+          0.33,
+          0.23,
+          0.13
+        ],
+        "rough": 0.44,
+        "coat": 0.08
+      }
+    },
+    "stones": {
+      "travertine": {
+        "kind": "travertine",
+        "a": [
+          0.3,
+          0.265,
+          0.215
+        ],
+        "b": [
+          0.52,
+          0.465,
+          0.385
+        ],
+        "pore": [
+          0.15,
+          0.13,
+          0.1
+        ],
+        "rough": 0.42
+      },
+      "graphite-slab": {
+        "base": [
+          0.055,
+          0.056,
+          0.06
+        ],
+        "vein": [
+          0.3,
+          0.29,
+          0.275
+        ],
+        "rough": 0.18,
+        "strength": 0.5
+      }
+    },
+    "stairTread": {
+      "a": [
+        0.055,
+        0.055,
+        0.058
+      ],
+      "b": [
+        0.068,
+        0.068,
+        0.071
+      ],
+      "grout": [
+        0.035,
+        0.035,
+        0.038
+      ],
+      "size": [
+        1.2,
+        0.3
+      ],
+      "rough": 0.3,
+      "vein": [
+        0.19,
+        0.185,
+        0.175
+      ],
+      "veinStrength": 0.3
+    },
+    "floors": {
+      "graphite": {
+        "a": [
+          0.06,
+          0.06,
+          0.064
+        ],
+        "b": [
+          0.075,
+          0.075,
+          0.08
+        ],
+        "grout": [
+          0.035,
+          0.035,
+          0.038
+        ],
+        "size": [
+          1.2,
+          2.4
+        ],
+        "rough": 0.28,
+        "vein": [
+          0.24,
+          0.23,
+          0.22
+        ],
+        "veinStrength": 0.3
+      },
+      "oak": {
+        "kind": "wood",
+        "a": [
+          0.22,
+          0.15,
+          0.085
+        ],
+        "b": [
+          0.29,
+          0.2,
+          0.115
+        ],
+        "size": [
+          2.2,
+          0.24
+        ],
+        "rough": 0.36
+      },
+      "wet": {
+        "a": [
+          0.045,
+          0.045,
+          0.048
+        ],
+        "b": [
+          0.058,
+          0.058,
+          0.061
+        ],
+        "grout": [
+          0.03,
+          0.03,
+          0.033
+        ],
+        "size": [
+          1.2,
+          0.6
+        ],
+        "rough": 0.28,
+        "vein": [
+          0.16,
+          0.155,
+          0.15
+        ],
+        "veinStrength": 0.25
+      }
+    }
+  },
+  "wallTiles": {
+    "graphite-slab": {
+      "a": [
+        0.055,
+        0.056,
+        0.06
+      ],
+      "b": [
+        0.072,
+        0.073,
+        0.078
+      ],
+      "grout": [
+        0.032,
+        0.032,
+        0.035
+      ],
+      "size": [
+        1.2,
+        2.6
+      ],
+      "rough": 0.16,
+      "vein": [
+        0.28,
+        0.27,
+        0.255
+      ],
+      "veinStrength": 0.45
+    }
+  },
+  "lights": {
+    "color": [
+      1.0,
+      0.85,
+      0.7
+    ],
+    "coveColor": [
+      1.0,
+      0.85,
+      0.7
+    ],
+    "cove": 8,
+    "spot": 12,
+    "edge": 6,
+    "slot": 16,
+    "wash": 16,
+    "pendant": 30,
+    "stair": 90
+  },
+  "roomTypes": {
+    "default": {
+      "ceiling": "flat",
+      "floor": "graphite",
+      "downlightSpacing": 2.2,
+      "downlightRadius": 0.035
+    },
+    "foyer": {
+      "ceiling": "slots",
+      "floor": "graphite",
+      "downlightSpacing": 1.2,
+      "downlightRadius": 0.035,
+      "featureWall": "auto",
+      "featureKind": "fluted-tight",
+      "featureMaterial": "travertine",
+      "featureSpan": 1.4,
+      "slotSpacing": 2.4,
+      "edgeGlow": true
+    },
+    "drawing": {
+      "ceiling": "slots",
+      "floor": "graphite",
+      "downlightSpacing": 2.2,
+      "downlightRadius": 0.035,
+      "featureWall": "auto",
+      "featureKind": "fluted-tight",
+      "featureMaterial": "travertine",
+      "slotSpacing": 2.4,
+      "edgeGlow": true
+    },
+    "powder-room": {
+      "ceiling": "cove",
+      "floor": "wet",
+      "slotSpacing": 0,
+      "downlightSpacing": 1.0,
+      "downlightRadius": 0.03,
+      "spotRadius": 0.12,
+      "wallTile": "full",
+      "wallTileKey": "graphite-slab",
+      "backlitMirror": true,
+      "door": "wall"
+    },
+    "dining": {
+      "ceiling": "slots",
+      "floor": "graphite",
+      "downlightSpacing": 2.2,
+      "downlightRadius": 0.035,
+      "featureWall": "east",
+      "featureKind": "travertine",
+      "featureAll": true,
+      "slotSpacing": 2.4,
+      "edgeGlow": true
+    },
+    "lounge": {
+      "ceiling": "slots",
+      "floor": "graphite",
+      "downlightSpacing": 2.4,
+      "downlightRadius": 0.04,
+      "slotSpacing": 2.4,
+      "edgeGlow": true
+    },
+    "stair-hall": {
+      "ceiling": "slots",
+      "floor": "graphite",
+      "slotSpacing": 2.0,
+      "downlightSpacing": 0,
+      "edgeGlow": true
+    },
+    "kitchen": {
+      "ceiling": "cove",
+      "floor": "graphite",
+      "downlightSpacing": 1.8,
+      "downlightRadius": 0.035,
+      "uppers": [
+        "k-counter-side",
+        "k-island"
+      ],
+      "waterfall": true,
+      "splashback": "slab",
+      "door": "wall",
+      "hood": true
+    },
+    "back-kitchen": {
+      "ceiling": "cove",
+      "floor": "graphite",
+      "slotSpacing": 1.4,
+      "downlightSpacing": 0,
+      "uppers": [
+        "bk-counter"
+      ],
+      "splashback": "slab",
+      "splashHeight": 0.6,
+      "door": "wall"
+    },
+    "bedroom": {
+      "ceiling": "cove",
+      "floor": "oak",
+      "downlightSpacing": 2.2,
+      "downlightRadius": 0.035,
+      "featureWall": "auto",
+      "featureKind": "travertine",
+      "featureSpan": 3.2
+    },
+    "master-bedroom": {
+      "ceiling": "slots",
+      "floor": "oak",
+      "downlightSpacing": 2.2,
+      "downlightRadius": 0.035,
+      "featureWall": "auto",
+      "featureKind": "fluted-tight",
+      "featureMaterial": "travertine",
+      "featureSpan": 3.2,
+      "slotSpacing": 2.4,
+      "edgeGlow": true
+    },
+    "dressing": {
+      "ceiling": "cove",
+      "floor": "oak",
+      "downlightSpacing": 1.4,
+      "downlightRadius": 0.03,
+      "door": "wall"
+    },
+    "bathroom": {
+      "ceiling": "flat",
+      "floor": "wet",
+      "slotSpacing": 0,
+      "downlightSpacing": 1.1,
+      "downlightRadius": 0.03,
+      "spotRadius": 0.12,
+      "wallTile": "full",
+      "wallTileKey": "graphite-slab",
+      "door": "wall"
+    },
+    "family-lounge": {
+      "ceiling": "slots",
+      "floor": "oak",
+      "downlightSpacing": 2.2,
+      "downlightRadius": 0.035,
+      "featureWall": "auto",
+      "featureKind": "fluted-tight",
+      "featureMaterial": "travertine",
+      "featureSpan": 3.6,
+      "slotSpacing": 2.4,
+      "edgeGlow": true
+    },
+    "laundry": {
+      "ceiling": "cove",
+      "floor": "wet",
+      "downlightSpacing": 1.2,
+      "downlightRadius": 0.03,
+      "spotRadius": 0.1,
+      "door": "wall"
+    },
+    "store": {
+      "ceiling": "cove",
+      "floor": "graphite",
+      "downlightSpacing": 1.8,
+      "downlightRadius": 0.03,
+      "door": "wall"
+    },
+    "servant-room": {
+      "ceiling": "flat",
+      "floor": "graphite",
+      "downlightSpacing": 2.4,
+      "downlightRadius": 0.03,
+      "door": "wall"
+    },
+    "guard-room": {
+      "ceiling": "flat",
+      "floor": "graphite",
+      "downlightSpacing": 2.4,
+      "downlightRadius": 0.03,
+      "door": "wall"
+    },
+    "stair-room": {
+      "ceiling": "flat",
+      "floor": "graphite",
+      "downlightSpacing": 2.0,
+      "downlightRadius": 0.03,
+      "door": "wall"
+    },
+    "terrace": {
+      "finish": "exterior",
+      "ceiling": "none"
+    }
+  },
+  "rooms": {
+    "ground/kitchen": {
+      "downlightSpacing": 1.2
+    },
+    "first/master-bath": {
+      "floor": "wet",
+      "wallTile": "full",
+      "wallTileKey": "graphite-slab",
+      "backlitMirror": true
+    },
+    "first/family": {
+      "downlightSpacing": 1.8
+    }
+  },
+  "chimney": {
+    "level": "ground",
+    "room": "lounge",
+    "side": "west",
+    "centre": 0.5,
+    "size": [
+      0.55,
+      1.5
+    ],
+    "material": "travertine"
+  },
+  "voidCeiling": {
+    "edgeGlow": true,
+    "slotSpacing": 3.0
+  },
+  "sun": {
+    "azimuth": 250,
+    "elevation": 45,
+    "strength": 4.2
+  },
+  "skyFill": 0.35,
+  "exposure": 0.3,
+  "viewpoints": {
+    "gate": {
+      "outdoors": true,
+      "exposure": 0.5,
+      "haze": 0.006,
+      "sun": {
+        "azimuth": 235
+      }
+    },
+    "porch": {
+      "outdoors": true,
+      "exposure": 0.5,
+      "haze": 0.006,
+      "sun": {
+        "azimuth": 235
+      }
+    },
+    "terrace": {
+      "exposure": 0.25,
+      "sun": {
+        "azimuth": 235
+      }
+    }
+  }
+}

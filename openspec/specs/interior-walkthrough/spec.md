@@ -5,7 +5,7 @@ Lets a visitor walk through a finished house as a series of 360° views, moving 
 ## Requirements
 
 ### Requirement: Rooms covered
-A design's walkthrough SHALL let the visitor stand in every room of the house on every storey that the design's room list contains: living and bedroom spaces, kitchens, bathrooms, dressing rooms, laundry and utility rooms, stair, lobby, passage and lounge areas, and any terrace or sky court. The only exceptions are rooms that the walkthrough names as left out, each with a reason. A room too large or irregular to read from one spot SHALL have more than one viewpoint. The 5 Marla walkthrough SHALL cover the porch, drawing room, TV lounge and stair, kitchen, bedroom 1 and its bath on the ground floor, and the master bedroom and its bath, balcony, family lounge, sky court, bedroom 2 and its bath and the laundry on the first floor. The 1 Kanal walkthrough SHALL cover, on the ground floor, the stair lobby with the main stair, the drawing room, powder room, dining room, kitchen and its entry, TV lounge and its lobby, raw kitchen, bedrooms 1 and 2 with their baths and dressing room, and the electrical room. On the first floor it SHALL cover bedrooms 3 and 4 with their baths and dressing room, the master bedroom with its dress and bath, the lobby, TV lounge, kitchenette, study, both passages, the link, the pier, the stair, and the right, stair and side terraces. It SHALL leave out only the front terrace over the porch and the outside-entry washroom, because neither can be reached from inside the house. Its double-height entrance hall SHALL be seen from below on the ground floor and from the first-floor passage and stair beside the void. The 10 Marla walkthrough SHALL cover, on the ground floor, the drawing room, foyer, TV lounge, dining room, kitchen, store, guest bath, and bedroom 1 and its bath, and on the first floor the master bedroom, dressing room and master bath, the laundry, the family lounge and stair head, the corridor, the closet, bedrooms 2 and 3 with their baths, and the terrace. It SHALL start at an outdoor viewpoint at the car gate, and SHALL leave out only the roof's stair room, which is not part of the tour, and the first-floor stair shaft, which has no floor to stand on and is seen from the stair's own spots.
+A design's walkthrough SHALL let the visitor stand in every room of the house on every storey that the design's room list contains: living and bedroom spaces, kitchens, bathrooms, dressing rooms, laundry and utility rooms, stair, lobby, passage and lounge areas, and any terrace or sky court. The only exceptions are rooms that the walkthrough names as left out, each with a reason. A room too large or irregular to read from one spot SHALL have more than one viewpoint. The 5 Marla walkthrough SHALL cover the porch, drawing room, TV lounge and stair, kitchen, bedroom 1 and its bath on the ground floor, and the master bedroom and its bath, balcony, family lounge, sky court, bedroom 2 and its bath and the laundry on the first floor. The 1 Kanal walkthrough SHALL cover, on the ground floor, the stair lobby with the main stair, the drawing room, powder room, dining room, kitchen and its entry, TV lounge and its lobby, raw kitchen, bedrooms 1 and 2 with their baths and dressing room, and the electrical room. On the first floor it SHALL cover bedrooms 3 and 4 with their baths and dressing room, the master bedroom with its dress and bath, the lobby, TV lounge, kitchenette, study, both passages, the link, the pier, the stair, and the right, stair and side terraces. It SHALL leave out only the front terrace over the porch and the outside-entry washroom, because neither can be reached from inside the house. Its double-height entrance hall SHALL be seen from below on the ground floor and from the first-floor passage and stair beside the void. The 10 Marla walkthrough SHALL cover, on the ground floor, the drawing room, foyer, TV lounge, dining room, kitchen, store, guest bath, and bedroom 1 and its bath, and on the first floor the master bedroom, dressing room and master bath, the laundry, the family lounge and stair head, the corridor, the closet, bedrooms 2 and 3 with their baths, and the terrace. It SHALL start at an outdoor viewpoint at the car gate, and SHALL leave out only the roof's stair room, which is not part of the tour, and the first-floor stair shaft, which has no floor to stand on and is seen from the stair's own spots. The 2 Kanal walkthrough SHALL cover, on the ground floor, the foyer, drawing room, powder room, dining room, the double-height lounge, the stair hall with the main stair, the kitchen, the back kitchen, bedroom 1 with its dressing room and bath, the store, bedroom 2 with its bath, and the laundry, and on the first floor the gallery round the void with the stair head, bedrooms 3, 4, 5 and 6 with their baths and dressing rooms, the master bedroom with its dressing room and bath, the family lounge, and the terrace over the porch. It SHALL start at an outdoor viewpoint at the car gate, with a second outdoor spot on the car porch, and SHALL leave out only the servant room and its bath, because neither can be reached from inside the house, the guard cabin at the gate, because it is a separate building entered from outside, and the roof's stair room, which is not part of the tour. Its double-height lounge SHALL be seen from the lounge floor looking up and from the gallery on the first floor looking down past the balustrade.
 
 #### Scenario: Every room reachable
 - **WHEN** a visitor has used the walkthrough of the 5 Marla house
@@ -30,6 +30,22 @@ A design's walkthrough SHALL let the visitor stand in every room of the house on
 #### Scenario: Outdoor start
 - **WHEN** a visitor starts the 10 Marla walkthrough
 - **THEN** it opens at the car gate looking at the porch, and from the gate and from the car porch a circle at the main door leads into the TV lounge
+
+#### Scenario: Every 2 Kanal room reachable
+- **WHEN** a visitor has used the walkthrough of the 2 Kanal house
+- **THEN** every ground- and first-floor room except the servant suite, the guard cabin and the roof stair room can be reached, including the two smallest (the laundry and the powder room), and each of the seven bedrooms has a spot in it
+
+#### Scenario: 2 Kanal lounge from both storeys
+- **WHEN** a visitor stands in the 2 Kanal lounge and then on the first-floor gallery beside the void
+- **THEN** the lounge's walls are seen rising 22 feet to the roof above, and from the gallery the lounge floor is seen below past a continuous balustrade, with the stair climbing beside it
+
+#### Scenario: 2 Kanal outdoor start
+- **WHEN** a visitor starts the 2 Kanal walkthrough
+- **THEN** it opens at the car gate looking up the drive at the car porch and the glass terrace above it, and from the gate and the porch a circle at the main door leads into the foyer
+
+#### Scenario: One door to the outside
+- **WHEN** a room's only door opens to the outside of the house, as with the 2 Kanal servant room and guard cabin
+- **THEN** that room is named as left out with that reason and the site build still passes
 
 ### Requirement: Finished, unfurnished interiors
 Every view SHALL show a finished house with no furniture, because Noor Developers delivers a finished house and the client brings only furniture. Views SHALL show finishes, fixed fittings, doors, windows, lighting and the view out of each window. They SHALL NOT show furniture, appliances other than fixed kitchen and bath fittings, people, brands or text.
@@ -166,3 +182,18 @@ In a `walking` tour, each doorway between rooms that the visitor passes through 
 #### Scenario: Walking from room to room
 - **WHEN** a visitor stands at a spot and looks through a doorway to the next room
 - **THEN** a spot just inside that doorway is offered, and from it the next room's spots are in view
+
+### Requirement: Routes only where a person can walk
+A walkthrough's links SHALL follow routes a person can walk upright: through doors, openings, open sides between rooms and stairs, never under a stair landing or flight.
+
+#### Scenario: 2 Kanal hall
+- **WHEN** the visitor stands at the front of the 2 Kanal hall
+- **THEN** the links lead to the lounge and the kitchen only, and the back hall, the stair foot, the bedrooms, the store and the laundry are reached from the lounge through its open side by Bedroom 1
+
+#### Scenario: Walking past a solid stair base
+- **WHEN** a walking tour lists a stair as `level/stair` in `solidStairs` (only the 2 Kanal lists `ground/stair`)
+- **THEN** a line of sight between two spots on that floor that crosses the stair's footprint offers no walk, while spots standing on the stair (with `rise`) keep their links, and every other tour's links are unchanged
+
+#### Scenario: Bath 4
+- **WHEN** the visitor is in Bedroom 4
+- **THEN** Bath 4's door is clear of the wardrobe and the visitor can walk through it

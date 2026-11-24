@@ -68,6 +68,11 @@ export const Walkthrough = z.object({
    * authored in `links`. Off for the small houses, whose few spots are all in sight of their doors.
    */
   walking: z.boolean().default(false),
+  /**
+   * Stairs (as level/stair id) built solid down to the floor, with no way under them: a line of sight between two spots on the
+   * floor that runs across one's footprint is stopped (the 2 Kanal, whose stair base is closed in)
+   */
+  solidStairs: z.array(z.string().regex(/^[a-z0-9][a-z0-9-]*\/[a-z0-9][a-z0-9-]*$/,"a level id and a stair id, as level/stair")).default([]),
   /** Rooms with no viewpoint, by the maintainer's choice (e.g. a room only reachable from outside) */
   excluded: z.array(Excluded).default([]),
 });
@@ -260,6 +265,38 @@ export function canSee(level: Level, a: Pt, b: Pt): boolean {
   return true;
 }
 
+/** Whether the straight line from one point to another passes through the inside of a plan rectangle */
+export function crossesRect(a: Pt, b: Pt, r: { x: number; y: number; w: number; d: number }): boolean {
+  // clip the segment against the rectangle's slabs (Liang-Barsky); anything left inside crosses it
+  let t0 = 0;
+  let t1 = 1;
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  for (const [p, q] of [
+    [-dx, a[0] - r.x],
+    [dx, r.x + r.w - a[0]],
+    [-dy, a[1] - r.y],
+    [dy, r.y + r.d - a[1]],
+  ]) {
+    if (Math.abs(p) < 1e-12) {
+      if (q <= 0) return false;
+      continue;
+    }
+    const t = q / p;
+    if (p < 0) t0 = Math.max(t0, t);
+    else t1 = Math.min(t1, t);
+    if (t0 >= t1) return false;
+  }
+  return t1 - t0 > 1e-6;
+}
+
+/** Whether one spot sees another: `canSee`, and for two spots on the floor, no solid stair base between them */
+function sees(level: Level, wt: Walkthrough, from: Viewpoint, to: Viewpoint): boolean {
+  if (!canSee(level, from.at, to.at)) return false;
+  if (from.rise || to.rise) return true;
+  return !level.stairs.some((s) => wt.solidStairs.includes(`${level.id}/${s.id}`) && crossesRect(from.at, to.at, s));
+}
+
 /**
  * The spots a visitor can walk to from one spot: every other spot on the same level and height that it can see through open
  * floor, doors and arches, within SIGHT_MAX, nearest first; a spot standing almost behind a nearer one is left out,
@@ -271,7 +308,7 @@ export function sightLinks(design: Design, wt: Walkthrough, from: Viewpoint): Vi
   const seen = wt.viewpoints
     .filter((v) => v.id !== from.id && v.level === from.level && v.rise === from.rise)
     .map((v) => ({ v, d: Math.hypot(v.at[0] - from.at[0], v.at[1] - from.at[1]) }))
-    .filter(({ v, d }) => d <= SIGHT_MAX && d > 0.01 && canSee(level, from.at, v.at))
+    .filter(({ v, d }) => d <= SIGHT_MAX && d > 0.01 && sees(level, wt, from, v))
     .sort((p, q) => p.d - q.d);
   const kept: { v: Viewpoint; yaw: number }[] = [];
   for (const { v } of seen) {
@@ -296,7 +333,7 @@ export function walkLinks(design: Design, wt: Walkthrough, vp: Viewpoint): { lin
     if (!to || out.some((o) => o.link.to === l.to)) continue;
     const level = levelOf(design, vp.level);
     // An authored link on one level that the visitor can see along is left to the sight rule (it was dropped there as hidden behind a nearer spot)
-    if (to.level === vp.level && to.rise === vp.rise && level && canSee(level, vp.at, to.at) && Math.hypot(to.at[0] - vp.at[0], to.at[1] - vp.at[1]) <= SIGHT_MAX) continue;
+    if (to.level === vp.level && to.rise === vp.rise && level && sees(level, wt, vp, to) && Math.hypot(to.at[0] - vp.at[0], to.at[1] - vp.at[1]) <= SIGHT_MAX) continue;
     out.push({ link: l, sighted: false });
   }
   return out;

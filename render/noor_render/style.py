@@ -23,6 +23,7 @@ GLOBAL = {
     "pendant": None,  # {"length", "height"}: a linear pendant in a double-height void
     "voidCeiling": None,  # the void ceiling's slot spec
     "clearColumns": False,  # trim a window the export runs into a column to the column's face (fixups.py)
+    "chimney": None,  # a freestanding fluted stone chimney in a double-height room, off unless named
 }
 GLOBAL_STYLE = {
     "balustrade": "rail",  # or "glass" for the main stair

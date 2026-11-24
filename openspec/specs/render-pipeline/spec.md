@@ -161,7 +161,7 @@ A keyed sequence MAY override scene context settings such as the front road's wi
 - **THEN** the sequence can name the same width, and its last frame shows the same road and the same neighbours as the still
 
 ### Requirement: Interior from design data
-The pipeline SHALL be able to build the inside of a design's rooms from the same exported data and committed configuration as the exterior: finished walls (in paint or wallpaper, chosen per room), floor, ceiling with lighting, skirting, window and door trim, door leaves, and fixed fittings for kitchens and baths. Finishes SHALL be chosen per room in committed configuration, SHALL use only materials already allowed by the materials requirement, and SHALL NOT include furniture. Rooms and levels with no interior configuration SHALL be built as before, so existing exterior renders are unchanged. Where the design has a double-height space or a stairwell, the room below SHALL take its ceiling from the next slab that covers it, and every open edge on the floor above SHALL have a balustrade. Every interior stair in the design, whatever its shape, SHALL be built as a finished stair with treads, risers, a soffit and a balustrade, with no raw construction mass left in view. An outdoor stair seen from a viewpoint SHALL be finished in exterior materials with a rail or side wall.
+The pipeline SHALL be able to build the inside of a design's rooms from the same exported data and committed configuration as the exterior: finished walls (in paint or wallpaper, chosen per room), floor, ceiling with lighting, skirting, window and door trim, door leaves, and fixed fittings for kitchens and baths. Finishes SHALL be chosen per room in committed configuration, SHALL use only materials already allowed by the materials requirement, and SHALL NOT include furniture. Rooms and levels with no interior configuration SHALL be built as before, so existing exterior renders are unchanged. Where the design has a double-height space or a stairwell, the room below SHALL take its ceiling from the next slab that covers it, and every open edge on the floor above SHALL have a balustrade. Every interior stair in the design, whatever its shape, SHALL be built as a finished stair with treads, risers, a soffit and a balustrade, with no raw construction mass left in view. An outdoor stair seen from a viewpoint SHALL be finished in exterior materials with a rail or side wall. A bathtub in the design's export SHALL be built as a fixed fitting: a low apron clad in the room's own wall finish, an inset white basin, a ledge on the wall side and metal taps, no higher than about 0.55 m, and it SHALL appear in every view that sees it. A design with no bathtub SHALL be unchanged. A freestanding stone chimney named in the configuration of a double-height room SHALL be built from the room's floor to that void's ceiling, fluted in stone on its faces, and SHALL appear in every view that sees it. A design whose configuration names no chimney SHALL be unchanged.
 
 #### Scenario: Interior follows the design
 - **WHEN** a room's size or an opening's position changes in the design data and the interior is rendered again
@@ -190,6 +190,18 @@ The pipeline SHALL be able to build the inside of a design's rooms from the same
 #### Scenario: Wallpaper pattern is scaled and aligned
 - **WHEN** a wallpaper covers a wall
 - **THEN** its pattern repeat is the same size on every wall of the room, runs upright, starts square at the room corner, and shows no stretching at openings or corners
+
+#### Scenario: Built-in bathtub
+- **WHEN** a panorama is rendered in a 2 Kanal bath that has a bathtub
+- **THEN** the tub is present against its wall as a stone-clad built-in with an inset white basin and metal taps, standing no higher than about 0.55 m, with no gap where the exported fixture is
+
+#### Scenario: No bathtub elsewhere
+- **WHEN** a panorama is rendered in any 5 Marla, 1 Kanal or 10 Marla room
+- **THEN** no bathtub fitting is added, because those designs have none
+
+#### Scenario: Freestanding chimney in a double-height room
+- **WHEN** a panorama is rendered in the 2 Kanal lounge
+- **THEN** the fluted stone chimney stands on the floor against the glass wall and rises the full height to the roof slab, with stone flutes on its faces, and no other design has one
 
 ### Requirement: Panorama render
 The pipeline SHALL render a 360° equirectangular panorama from any named viewpoint in a design, at eye height above the finished floor, with no gaps or visible seams. Viewpoints SHALL be listed in a committed configuration file per design, with the room, position, starting direction and the viewpoints reachable from it. The panorama SHALL be written as a 2:1 image, with a fixed, documented relation between image direction and compass direction in the house, and SHALL be renderable with Cycles. The command SHALL accept the design, viewpoint and quality preset, and SHALL be runnable through npm scripts.
@@ -261,3 +273,36 @@ When a panorama is rendered on a GPU, the pipeline SHALL use the fastest backend
 #### Scenario: No GPU
 - **WHEN** the GPU option is given on a machine with no supported GPU
 - **THEN** the panorama renders on the CPU and the log says no GPU was found
+
+### Requirement: Kitchen wall units clear of openings, with an optional hood
+Wall units over a kitchen counter SHALL stop either side of any window or door in the wall behind them, whatever the cabinetry style. A room configured with `hood` SHALL also leave a gap in the wall units over each hob set into the counter and fill it with a chimney hood in the design's metal finish. No configuration SHALL get a hood unless it sets the key.
+
+#### Scenario: Window behind the wall units
+- **WHEN** the 2 Kanal kitchen's side counter, with the side window behind it, is rendered
+- **THEN** the wall units run either side of the window and none covers it
+
+#### Scenario: Hood over the hob
+- **WHEN** the 2 Kanal kitchen's hob counter is rendered
+- **THEN** wall units run either side of a dark-metal chimney hood over the hob, its flue rising to the ceiling
+
+#### Scenario: Other houses unchanged
+- **WHEN** the 5 Marla, 1 Kanal and 10 Marla kitchens are rendered again
+- **THEN** their images match the earlier renders within one level per pixel
+
+### Requirement: Solid stair base and open flight foot
+A stair named in a design's `solidStairs` SHALL be built solid from the floor to its treads, with no slot between its flights and its light clear of the base, so no low space under a landing reads as a way through. With `openFlightFoot`, the balustrade round a stairwell SHALL stay open where a flight to the floor above starts at the hole's edge. Both SHALL be off unless a design's configuration turns them on.
+
+#### Scenario: 2 Kanal main stair
+- **WHEN** the 2 Kanal hall is seen from the front of the hall
+- **THEN** the stair stands on a plastered solid base with the landing rail above it, and no space under the landing is visible
+
+#### Scenario: Roof flight foot
+- **WHEN** the 2 Kanal stair head is seen from the gallery
+- **THEN** the foot of the flight to the roof is open, and glass runs only along the open sides of the stairwell
+
+### Requirement: Notched double-height void
+A double-height void that reaches the slab's outline, and so is exported as a notch rather than a hole, SHALL open the ceiling of the room below it exactly as a void that is a hole does: no ceiling, slots or downlights inside it.
+
+#### Scenario: 2 Kanal lounge
+- **WHEN** the lounge is seen from the family lounge or the gallery on the first floor
+- **THEN** the lounge floor and its chimney are visible past the balustrade, with no ceiling across the void

@@ -377,7 +377,8 @@ export default defineDesign({
         door("master-bath-door", "mb", 2, { width: 2.5, opensTo: "left" }),
         door("bed4-door", "d2", 2, { opensTo: "left" }),
         door("bed5-door", "d2", 28, { opensTo: "left", hinge: "end" }),
-        door("bath4-door", "y66", 6, { width: 2.5, opensTo: "left" }),
+        // At the west end of the wall, clear of the bedroom's wardrobe (x 60-68)
+        door("bath4-door", "y66", 1, { width: 2.5, opensTo: "left" }),
         door("dressing5-door", "y5", 1.5, { width: 2.5, opensTo: "left" }),
         door("bath5-door", "y5", 7, { width: 2.5, opensTo: "left" }),
         gap("family-opening", "c4", 2, 10),

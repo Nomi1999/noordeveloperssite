@@ -4,6 +4,7 @@ import { planPoint } from "./plan.ts";
 import {
   buildTour,
   canSee,
+  crossesRect,
   sightLinks,
   linkPoint,
   markerYaw,
@@ -43,7 +44,7 @@ describe("the 5 Marla walkthrough", () => {
   });
 
   it("has no tour for a design without one", () => {
-    expect(getWalkthrough("2-kanal")).toBeUndefined();
+    expect(getWalkthrough("no-such-design")).toBeUndefined();
   });
 });
 
@@ -52,7 +53,7 @@ describe("the 1 Kanal walkthrough", () => {
   const source = walkthroughSources.find((s) => (s as { design: string }).design === "1-kanal");
 
   it("is found beside the 5 Marla's", () => {
-    expect(walkthroughSources.map((s) => (s as { design: string }).design).sort()).toEqual(["1-kanal", "10-marla", "5-marla"]);
+    expect(walkthroughSources.map((s) => (s as { design: string }).design).sort()).toEqual(["1-kanal", "10-marla", "2-kanal", "5-marla"]);
     expect(getWalkthrough("1-kanal")).toBeDefined();
   });
 
@@ -387,5 +388,34 @@ describe("the walking rules", () => {
     // g1 and passage, both on the gallery south of the void, still see each other
     expect(seen("g1")).toContain("passage");
     expect(seen("g1")).not.toContain("passage-side");
+  });
+
+  it("does not walk through a stair base built solid, which only the 2 Kanal has", () => {
+    for (const s of walkthroughSources) {
+      const t = parseWalkthrough(s);
+      expect(t.solidStairs).toEqual(t.design === "2-kanal" ? ["ground/stair"] : []);
+    }
+    const design = getDesign("2-kanal").design;
+    const tour = parseWalkthrough(walkthroughSources.find((s) => (s as { design: string }).design === "2-kanal"));
+    const at = (id: string) => tour.viewpoints.find((v) => v.id === id)!;
+    const ids = (id: string) => sightLinks(design, tour, at(id)).map((v) => v.id);
+    // the front hall and the stair's foot are on either side of the closed-in base: no line of sight joins them
+    expect(ids("hall")).not.toContain("stair-foot");
+    expect(ids("hall")).not.toContain("d-bed2-door");
+    expect(ids("stair-foot")).not.toContain("hall");
+    // the way round is through the lounge's open side, and up on the landing the two flights still see each other
+    expect(at("lounge").links.map((l) => l.to)).toContain("hall-stair");
+    expect(ids("stair-landing")).toContain("stair-turn");
+    // the same spots with the switch off would see each other, so the base is what stops them
+    expect(sightLinks(design, { ...tour, solidStairs: [] }, at("hall")).map((v) => v.id)).toContain("stair-foot");
+  });
+
+  it("knows when a line crosses a rectangle", () => {
+    const r = { x: 0, y: 0, w: 2, d: 2 };
+    expect(crossesRect([-1, 1], [3, 1], r)).toBe(true);
+    expect(crossesRect([-1, 3], [3, 3], r)).toBe(false);
+    expect(crossesRect([-1, -1], [-0.5, 5], r)).toBe(false);
+    expect(crossesRect([1, 1], [5, 5], r)).toBe(true);
+    expect(crossesRect([-1, 2], [3, 2], r)).toBe(false); // along an edge only
   });
 });
